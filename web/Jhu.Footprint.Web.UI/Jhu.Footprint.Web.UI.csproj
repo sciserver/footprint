@@ -90,6 +90,11 @@
     <Content Include="App_Themes\Basic\Icons\user.png" />
     <Content Include="App_Themes\Basic\Icons\userstatus.png" />
     <Content Include="App_Themes\Basic\Icons\welcome.png" />
+    <Content Include="Controls\Footer.ascx" />
+    <Content Include="Controls\Menu.ascx" />
+    <Content Include="Default.aspx" />
+    <Content Include="Docs\Default.aspx" />
+    <Content Include="Global.asax" />
     <Content Include="Scripts\CodeMirror\addon\comment\comment.js" />
     <Content Include="Scripts\CodeMirror\addon\comment\continuecomment.js" />
     <Content Include="Scripts\CodeMirror\addon\dialog\dialog.css" />
@@ -359,11 +364,63 @@
   <ItemGroup>
     <Compile Include="App_Masters\Basic.master.cs">
       <DependentUpon>Basic.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="App_Masters\Basic.master.designer.cs">
       <DependentUpon>Basic.master</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Footer.ascx.cs">
+      <DependentUpon>Footer.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Footer.ascx.designer.cs">
+      <DependentUpon>Footer.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Menu.ascx.cs">
+      <DependentUpon>Menu.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Menu.ascx.designer.cs">
+      <DependentUpon>Menu.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="CustomPageBase.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CustomUserControlBase.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Docs\Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Docs\Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Docs\Docs.master.cs">
+      <DependentUpon>Docs.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Docs\Docs.master.designer.cs">
+      <DependentUpon>Docs.master</DependentUpon>
+    </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UI.master.cs">
+      <DependentUpon>UI.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UI.master.designer.cs">
+      <DependentUpon>UI.master</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Web.original.config" />
@@ -381,6 +438,10 @@
     <Content Include="App_Themes\Basic\Basic.skin" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\graywulf\dll\Jhu.Graywulf.Registry\Jhu.Graywulf.Registry.csproj">
+      <Project>{59bfb28b-3f97-4714-b8d7-a1b40f668831}</Project>
+      <Name>Jhu.Graywulf.Registry</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\graywulf\dll\Jhu.Graywulf.Web.Controls\Jhu.Graywulf.Web.Controls.csproj">
       <Project>{3adb72a9-4417-4454-aa10-1af3b2750a94}</Project>
       <Name>Jhu.Graywulf.Web.Controls</Name>
@@ -389,6 +450,15 @@
       <Project>{e9d182cf-746e-4e40-b01c-74a32fb70749}</Project>
       <Name>Jhu.Graywulf.Web</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="UI.master" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Docs\Docs.master" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Docs\Web.config" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
