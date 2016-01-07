@@ -59,6 +59,37 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Themes\Basic\Css\codemirror.css" />
+    <Content Include="App_Themes\Basic\Css\docs.css" />
+    <Content Include="App_Themes\Basic\Css\fonts.css" />
+    <Content Include="App_Themes\Basic\Css\forms.css" />
+    <Content Include="App_Themes\Basic\Css\headline.css" />
+    <Content Include="App_Themes\Basic\Css\layout.css" />
+    <Content Include="App_Themes\Basic\Css\lists.css" />
+    <Content Include="App_Themes\Basic\Css\menu.css" />
+    <Content Include="App_Themes\Basic\Css\syntaxhighlighter.css" />
+    <Content Include="App_Themes\Basic\Css\tabs.css" />
+    <Content Include="App_Themes\Basic\Css\toolbar.css" />
+    <Content Include="App_Themes\Basic\Icons\activatesuccess.png" />
+    <Content Include="App_Themes\Basic\Icons\activateuser.png" />
+    <Content Include="App_Themes\Basic\Icons\api.png" />
+    <Content Include="App_Themes\Basic\Icons\canceljob.png" />
+    <Content Include="App_Themes\Basic\Icons\droptable.png" />
+    <Content Include="App_Themes\Basic\Icons\email.png" />
+    <Content Include="App_Themes\Basic\Icons\emailsent.png" />
+    <Content Include="App_Themes\Basic\Icons\error.png" />
+    <Content Include="App_Themes\Basic\Icons\exporttable.png" />
+    <Content Include="App_Themes\Basic\Icons\importtable.png" />
+    <Content Include="App_Themes\Basic\Icons\job.png" />
+    <Content Include="App_Themes\Basic\Icons\mydb.png" />
+    <Content Include="App_Themes\Basic\Icons\renametable.png" />
+    <Content Include="App_Themes\Basic\Icons\resetpassword.png" />
+    <Content Include="App_Themes\Basic\Icons\schemabrowser.png" />
+    <Content Include="App_Themes\Basic\Icons\signin.png" />
+    <Content Include="App_Themes\Basic\Icons\signout.png" />
+    <Content Include="App_Themes\Basic\Icons\user.png" />
+    <Content Include="App_Themes\Basic\Icons\userstatus.png" />
+    <Content Include="App_Themes\Basic\Icons\welcome.png" />
     <Content Include="Scripts\CodeMirror\addon\comment\comment.js" />
     <Content Include="Scripts\CodeMirror\addon\comment\continuecomment.js" />
     <Content Include="Scripts\CodeMirror\addon\dialog\dialog.css" />
@@ -319,9 +350,19 @@
     <Content Include="Scripts\CodeMirror\theme\vibrant-ink.css" />
     <Content Include="Scripts\CodeMirror\theme\xq-dark.css" />
     <Content Include="Scripts\CodeMirror\theme\xq-light.css" />
+    <Content Include="Templates\ActivationEmail.xml" />
+    <Content Include="Templates\ErrorFeedbackEmail.xml" />
+    <Content Include="Templates\FeedbackEmail.xml" />
+    <Content Include="Templates\RequestResetEmail.xml" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Masters\Basic.master.cs">
+      <DependentUpon>Basic.master</DependentUpon>
+    </Compile>
+    <Compile Include="App_Masters\Basic.master.designer.cs">
+      <DependentUpon>Basic.master</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -332,6 +373,22 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Masters\Basic.master" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Themes\Basic\Basic.skin" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\graywulf\dll\Jhu.Graywulf.Web.Controls\Jhu.Graywulf.Web.Controls.csproj">
+      <Project>{3adb72a9-4417-4454-aa10-1af3b2750a94}</Project>
+      <Name>Jhu.Graywulf.Web.Controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\graywulf\dll\Jhu.Graywulf.Web\Jhu.Graywulf.Web.csproj">
+      <Project>{e9d182cf-746e-4e40-b01c-74a32fb70749}</Project>
+      <Name>Jhu.Graywulf.Web</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
