@@ -59,6 +59,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Api\V1\Footprint.svc" />
     <Content Include="App_Themes\Basic\Css\codemirror.css" />
     <Content Include="App_Themes\Basic\Css\docs.css" />
     <Content Include="App_Themes\Basic\Css\fonts.css" />
@@ -449,6 +450,10 @@
     <ProjectReference Include="..\..\..\graywulf\dll\Jhu.Graywulf.Web\Jhu.Graywulf.Web.csproj">
       <Project>{e9d182cf-746e-4e40-b01c-74a32fb70749}</Project>
       <Name>Jhu.Graywulf.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\dll\Jhu.Footprint.Web.Api\Jhu.Footprint.Web.Api.csproj">
+      <Project>{24570021-f4c8-4015-a0af-82d4bbbec40d}</Project>
+      <Name>Jhu.Footprint.Web.Api</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
