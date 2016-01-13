@@ -68,13 +68,11 @@ namespace Jhu.Footprint.Web.Lib
         public DateTime DateCreated
         {
             get { return dateCreated; }
-            private set { dateCreated = value; }
         }
 
         public DateTime DateModified
         {
             get { return dateModified; }
-            private set { dateModified = value; }
         }
 
 
@@ -121,14 +119,33 @@ namespace Jhu.Footprint.Web.Lib
             cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = user;
             cmd.Parameters.Add("@Type", SqlDbType.TinyInt).Value = type;
             cmd.Parameters.Add("@Public", SqlDbType.TinyInt).Value = @public;
-            cmd.Parameters.Add("@DateCreated", SqlDbType.DateTime).Value = dateCreated;
-            cmd.Parameters.Add("@DateModified", SqlDbType.DateTime).Value = dateModified;
-            cmd.Parameters.Add("@Comment", SqlDbType.NVarChar, 256).Value = comment;
+            cmd.Parameters.Add("@Comment", SqlDbType.NVarChar, -1).Value = comment;
 
             cmd.Parameters.Add("@NewID", SqlDbType.BigInt).Direction = ParameterDirection.Output;
-                                
+            cmd.Parameters.Add("RETVAL", SqlDbType.Int).Direction = ParameterDirection.ReturnValue;
+                    
             return cmd;
             
+        }
+
+
+        protected override SqlCommand GetModifyCommand()
+        {
+            string sql = "fps.spModifyFootprintFolder";
+            var cmd = new SqlCommand(sql);
+
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+            cmd.Parameters.Add("@FolderID", SqlDbType.BigInt).Value = id;
+            cmd.Parameters.Add("@Name", SqlDbType.NVarChar, 256).Value = name;
+            cmd.Parameters.Add("@User", SqlDbType.NVarChar, 256).Value = user;
+            cmd.Parameters.Add("@Type", SqlDbType.TinyInt).Value = type;
+            cmd.Parameters.Add("@Public", SqlDbType.TinyInt).Value = @public;
+            cmd.Parameters.Add("@Comment", SqlDbType.NVarChar, -1).Value = comment;
+
+            cmd.Parameters.Add("RETVAL", SqlDbType.Int).Direction = ParameterDirection.ReturnValue;
+
+            return cmd;
         }
 
         public void Create()
@@ -140,10 +157,39 @@ namespace Jhu.Footprint.Web.Lib
 
                 cmd.ExecuteNonQuery();
 
-                //this.id = (long)cmd.Parameters["@NewID"].Value; //? hová
+                int retval = (int)cmd.Parameters["RETVAL"].Value;
+
+                if (retval == 0)
+                {
+                    throw new Exception("Cannot update FootprintFolder.");
+                }
+                else
+                { 
+                    this.id = (long)cmd.Parameters["@NewID"].Value; 
+                }
             }
             
         }
+
+        public void Modify()
+        {
+            using (var cmd = GetModifyCommand())
+            {
+                cmd.Connection = Context.Connection;
+                cmd.Transaction = Context.Transaction;
+
+                cmd.ExecuteNonQuery();
+
+                int retval = (int)cmd.Parameters["RETVAL"].Value;
+
+                if (retval == 0)
+                {
+                    throw new Exception("Cannot update FootprintFolder.");
+                }
+                  
+            }
+        }
+
 
     }
 }

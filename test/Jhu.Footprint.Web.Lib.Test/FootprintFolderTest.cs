@@ -9,15 +9,13 @@ namespace Jhu.Footprint.Web.Lib.Test
         [TestMethod]
         public void CreateTest()
         {
-            const string cstr = "Data Source=localhost;Initial Catalog=Footprint;Integrated Security=true";
             using (var context = new Context())
             {
-                context.ConnectionString = cstr;
-
+                
                 var folder = new FootprintFolder(context);
 
-                folder.Name = "CreateTest";
-                folder.User = "ebanyai";
+                folder.Name = "CreateTest2";
+                folder.User = "webtestuser";
                 folder.Type = 0;
                 folder.Public = 1;
                 folder.Comment = "FootprintFolder.Create Unit Test";
@@ -25,6 +23,25 @@ namespace Jhu.Footprint.Web.Lib.Test
                 folder.Create();
 
 
+            }
+        }
+
+        [TestMethod]
+
+        public void ModifyTest()
+        {
+            using (var context = new Context())
+            {
+                var folder = new FootprintFolder(context);
+
+                folder.Id = 7;
+                folder.Name = "CreateTest3";
+                folder.User = "webtestuser";
+                folder.Type = 0;
+                folder.Public = 0;
+                folder.Comment = "FootprintFolder.Modify Unit Test";
+
+                folder.Modify();
             }
         }
     }

@@ -61,8 +61,8 @@ namespace Jhu.Footprint.Web.Lib
 
         private void InitializeMembers()
         {
-            //this.connectionString = ConfigurationManager.ConnectionStrings["Jhu.Footprint"].ConnectionString;
-            this.connectionString = "";
+            
+            this.connectionString = ConfigurationManager.ConnectionStrings["Jhu.Footprint"].ConnectionString;
             this.connection = null;
             this.transaction = null;
             this.user = "";
