@@ -1,28 +1,45 @@
 ﻿using System;
+using System.IO;
+using Microsoft.SqlServer.Management.Common;
+using Microsoft.SqlServer.Management.Smo;
+using Microsoft.SqlServer.Management.Sdk;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Jhu.Footprint.Web.Lib.Test
 {
+
     [TestClass]
     public class FootprintFolderTest
     {
+        [ClassInitialize]
+        public static void ClassInit(TestContext testContext)
+        {
+            using (var context = new Context())
+            {
+                string path = Path.GetDirectoryName((string)Environment.GetEnvironmentVariables()["SolutionPath"]);
+                string script = File.ReadAllText(path + @"\footprint\sql\Jhu.Footprint.Tables.sql");
+                script += File.ReadAllText(path + @"\footprint\sql\Jhu.Footprint.FootprintFolder.TestInit.sql");
+
+                var server = new Server(new ServerConnection(context.Connection));
+                server.ConnectionContext.ExecuteNonQuery(script);
+            }
+        }
+
         [TestMethod]
         public void CreateTest()
         {
             using (var context = new Context())
             {
-                
+
                 var folder = new FootprintFolder(context);
 
-                folder.Name = "CreateTest2";
+                folder.Name = "CreateTest";
                 folder.User = "webtestuser";
-                folder.Type = 0;
+                folder.Type = FolderType.None;
                 folder.Public = 1;
                 folder.Comment = "FootprintFolder.Create Unit Test";
 
                 folder.Create();
-
-
             }
         }
 
@@ -34,14 +51,28 @@ namespace Jhu.Footprint.Web.Lib.Test
             {
                 var folder = new FootprintFolder(context);
 
-                folder.Id = 7;
-                folder.Name = "CreateTest3";
-                folder.User = "webtestuser";
+                folder.Id = 8;
+                folder.Name = "ModifyTest";
+                folder.User = "evelin";
                 folder.Type = 0;
                 folder.Public = 0;
                 folder.Comment = "FootprintFolder.Modify Unit Test";
 
                 folder.Modify();
+            }
+        }
+
+        [TestMethod]
+        public void DeleteTest()
+        {
+            using (var context = new Context())
+            {
+                var folder = new FootprintFolder(context);
+
+                folder.Id = 5;
+                folder.User = "bob";
+
+                folder.Delete();
             }
         }
     }

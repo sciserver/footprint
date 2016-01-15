@@ -10,7 +10,7 @@ using System.Xml.Serialization;
 
 namespace Jhu.Footprint.Web.Lib
 {
-    public class FootprintFolder: ContextObject
+    public class FootprintFolder : ContextObject
     {
         #region Member variables
 
@@ -35,8 +35,8 @@ namespace Jhu.Footprint.Web.Lib
 
         public string Name
         {
-            get { return name;}
-            set { name = value;}
+            get { return name; }
+            set { name = value; }
         }
 
 
@@ -108,11 +108,11 @@ namespace Jhu.Footprint.Web.Lib
         }
 
         protected override SqlCommand GetCreateCommand()
-        { 
+        {
             string sql = "fps.spCreateFootprintFolder";
             var cmd = new SqlCommand(sql);
-            
-                
+
+
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
             cmd.Parameters.Add("@Name", SqlDbType.NVarChar, 256).Value = name;
@@ -123,9 +123,9 @@ namespace Jhu.Footprint.Web.Lib
 
             cmd.Parameters.Add("@NewID", SqlDbType.BigInt).Direction = ParameterDirection.Output;
             cmd.Parameters.Add("RETVAL", SqlDbType.Int).Direction = ParameterDirection.ReturnValue;
-                    
+
             return cmd;
-            
+
         }
 
 
@@ -138,7 +138,7 @@ namespace Jhu.Footprint.Web.Lib
 
             cmd.Parameters.Add("@FolderID", SqlDbType.BigInt).Value = id;
             cmd.Parameters.Add("@Name", SqlDbType.NVarChar, 256).Value = name;
-            cmd.Parameters.Add("@User", SqlDbType.NVarChar, 256).Value = user;
+            cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = user;
             cmd.Parameters.Add("@Type", SqlDbType.TinyInt).Value = type;
             cmd.Parameters.Add("@Public", SqlDbType.TinyInt).Value = @public;
             cmd.Parameters.Add("@Comment", SqlDbType.NVarChar, -1).Value = comment;
@@ -147,6 +147,21 @@ namespace Jhu.Footprint.Web.Lib
 
             return cmd;
         }
+
+        protected override SqlCommand GetDeleteCommand()
+        {
+            string sql = "fps.spDeleteFootprintFolder";
+            var cmd = new SqlCommand(sql);
+
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+            cmd.Parameters.Add("@FolderId", SqlDbType.BigInt).Value = id;
+            cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = user;
+
+            cmd.Parameters.Add("RETVAL", SqlDbType.Int).Direction = ParameterDirection.ReturnValue;
+            return cmd;
+        }
+
 
         public void Create()
         {
@@ -161,14 +176,14 @@ namespace Jhu.Footprint.Web.Lib
 
                 if (retval == 0)
                 {
-                    throw new Exception("Cannot update FootprintFolder.");
+                    throw new Exception("Cannot create FootprintFolder.");
                 }
                 else
-                { 
-                    this.id = (long)cmd.Parameters["@NewID"].Value; 
+                {
+                    this.id = (long)cmd.Parameters["@NewID"].Value;
                 }
             }
-            
+
         }
 
         public void Modify()
@@ -186,10 +201,27 @@ namespace Jhu.Footprint.Web.Lib
                 {
                     throw new Exception("Cannot update FootprintFolder.");
                 }
-                  
+
             }
         }
 
+        public void Delete()
+        {
+            using (var cmd = GetDeleteCommand())
+            {
+                cmd.Connection = Context.Connection;
+                cmd.Transaction = Context.Transaction;
+
+                cmd.ExecuteNonQuery();
+
+                int retval = (int)cmd.Parameters["RETVAL"].Value;
+
+                if (retval == 0)
+                {
+                    throw new Exception("Cannot delete FootprintFolder.");
+                }
+            }
+        }
 
     }
 }

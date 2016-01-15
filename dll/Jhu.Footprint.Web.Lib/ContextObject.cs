@@ -16,6 +16,8 @@ namespace Jhu.Footprint.Web.Lib
 
         protected abstract SqlCommand GetModifyCommand();
 
+        protected abstract SqlCommand GetDeleteCommand();
+
         public Context Context
         {
             get { return context; }

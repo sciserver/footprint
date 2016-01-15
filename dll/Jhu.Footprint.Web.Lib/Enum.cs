@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 namespace Jhu.Footprint.Web.Lib
 {
 
-   public enum FolderType
-   {
-       Any = -1,
-       Unknown = 0,
-       Union = 1,
-       Intersection = 2,
-       None = 3
-   }
+    public enum FolderType
+    {
+        Any = 0,
+        Unknown = 1,
+        Union = 2,
+        Intersection = 3,
+        None = 4
+    }
 
 }
