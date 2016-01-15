@@ -5,26 +5,27 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Jhu.Spherical;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace Jhu.Footprint.Web.Lib
 {
-    public class Footprint
+    public class Footprint: ContextObject
     {
         #region Member variables
 
         private long id;
         private string name;
-        private Guid userGuid;               // user database guid
-        private byte @public;                         // public flag, >0 when visible to the public
+        private string user;               // user database guid
+        private byte @public;                // public flag, >0 when visible to the public
         private DateTime dateCreated;
-        private long customId;
         private Region region;
         private double fillFactor;
         private string type;
         private byte mask;
-        private GroupType groupType;
+        private FolderType folderType;
+        private long folderId;
         private string comment;
-        private string regionString;
         #endregion
 
         #region Properties
@@ -48,12 +49,12 @@ namespace Jhu.Footprint.Web.Lib
         /// Returns or sets the user ID. Set this before doing any database operation
         /// since it determines the security context for the stored procedures.
         /// </summary>
-        
+
         [XmlIgnore]
-        public Guid UserGuid
+        public string User
         {
-            get { return userGuid; }
-            set { userGuid = value; }
+            get { return user; }
+            set { user = value; }
         }
 
         /// <summary>
@@ -71,17 +72,17 @@ namespace Jhu.Footprint.Web.Lib
             private set { dateCreated = value; }
         }
 
-        public long CustomId
+        public long FolderId
         {
-            get { return customId; }
-            set { customId = value; }
+            get { return folderId; }
+            set { folderId = value; }
         }
 
 
         public Region Region
         {
             get { return region; }
-            set { region = value;}
+            set { region = value; }
         }
 
         public double FillFactor
@@ -102,10 +103,10 @@ namespace Jhu.Footprint.Web.Lib
             set { mask = value; }
         }
 
-        public GroupType GroupType
+        public FolderType FolderType
         {
-            get { return groupType; }
-            set { groupType = value; }
+            get { return folderType; }
+            set { folderType = value; }
         }
 
         public string Comment
@@ -113,36 +114,108 @@ namespace Jhu.Footprint.Web.Lib
             get { return comment; }
             set { comment = value; }
         }
-
-        [XmlIgnore]
-        public string RegionString
-        {
-            get { return regionString; }
-            set { regionString = value; }
-        }
         #endregion
 
-        public Footprint()
+        public Footprint(Context context)
+            : base(context)
         {
             InitializeMembers();
         }
 
         private void InitializeMembers()
         {
-            Id = 0;
-            Name = "";
-            UserGuid = Guid.Empty;               // user database guid
-            Public = 0;                         // public flag, >0 when visible to the public
-            DateCreated = DateTime.Now;
-            CustomId = 0;
-            Region = null;
-            FillFactor = 1.0;
-            Type = "";
-            Mask = 0;
-            GroupType = GroupType.Unknown;
-            Comment = "";
-            RegionString = "";
+            this.id = 0;
+            this.name = "";
+            this.user = "";
+            this.@public = 0;
+            this.dateCreated = DateTime.Now;
+            this.region = null;
+            this.folderId = 0;
+            this.comment = "";
         }
-        
+
+        protected override System.Data.SqlClient.SqlCommand GetCreateCommand()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override System.Data.SqlClient.SqlCommand GetModifyCommand()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override System.Data.SqlClient.SqlCommand GetDeleteCommand()
+        {
+            string sql = "fps.spDeleteFootprint";
+            var cmd = new SqlCommand(sql);
+
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+            cmd.Parameters.Add("@FootprintId", SqlDbType.BigInt).Value = id;
+            cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = user;
+
+            cmd.Parameters.Add("RETVAL", SqlDbType.Int).Direction = ParameterDirection.ReturnValue;
+            return cmd;
+        }
+
+        public void Create()
+        {
+            using (var cmd = GetCreateCommand())
+            {
+                cmd.Connection = Context.Connection;
+                cmd.Transaction = Context.Transaction;
+
+                cmd.ExecuteNonQuery();
+
+                int retval = (int)cmd.Parameters["RETVAL"].Value;
+
+                if (retval == 0)
+                {
+                    throw new Exception("Cannot create Footprint.");
+                }
+                else
+                {
+                    this.id = (long)cmd.Parameters["@NewID"].Value;
+                }
+            }
+
+        }
+
+        public void Modify()
+        {
+            using (var cmd = GetModifyCommand())
+            {
+                cmd.Connection = Context.Connection;
+                cmd.Transaction = Context.Transaction;
+
+                cmd.ExecuteNonQuery();
+
+                int retval = (int)cmd.Parameters["RETVAL"].Value;
+
+                if (retval == 0)
+                {
+                    throw new Exception("Cannot update Footprint");
+                }
+
+            }
+        }
+
+        public void Delete()
+        {
+            using (var cmd = GetDeleteCommand())
+            {
+                cmd.Connection = Context.Connection;
+                cmd.Transaction = Context.Transaction;
+
+                cmd.ExecuteNonQuery();
+
+                int retval = (int)cmd.Parameters["RETVAL"].Value;
+
+                if (retval == 0)
+                {
+                    throw new Exception("Cannot delete Footprint.");
+                }
+            }
+        }
     }
 }
