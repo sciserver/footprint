@@ -162,6 +162,30 @@ namespace Jhu.Footprint.Web.Lib
             return cmd;
         }
 
+        protected override SqlCommand GetLoadCommand()
+        {
+            string sql = "fps.spGetFootprintFolder";
+            var cmd = new SqlCommand(sql);
+
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.Add("@FolderId", SqlDbType.BigInt).Value = id;
+            cmd.Parameters.Add("@user", SqlDbType.NVarChar, 250).Value = user;
+
+            return cmd;
+        }
+
+        public override void LoadFromDataReader(SqlDataReader dr)
+        {
+            this.id = (long)dr["FolderId"];
+            this.name = (string)dr["Name"];
+            this.user = (string)dr["User"];
+            this.type = (FolderType)Enum.ToObject(typeof(FolderType),dr["Type"]);
+            this.@public = (byte)dr["Public"];
+            this.dateCreated = (DateTime)dr["DateCreated"];
+            this.dateModified = (DateTime)dr["DateModified"];
+            this.comment = (string)dr["Comment"];
+        }
 
         public void Create()
         {
@@ -223,5 +247,5 @@ namespace Jhu.Footprint.Web.Lib
             }
         }
 
-    }
+     }
 }

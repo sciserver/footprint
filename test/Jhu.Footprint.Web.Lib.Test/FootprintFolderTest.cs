@@ -54,8 +54,8 @@ namespace Jhu.Footprint.Web.Lib.Test
                 folder.Id = 8;
                 folder.Name = "ModifyTest";
                 folder.User = "evelin";
-                folder.Type = 0;
-                folder.Public = 0;
+                //folder.Type = 0;
+                //folder.Public = 0;
                 folder.Comment = "FootprintFolder.Modify Unit Test";
 
                 folder.Modify();
@@ -74,6 +74,21 @@ namespace Jhu.Footprint.Web.Lib.Test
 
                 folder.Delete();
             }
+        }
+
+        [TestMethod]
+        public void LoadTest()
+        { 
+            using (var context = new Context())
+            {
+                var folder = new FootprintFolder(context);
+
+                folder.Id = 6;
+                folder.User = "kate";
+
+                folder.Load();
+            }
+
         }
     }
 }

@@ -21,8 +21,6 @@ namespace Jhu.Footprint.Web.Lib
         private DateTime dateCreated;
         private Region region;
         private double fillFactor;
-        private string type;
-        private byte mask;
         private FolderType folderType;
         private long folderId;
         private string comment;
@@ -90,19 +88,7 @@ namespace Jhu.Footprint.Web.Lib
             get { return fillFactor; }
             set { fillFactor = value; }
         }
-
-        public string Type
-        {
-            get { return type; }
-            set { type = value; }
-        }
-
-        public byte Mask
-        {
-            get { return mask; }
-            set { mask = value; }
-        }
-
+        
         public FolderType FolderType
         {
             get { return folderType; }
@@ -130,18 +116,49 @@ namespace Jhu.Footprint.Web.Lib
             this.@public = 0;
             this.dateCreated = DateTime.Now;
             this.region = null;
+            this.fillFactor = 0;
+            this.folderType = FolderType.None;
             this.folderId = 0;
             this.comment = "";
         }
 
         protected override System.Data.SqlClient.SqlCommand GetCreateCommand()
         {
-            throw new NotImplementedException();
+            string sql = "fps.spCreateFootprint";
+            var cmd = new SqlCommand(sql);
+
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.Add("@Name",SqlDbType.NVarChar,256).Value = name;
+            cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = user;
+            cmd.Parameters.Add("@Public", SqlDbType.TinyInt).Value = @public;
+            cmd.Parameters.Add("@FillFactor", SqlDbType.Float).Value = fillFactor;
+            cmd.Parameters.Add("@FolderType", SqlDbType.TinyInt).Value = folderType;
+            cmd.Parameters.Add("@FolderId", SqlDbType.BigInt).Value = folderId;
+            cmd.Parameters.Add("@Comment", SqlDbType.NVarChar, -1).Value = comment;
+
+            cmd.Parameters.Add("@NewID", SqlDbType.BigInt).Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("RETVAL", SqlDbType.Int).Direction = ParameterDirection.ReturnValue;
+            return cmd;
         }
 
         protected override System.Data.SqlClient.SqlCommand GetModifyCommand()
         {
-            throw new NotImplementedException();
+            string sql = "fps.spModifyFootprint";
+            var cmd = new SqlCommand(sql);
+
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.Add("@Name", SqlDbType.NVarChar, 256).Value = name;
+            cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = user;
+            cmd.Parameters.Add("@Public", SqlDbType.TinyInt).Value = @public;
+            cmd.Parameters.Add("@FillFactor", SqlDbType.Float).Value = fillFactor;
+            cmd.Parameters.Add("@FolderType", SqlDbType.TinyInt).Value = folderType;
+            cmd.Parameters.Add("@FolderId", SqlDbType.BigInt).Value = folderId;
+            cmd.Parameters.Add("@Comment", SqlDbType.NVarChar, -1).Value = comment;
+
+            cmd.Parameters.Add("RETVAL", SqlDbType.Int).Direction = ParameterDirection.ReturnValue;
+            return cmd;
         }
 
         protected override System.Data.SqlClient.SqlCommand GetDeleteCommand()
@@ -156,6 +173,16 @@ namespace Jhu.Footprint.Web.Lib
 
             cmd.Parameters.Add("RETVAL", SqlDbType.Int).Direction = ParameterDirection.ReturnValue;
             return cmd;
+        }
+
+        protected override SqlCommand GetLoadCommand()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void LoadFromDataReader(SqlDataReader dr)
+        {
+            throw new NotImplementedException();
         }
 
         public void Create()
