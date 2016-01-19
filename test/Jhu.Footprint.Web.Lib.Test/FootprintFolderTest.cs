@@ -26,7 +26,7 @@ namespace Jhu.Footprint.Web.Lib.Test
         }
 
         [TestMethod]
-        public void CreateTest()
+        public void FolderCreateTest()
         {
             using (var context = new Context())
             {
@@ -45,17 +45,17 @@ namespace Jhu.Footprint.Web.Lib.Test
 
         [TestMethod]
 
-        public void ModifyTest()
+        public void FolderModifyTest()
         {
             using (var context = new Context())
             {
                 var folder = new FootprintFolder(context);
 
-                folder.Id = 8;
+                folder.Id = 4;
+                folder.User = "mike";
+                folder.Load();
+
                 folder.Name = "ModifyTest";
-                folder.User = "evelin";
-                //folder.Type = 0;
-                //folder.Public = 0;
                 folder.Comment = "FootprintFolder.Modify Unit Test";
 
                 folder.Modify();
@@ -63,21 +63,21 @@ namespace Jhu.Footprint.Web.Lib.Test
         }
 
         [TestMethod]
-        public void DeleteTest()
+        public void FolderDeleteTest()
         {
             using (var context = new Context())
             {
                 var folder = new FootprintFolder(context);
 
-                folder.Id = 5;
-                folder.User = "bob";
+                folder.Id = 9;
+                folder.User = "lilly";
 
                 folder.Delete();
             }
         }
 
         [TestMethod]
-        public void LoadTest()
+        public void FolderLoadTest()
         { 
             using (var context = new Context())
             {

@@ -149,6 +149,7 @@ namespace Jhu.Footprint.Web.Lib
 
             cmd.CommandType = CommandType.StoredProcedure;
 
+            cmd.Parameters.Add("@FootprintId", SqlDbType.BigInt).Value = id;
             cmd.Parameters.Add("@Name", SqlDbType.NVarChar, 256).Value = name;
             cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = user;
             cmd.Parameters.Add("@Public", SqlDbType.TinyInt).Value = @public;
@@ -177,12 +178,28 @@ namespace Jhu.Footprint.Web.Lib
 
         protected override SqlCommand GetLoadCommand()
         {
-            throw new NotImplementedException();
+            string sql = "fps.spGetFootprint";
+            var cmd = new SqlCommand(sql);
+
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.Add("@FootprintId", SqlDbType.BigInt).Value = id;
+            cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = user;
+
+            return cmd;
         }
 
         public override void LoadFromDataReader(SqlDataReader dr)
         {
-            throw new NotImplementedException();
+            this.id = (long)dr["FootprintID"];
+            this.name = (string)dr["Name"];
+            this.user = (string)dr["User"];
+            this.@public = (byte)dr["Public"];
+            this.dateCreated = (DateTime)dr["DateCreated"];
+            this.fillFactor = (double)dr["FillFactor"];
+            this.folderType = (FolderType)Enum.ToObject(typeof(FolderType),dr["FolderType"]);
+            this.folderId = (long)dr["FolderID"];
+            this.comment = (string)dr["Comment"];
         }
 
         public void Create()
