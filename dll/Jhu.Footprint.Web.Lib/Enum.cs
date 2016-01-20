@@ -6,7 +6,13 @@ using System.Threading.Tasks;
 
 namespace Jhu.Footprint.Web.Lib
 {
-
+    public enum FootprintSearchMethod
+    { 
+        Name,
+        Object,
+        Point,
+        Intersect
+    }
     public enum FolderType
     {
         Any = 0,

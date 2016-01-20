@@ -10,7 +10,7 @@ using System.Data.SqlClient;
 
 namespace Jhu.Footprint.Web.Lib
 {
-    public class Footprint: ContextObject
+    public class Footprint: Entity
     {
         #region Member variables
 

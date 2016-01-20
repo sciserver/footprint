@@ -10,7 +10,7 @@ using System.Xml.Serialization;
 
 namespace Jhu.Footprint.Web.Lib
 {
-    public class FootprintFolder : ContextObject
+    public class FootprintFolder : Entity
     {
         #region Member variables
 

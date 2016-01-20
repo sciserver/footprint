@@ -1,3 +1,9 @@
+-- CREATE SCHEMA --
+/*
+CREATE SCHEMA [fps]
+GO
+*/
+
 /***********************************************************************/
 /******                     FOOTPRINT PROCEDURES                  ******/
 /***********************************************************************/ 
@@ -183,4 +189,19 @@ AS
              FolderID = @FolderID
              AND ([User] = @User OR [Public] > 0)
  
+GO
+
+/****** Object:  StoredProcedure [fps].[spFindFootprintFolder]  ******/
+IF (OBJECT_ID('[fps].[spFindFootprintFolder]') IS NOT NULL)
+	DROP PROC [fps].[spFindFootprintFolder]
+GO
+
+CREATE PROC [fps].[spFindFootprintFolder]
+	@Name nvarchar(256),
+	@User nvarchar(250)
+AS
+	SELECT * FROM FootprintFolder
+	WHERE
+		Name LIKE @Name
+		AND ([User] = @User OR [Public] > 0)
 GO

@@ -42,10 +42,12 @@
   <ItemGroup>
     <Compile Include="Context.cs" />
     <Compile Include="ContextObject.cs" />
+    <Compile Include="Entity.cs" />
     <Compile Include="Enum.cs" />
     <Compile Include="Footprint.cs" />
     <Compile Include="FootprintFolder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Search.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\spherical\src\Jhu.Spherical\Jhu.Spherical.csproj">
