@@ -9,7 +9,7 @@ using System.Data.SqlClient;
 
 namespace Jhu.Footprint.Web.Lib
 {
-    public class Search: ContextObject
+    public class FootprintFolderSearch: ContextObject
     {
         private FootprintSearchMethod searchMethod;
         private string user;
@@ -54,7 +54,12 @@ namespace Jhu.Footprint.Web.Lib
             set { region = value; }
         }
 
-        public Search(Context context)
+        public FootprintFolderSearch()
+        {
+
+        }
+
+        public FootprintFolderSearch(Context context)
             : base(context) 
         {
             InitializeMembers();
@@ -67,6 +72,22 @@ namespace Jhu.Footprint.Web.Lib
             this.@object = null;
             this.point = new Cartesian();
             this.region = null;
+        }
+
+        public int Count()
+        {
+            string sql = "fps.spCountFootprintFolderByName";
+
+            using (var cmd = new SqlCommand(sql, Context.Connection, Context.Transaction))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@Name", SqlDbType.NVarChar, 256).Value = this.name;
+                cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = this.user;
+                cmd.Parameters.Add("RETVAL", SqlDbType.Int).Direction = ParameterDirection.ReturnValue;
+
+                return (int)cmd.Parameters["RETVAL"].Value;
+            }
         }
 
         public IEnumerable<FootprintFolder> Find()
@@ -90,13 +111,13 @@ namespace Jhu.Footprint.Web.Lib
         private IEnumerable<FootprintFolder> FindName()
         { 
             var res = new List<FootprintFolder>();
-            string sql = "fps.spFindFootprintFolder";
+            string sql = "fps.spFindFootprintFolderByName";
 
             using (var cmd = new SqlCommand(sql,Context.Connection,Context.Transaction))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.Add("@Name",SqlDbType.NVarChar,256).Value = "%"+this.name+"%";
+                cmd.Parameters.Add("@Name",SqlDbType.NVarChar,256).Value = this.name;
                 cmd.Parameters.Add("@User",SqlDbType.NVarChar,250).Value = this.user;
 
                 using (var dr = cmd.ExecuteReader())

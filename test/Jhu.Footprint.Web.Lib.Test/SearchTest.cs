@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Jhu.Graywulf.Test;
 
 namespace Jhu.Footprint.Web.Lib.Test
 {
@@ -11,9 +12,9 @@ namespace Jhu.Footprint.Web.Lib.Test
         {
             using (var context = new Context())
             {
-                var search = new Search(context);
+                var search = new FootprintFolderSearch(context);
 
-                search.Name = "SDSS";
+                search.Name = "Test";
                 search.User = "webtestuser";
                 search.SearchMethod = FootprintSearchMethod.Name;
 

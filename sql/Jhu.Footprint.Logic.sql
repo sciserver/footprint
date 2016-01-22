@@ -165,6 +165,8 @@ AS
 	DELETE FootprintFolder
 	WHERE
 		FolderID = @FolderID AND [User] = @User
+
+
 		 
 	SET @CountAll = @@ROWCOUNT
 	DELETE Footprint
@@ -192,16 +194,36 @@ AS
 GO
 
 /****** Object:  StoredProcedure [fps].[spFindFootprintFolder]  ******/
-IF (OBJECT_ID('[fps].[spFindFootprintFolder]') IS NOT NULL)
-	DROP PROC [fps].[spFindFootprintFolder]
+IF (OBJECT_ID('[fps].[spFindFootprintFolderByName]') IS NOT NULL)
+	DROP PROC [fps].[spFindFootprintFolderByName]
 GO
 
-CREATE PROC [fps].[spFindFootprintFolder]
+CREATE PROC [fps].[spFindFootprintFolderByName]
 	@Name nvarchar(256),
 	@User nvarchar(250)
 AS
 	SELECT * FROM FootprintFolder
 	WHERE
-		Name LIKE @Name
+		Name LIKE '%' + @Name + '%'
 		AND ([User] = @User OR [Public] > 0)
+	ORDER BY Name
+GO
+
+/****** Object:  StoredProcedure [fps].[spFindFootprintFolder]  ******/
+IF (OBJECT_ID('[fps].[spCountFootprintFolderByName]') IS NOT NULL)
+	DROP PROC [fps].[spCountFootprintFolderByName]
+GO
+
+CREATE PROC [fps].[spCountFootprintFolderByName]
+	@Name nvarchar(256),
+	@User nvarchar(250)	
+	
+AS
+	DECLARE @Count int;
+	SET @Count = (SELECT Count(*) FROM FootprintFolder
+	WHERE
+		Name LIKE '%' + @Name + '%'
+		AND ([User] = @User OR [Public] > 0))
+	
+	RETURN @Count
 GO

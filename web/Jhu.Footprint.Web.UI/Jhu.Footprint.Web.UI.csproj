@@ -356,6 +356,7 @@
     <Content Include="Scripts\CodeMirror\theme\vibrant-ink.css" />
     <Content Include="Scripts\CodeMirror\theme\xq-dark.css" />
     <Content Include="Scripts\CodeMirror\theme\xq-light.css" />
+    <Content Include="Search.aspx" />
     <Content Include="Templates\ActivationEmail.xml" />
     <Content Include="Templates\ErrorFeedbackEmail.xml" />
     <Content Include="Templates\FeedbackEmail.xml" />
@@ -415,6 +416,13 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Search.aspx.cs">
+      <DependentUpon>Search.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Search.aspx.designer.cs">
+      <DependentUpon>Search.aspx</DependentUpon>
+    </Compile>
     <Compile Include="UI.master.cs">
       <DependentUpon>UI.master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -454,6 +462,10 @@
     <ProjectReference Include="..\..\dll\Jhu.Footprint.Web.Api\Jhu.Footprint.Web.Api.csproj">
       <Project>{24570021-f4c8-4015-a0af-82d4bbbec40d}</Project>
       <Name>Jhu.Footprint.Web.Api</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\dll\Jhu.Footprint.Web.Lib\Jhu.Footprint.Web.Lib.csproj">
+      <Project>{8d06003c-676e-48e0-87bf-db12da746b50}</Project>
+      <Name>Jhu.Footprint.Web.Lib</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

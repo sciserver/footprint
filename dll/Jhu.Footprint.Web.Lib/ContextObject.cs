@@ -16,6 +16,11 @@ namespace Jhu.Footprint.Web.Lib
             set { context = value; }
         }
 
+        public ContextObject()
+        {
+
+        }
+
         public ContextObject(Context context)
         { 
             this.context = context;
