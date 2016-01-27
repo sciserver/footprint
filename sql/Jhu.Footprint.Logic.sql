@@ -88,12 +88,23 @@ GO
 
 CREATE PROC [fps].[spGetFootprint]
 		@User nvarchar(250),
-		@FootprintId bigint
+		@FootprintId bigint,
+		@Name
 AS
+	IF (@FootprintID > 0)
+	BEGIN
 	SELECT * FROM Footprint
 	WHERE
 		FootprintID = @FootprintID
 		AND ([User] = @User OR [Public] > 0)
+	END
+	IF (@FootprintID = 0)
+	BEGIN
+		SELECT * FROM Footprint
+		WHERE
+		Name = @Name
+		AND ([User] = @User OR [Public] > 0)
+	END
 GO
 
 /***********************************************************************/
@@ -227,3 +238,20 @@ AS
 	
 	RETURN @Count
 GO
+
+/****** Object:  StoredProcedure [fps].[spGetFootrpintFolderNameById]  ******/
+IF (OBJECT_ID('[fps].[spGetFootprintFolderNameById]') IS NOT NULL)
+	DROP PROC [fps].[spGetFootprintFolderNameById]
+GO
+
+CREATE PROC [fps].[spGetFootprintFolderNameById]
+	@FolderID bigint,
+
+	@FolderName nvarchar(256) OUTPUT
+AS
+	SET @FolderName = 
+	(
+	SELECT Name From FootprintFolder
+	WHERE @FolderID = FolderID
+	)
+	RETURN @@ROWCOUNT

@@ -23,6 +23,7 @@ namespace Jhu.Footprint.Web.Lib
         private double fillFactor;
         private FolderType folderType;
         private long folderId;
+        private string folderName;
         private string comment;
         #endregion
 
@@ -76,6 +77,12 @@ namespace Jhu.Footprint.Web.Lib
             set { folderId = value; }
         }
 
+        public string FolderName
+        {
+            get { return folderName; }
+            set { folderName = value; }
+        }
+
 
         public Region Region
         {
@@ -119,6 +126,7 @@ namespace Jhu.Footprint.Web.Lib
             this.fillFactor = 0;
             this.folderType = FolderType.None;
             this.folderId = 0;
+            this.folderName = "";
             this.comment = "";
         }
 
@@ -185,6 +193,8 @@ namespace Jhu.Footprint.Web.Lib
 
             cmd.Parameters.Add("@FootprintId", SqlDbType.BigInt).Value = id;
             cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = user;
+            cmd.Parameters.Add("@Name", SqlDbType.NVarChar, 256).Value = name;
+            cmd.Parameters.Add("@FolderName", SqlDbType.NVarChar, 256).Value = folderName;
 
             return cmd;
         }
@@ -261,5 +271,7 @@ namespace Jhu.Footprint.Web.Lib
                 }
             }
         }
+
+        
     }
 }

@@ -9,14 +9,21 @@ using System.ServiceModel;
 
 namespace Jhu.Footprint.Web.Api.V1
 {
-    [DataContract(Name = "queues")]
-    [Description("Represents a list of job queues.")]
+    [DataContract(Name = "footprintList")]
+    [Description("Represents a list of footprint queues.")]
     public class FootprintListResponse
     {
         [DataMember(Name = "footprints")]
         [Description("")]
         public Footprint[] Footprints { get; set; }
 
+        public FootprintListResponse()
+        {
+        }
 
+        public FootprintListResponse(Footprint footprint)
+        {
+            this.Footprints = new[] { footprint };
+        }
     }
 }

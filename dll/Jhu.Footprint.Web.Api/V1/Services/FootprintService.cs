@@ -25,6 +25,11 @@ namespace Jhu.Footprint.Web.Api.V1
         [WebGet(UriTemplate = "/users/{userName}/footprints/{folderName}/{footprintName}")]
         [Description("TODO")]
         FootprintListResponse GetUserFootprint(string userName, string folderName, string footprintName);
+
+        [OperationContract]
+        [WebInvoke(Method = "PUT", UriTemplate = "/users/{userName}/footprints/{folderName}/{footprintName}")]
+        [Description("Create a new footprint under an existing folder.")]
+        void CreateUserFootprint(string userName, string folderName, string footprintName, FootprintRequest footprint);
     }
 
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
@@ -47,6 +52,26 @@ namespace Jhu.Footprint.Web.Api.V1
 
         [PrincipalPermission(SecurityAction.Assert, Authenticated=true)]
         public FootprintListResponse GetUserFootprint(string userName, string folderName, string footprintName)
+        {
+            Jhu.Footprint.Web.Lib.Footprint footprint;
+            using (var context = new Lib.Context())
+            {
+                footprint = new Lib.Footprint(context);
+                footprint.User = userName;
+                footprint.FolderName = folderName;
+                footprint.Name = footprintName;
+                footprint.Load();
+                // load footprint
+            }
+
+            var f = new Footprint(footprint);
+            var r = new FootprintListResponse(f); 
+            return r;
+            
+        }
+
+        [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
+        public void CreateUserFootprint(string userName, string folderName, string footprintName, FootprintRequest footprint) 
         {
             throw new NotImplementedException();
         }
