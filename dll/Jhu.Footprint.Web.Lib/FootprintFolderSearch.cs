@@ -74,7 +74,25 @@ namespace Jhu.Footprint.Web.Lib
             this.region = null;
         }
 
+
         public int Count()
+        {
+            switch (SearchMethod)
+            {
+                case FootprintSearchMethod.Name:
+                    return CountName();
+                case FootprintSearchMethod.Object:
+                    throw new NotImplementedException();
+                case FootprintSearchMethod.Point:
+                    throw new NotImplementedException();
+                case FootprintSearchMethod.Intersect:
+                    throw new NotImplementedException();
+
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+        public int CountName()
         {
             string sql = "fps.spCountFootprintFolderByName";
 
