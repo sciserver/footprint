@@ -22,7 +22,7 @@ namespace Jhu.Footprint.Web.Lib
         protected abstract SqlCommand GetDeleteCommand();
 
         protected abstract SqlCommand GetLoadCommand();
-
+        
         public abstract void LoadFromDataReader(SqlDataReader dr);
 
         public void Load()
