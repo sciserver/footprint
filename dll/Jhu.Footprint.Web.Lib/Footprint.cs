@@ -109,6 +109,11 @@ namespace Jhu.Footprint.Web.Lib
         }
         #endregion
 
+        public Footprint()
+        {
+            InitializeMembers();
+        }
+
         public Footprint(Context context)
             : base(context)
         {

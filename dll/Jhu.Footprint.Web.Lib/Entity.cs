@@ -10,6 +10,10 @@ namespace Jhu.Footprint.Web.Lib
 {
     public abstract class Entity: ContextObject
     {
+        protected Entity()
+        {
+        }
+
         protected Entity(Context context)
             : base(context)
         {
