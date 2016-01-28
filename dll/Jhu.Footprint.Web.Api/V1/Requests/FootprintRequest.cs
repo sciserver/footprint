@@ -15,5 +15,10 @@ namespace Jhu.Footprint.Web.Api.V1
         [DefaultValue(null)]
         [Description("Conveys a footprint.")]
         public Footprint Footprint { get; set; }
+
+        public FootprintRequest()
+        {
+        }
     }
+
 }

@@ -71,9 +71,24 @@ namespace Jhu.Footprint.Web.Api.V1
         }
 
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
-        public void CreateUserFootprint(string userName, string folderName, string footprintName, FootprintRequest footprint) 
+        public void CreateUserFootprint(string userName, string folderName, string footprintName, FootprintRequest request) 
         {
-            throw new NotImplementedException();
+            using (var context = new Lib.Context())
+            {
+                var footprint = request.Footprint.GetValue();
+                footprint.Context = context;
+                footprint.Create();
+
+                /*
+                Lib.Footprint fp = new Lib.Footprint(context);
+                fp.User = userName;
+                fp.FolderName = folderName;
+                fp.Name = footprintName;
+                fp.Create();
+                */
+            }
+
+
         }
     }
 }
