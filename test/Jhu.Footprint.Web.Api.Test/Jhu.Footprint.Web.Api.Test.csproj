@@ -58,6 +58,18 @@
     <Compile Include="FootprintTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\graywulf\dll\Jhu.Graywulf.Web\Jhu.Graywulf.Web.csproj">
+      <Project>{e9d182cf-746e-4e40-b01c-74a32fb70749}</Project>
+      <Name>Jhu.Graywulf.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\graywulf\test\Jhu.Graywulf.Test\Jhu.Graywulf.Test.csproj">
+      <Project>{ea6164ba-b283-46c2-874b-348d6bad41ad}</Project>
+      <Name>Jhu.Graywulf.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\graywulf\test\Jhu.Graywulf.Web.Test\Jhu.Graywulf.Web.Test.csproj">
+      <Project>{3c9ea0e6-dad6-4f6e-bfba-f24cfc8e2a66}</Project>
+      <Name>Jhu.Graywulf.Web.Test</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\dll\Jhu.Footprint.Web.Api\Jhu.Footprint.Web.Api.csproj">
       <Project>{24570021-f4c8-4015-a0af-82d4bbbec40d}</Project>
       <Name>Jhu.Footprint.Web.Api</Name>
