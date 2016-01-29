@@ -87,24 +87,31 @@ IF (OBJECT_ID('[fps].[spGetFootprint]') IS NOT NULL)
 GO
 
 CREATE PROC [fps].[spGetFootprint]
-		@User nvarchar(250),
-		@FootprintId bigint,
-		@Name
+	@User nvarchar(250),
+	@FootprintId bigint
 AS
-	IF (@FootprintID > 0)
-	BEGIN
 	SELECT * FROM Footprint
 	WHERE
 		FootprintID = @FootprintID
 		AND ([User] = @User OR [Public] > 0)
-	END
-	IF (@FootprintID = 0)
-	BEGIN
-		SELECT * FROM Footprint
-		WHERE
-		Name = @Name
-		AND ([User] = @User OR [Public] > 0)
-	END
+GO
+
+/****** Object:  StoredProcedure [fps].[spGetFolderId]  ******/
+
+IF (OBJECT_ID('[fps].[spGetFolderId]') IS NOT NULL)
+	DROP PROC [fps].[spGetFolderId]
+GO
+
+CREATE PROC [fps].[spGetFolderId]
+	@User nvarchar(250),
+	@FolderName nvarchar(256),
+
+	@folderId bigint OUTPUT
+AS
+	SET @folderId = (SELECT [Name] FROM FootprintFolder
+	WHERE
+		Name = @FolderName
+		AND [User] = @User)
 GO
 
 /***********************************************************************/
