@@ -177,6 +177,8 @@ namespace Jhu.Footprint.Web.Lib
 
         protected override System.Data.SqlClient.SqlCommand GetDeleteCommand()
         {
+            if (this.id == 0) { GetFootprintId(); } 
+
             string sql = "fps.spDeleteFootprint";
             var cmd = new SqlCommand(sql);
 
@@ -191,16 +193,16 @@ namespace Jhu.Footprint.Web.Lib
 
         protected override SqlCommand GetLoadCommand()
         {
-            string sql = "fps.spGetFootprint";
+            if (this.id == 0) { GetFootprintId(); } 
+            
+            var sql = "fps.spGetFootprint";
             var cmd = new SqlCommand(sql);
 
             cmd.CommandType = CommandType.StoredProcedure;
 
-            cmd.Parameters.Add("@FootprintId", SqlDbType.BigInt).Value = id;
             cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = user;
-            cmd.Parameters.Add("@Name", SqlDbType.NVarChar, 256).Value = name;
-            cmd.Parameters.Add("@FolderName", SqlDbType.NVarChar, 256).Value = folderName;
-
+            cmd.Parameters.Add("@FootprintId", SqlDbType.BigInt).Value = id;
+            
             return cmd;
         }
 
@@ -274,6 +276,27 @@ namespace Jhu.Footprint.Web.Lib
                 {
                     throw new Exception("Cannot delete Footprint.");
                 }
+            }
+        }
+
+        private void GetFootprintId()
+        {
+            var sql = "fps.spGetFootprintId";
+            using (var cmd = new SqlCommand(sql))
+            {
+                cmd.Connection = Context.Connection;
+                cmd.Transaction = Context.Transaction;
+
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = user;
+                cmd.Parameters.Add("@FolderName", SqlDbType.NVarChar, 256).Value = folderName;
+                cmd.Parameters.Add("@FootprintName", SqlDbType.NVarChar, 256).Value = name;
+                cmd.Parameters.Add("@FootprintId", SqlDbType.BigInt).Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+
+                this.id = (long)cmd.Parameters["@FootprintId"].Value;
             }
         }
 
