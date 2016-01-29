@@ -23,13 +23,18 @@ namespace Jhu.Footprint.Web.Api.V1
 
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}/footprints/{folderName}/{footprintName}")]
-        [Description("TODO")]
+        [Description("Load existing footprint under an existing folder.")]
         FootprintListResponse GetUserFootprint(string userName, string folderName, string footprintName);
 
         [OperationContract]
-        [WebInvoke(Method = "PUT", UriTemplate = "/users/{userName}/footprints/{folderName}/{footprintName}")]
+        [WebInvoke(Method = HttpMethod.Put, UriTemplate = "/users/{userName}/footprints/{folderName}/{footprintName}")]
         [Description("Create a new footprint under an existing folder.")]
         void CreateUserFootprint(string userName, string folderName, string footprintName, FootprintRequest footprint);
+
+        [OperationContract]
+        [WebInvoke(Method = HttpMethod.Delete, UriTemplate = "/users/{userName}/footprints/{folderName}/{footprintName}")]
+        [Description("Delete footprint under an existing folder.")]
+        void DeleteUserFootprint(string userName, string folderName, string footprintName);
     }
 
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
@@ -78,17 +83,21 @@ namespace Jhu.Footprint.Web.Api.V1
                 var footprint = request.Footprint.GetValue();
                 footprint.Context = context;
                 footprint.Create();
-
-                /*
-                Lib.Footprint fp = new Lib.Footprint(context);
-                fp.User = userName;
-                fp.FolderName = folderName;
-                fp.Name = footprintName;
-                fp.Create();
-                */
             }
+        }
 
+        [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
+        public void DeleteUserFootprint(string userName, string folderName, string footprintName)
+        {
+            using (var context = new Lib.Context())
+            {
+                var footprint = new Lib.Footprint(context);
+                footprint.Name = footprintName;
+                footprint.FolderName = folderName;
+                footprint.User = userName;
 
+                footprint.Delete();
+            }
         }
     }
 }
