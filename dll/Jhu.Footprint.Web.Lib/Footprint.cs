@@ -16,7 +16,7 @@ namespace Jhu.Footprint.Web.Lib
 
         private long id;
         private string name;
-        private string user;               // user database guid
+        private string user;               
         private byte @public;                // public flag, >0 when visible to the public
         private DateTime dateCreated;
         private Region region;
@@ -157,6 +157,8 @@ namespace Jhu.Footprint.Web.Lib
 
         protected override System.Data.SqlClient.SqlCommand GetModifyCommand()
         {
+            if (this.id == 0) { GetFootprintId(); } 
+
             string sql = "fps.spModifyFootprint";
             var cmd = new SqlCommand(sql);
 
