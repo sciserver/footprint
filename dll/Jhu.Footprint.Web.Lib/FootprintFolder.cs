@@ -56,7 +56,7 @@ namespace Jhu.Footprint.Web.Lib
             }
         }
 
-        public int Public
+        public byte Public
         {
             get { return @public; }
             set
@@ -87,6 +87,10 @@ namespace Jhu.Footprint.Web.Lib
 
         #endregion
 
+        public FootprintFolder()
+        {
+            InitializeMembers();
+        }
         public FootprintFolder(Context context)
             : base(context)
         {
@@ -131,6 +135,8 @@ namespace Jhu.Footprint.Web.Lib
 
         protected override SqlCommand GetModifyCommand()
         {
+            if (this.id == 0) { GetFootprintFolderId(); } 
+
             string sql = "fps.spModifyFootprintFolder";
             var cmd = new SqlCommand(sql);
 
@@ -150,6 +156,8 @@ namespace Jhu.Footprint.Web.Lib
 
         protected override SqlCommand GetDeleteCommand()
         {
+            if (this.id == 0) { GetFootprintFolderId(); } 
+
             string sql = "fps.spDeleteFootprintFolder";
             var cmd = new SqlCommand(sql);
 
@@ -164,6 +172,8 @@ namespace Jhu.Footprint.Web.Lib
 
         protected override SqlCommand GetLoadCommand()
         {
+            if (this.id == 0) { GetFootprintFolderId(); } 
+
             string sql = "fps.spGetFootprintFolder";
             var cmd = new SqlCommand(sql);
 
@@ -244,6 +254,26 @@ namespace Jhu.Footprint.Web.Lib
                 {
                     throw new Exception("Cannot delete FootprintFolder.");
                 }
+            }
+        }
+
+        private void GetFootprintFolderId()
+        {
+            var sql = "fps.spGetFootprintFolderId";
+            using (var cmd = new SqlCommand(sql))
+            {
+                cmd.Connection = Context.Connection;
+                cmd.Transaction = Context.Transaction;
+
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = user;
+                cmd.Parameters.Add("@FolderName", SqlDbType.NVarChar, 256).Value = name;
+                cmd.Parameters.Add("@FolderId", SqlDbType.BigInt).Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+
+                this.id = (long)cmd.Parameters["@FolderId"].Value;
             }
         }
 
