@@ -45,23 +45,8 @@ namespace Jhu.Footprint.Web.Api.V1
             using (var session = new RestClientSession())
             {
                 var client = CreateClient(session);
-                var footprint = client.GetUserFootprint("evelin","SDSS.DR7","Stripe2");
+                var footprint = client.GetUserFootprint("evelin", "SDSS.DR7", "Stripe2");
             }
-
-            /*
-            var uri = new Uri("http://CASTOR/footprint/api/v1/Footprint.svc/users/evelin/footprints/SDSS.DR7/Stripe2");
-            var req = (HttpWebRequest)WebRequest.Create(uri);
-
-            req.Accept = MediaTypeNames.Text.Xml;
-
-            var res = (HttpWebResponse)req.GetResponse();
-
-            using (var reader = new StreamReader(res.GetResponseStream()))
-            {
-                var text = reader.ReadToEnd();
-                System.Diagnostics.Debug.WriteLine(text);
-            }
-            */
         }
 
         [TestMethod]
@@ -80,8 +65,34 @@ namespace Jhu.Footprint.Web.Api.V1
 
                 request.Footprint = new V1.Footprint(footprint);
 
-                client.CreateUserFootprint("Evelin","Test","Test",request);
+                client.CreateUserFootprint(request.Footprint.User, request.Footprint.FolderName, request.Footprint.Name, request);
             }
+        }
+
+        [TestMethod]
+        public void ModifyUserFootprintTest()
+        {
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session);
+
+                var footprint = new Jhu.Footprint.Web.Lib.Footprint();
+                var request = new FootprintRequest();
+
+                using (var context = new Context())
+                {
+                    footprint.Context = context;
+                    footprint.Id = 4;
+                    footprint.Load();
+                }
+
+                footprint.Comment = "Api modification test.";
+
+                request.Footprint = new V1.Footprint(footprint);
+
+                client.ModifyUserFootprint("mike", "2MASS", "South", request);
+            }
+
         }
 
         [TestMethod]
