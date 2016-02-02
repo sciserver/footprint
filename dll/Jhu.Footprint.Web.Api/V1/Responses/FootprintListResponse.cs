@@ -14,7 +14,7 @@ namespace Jhu.Footprint.Web.Api.V1
     public class FootprintListResponse
     {
         [DataMember(Name = "footprints")]
-        [Description("")]
+        [Description("List of footprints.")]
         public Footprint[] Footprints { get; set; }
 
         public FootprintListResponse()
