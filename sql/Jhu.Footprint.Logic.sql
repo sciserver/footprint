@@ -96,21 +96,30 @@ AS
 		AND ([User] = @User OR [Public] > 0)
 GO
 
+
+
+
 /****** Object:  StoredProcedure [fps].[spGetFolderId]  ******/
 
-IF (OBJECT_ID('[fps].[spGetFolderId]') IS NOT NULL)
-	DROP PROC [fps].[spGetFolderId]
+IF (OBJECT_ID('[fps].[spGetFootprintId]') IS NOT NULL)
+	DROP PROC [fps].[spGetFootprintId]
 GO
 
-CREATE PROC [fps].[spGetFolderId]
+CREATE PROC [fps].[spGetFootprintId]
 	@User nvarchar(250),
 	@FolderName nvarchar(256),
+	@FootprintName nvarchar(256),
 
-	@folderId bigint OUTPUT
+	@footprintId bigint OUTPUT
 AS
-	SET @folderId = (SELECT [Name] FROM FootprintFolder
+	DECLARE @folderId bigint;
+	SET @folderId = (SELECT folderId FROM FootprintFolder
 	WHERE
 		Name = @FolderName
+		AND [User] = @User)
+	SET @footprintId = (SELECT footprintId FROM Footprint
+	WHERE
+		Name = @FootprintName
 		AND [User] = @User)
 GO
 
@@ -262,3 +271,21 @@ AS
 	WHERE @FolderID = FolderID
 	)
 	RETURN @@ROWCOUNT
+
+/****** Object:  StoredProcedure [fps].[spGetFootprintFolderId]  ******/
+
+IF (OBJECT_ID('[fps].[spGetFootprintFolderId]') IS NOT NULL)
+	DROP PROC [fps].[spGetFootprintFolderId]
+GO
+
+CREATE PROC [fps].[spGetFootprintFolderId]
+	@User nvarchar(250),
+	@FolderName nvarchar(256),
+
+	@folderId bigint OUTPUT
+AS
+	SET @folderId = (SELECT [folderId] FROM FootprintFolder
+	WHERE
+		Name = @FolderName
+		AND [User] = @User)
+GO
