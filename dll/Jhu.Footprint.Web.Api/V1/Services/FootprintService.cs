@@ -27,9 +27,14 @@ namespace Jhu.Footprint.Web.Api.V1
         FootprintListResponse GetUserFootprint(string userName, string folderName, string footprintName);
 
         [OperationContract]
-        [WebInvoke(Method = HttpMethod.Put, UriTemplate = "/users/{userName}/footprints/{folderName}/{footprintName}")]
+        [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/users/{userName}/footprints/{folderName}/{footprintName}")]
         [Description("Create a new footprint under an existing folder.")]
         void CreateUserFootprint(string userName, string folderName, string footprintName, FootprintRequest footprint);
+
+        [OperationContract]
+        [WebInvoke(Method = HttpMethod.Put, UriTemplate = "/users/{userName}/footprints/{folderName}/{footprintName}")]
+        [Description("Modify an existing footprint under an existing folder.")]
+        void ModifyUserFootprint(string userName, string folderName, string footprintName, FootprintRequest footprint);
 
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Delete, UriTemplate = "/users/{userName}/footprints/{folderName}/{footprintName}")]
@@ -78,7 +83,7 @@ namespace Jhu.Footprint.Web.Api.V1
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
         public void CreateUserFootprint(string userName, string folderName, string footprintName, FootprintRequest request) 
         {
-            using (var context = new Lib.Context())
+            using (var context = new Jhu.Footprint.Web.Lib.Context())
             {
                 var footprint = request.Footprint.GetValue();
                 footprint.Context = context;
@@ -87,11 +92,23 @@ namespace Jhu.Footprint.Web.Api.V1
         }
 
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
+        public void ModifyUserFootprint(string userName, string folderName, string footprintName, FootprintRequest request)
+        {
+            using (var context = new Jhu.Footprint.Web.Lib.Context())
+            {
+                var footprint = request.Footprint.GetValue();
+                footprint.Context = context;
+                footprint.Modify();
+            
+            }
+        }
+
+        [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
         public void DeleteUserFootprint(string userName, string folderName, string footprintName)
         {
-            using (var context = new Lib.Context())
+            using (var context = new Jhu.Footprint.Web.Lib.Context())
             {
-                var footprint = new Lib.Footprint(context);
+                var footprint = new Jhu.Footprint.Web.Lib.Footprint(context);
                 footprint.Name = footprintName;
                 footprint.FolderName = folderName;
                 footprint.User = userName;
