@@ -5,6 +5,8 @@ using System.Text;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
 using System.ComponentModel;
+using Util = Jhu.Graywulf.Web.Api.Util;
+using Lib = Jhu.Footprint.Web.Lib;
 
 namespace Jhu.Footprint.Web.Api.V1
 {
@@ -12,6 +14,15 @@ namespace Jhu.Footprint.Web.Api.V1
     [Description("TODO")]
     public class Footprint
     {
+
+        [DataMember(Name = "id")]
+        [Description("Footprint Id.")]
+        public long Id { get; set; }
+
+        [DataMember(Name = "folderId")]
+        [Description("Id of the folder containing the footprint.")]
+        public long FolderId { get; set; }
+
         [DataMember(Name = "folderName")]
         [Description("Name of the folder containing the footprint.")]
         public string FolderName { get; set; }
@@ -24,10 +35,6 @@ namespace Jhu.Footprint.Web.Api.V1
         [Description("User of the footprint.")]
         public string User { get; set; }
 
-        [DataMember(Name = "id")]
-        [Description("Footprint Id.")]
-        public long Id { get; set; }
-
         [DataMember(Name = "public")]
         [Description("Publicity of footprint. 0 - not public, 1 - public.")]
         public byte Public { get; set; }
@@ -36,13 +43,18 @@ namespace Jhu.Footprint.Web.Api.V1
         [Description("TODO")]
         public double FillFactor { get; set; }
 
-        [DataMember(Name = "folderType")]
-        [Description("Type of the folder containing the footprint. Could be: Any, Unknown, Union, Intersection, None.")]
+        [IgnoreDataMember]
         public Jhu.Footprint.Web.Lib.FolderType FolderType { get; set; }
 
-        [DataMember(Name = "folderId")]
-        [Description("Id of the folder containing the footprint.")]
-        public long FolderId { get; set; }
+        [DataMember(Name = "folderType")]
+        [Description("Type of the folder containing the footprint. Could be: Any, Unknown, Union, Intersection, None.")]
+        public string Type_ForXml
+        {
+            get { return Util.EnumFormatter.ToXmlString(FolderType); }
+            set { FolderType = Util.EnumFormatter.FromXmlString<Lib.FolderType>(value); }
+
+        }
+
 
         [DataMember(Name = "comment")]
         [Description("Comment.")]

@@ -55,6 +55,10 @@
     <Compile Include="V1\Services\FootprintService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\graywulf\dll\Jhu.Graywulf.Web.Api\Jhu.Graywulf.Web.Api.csproj">
+      <Project>{975ee996-a41b-4c73-8562-e2b2035e8899}</Project>
+      <Name>Jhu.Graywulf.Web.Api</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\graywulf\dll\Jhu.Graywulf.Web\Jhu.Graywulf.Web.csproj">
       <Project>{e9d182cf-746e-4e40-b01c-74a32fb70749}</Project>
       <Name>Jhu.Graywulf.Web</Name>

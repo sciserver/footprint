@@ -22,7 +22,7 @@ namespace Jhu.Footprint.Web.Api.V1
         void HandleHttpOptionsRequest();
 
         [OperationContract]
-        [WebGet(UriTemplate = "/users/{userName}/fooprints/{folderName}")]
+        [WebGet(UriTemplate = "/users/{userName}/footprints/{folderName}")]
         [Description("Load existing footprint folder.")]
         FootprintFolderListResponse GetUserFootprintFolder(string userName, string folderName);
 

@@ -14,6 +14,10 @@ namespace Jhu.Footprint.Web.Api.V1
     [Description("Folder that is able to contain footprint(s).")]
     public class FootprintFolder
     {
+        [DataMember(Name = "id")]
+        [Description("Folder Id.")]
+        public long Id { get; set; }
+
         [DataMember(Name = "name")]
         [Description("Name of the folder containing the footprint.")]
         public string Name { get; set; }
@@ -21,10 +25,6 @@ namespace Jhu.Footprint.Web.Api.V1
         [DataMember(Name = "user")]
         [Description("User of the folder.")]
         public string User { get; set; }
-
-        [DataMember(Name = "id")]
-        [Description("Folder Id.")]
-        public long Id { get; set; }
 
         [DataMember(Name = "public")]
         [Description("Publicity of folder. 0 - not public, 1 - public.")]
@@ -35,7 +35,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
         [DataMember(Name = "type")]
         [Description("Type of the folder. Could be: Any, Unknown, Union, Intersection, None.")]
-        public string Status_ForXml
+        public string Type_ForXml
         {
             get { return Util.EnumFormatter.ToXmlString(Type); }
             set { Type = Util.EnumFormatter.FromXmlString<Lib.FolderType>(value); }
