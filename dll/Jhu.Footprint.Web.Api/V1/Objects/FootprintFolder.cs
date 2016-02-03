@@ -5,6 +5,8 @@ using System.Text;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
 using System.ComponentModel;
+using Util = Jhu.Graywulf.Web.Api.Util;
+using Lib = Jhu.Footprint.Web.Lib;
 
 namespace Jhu.Footprint.Web.Api.V1
 {
@@ -27,10 +29,18 @@ namespace Jhu.Footprint.Web.Api.V1
         [DataMember(Name = "public")]
         [Description("Publicity of folder. 0 - not public, 1 - public.")]
         public byte Public { get; set; }
-        
+
+        [IgnoreDataMember]
+        public Jhu.Footprint.Web.Lib.FolderType Type { get; set; }
+
         [DataMember(Name = "type")]
         [Description("Type of the folder. Could be: Any, Unknown, Union, Intersection, None.")]
-        public Jhu.Footprint.Web.Lib.FolderType Type { get; set; }
+        public string Status_ForXml
+        {
+            get { return Util.EnumFormatter.ToXmlString(Type); }
+            set { Type = Util.EnumFormatter.FromXmlString<Lib.FolderType>(value); }
+
+        }
 
         [DataMember(Name = "comment")]
         [Description("Comment.")]
