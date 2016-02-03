@@ -33,7 +33,8 @@ namespace Jhu.Footprint.Web.Api.V1
         {
             AuthenticateTestUser(session);
 
-            var uri = new Uri("http://CASTOR/footprint/api/v1/FootprintFolder.svc");
+            var host = Environment.MachineName;
+            var uri = new Uri("http://"+host+"/footprint/api/v1/FootprintFolder.svc");
 
             var client = session.CreateClient<IFootprintFolderService>(uri, null);
             return client;
