@@ -239,6 +239,9 @@ namespace Jhu.Footprint.Web.Lib
                 {
                     this.id = (long)cmd.Parameters["@NewID"].Value;
                 }
+
+                // TODO
+                // throw Error.DuplicateFootprintName(name);
             }
 
         }
