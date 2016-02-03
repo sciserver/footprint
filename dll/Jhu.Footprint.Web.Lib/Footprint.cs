@@ -142,13 +142,7 @@ namespace Jhu.Footprint.Web.Lib
 
             cmd.CommandType = CommandType.StoredProcedure;
 
-            cmd.Parameters.Add("@Name",SqlDbType.NVarChar,256).Value = name;
-            cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = user;
-            cmd.Parameters.Add("@Public", SqlDbType.TinyInt).Value = @public;
-            cmd.Parameters.Add("@FillFactor", SqlDbType.Float).Value = fillFactor;
-            cmd.Parameters.Add("@FolderType", SqlDbType.TinyInt).Value = folderType;
-            cmd.Parameters.Add("@FolderId", SqlDbType.BigInt).Value = folderId;
-            cmd.Parameters.Add("@Comment", SqlDbType.NVarChar, -1).Value = comment;
+            AppendCreateModifyParameters(cmd);
 
             cmd.Parameters.Add("@NewID", SqlDbType.BigInt).Direction = ParameterDirection.Output;
             cmd.Parameters.Add("RETVAL", SqlDbType.Int).Direction = ParameterDirection.ReturnValue;
@@ -165,13 +159,7 @@ namespace Jhu.Footprint.Web.Lib
             cmd.CommandType = CommandType.StoredProcedure;
 
             cmd.Parameters.Add("@FootprintId", SqlDbType.BigInt).Value = id;
-            cmd.Parameters.Add("@Name", SqlDbType.NVarChar, 256).Value = name;
-            cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = user;
-            cmd.Parameters.Add("@Public", SqlDbType.TinyInt).Value = @public;
-            cmd.Parameters.Add("@FillFactor", SqlDbType.Float).Value = fillFactor;
-            cmd.Parameters.Add("@FolderType", SqlDbType.TinyInt).Value = folderType;
-            cmd.Parameters.Add("@FolderId", SqlDbType.BigInt).Value = folderId;
-            cmd.Parameters.Add("@Comment", SqlDbType.NVarChar, -1).Value = comment;
+            AppendCreateModifyParameters(cmd);
 
             cmd.Parameters.Add("RETVAL", SqlDbType.Int).Direction = ParameterDirection.ReturnValue;
             return cmd;
@@ -206,6 +194,17 @@ namespace Jhu.Footprint.Web.Lib
             cmd.Parameters.Add("@FootprintId", SqlDbType.BigInt).Value = id;
             
             return cmd;
+        }
+
+        private void AppendCreateModifyParameters(SqlCommand cmd)
+        {
+            cmd.Parameters.Add("@Name", SqlDbType.NVarChar, 256).Value = name;
+            cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = user;
+            cmd.Parameters.Add("@Public", SqlDbType.TinyInt).Value = @public;
+            cmd.Parameters.Add("@FillFactor", SqlDbType.Float).Value = fillFactor;
+            cmd.Parameters.Add("@FolderType", SqlDbType.TinyInt).Value = folderType;
+            cmd.Parameters.Add("@FolderId", SqlDbType.BigInt).Value = folderId;
+            cmd.Parameters.Add("@Comment", SqlDbType.NVarChar, -1).Value = comment;
         }
 
         public override void LoadFromDataReader(SqlDataReader dr)
