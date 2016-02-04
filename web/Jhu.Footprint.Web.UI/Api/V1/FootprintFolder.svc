@@ -1,1 +1,0 @@
-﻿<%@ ServiceHost Language="C#" Debug="true" Service="Jhu.Footprint.Web.Api.V1.FootprintFolderService" Factory="System.ServiceModel.Activation.WebServiceHostFactory"  %>

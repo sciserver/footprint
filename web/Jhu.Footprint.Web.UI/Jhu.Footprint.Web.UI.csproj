@@ -63,7 +63,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Api\V1\Footprint.svc" />
-    <Content Include="Api\V1\FootprintFolder.svc" />
     <Content Include="App_Themes\Basic\Css\codemirror.css" />
     <Content Include="App_Themes\Basic\Css\docs.css" />
     <Content Include="App_Themes\Basic\Css\fonts.css" />

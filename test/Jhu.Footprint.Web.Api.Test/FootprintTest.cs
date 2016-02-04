@@ -57,7 +57,6 @@ namespace Jhu.Footprint.Web.Api.V1
             using (var session = new RestClientSession())
             {
                 var client = CreateClient(session);
-
                 var request = new FootprintRequest();
                 var footprint = new Lib.Footprint();
                 footprint.Comment = "Test Api Create Footprint";
@@ -68,6 +67,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 request.Footprint = new V1.Footprint(footprint);
 
                 client.CreateUserFootprint(request.Footprint.User, request.Footprint.FolderName, request.Footprint.Name, request);
+
             }
         }
 
@@ -105,6 +105,74 @@ namespace Jhu.Footprint.Web.Api.V1
                 var client = CreateClient(session);
 
                 client.DeleteUserFootprint("evelin", "SDSS.DR7", "ApiDelete");
+            }
+        }
+
+        // TEST for folder actions
+
+        [TestMethod]
+        public void GetUserFootprintFolderTest()
+        {
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session);
+                var folder = client.GetUserFootprint("evelin", "SDSS.DR7","");
+            }
+        }
+
+        [TestMethod]
+        public void CreateUserFootprintFolderTest()
+        {
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session);
+
+                var request = new FootprintRequest();
+                var folder = new Lib.FootprintFolder();
+
+                folder.Comment = "Test Api Create Folder";
+                folder.User = "Evelin";
+                folder.Name = "Test Api";
+                folder.Type = FolderType.Intersection;
+
+                request.FootprintFolder = new V1.FootprintFolder(folder);
+                client.CreateUserFootprint(request.FootprintFolder.User, request.FootprintFolder.Name,"", request);
+            }
+        }
+
+        [TestMethod]
+        public void ModifyUserFootprintFolderTest()
+        {
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session);
+
+                var folder = new Jhu.Footprint.Web.Lib.FootprintFolder();
+                var request = new FootprintRequest();
+
+                using (var context = new Context())
+                {
+                    folder.Context = context;
+                    folder.Id = 8;
+                    folder.Load();
+                }
+
+                folder.Comment = "Api modification test.";
+
+                request.FootprintFolder = new V1.FootprintFolder(folder);
+
+                client.ModifyUserFootprint(request.FootprintFolder.User, request.FootprintFolder.Name, "",request);
+            }
+        }
+
+        [TestMethod]
+        public void DeleteUserFootprintFolderTest()
+        {
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session);
+
+                client.DeleteUserFootprint("kate", "COSMOS","");
             }
         }
     }
