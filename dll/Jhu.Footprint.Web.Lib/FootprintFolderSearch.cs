@@ -17,6 +17,7 @@ namespace Jhu.Footprint.Web.Lib
         private string @object;
         private Cartesian point;
         private Region region;
+        private SearchSource source;
 
         public FootprintSearchMethod SearchMethod
         {
@@ -54,6 +55,12 @@ namespace Jhu.Footprint.Web.Lib
             set { region = value; }
         }
 
+        public SearchSource Source
+        {
+            get { return source; }
+            set { source = value; }
+        }
+
         public FootprintFolderSearch()
         {
 
@@ -67,8 +74,8 @@ namespace Jhu.Footprint.Web.Lib
 
         private void InitializeMembers()
         {
-            this.name = null;
-            this.user = null;
+            this.name = "";
+            this.user = "";
             this.@object = null;
             this.point = new Cartesian();
             this.region = null;
@@ -102,6 +109,7 @@ namespace Jhu.Footprint.Web.Lib
 
                 cmd.Parameters.Add("@Name", SqlDbType.NVarChar, 256).Value = this.name;
                 cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = this.user;
+                //cmd.Parameters.Add("@Source", SqlDbType.Int).Value = (int)this.source;
                 cmd.Parameters.Add("RETVAL", SqlDbType.Int).Direction = ParameterDirection.ReturnValue;
 
                 return (int)cmd.Parameters["RETVAL"].Value;
@@ -136,7 +144,8 @@ namespace Jhu.Footprint.Web.Lib
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 cmd.Parameters.Add("@Name",SqlDbType.NVarChar,256).Value = this.name;
-                cmd.Parameters.Add("@User",SqlDbType.NVarChar,250).Value = this.user;
+                cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = this.user; 
+                cmd.Parameters.Add("@Source", SqlDbType.Int).Value = (int)this.source;
 
                 using (var dr = cmd.ExecuteReader())
                 {
