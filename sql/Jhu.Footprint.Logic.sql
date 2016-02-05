@@ -123,6 +123,29 @@ AS
 		AND [User] = @User)
 GO
 
+
+/****** Object:  StoredProcedure [fps].[spFootprintNameIsAvailable]  ******/
+
+IF (OBJECT_ID('[fps].[spFootprintNameIsAvailable]') IS NOT NULL)
+	DROP PROC [fps].[spFootprintNameIsAvailable]
+GO
+
+CREATE PROC [fps].[spFootprintNameIsAvailable]
+	@User nvarchar(250),
+	@FolderId bigint,
+	@FootprintName nvarchar(256),
+
+	@MATCH int OUTPUT
+
+AS
+	SET @MATCH = (SELECT COUNT(*) FROM Footprint
+	WHERE
+		Name = @FootprintName
+		AND [User] = @User
+		AND FolderId = @FolderId)
+GO
+
+
 /***********************************************************************/
 /******                 FOOTPRINT FOLDER PROCEDURES               ******/ 
 /***********************************************************************/
@@ -227,12 +250,18 @@ GO
 
 CREATE PROC [fps].[spFindFootprintFolderByName]
 	@Name nvarchar(256),
-	@User nvarchar(250)
+	@User nvarchar(250),
+	@Source int
 AS
 	SELECT * FROM FootprintFolder
 	WHERE
-		Name LIKE '%' + @Name + '%'
-		AND ([User] = @User OR [Public] > 0)
+		-- public
+		((@Source & 1) > 0 
+		AND [Public] > 0)
+		OR
+		-- private
+		(@User = [User] AND (@Source & 2) > 0)
+		AND Name LIKE '%' + @Name + '%'
 	ORDER BY Name
 GO
 
@@ -265,7 +294,7 @@ CREATE PROC [fps].[spGetFootprintFolderNameById]
 
 	@FolderName nvarchar(256) OUTPUT
 AS
-	SET @FolderName = 
+	SET @FolderName = 6
 	(
 	SELECT Name From FootprintFolder
 	WHERE @FolderID = FolderID
