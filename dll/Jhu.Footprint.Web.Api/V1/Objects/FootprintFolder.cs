@@ -18,6 +18,10 @@ namespace Jhu.Footprint.Web.Api.V1
         [Description("Folder Id.")]
         public long Id { get; set; }
 
+        [DataMember(Name = "url")]
+        [Description("Folder url.")]
+        public string Url { get; set; }
+
         [DataMember(Name = "name")]
         [Description("Name of the folder containing the footprint.")]
         public string Name { get; set; }
@@ -62,6 +66,7 @@ namespace Jhu.Footprint.Web.Api.V1
             this.Id = folder.Id;
             this.Public = folder.Public;
             this.Type = folder.Type;
+            //this.Url = System.ServiceModel.Web.WebOperationContext.Current.IncomingRequest.UriTemplateMatch.RequestUri.OriginalString;
             this.Comment = folder.Comment;
         }
 

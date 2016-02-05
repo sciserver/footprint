@@ -17,10 +17,6 @@ namespace Jhu.Footprint.Web.Api.V1
         [Description("List of footprints.")]
         public Footprint[] Footprints { get; set; }
 
-        [DataMember(Name = "footprintFolders")]
-        [Description("List of footprint folders.")]
-        public FootprintFolder[] FootprintFolders { get; set; }
-
         public FootprintListResponse()
         {
         }
@@ -28,11 +24,6 @@ namespace Jhu.Footprint.Web.Api.V1
         public FootprintListResponse(Footprint footprint)
         {
             this.Footprints = new[] { footprint };
-        }
-
-                public FootprintListResponse(FootprintFolder folder)
-        {
-            this.FootprintFolders = new[] { folder };
         }
     }
 }

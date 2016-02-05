@@ -47,7 +47,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="V1\Objects\Footprint.cs" />
     <Compile Include="V1\Objects\FootprintFolder.cs" />
+    <Compile Include="V1\Requests\FootprintFolderRequest.cs" />
     <Compile Include="V1\Requests\FootprintRequest.cs" />
+    <Compile Include="V1\Responses\FootprintFolderListResponse.cs" />
     <Compile Include="V1\Responses\FootprintListResponse.cs" />
     <Compile Include="V1\Services\FootprintService.cs" />
   </ItemGroup>

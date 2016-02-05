@@ -16,12 +16,6 @@ namespace Jhu.Footprint.Web.Api.V1
         [Description("Conveys a footprint.")]
         public Footprint Footprint { get; set; }
 
-
-        [DataMember(Name = "footprintFolder", EmitDefaultValue = false)]
-        [DefaultValue(null)]
-        [Description("Conveys a footprint folder.")]
-        public FootprintFolder FootprintFolder { get; set; }
-
         public FootprintRequest()
         {
         }

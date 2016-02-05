@@ -111,23 +111,13 @@ namespace Jhu.Footprint.Web.Api.V1
         // TEST for folder actions
 
         [TestMethod]
-        public void GetUserFootprintFolderTest()
-        {
-            using (var session = new RestClientSession())
-            {
-                var client = CreateClient(session);
-                var folder = client.GetUserFootprint("evelin", "SDSS.DR7","");
-            }
-        }
-
-        [TestMethod]
         public void CreateUserFootprintFolderTest()
         {
             using (var session = new RestClientSession())
             {
                 var client = CreateClient(session);
 
-                var request = new FootprintRequest();
+                var request = new FootprintFolderRequest();
                 var folder = new Lib.FootprintFolder();
 
                 folder.Comment = "Test Api Create Folder";
@@ -136,7 +126,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 folder.Type = FolderType.Intersection;
 
                 request.FootprintFolder = new V1.FootprintFolder(folder);
-                client.CreateUserFootprint(request.FootprintFolder.User, request.FootprintFolder.Name,"", request);
+                client.CreateUserFootprintFolder(request.FootprintFolder.User, request.FootprintFolder.Name, request);
             }
         }
 
@@ -148,7 +138,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 var client = CreateClient(session);
 
                 var folder = new Jhu.Footprint.Web.Lib.FootprintFolder();
-                var request = new FootprintRequest();
+                var request = new FootprintFolderRequest();
 
                 using (var context = new Context())
                 {
@@ -161,7 +151,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
                 request.FootprintFolder = new V1.FootprintFolder(folder);
 
-                client.ModifyUserFootprint(request.FootprintFolder.User, request.FootprintFolder.Name, "",request);
+                client.ModifyUserFootprintFolder(request.FootprintFolder.User, request.FootprintFolder.Name, request);
             }
         }
 
@@ -172,7 +162,7 @@ namespace Jhu.Footprint.Web.Api.V1
             {
                 var client = CreateClient(session);
 
-                client.DeleteUserFootprint("kate", "COSMOS","");
+                client.DeleteUserFootprintFolder("kate", "COSMOS");
             }
         }
     }
