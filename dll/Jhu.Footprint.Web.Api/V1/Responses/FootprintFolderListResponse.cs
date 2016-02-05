@@ -12,7 +12,7 @@ namespace Jhu.Footprint.Web.Api.V1
     [DataContract(Name = "footprintFolderList")]
     [Description("Represents a list of footprint folder queues.")]
     public class FootprintFolderListResponse
-    {        
+    {
         [DataMember(Name = "footprintFolders")]
         [Description("List of footprint folders.")]
         public FootprintFolder[] FootprintFolders { get; set; }
@@ -24,6 +24,11 @@ namespace Jhu.Footprint.Web.Api.V1
         public FootprintFolderListResponse(FootprintFolder folder)
         {
             this.FootprintFolders = new[] { folder };
+        }
+
+        public FootprintFolderListResponse(FootprintFolder[] folders)
+        {
+            this.FootprintFolders = folders;
         }
     }
 }
