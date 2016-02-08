@@ -255,13 +255,14 @@ CREATE PROC [fps].[spFindFootprintFolderByName]
 AS
 	SELECT * FROM FootprintFolder
 	WHERE
+		Name LIKE '%' + @Name + '%'
+		AND
 		-- public
 		((@Source & 1) > 0 
 		AND [Public] > 0)
 		OR
 		-- private
 		(@User = [User] AND (@Source & 2) > 0)
-		AND Name LIKE '%' + @Name + '%'
 	ORDER BY Name
 GO
 
@@ -272,15 +273,21 @@ GO
 
 CREATE PROC [fps].[spCountFootprintFolderByName]
 	@Name nvarchar(256),
-	@User nvarchar(250)	
+	@User nvarchar(250),
+	@Source int
 	
 AS
 	DECLARE @Count int;
 	SET @Count = (SELECT Count(*) FROM FootprintFolder
 	WHERE
 		Name LIKE '%' + @Name + '%'
-		AND ([User] = @User OR [Public] > 0))
-	
+		AND
+		-- public
+		((@Source & 1) > 0 
+		AND [Public] > 0)
+		OR
+		-- private
+		(@User = [User] AND (@Source & 2) > 0)
 	RETURN @Count
 GO
 
