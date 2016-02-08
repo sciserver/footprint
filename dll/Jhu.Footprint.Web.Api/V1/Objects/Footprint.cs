@@ -90,7 +90,7 @@ namespace Jhu.Footprint.Web.Api.V1
             this.FolderId = footprint.FolderId;
             //TODO : url works only through web
             //this.Url = System.ServiceModel.Web.WebOperationContext.Current.IncomingRequest.UriTemplateMatch.RequestUri.OriginalString;
-            //this.Region = footprint.Region.ToString();
+            //this.RegionString = footprint.Region.ToString();
         }
 
         public Jhu.Footprint.Web.Lib.Footprint GetValue()
@@ -106,7 +106,7 @@ namespace Jhu.Footprint.Web.Api.V1
             footprint.FolderType = this.FolderType;
             footprint.Comment = this.Comment;
             footprint.FolderId = this.FolderId;
-            //footprint.Region = Jhu.Spherical.Region.Parse(this.RegionString);
+            //footprint.RegionString = Jhu.Spherical.Region.Parse(this.RegionString);
 
             return footprint;
         }

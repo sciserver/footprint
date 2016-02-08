@@ -26,12 +26,17 @@ namespace Jhu.Footprint.Web.Api.V1
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}")]
         [Description("Returns a list of all user created folders.")]
-        FootprintFolderListResponse GetUserFootprintFolderList(string userName);
+        FootprintFolderResponse GetUserFootprintFolderList(string userName);
 
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/")]
         [Description("Returns the details of an existing folder and the list of the footprints in it.")]
         FootprintFolderListResponse GetUserFootprintFolder(string userName, string folderName);
+
+        [OperationContract]
+        [WebGet(UriTemplate = "/users/{userName}/{folderName}/footprint")]
+        [Description("Returns the footprint of a folder")]
+        string GetUserFootprintFolderRegion(string userName, string folderName);
 
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/users/{userName}/footprints/{folderName}")]
@@ -53,7 +58,12 @@ namespace Jhu.Footprint.Web.Api.V1
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/{footprintName}")]
         [Description("Returns the details of a footprint under an existing folder.")]
-        FootprintListResponse GetUserFootprint(string userName, string folderName, string footprintName);
+        FootprintResponse GetUserFootprint(string userName, string folderName, string footprintName);
+
+        [OperationContract]
+        [WebGet(UriTemplate = "/users/{userName}/{folderName}/footprint")]
+        [Description("Returns the footprint of a footprint")]
+        string GetUserFootprintRegion(string userName, string folderName, string footprintName);
 
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/users/{userName}/{folderName}/{footprintName}")]
@@ -103,15 +113,14 @@ namespace Jhu.Footprint.Web.Api.V1
                 search.Source = Lib.SearchSource.My;
                 folders = search.Find();
             }
-
-            var fs = folders.Select(f => new FootprintFolder(f)).ToArray();
-            var r = new FootprintFolderListResponse(fs);
+            
+            var r = new FootprintFolderListResponse(folders);
             return r;
         }
 
 
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
-        public FootprintFolderListResponse GetUserFootprintFolder(string userName, string folderName)
+        public FootprintFolderResponse GetUserFootprintFolder(string userName, string folderName)
         {
             Jhu.Footprint.Web.Lib.FootprintFolder folder;
             using (var context = new Lib.Context())
@@ -124,9 +133,17 @@ namespace Jhu.Footprint.Web.Api.V1
             }
 
             var f = new FootprintFolder(folder);
-            var r = new FootprintFolderListResponse(f);
+            var r = new FootprintFolderResponse(f);
             return r;
 
+        }
+
+
+        [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
+        public string GetUserFootprintFolderRegion(string userName, string folderName)
+        {
+            // TODO : Name? How will the folder's footprint be identified? 
+            throw new NotImplementedException();
         }
 
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
@@ -168,7 +185,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
         #region Footprint Methods
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
-        public FootprintListResponse GetUserFootprint(string userName, string folderName, string footprintName)
+        public FootprintResponse GetUserFootprint(string userName, string folderName, string footprintName)
         {
             Lib.Footprint footprint;
             using (var context = new Lib.Context())
@@ -182,8 +199,15 @@ namespace Jhu.Footprint.Web.Api.V1
             }
 
             var f = new Footprint(footprint);
-            var r = new FootprintListResponse(f);
+            var r = new FootprintResponse(f);
             return r;
+        }
+
+        [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
+        public string GetUserFootprintRegion(string userName, string folderName, string footprintName)
+        {
+            var fp = GetUserFootprint(userName, folderName, footprintName);
+            return fp.Footprint.RegionString;
         }
 
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]

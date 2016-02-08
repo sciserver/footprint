@@ -10,7 +10,7 @@ using System.ServiceModel;
 namespace Jhu.Footprint.Web.Api.V1
 {
     [DataContract(Name = "footprintList")]
-    [Description("Represents a list of footprint queues.")]
+    [Description("Represents a list of footprints.")]
     public class FootprintListResponse
     {
         [DataMember(Name = "footprints")]
@@ -24,6 +24,11 @@ namespace Jhu.Footprint.Web.Api.V1
         public FootprintListResponse(Footprint footprint)
         {
             this.Footprints = new[] { footprint };
+        }
+
+        public FootprintListResponse(IEnumerable<Lib.Footprint> footprints)
+        {
+            this.Footprints = footprints.Select(f => new Footprint(f)).ToArray();
         }
     }
 }

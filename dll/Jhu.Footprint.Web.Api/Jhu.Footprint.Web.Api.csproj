@@ -50,7 +50,9 @@
     <Compile Include="V1\Requests\FootprintFolderRequest.cs" />
     <Compile Include="V1\Requests\FootprintRequest.cs" />
     <Compile Include="V1\Responses\FootprintFolderListResponse.cs" />
+    <Compile Include="V1\Responses\FootprintFolderResponse.cs" />
     <Compile Include="V1\Responses\FootprintListResponse.cs" />
+    <Compile Include="V1\Responses\FootprintResponse.cs" />
     <Compile Include="V1\Services\FootprintService.cs" />
   </ItemGroup>
   <ItemGroup>
