@@ -79,6 +79,7 @@ namespace Jhu.Footprint.Web.Lib
             this.@object = null;
             this.point = new Cartesian();
             this.region = null;
+            this.source = 0;
         }
 
 

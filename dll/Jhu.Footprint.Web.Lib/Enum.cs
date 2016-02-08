@@ -13,13 +13,16 @@ namespace Jhu.Footprint.Web.Lib
         Point,
         Intersect
     }
-    public enum SearchSource
+
+    [Flags]
+    public enum SearchSource : int
     {
         None = 0,
         Public = 0x01,         // all public owned by someone
         My = 0x02,          // all in myfootprint, required login
         //All = 0x04,      // all public owned by noone // Do we really need this?
     }
+
     public enum FolderType
     {
         Any = 0,
