@@ -14,11 +14,12 @@ namespace Jhu.Footprint.Web.Lib.Test
             {
                 var search = new FootprintFolderSearch(context);
 
-                search.Name = "Test";
+                search.Name = "T";
                 search.User = "webtestuser";
+                search.Source = SearchSource.Public | SearchSource.My;
                 search.SearchMethod = FootprintSearchMethod.Name;
 
-                search.Find();
+                var res = search.Find();
             }
         }
     }
