@@ -26,12 +26,12 @@ namespace Jhu.Footprint.Web.Api.V1
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}")]
         [Description("Returns a list of all user created folders.")]
-        FootprintFolderResponse GetUserFootprintFolderList(string userName);
+        FootprintFolderListResponse GetUserFootprintFolderList(string userName);
 
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/")]
         [Description("Returns the details of an existing folder and the list of the footprints in it.")]
-        FootprintFolderListResponse GetUserFootprintFolder(string userName, string folderName);
+        FootprintFolderResponse GetUserFootprintFolder(string userName, string folderName);
 
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/footprint")]
@@ -60,10 +60,12 @@ namespace Jhu.Footprint.Web.Api.V1
         [Description("Returns the details of a footprint under an existing folder.")]
         FootprintResponse GetUserFootprint(string userName, string folderName, string footprintName);
 
+        
         [OperationContract]
-        [WebGet(UriTemplate = "/users/{userName}/{folderName}/footprint")]
+        [WebGet(UriTemplate = "/users/{userName}/{folderName}/{footprintName}/footprint")]
         [Description("Returns the footprint of a footprint")]
         string GetUserFootprintRegion(string userName, string folderName, string footprintName);
+        
 
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/users/{userName}/{folderName}/{footprintName}")]

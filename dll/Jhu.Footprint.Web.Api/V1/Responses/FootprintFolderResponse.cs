@@ -8,11 +8,11 @@ using System.ComponentModel;
 using System.ServiceModel;
 
 
-namespace Jhu.Footprint.Web.Api.V1.Responses
+namespace Jhu.Footprint.Web.Api.V1
 {
     [DataContract(Name = "footprintList")]
     [Description("Represents a list of footprints.")]
-    class FootprintFolderResponse
+    public class FootprintFolderResponse
     {
         [DataMember(Name = "footprintfolder")]
         [Description("Footprint folder.")]

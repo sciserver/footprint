@@ -13,8 +13,8 @@ namespace Jhu.Footprint.Web.Api.V1
     [Description("Represents a footprint.")]
     public class FootprintResponse
     {
-        [DataMember(Name = "footprints")]
-        [Description("List of footprints.")]
+        [DataMember(Name = "footprint")]
+        [Description("A footprint.")]
         public Footprint Footprint { get; set; }
 
         public FootprintResponse(Footprint footprint)

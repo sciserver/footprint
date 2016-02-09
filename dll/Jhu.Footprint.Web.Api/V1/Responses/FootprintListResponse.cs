@@ -21,11 +21,6 @@ namespace Jhu.Footprint.Web.Api.V1
         {
         }
 
-        public FootprintListResponse(Footprint footprint)
-        {
-            this.Footprints = new[] { footprint };
-        }
-
         public FootprintListResponse(IEnumerable<Lib.Footprint> footprints)
         {
             this.Footprints = footprints.Select(f => new Footprint(f)).ToArray();
