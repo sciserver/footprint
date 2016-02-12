@@ -109,6 +109,7 @@ namespace Jhu.Footprint.Web.Lib
         }
         #endregion
 
+        #region Constructors & Initializer
         public Footprint()
         {
             InitializeMembers();
@@ -133,6 +134,12 @@ namespace Jhu.Footprint.Web.Lib
             this.folderId = 0;
             this.folderName = "";
             this.comment = "";
+        }
+        #endregion
+
+        private Boolean FootprintNameIsAvailable()
+        {
+            throw new NotImplementedException();
         }
 
         protected override System.Data.SqlClient.SqlCommand GetCreateCommand()
@@ -218,6 +225,7 @@ namespace Jhu.Footprint.Web.Lib
             this.folderType = (FolderType)Enum.ToObject(typeof(FolderType),dr["FolderType"]);
             this.folderId = (long)dr["FolderID"];
             this.comment = (string)dr["Comment"];
+            this.folderName = (string)dr["FolderName"];
         }
 
         public void Create()
@@ -302,8 +310,6 @@ namespace Jhu.Footprint.Web.Lib
 
                 this.id = (long)cmd.Parameters["@FootprintId"].Value;
             }
-        }
-
-        
+        }        
     }
 }
