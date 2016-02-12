@@ -124,18 +124,28 @@ namespace Jhu.Footprint.Web.Api.V1
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
         public FootprintFolderResponse GetUserFootprintFolder(string userName, string folderName)
         {
-            Jhu.Footprint.Web.Lib.FootprintFolder folder;
+            Lib.FootprintFolder folder;
+            IEnumerable<Lib.Footprint> footprints;
             using (var context = new Lib.Context())
-            {
+            {   
+                // load footprint folder info
                 folder = new Lib.FootprintFolder(context);
                 folder.User = userName;
                 folder.Name = folderName;
                 folder.Load();
-                // load footprint folder
+                
+                //get footprints from folder
+                var search = new Lib.FootprintSearch(context);
+                search.FolderId = folder.Id;
+                search.User = folder.User;
+                search.SearchMethod = Lib.FootprintSearchMethod.FolderId;
+                footprints = search.Find();
             }
 
             var f = new FootprintFolder(folder);
-            var r = new FootprintFolderResponse(f);
+
+            var list = footprints.Select(fp => new Footprint(fp).Url).ToArray();
+            var r = new FootprintFolderResponse(f,list);
             return r;
 
         }
