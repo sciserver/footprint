@@ -1,3 +1,4 @@
+USE [Footprint]
 -- CREATE SCHEMA --
 /*
 CREATE SCHEMA [fps]
@@ -90,10 +91,12 @@ CREATE PROC [fps].[spGetFootprint]
 	@User nvarchar(250),
 	@FootprintId bigint
 AS
-	SELECT * FROM Footprint
+	SELECT F.FootprintID AS FootprintID, F.Name AS Name, F.[User] AS [User], F.[Public] AS [Public], F.DateCreated AS [DateCreated], F.[FillFactor] AS [FillFactor],
+	F.FolderType AS FolderType, F.FolderId AS FolderId, F.Comment AS Comment, FF.Name AS FolderName FROM Footprint AS F INNER JOIN FootprintFolder AS FF ON F.FolderId = FF.FolderID
+	
 	WHERE
 		FootprintID = @FootprintID
-		AND ([User] = @User OR [Public] > 0)
+		AND (F.[User] = @User OR F.[Public] > 0)
 GO
 
 
@@ -145,6 +148,22 @@ AS
 		AND FolderId = @FolderId)
 GO
 
+/****** Object:  StoredProcedure [fps].[spGetFootprintByFolderId]  ******/
+IF (OBJECT_ID('[fps].[spFindFootprintsByFolderId]') IS NOT NULL)
+	DROP PROC [fps].[spFindFootprintsByFolderId]
+GO
+
+CREATE PROC [fps].[spFindFootprintsByFolderId]
+	@FolderId bigint,
+	@User nvarchar(250)
+AS
+	SELECT F.FootprintID AS FootprintID, F.Name AS Name, F.[User] AS [User], F.[Public] AS [Public], F.DateCreated AS [DateCreated], F.[FillFactor] AS [FillFactor],
+	F.FolderType AS FolderType, F.FolderId AS FolderId, F.Comment AS Comment, FF.Name AS FolderName FROM Footprint AS F INNER JOIN FootprintFolder AS FF ON F.FolderId = FF.FolderID
+	WHERE
+		F.FolderId = @FolderId
+		AND F.[User]= @User
+	ORDER BY Name
+GO
 
 /***********************************************************************/
 /******                 FOOTPRINT FOLDER PROCEDURES               ******/ 
@@ -287,7 +306,7 @@ AS
 		AND [Public] > 0)
 		OR
 		-- private
-		(@User = [User] AND (@Source & 2) > 0)
+		(@User = [User] AND (@Source & 2) > 0))
 	RETURN @Count
 GO
 
