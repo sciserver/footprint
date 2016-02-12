@@ -20,7 +20,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
         [DataMember(Name = "url")]
         [Description("Folder url.")]
-        public string Url { get; set; }
+        public Uri Url { get; set; }
 
         [DataMember(Name = "name")]
         [Description("Name of the folder containing the footprint.")]
@@ -66,7 +66,8 @@ namespace Jhu.Footprint.Web.Api.V1
             this.Id = folder.Id;
             this.Public = folder.Public;
             this.Type = folder.Type;
-            //this.Url = System.ServiceModel.Web.WebOperationContext.Current.IncomingRequest.UriTemplateMatch.RequestUri.OriginalString;
+            //TODO : host name?
+            this.Url = new Uri("http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + this.User + "/" + this.Name);
             this.Comment = folder.Comment;
         }
 

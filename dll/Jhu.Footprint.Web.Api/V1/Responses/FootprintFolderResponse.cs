@@ -16,11 +16,16 @@ namespace Jhu.Footprint.Web.Api.V1
     {
         [DataMember(Name = "footprintfolder")]
         [Description("Footprint folder.")]
-        public FootprintFolder Footprints { get; set; }
+        public FootprintFolder FootprintFolder { get; set; }
 
-        public FootprintFolderResponse(FootprintFolder folder)
+        [DataMember(Name = "footprintList")]
+        [Description("List of fooptrint in folder.")]
+        public Uri[] FootprintList { get; set; }
+
+        public FootprintFolderResponse(FootprintFolder folder, Uri[] footprintList)
         {
-            this.Footprints = folder;
+            this.FootprintFolder = folder;
+            this.FootprintList = footprintList;
         }
     }
 }
