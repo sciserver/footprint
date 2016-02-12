@@ -9,7 +9,7 @@ using System.Data.SqlClient;
 
 namespace Jhu.Footprint.Web.Lib
 {
-    public class FootprintFolderSearch: ContextObject
+    public class FootprintFolderSearch: Search
     {
         private FootprintSearchMethod searchMethod;
         private string user;
@@ -34,7 +34,7 @@ namespace Jhu.Footprint.Web.Lib
         public string Name
         {
             get { return name; }
-            set { name = value;  }
+            set { name = value; }
         }
 
         public string Object
@@ -79,11 +79,11 @@ namespace Jhu.Footprint.Web.Lib
             this.@object = null;
             this.point = new Cartesian();
             this.region = null;
-            this.source = 0;
+            this.source = SearchSource.None;
         }
 
 
-        public int Count()
+        override public int Count()
         {
             switch (SearchMethod)
             {
@@ -122,7 +122,7 @@ namespace Jhu.Footprint.Web.Lib
             switch (SearchMethod)
             {
                 case FootprintSearchMethod.Name:
-                    return FindName();
+                    return FindByName();
                 case FootprintSearchMethod.Object:
                     throw new NotImplementedException();
                 case FootprintSearchMethod.Point:
@@ -135,7 +135,7 @@ namespace Jhu.Footprint.Web.Lib
             }
         }
 
-        private IEnumerable<FootprintFolder> FindName()
+        private IEnumerable<FootprintFolder> FindByName()
         { 
             var res = new List<FootprintFolder>();
             string sql = "fps.spFindFootprintFolderByName";

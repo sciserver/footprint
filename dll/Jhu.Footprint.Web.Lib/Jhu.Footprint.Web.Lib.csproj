@@ -55,7 +55,9 @@
     <Compile Include="FootprintException.cs" />
     <Compile Include="FootprintFolder.cs" />
     <Compile Include="FootprintFolderSearch.cs" />
+    <Compile Include="FootprintSearch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Search.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\spherical\src\Jhu.Spherical\Jhu.Spherical.csproj">
