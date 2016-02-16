@@ -95,7 +95,7 @@ AS
 	F.FolderType AS FolderType, F.FolderId AS FolderId, F.Comment AS Comment, FF.Name AS FolderName FROM Footprint AS F INNER JOIN FootprintFolder AS FF ON F.FolderId = FF.FolderID
 	
 	WHERE
-		FootprintID = @FootprintID
+		F.FootprintID = @FootprintID
 		AND (F.[User] = @User OR F.[Public] > 0)
 GO
 
@@ -148,12 +148,12 @@ AS
 		AND FolderId = @FolderId)
 GO
 
-/****** Object:  StoredProcedure [fps].[spGetFootprintByFolderId]  ******/
-IF (OBJECT_ID('[fps].[spFindFootprintsByFolderId]') IS NOT NULL)
-	DROP PROC [fps].[spFindFootprintsByFolderId]
+/****** Object:  StoredProcedure [fps].[spGetFootprintsByFolderId]  ******/
+IF (OBJECT_ID('[fps].[spGetFootprintsByFolderId]') IS NOT NULL)
+	DROP PROC [fps].[spGetFootprintsByFolderId]
 GO
 
-CREATE PROC [fps].[spFindFootprintsByFolderId]
+CREATE PROC [fps].[spGetFootprintsByFolderId]
 	@FolderId bigint,
 	@User nvarchar(250)
 AS
@@ -165,6 +165,30 @@ AS
 	ORDER BY Name
 GO
 
+
+/****** Object:  StoredProcedure [fps].[spGetFolderFootprint] ******/
+IF (OBJECT_ID('[fps].[spGetFolderFootprint]') IS NOT NULL)
+	DROP PROC [fps].[spGetFolderFootprint]
+GO
+
+CREATE PROC [fps].[spGetFolderFootprint]
+	@FolderID bigint
+AS
+	DECLARE @FootprintID bigint
+	
+	SELECT FootprintID = @FootprintID FROM FootprintFolder WHERE FolderID = @FolderID
+
+	IF(@FootprintID IS NULL) -- no cache, single region
+	BEGIN
+		SELECT TOP 1 * FROM Footprint
+		WHERE FolderID = @FolderID
+	END
+	ELSE
+	BEGIN
+		SELECT * FROM Footprint
+		WHERE FootprintID = @FootprintID
+	END
+GO
 /***********************************************************************/
 /******                 FOOTPRINT FOLDER PROCEDURES               ******/ 
 /***********************************************************************/
@@ -326,6 +350,7 @@ AS
 	WHERE @FolderID = FolderID
 	)
 	RETURN @@ROWCOUNT
+GO
 
 /****** Object:  StoredProcedure [fps].[spGetFootprintFolderId]  ******/
 
