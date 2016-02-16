@@ -11,8 +11,7 @@ namespace Jhu.Footprint.Web.Lib
         Name,
         Object,
         Point,
-        Intersect,
-        FolderId
+        Intersect
     }
 
     [Flags]

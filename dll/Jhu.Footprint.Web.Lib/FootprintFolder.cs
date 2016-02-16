@@ -277,5 +277,36 @@ namespace Jhu.Footprint.Web.Lib
             }
         }
 
+        public IEnumerable<Footprint> GetFootprintsByFolderId()
+        {
+            var res = new List<Footprint>();
+            string sql = "fps.spGetFootprintsByFolderId";
+
+
+            using (var cmd = new SqlCommand(sql))
+            {
+                cmd.Connection = Context.Connection;
+                cmd.Transaction = Context.Transaction;
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@FolderId", SqlDbType.BigInt).Value = this.id;
+                cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = this.user;
+
+                using (var dr = cmd.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        var f = new Footprint(Context);
+                        f.LoadFromDataReader(dr);
+
+                        res.Add(f);
+                    }
+                }
+
+            }
+
+            return res;
+        }
+
      }
 }

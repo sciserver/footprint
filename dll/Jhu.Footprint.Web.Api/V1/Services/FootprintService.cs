@@ -135,11 +135,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 folder.Load();
                 
                 //get footprints from folder
-                var search = new Lib.FootprintSearch(context);
-                search.FolderId = folder.Id;
-                search.User = folder.User;
-                search.SearchMethod = Lib.FootprintSearchMethod.FolderId;
-                footprints = search.Find();
+                footprints = folder.GetFootprintsByFolderId();
             }
 
             var f = new FootprintFolder(folder);
@@ -154,7 +150,8 @@ namespace Jhu.Footprint.Web.Api.V1
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
         public string GetUserFootprintFolderRegion(string userName, string folderName)
         {
-            // TODO : Name? How will the folder's footprint be identified? 
+            // TODO : Name? How will the folder's footprint be identified?
+            // e.g.: FolderFootprint, name of the folder...
             throw new NotImplementedException();
         }
 

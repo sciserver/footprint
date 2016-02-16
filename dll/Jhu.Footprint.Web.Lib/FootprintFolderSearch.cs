@@ -9,7 +9,7 @@ using System.Data.SqlClient;
 
 namespace Jhu.Footprint.Web.Lib
 {
-    public class FootprintFolderSearch: Search
+    public class FootprintFolderSearch: ContextObject
     {
         private FootprintSearchMethod searchMethod;
         private string user;
@@ -83,7 +83,7 @@ namespace Jhu.Footprint.Web.Lib
         }
 
 
-        override public int Count()
+        public int Count()
         {
             switch (SearchMethod)
             {
