@@ -33,6 +33,7 @@ GO
 
 CREATE TABLE [dbo].[FootprintFolder](
        [FolderID] [bigint] IDENTITY(1,1) NOT NULL,
+	   [FootprintID] [bigint] NULL,
        [Name] [nvarchar](256) NOT NULL DEFAULT (''),
        [User] [nvarchar](250) NOT NULL DEFAULT (''),
        [Type] [tinyint] NOT NULL,
