@@ -7,6 +7,8 @@ using System.Xml.Serialization;
 using Jhu.Spherical;
 using System.Data;
 using System.Data.SqlClient;
+using System.Data.SqlTypes;
+using System.IO;
 
 namespace Jhu.Footprint.Web.Lib
 {
@@ -107,6 +109,7 @@ namespace Jhu.Footprint.Web.Lib
             get { return comment; }
             set { comment = value; }
         }
+
         #endregion
 
         #region Constructors & Initializer
@@ -137,6 +140,7 @@ namespace Jhu.Footprint.Web.Lib
         }
         #endregion
 
+        #region Methods
         private Boolean FootprintNameIsAvailable()
         {
             throw new NotImplementedException();
@@ -212,6 +216,25 @@ namespace Jhu.Footprint.Web.Lib
             cmd.Parameters.Add("@FolderType", SqlDbType.TinyInt).Value = folderType;
             cmd.Parameters.Add("@FolderId", SqlDbType.BigInt).Value = folderId;
             cmd.Parameters.Add("@Comment", SqlDbType.NVarChar, -1).Value = comment;
+
+            SqlBytes bytes;
+            using (var ms = new MemoryStream())
+            {
+                using (var w = new Spherical.IO.RegionWriter(ms))
+                {
+                    if (this.region != null)
+                    {
+                    w.Write(this.region);
+                    }
+                    else
+                    {
+                        w.Write(0);
+                    }
+                }
+                bytes = new SqlBytes(ms.ToArray());
+            }
+
+            cmd.Parameters.Add("@RegionBinary", SqlDbType.VarBinary, -1).Value = bytes;
         }
 
         public override void LoadFromDataReader(SqlDataReader dr)
@@ -226,6 +249,16 @@ namespace Jhu.Footprint.Web.Lib
             this.folderId = (long)dr["FolderID"];
             this.comment = (string)dr["Comment"];
             this.folderName = (string)dr["FolderName"];
+
+            if (!dr.IsDBNull(dr.GetOrdinal("RegionBinary")))
+            {
+                var bytes = (SqlBytes)dr["RegionBinary"];
+                this.region = bytes.IsNull ? null : Jhu.Spherical.Region.FromSqlBytes(bytes);
+            }
+            else
+            {
+                this.region = null;
+            }
         }
 
         public void Create()
@@ -310,6 +343,7 @@ namespace Jhu.Footprint.Web.Lib
 
                 this.id = (long)cmd.Parameters["@FootprintId"].Value;
             }
-        }        
+        }
+        #endregion
     }
 }
