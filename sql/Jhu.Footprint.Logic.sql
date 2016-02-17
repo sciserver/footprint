@@ -21,17 +21,18 @@ CREATE PROC [fps].[spCreateFootprint]
 	@FillFactor float,
 	@FolderType tinyint,
 	@FolderId bigint,
-	@Comment nvarchar(max),
+	@Comment ntext,
+	@RegionBinary varbinary(max),
 
 	@NewID bigint OUTPUT
 
 AS
 	INSERT Footprint
 		(Name, [User], [Public], DateCreated,  [FillFactor],
-		FolderType, FolderId, Comment)
+		FolderType, FolderId, Comment, RegionBinary)
 	VALUES
 		(@Name, @User, @Public, GETDATE(), @FillFactor,
-		@FolderType, @FolderId, @Comment)
+		@FolderType, @FolderId, @Comment, @RegionBinary)
 
 	SET @NewID = @@IDENTITY
 
@@ -52,7 +53,8 @@ CREATE PROC [fps].[spModifyFootprint]
 	@FillFactor float,
 	@FolderType tinyint,
 	@FolderId bigint,
-    @Comment nvarchar(max)
+    @Comment ntext,
+	@RegionBinary varbinary(max)
 AS
 	UPDATE Footprint
 	SET Name = @Name, 
@@ -60,7 +62,8 @@ AS
 		[FillFactor] = @FillFactor,
 		FolderType = @FolderType,
 		FolderID = @FolderId,
-		Comment = @Comment
+		Comment = @Comment,
+		RegionBinary = @RegionBinary
 	WHERE
 		FootprintID = @FootprintID AND [User] = @User 
 	RETURN @@ROWCOUNT
@@ -91,8 +94,10 @@ CREATE PROC [fps].[spGetFootprint]
 	@User nvarchar(250),
 	@FootprintId bigint
 AS
-	SELECT F.FootprintID AS FootprintID, F.Name AS Name, F.[User] AS [User], F.[Public] AS [Public], F.DateCreated AS [DateCreated], F.[FillFactor] AS [FillFactor],
-	F.FolderType AS FolderType, F.FolderId AS FolderId, F.Comment AS Comment, FF.Name AS FolderName FROM Footprint AS F INNER JOIN FootprintFolder AS FF ON F.FolderId = FF.FolderID
+	SELECT F.FootprintID AS FootprintID, F.Name AS Name, F.[User] AS [User], F.[Public] AS [Public], 
+	F.DateCreated AS [DateCreated], F.[FillFactor] AS [FillFactor], F.FolderType AS FolderType, 
+	F.FolderId AS FolderId, F.Comment AS Comment, FF.Name AS FolderName, F.RegionBinary AS RegionBinary
+	FROM Footprint AS F INNER JOIN FootprintFolder AS FF ON F.FolderId = FF.FolderID
 	
 	WHERE
 		F.FootprintID = @FootprintID
@@ -157,8 +162,10 @@ CREATE PROC [fps].[spGetFootprintsByFolderId]
 	@FolderId bigint,
 	@User nvarchar(250)
 AS
-	SELECT F.FootprintID AS FootprintID, F.Name AS Name, F.[User] AS [User], F.[Public] AS [Public], F.DateCreated AS [DateCreated], F.[FillFactor] AS [FillFactor],
-	F.FolderType AS FolderType, F.FolderId AS FolderId, F.Comment AS Comment, FF.Name AS FolderName FROM Footprint AS F INNER JOIN FootprintFolder AS FF ON F.FolderId = FF.FolderID
+	SELECT F.FootprintID AS FootprintID, F.Name AS Name, F.[User] AS [User], F.[Public] AS [Public],
+	F.DateCreated AS [DateCreated], F.[FillFactor] AS [FillFactor],	F.FolderType AS FolderType, 
+	F.FolderId AS FolderId, F.Comment AS Comment, FF.Name AS FolderName, F.RegionBinary AS RegionBinary
+	FROM Footprint AS F INNER JOIN FootprintFolder AS FF ON F.FolderId = FF.FolderID
 	WHERE
 		F.FolderId = @FolderId
 		AND F.[User]= @User
@@ -180,15 +187,22 @@ AS
 
 	IF(@FootprintID IS NULL) -- no cache, single region
 	BEGIN
-		SELECT TOP 1 * FROM Footprint
-		WHERE FolderID = @FolderID
+		SELECT TOP 1 F.FootprintID AS FootprintID, F.Name AS Name, F.[User] AS [User], F.[Public] AS [Public],
+		F.DateCreated AS [DateCreated], F.[FillFactor] AS [FillFactor],	F.FolderType AS FolderType, 
+		F.FolderId AS FolderId, F.Comment AS Comment, FF.Name AS FolderName, F.RegionBinary AS RegionBinary
+		FROM Footprint AS F INNER JOIN FootprintFolder AS FF ON F.FolderId = FF.FolderID 
+		WHERE F.FolderID = @FolderID
 	END
 	ELSE
 	BEGIN
-		SELECT * FROM Footprint
-		WHERE FootprintID = @FootprintID
+		SELECT F.FootprintID AS FootprintID, F.Name AS Name, F.[User] AS [User], F.[Public] AS [Public],
+		F.DateCreated AS [DateCreated], F.[FillFactor] AS [FillFactor],	F.FolderType AS FolderType, 
+		F.FolderId AS FolderId, F.Comment AS Comment, FF.Name AS FolderName, F.RegionBinary AS RegionBinary
+		FROM Footprint AS F INNER JOIN FootprintFolder AS FF ON F.FolderId = FF.FolderID 
+		WHERE F.FootprintID = @FootprintID
 	END
 GO
+
 /***********************************************************************/
 /******                 FOOTPRINT FOLDER PROCEDURES               ******/ 
 /***********************************************************************/

@@ -12,13 +12,16 @@ GO
 CREATE TABLE [dbo].[Footprint](
        [FootprintID] [bigint] IDENTITY(1,1) NOT NULL,
 	   [Name] [nvarchar](256) NOT NULL DEFAULT (''),
-       [User] [nvarchar](250) NOT NULL   DEFAULT (''),
+       [User] [nvarchar](250) NOT NULL DEFAULT (''),
        [Public] [tinyint] NOT NULL  DEFAULT ((0)),
        [DateCreated] [datetime] NOT NULL DEFAULT (getdate()),
        [FillFactor] [float] NOT NULL  DEFAULT ((1.0)),
        [FolderType] [tinyint] NOT NULL DEFAULT ((0)),
 	   [FolderId] [bigint] NOT NULL DEFAULT((0)),
        [Comment] [ntext] NOT NULL DEFAULT (''),
+       [RegionString] [text] NOT NULL DEFAULT (''),
+       [RegionBinary] [varbinary](max) NULL,
+       [Thumbnail] [varbinary](max) NULL,
 CONSTRAINT [PK_Footprint] PRIMARY KEY CLUSTERED
 (
        [FootprintID] ASC
