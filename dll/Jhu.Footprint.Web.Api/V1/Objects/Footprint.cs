@@ -48,14 +48,14 @@ namespace Jhu.Footprint.Web.Api.V1
         public double FillFactor { get; set; }
 
         [IgnoreDataMember]
-        public Jhu.Footprint.Web.Lib.FolderType FolderType { get; set; }
+        public Jhu.Footprint.Web.Lib.FootprintType FootprintType { get; set; }
 
         [DataMember(Name = "folderType")]
         [Description("Type of the folder containing the footprint. Could be: Any, Unknown, Union, Intersection, None.")]
         public string Type_ForXml
         {
-            get { return Util.EnumFormatter.ToXmlString(FolderType); }
-            set { FolderType = Util.EnumFormatter.FromXmlString<Lib.FolderType>(value); }
+            get { return Util.EnumFormatter.ToXmlString(FootprintType); }
+            set { FootprintType = Util.EnumFormatter.FromXmlString<Lib.FootprintType>(value); }
 
         }
 
@@ -85,7 +85,7 @@ namespace Jhu.Footprint.Web.Api.V1
             this.Id = footprint.Id;
             this.Public = footprint.Public;
             this.FillFactor = footprint.FillFactor;
-            this.FolderType = footprint.FolderType;
+            this.FootprintType = footprint.Type;
             this.Comment = footprint.Comment;
             this.FolderId = footprint.FolderId;
             //TODO : host name?
@@ -103,7 +103,7 @@ namespace Jhu.Footprint.Web.Api.V1
             footprint.Id = this.Id;
             footprint.Public = this.Public;
             footprint.FillFactor = this.FillFactor;
-            footprint.FolderType = this.FolderType;
+            footprint.Type = this.FootprintType;
             footprint.Comment = this.Comment;
             footprint.FolderId = this.FolderId;
             //footprint.RegionString = Jhu.Spherical.Region.Parse(this.RegionString);
