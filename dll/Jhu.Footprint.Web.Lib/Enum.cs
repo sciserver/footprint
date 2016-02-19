@@ -25,11 +25,17 @@ namespace Jhu.Footprint.Web.Lib
 
     public enum FolderType
     {
-        Any = 0,
-        Unknown = 1,
-        Union = 2,
-        Intersection = 3,
-        None = 4
+        Any = -1,
+        None = 0,
+        Union = 1,
+        Intersection = 2
     }
+
+    public enum FootprintType
+    {
+        None = 0,
+        Folder = 1
+    }
+
 
 }

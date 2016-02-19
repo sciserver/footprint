@@ -19,7 +19,7 @@ CREATE PROC [fps].[spCreateFootprint]
 	@User nvarchar(250),
 	@Public tinyint,
 	@FillFactor float,
-	@FolderType tinyint,
+	@FootprintType smallint,
 	@FolderId bigint,
 	@Comment ntext,
 	@RegionBinary varbinary(max),
@@ -29,10 +29,10 @@ CREATE PROC [fps].[spCreateFootprint]
 AS
 	INSERT Footprint
 		(Name, [User], [Public], DateCreated,  [FillFactor],
-		FolderType, FolderId, Comment, RegionBinary)
+		FootprintType, FolderId, Comment, RegionBinary)
 	VALUES
 		(@Name, @User, @Public, GETDATE(), @FillFactor,
-		@FolderType, @FolderId, @Comment, @RegionBinary)
+		@FootprintType, @FolderId, @Comment, @RegionBinary)
 
 	SET @NewID = @@IDENTITY
 
@@ -51,7 +51,7 @@ CREATE PROC [fps].[spModifyFootprint]
     @User nvarchar(250),
     @Public tinyint,
 	@FillFactor float,
-	@FolderType tinyint,
+	@FootprintType smallint,
 	@FolderId bigint,
     @Comment ntext,
 	@RegionBinary varbinary(max)
@@ -60,7 +60,7 @@ AS
 	SET Name = @Name, 
 		[Public] = @Public,
 		[FillFactor] = @FillFactor,
-		FolderType = @FolderType,
+		FootprintType = @FootprintType,
 		FolderID = @FolderId,
 		Comment = @Comment,
 		RegionBinary = @RegionBinary
@@ -69,7 +69,7 @@ AS
 	RETURN @@ROWCOUNT
 GO
 
-/****** Object:  StoredProcedure [fps].[spDeleteFootprintFolder]  ******/
+/****** Object:  StoredProcedure [fps].[spDeleteFootprint]  ******/
 IF (OBJECT_ID('[fps].[spDeleteFootprint]') IS NOT NULL)
 	DROP PROC [fps].[spDeleteFootprint]
 GO
@@ -84,7 +84,7 @@ AS
 	RETURN @@ROWCOUNT
 GO
 
-/****** Object:  StoredProcedure [fps].[spGetFootprintFolder]  ******/
+/****** Object:  StoredProcedure [fps].[spGetFootprint]  ******/
 
 IF (OBJECT_ID('[fps].[spGetFootprint]') IS NOT NULL)
 	DROP PROC [fps].[spGetFootprint]
@@ -95,7 +95,7 @@ CREATE PROC [fps].[spGetFootprint]
 	@FootprintId bigint
 AS
 	SELECT F.FootprintID AS FootprintID, F.Name AS Name, F.[User] AS [User], F.[Public] AS [Public], 
-	F.DateCreated AS [DateCreated], F.[FillFactor] AS [FillFactor], F.FolderType AS FolderType, 
+	F.DateCreated AS [DateCreated], F.[FillFactor] AS [FillFactor], F.FootprintType AS FootprintType, 
 	F.FolderId AS FolderId, F.Comment AS Comment, FF.Name AS FolderName, F.RegionBinary AS RegionBinary
 	FROM Footprint AS F INNER JOIN FootprintFolder AS FF ON F.FolderId = FF.FolderID
 	
@@ -163,7 +163,7 @@ CREATE PROC [fps].[spGetFootprintsByFolderId]
 	@User nvarchar(250)
 AS
 	SELECT F.FootprintID AS FootprintID, F.Name AS Name, F.[User] AS [User], F.[Public] AS [Public],
-	F.DateCreated AS [DateCreated], F.[FillFactor] AS [FillFactor],	F.FolderType AS FolderType, 
+	F.DateCreated AS [DateCreated], F.[FillFactor] AS [FillFactor],	F.FootprintType AS FootprintType, 
 	F.FolderId AS FolderId, F.Comment AS Comment, FF.Name AS FolderName, F.RegionBinary AS RegionBinary
 	FROM Footprint AS F INNER JOIN FootprintFolder AS FF ON F.FolderId = FF.FolderID
 	WHERE
@@ -188,7 +188,7 @@ AS
 	IF(@FootprintID IS NULL) -- no cache, single region
 	BEGIN
 		SELECT TOP 1 F.FootprintID AS FootprintID, F.Name AS Name, F.[User] AS [User], F.[Public] AS [Public],
-		F.DateCreated AS [DateCreated], F.[FillFactor] AS [FillFactor],	F.FolderType AS FolderType, 
+		F.DateCreated AS [DateCreated], F.[FillFactor] AS [FillFactor],	F.FootprintType AS FolderType, 
 		F.FolderId AS FolderId, F.Comment AS Comment, FF.Name AS FolderName, F.RegionBinary AS RegionBinary
 		FROM Footprint AS F INNER JOIN FootprintFolder AS FF ON F.FolderId = FF.FolderID 
 		WHERE F.FolderID = @FolderID
@@ -196,7 +196,7 @@ AS
 	ELSE
 	BEGIN
 		SELECT F.FootprintID AS FootprintID, F.Name AS Name, F.[User] AS [User], F.[Public] AS [Public],
-		F.DateCreated AS [DateCreated], F.[FillFactor] AS [FillFactor],	F.FolderType AS FolderType, 
+		F.DateCreated AS [DateCreated], F.[FillFactor] AS [FillFactor],	F.FootprintType AS FolderType, 
 		F.FolderId AS FolderId, F.Comment AS Comment, FF.Name AS FolderName, F.RegionBinary AS RegionBinary
 		FROM Footprint AS F INNER JOIN FootprintFolder AS FF ON F.FolderId = FF.FolderID 
 		WHERE F.FootprintID = @FootprintID
@@ -216,6 +216,7 @@ GO
 CREATE PROC [fps].[spCreateFootprintFolder]
 	@Name nvarchar(256),
 	@User nvarchar(250),
+	@FootprintID bigint,
 	@Type tinyint,
 	@Public tinyint,
 	@Comment nvarchar(max),
@@ -223,10 +224,10 @@ CREATE PROC [fps].[spCreateFootprintFolder]
 	@NewID bigint OUTPUT
 AS
 	INSERT FootprintFolder
-		([Type],  [User], [Public],
+		([Type],  [User], [Public], FootprintID, 
 			DateCreated, DateModified, Name, Comment)
 	VALUES
-		(@Type, @User, @Public,
+		(@Type, @User, @Public, @FootprintID,
 		GETDATE(), GETDATE(), @Name, @Comment)
 
 	SET @NewID = @@IDENTITY
@@ -244,12 +245,14 @@ CREATE PROC [fps].[spModifyFootprintFolder]
 	@FolderID bigint,
     @Name nvarchar(256),
     @User nvarchar(250),
+	@FootprintId bigint,
     @Type tinyint,
     @Public tinyint,
     @Comment nvarchar(max)
 AS
     UPDATE FootprintFolder
 	SET Name = @Name, 
+		FootprintId = @FootprintId,
 		[Type] = @Type,
 		[Public] = @Public,
 		DateModified = GETDATE(),

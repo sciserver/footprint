@@ -37,7 +37,7 @@ namespace Jhu.Footprint.Web.Lib.Test
                 footprint.Public = 1;
                 footprint.FillFactor = 0.9;
                 footprint.FolderId = 2;
-                footprint.FolderType = FolderType.None;
+                footprint.Type = FootprintType.None;
                 footprint.Comment = "Create Test";
 
                 footprint.Create();

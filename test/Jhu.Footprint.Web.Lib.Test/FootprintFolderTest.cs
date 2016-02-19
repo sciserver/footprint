@@ -58,7 +58,9 @@ namespace Jhu.Footprint.Web.Lib.Test
                 folder.Name = "ModifyTest";
                 folder.Comment = "FootprintFolder.Modify Unit Test";
 
-                folder.Modify();
+                folder.Modify(false);
+
+                folder.Load();
             }
         }
 

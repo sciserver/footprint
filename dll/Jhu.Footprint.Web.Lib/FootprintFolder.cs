@@ -15,6 +15,7 @@ namespace Jhu.Footprint.Web.Lib
         #region Member variables
 
         private long id;
+        private long footprintId;
         private string name;
         private string user;
         private FolderType type;
@@ -23,6 +24,7 @@ namespace Jhu.Footprint.Web.Lib
         private DateTime dateCreated;
         private DateTime dateModified;
         private string comment;
+        private Footprint folderFootprint;
 
         #endregion
 
@@ -31,6 +33,12 @@ namespace Jhu.Footprint.Web.Lib
         {
             get { return id; }
             set { id = value; }
+        }
+
+        public long FootprintId
+        {
+            get { return footprintId; }
+            set { footprintId = value; }
         }
 
         public string Name
@@ -85,8 +93,15 @@ namespace Jhu.Footprint.Web.Lib
             }
         }
 
+        public Footprint FolderFootprint
+        {
+            get { return folderFootprint; }
+            set { folderFootprint = value; }
+        }
+
         #endregion
 
+        #region Contsructors and Initializers
         public FootprintFolder()
         {
             InitializeMembers();
@@ -100,16 +115,18 @@ namespace Jhu.Footprint.Web.Lib
         private void InitializeMembers()
         {
             this.id = 0;
+            this.footprintId = 0;
             this.name = "";
             this.user = "";
-            this.type = FolderType.Unknown;
+            this.type = FolderType.None;
 
             this.@public = 0;
             this.dateCreated = DateTime.Now;
             this.dateModified = DateTime.Now;
             this.comment = "";
-
+            this.folderFootprint = null;
         }
+        #endregion
 
         protected override SqlCommand GetCreateCommand()
         {
@@ -130,7 +147,7 @@ namespace Jhu.Footprint.Web.Lib
 
         protected override SqlCommand GetModifyCommand()
         {
-            if (this.id == 0) { GetFootprintFolderId(); } 
+            if (this.id == 0) { GetFootprintFolderId(); }
 
             string sql = "fps.spModifyFootprintFolder";
             var cmd = new SqlCommand(sql);
@@ -147,7 +164,7 @@ namespace Jhu.Footprint.Web.Lib
 
         protected override SqlCommand GetDeleteCommand()
         {
-            if (this.id == 0) { GetFootprintFolderId(); } 
+            if (this.id == 0) { GetFootprintFolderId(); }
 
             string sql = "fps.spDeleteFootprintFolder";
             var cmd = new SqlCommand(sql);
@@ -163,7 +180,7 @@ namespace Jhu.Footprint.Web.Lib
 
         protected override SqlCommand GetLoadCommand()
         {
-            if (this.id == 0) { GetFootprintFolderId(); } 
+            if (this.id == 0) { GetFootprintFolderId(); }
 
             string sql = "fps.spGetFootprintFolder";
             var cmd = new SqlCommand(sql);
@@ -180,6 +197,7 @@ namespace Jhu.Footprint.Web.Lib
         {
             cmd.Parameters.Add("@Name", SqlDbType.NVarChar, 256).Value = name;
             cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = user;
+            cmd.Parameters.Add("@FootprintId", SqlDbType.BigInt).Value = footprintId;
             cmd.Parameters.Add("@Public", SqlDbType.TinyInt).Value = @public;
             cmd.Parameters.Add("@Type", SqlDbType.TinyInt).Value = Type;
             cmd.Parameters.Add("@Comment", SqlDbType.NVarChar, -1).Value = comment;
@@ -190,11 +208,27 @@ namespace Jhu.Footprint.Web.Lib
             this.id = (long)dr["FolderId"];
             this.name = (string)dr["Name"];
             this.user = (string)dr["User"];
-            this.type = (FolderType)Enum.ToObject(typeof(FolderType),dr["Type"]);
+            this.type = (FolderType)Enum.ToObject(typeof(FolderType), dr["Type"]);
             this.@public = (byte)dr["Public"];
             this.dateCreated = (DateTime)dr["DateCreated"];
             this.dateModified = (DateTime)dr["DateModified"];
             this.comment = (string)dr["Comment"];
+        }
+
+        public override void Save()
+        {
+            Save(true);
+        }
+        public void Save(bool refreshFolderFootprint = true)
+        {
+            if (this.id == 0)
+            {
+                Create();
+            }
+            else
+            {
+                Modify(refreshFolderFootprint);
+            }
         }
 
         public void Create()
@@ -217,10 +251,9 @@ namespace Jhu.Footprint.Web.Lib
                     this.id = (long)cmd.Parameters["@NewID"].Value;
                 }
             }
-
         }
 
-        public void Modify()
+        public void Modify(bool refreshFolderFootprint)
         {
             using (var cmd = GetModifyCommand())
             {
@@ -237,9 +270,15 @@ namespace Jhu.Footprint.Web.Lib
                 }
 
             }
+
+            // false parameter prevents recursive updating!
+            if (refreshFolderFootprint)
+            {
+                RefreshFolderFootprint();
+            }
         }
 
-        public void Delete()
+        public void Delete(bool refreshFolderFootprint = true)
         {
             using (var cmd = GetDeleteCommand())
             {
@@ -308,5 +347,190 @@ namespace Jhu.Footprint.Web.Lib
             return res;
         }
 
-     }
+        /// <summary>
+        /// Updates region cache if a new region is linked to the RegionGroup
+        /// </summary>
+        private void UpdateFolderFootprint(long newFootprintId)
+        {
+            Spherical.Region region = null; // will contain the folderFootprint region;
+
+            // if a folderFootprint exists, load it
+            if (this.footprintId > 0)
+            {
+                folderFootprint.Id = this.footprintId;
+                folderFootprint.Load();
+            }
+
+            //  folderFootprint.Type == FootprintType.None means we have a link to a single region, 
+            // no dedicated folderFootprint exists
+            if (this.folderFootprint == null || folderFootprint.Type == FootprintType.None)
+            {
+                // creating a new folderFootprint region
+                IEnumerable<Footprint> footprints = GetFootprintsByFolderId();
+
+                if (footprints.Count() > 1)
+                {
+                    region = new Spherical.Region();
+
+                    // intersection must be started from an all-sky region
+                    if (type == FolderType.Intersection)
+                    {
+                        region.Add(new Spherical.Convex(new Spherical.Halfspace(0, 0, 1, false, -1)));
+                    }
+
+                    foreach (Footprint f in footprints)
+                    {
+                        switch (type)
+                        {
+                            case FolderType.Union:
+                                region.SmartUnion(f.Region);
+                                break;
+                            case FolderType.Intersection:
+                                region.SmartIntersect(f.Region, false);
+                                break;
+                        }
+                    }
+                }
+                else if (footprints.Count() == 1)
+                {
+                    FootprintId = footprints.ElementAt(0).Id;
+                    Save(false);
+                    return;
+                }
+            }
+            else
+            {
+                // updating the existing folderFootprint region
+                Footprint f;
+                using (var context = new Context())
+                {
+                    f = new Footprint(new Context());
+                    f.User = user;
+                    f.Id = newFootprintId;
+                    f.Load();
+                }
+
+                region = new Spherical.Region(folderFootprint.Region);
+
+                switch (type)
+                {
+                    case FolderType.Union:
+                        region.SmartUnion(f.Region);
+                        break;
+                    case FolderType.Intersection:
+                        region.SmartIntersect(f.Region, false);
+                        break;
+                }
+            }
+
+            // save the new folderFootprint if required
+            if (region != null)
+            {
+                folderFootprint.Name = "folderFootprint";
+                folderFootprint.User = user;
+                folderFootprint.Type = FootprintType.Folder;
+                folderFootprint.Public = @public;
+                folderFootprint.Comment = "Footprint of the folder.";
+                folderFootprint.FolderId = id;
+                folderFootprint.FolderName = name;
+
+                region.Simplify();
+                folderFootprint.Region = region;
+
+                folderFootprint.Save(); // save the new folderFootprint
+
+                this.footprintId = folderFootprint.Id;
+                Save(false);
+            }
+        }
+
+        /// <summary>
+        /// Refrehes the region cache completely after a RegionLink delete
+        /// </summary>
+        private void RefreshFolderFootprint()
+        {
+            IEnumerable<Footprint> footprints = GetFootprintsByFolderId();
+
+            // if a folderFootprint exist, load it
+            if (this.footprintId > 0)
+            {
+                folderFootprint.Id = this.footprintId;
+                folderFootprint.Load();
+            }
+
+            // if less than 2 footprints are associated with this FootprintFolder,
+            // FolderFootprint is not needed
+            if (footprints.Count() < 2)
+            {
+                // delete old folderFootprint if exists
+                if (folderFootprint != null && folderFootprint.Type == FootprintType.Folder)
+                {
+                    folderFootprint.Delete();
+                }
+
+                // (folder)footprintID must be set in DB
+                if (footprints.Count() == 1)
+                {
+                    this.FootprintId = footprints.ElementAt(0).Id;
+                }
+                else
+                { 
+                    this.FootprintId = -1;
+                }
+
+                Save(false); 
+
+                return;
+            }
+
+            Spherical.Region region = new Spherical.Region();
+
+            if (folderFootprint == null || folderFootprint.Type != FootprintType.Folder)
+            {
+                folderFootprint.Id = 0; // brand new folderFootprint 
+            }
+
+            // intersection must be started from an all-sky region
+            if (this.type == FolderType.Intersection)
+            {
+                region.Add(new Spherical.Convex(new Spherical.Halfspace(0, 0, 1, false, -1)));
+            }
+
+            // update the folderFootprint
+            foreach (Footprint f in footprints)
+            {
+                switch (this.type)
+                {
+                    case FolderType.Union:
+                        region.SmartUnion(f.Region);
+                        break;
+                    case FolderType.Intersection:
+                        region = region.SmartIntersect(f.Region, false);
+                        break;
+                }
+            }
+
+            // save the new folderFootprint if required
+            if (region != null)
+            {
+                folderFootprint.Name = "folderFootprint";
+                folderFootprint.User = user;
+                folderFootprint.Type = FootprintType.Folder;
+                folderFootprint.Public = @public;
+                folderFootprint.Comment = "Footprint of the folder.";
+                folderFootprint.FolderId = id;
+                folderFootprint.FolderName = name;
+
+                region.Simplify();
+                folderFootprint.Region = region;
+
+                folderFootprint.Save(); // save the new folderFootprint
+
+                this.footprintId = folderFootprint.Id;
+                Save(false); 
+            }
+
+        }
+
+    }
 }

@@ -43,5 +43,7 @@ namespace Jhu.Footprint.Web.Lib
                 }
             }
         }
+
+        public abstract void Save();
     }
 }
