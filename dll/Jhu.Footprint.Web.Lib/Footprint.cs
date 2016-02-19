@@ -23,7 +23,7 @@ namespace Jhu.Footprint.Web.Lib
         private DateTime dateCreated;
         private Region region;
         private double fillFactor;
-        private FolderType folderType;
+        private FootprintType type;
         private long folderId;
         private string folderName;
         private string comment;
@@ -98,10 +98,10 @@ namespace Jhu.Footprint.Web.Lib
             set { fillFactor = value; }
         }
         
-        public FolderType FolderType
+        public FootprintType Type
         {
-            get { return folderType; }
-            set { folderType = value; }
+            get { return type; }
+            set { type = value; }
         }
 
         public string Comment
@@ -133,7 +133,7 @@ namespace Jhu.Footprint.Web.Lib
             this.dateCreated = DateTime.Now;
             this.region = null;
             this.fillFactor = 0;
-            this.folderType = FolderType.None;
+            this.type = FootprintType.None;
             this.folderId = 0;
             this.folderName = "";
             this.comment = "";
@@ -145,7 +145,7 @@ namespace Jhu.Footprint.Web.Lib
         {
             throw new NotImplementedException();
         }
-
+        
         protected override System.Data.SqlClient.SqlCommand GetCreateCommand()
         {
             string sql = "fps.spCreateFootprint";
@@ -213,22 +213,18 @@ namespace Jhu.Footprint.Web.Lib
             cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = user;
             cmd.Parameters.Add("@Public", SqlDbType.TinyInt).Value = @public;
             cmd.Parameters.Add("@FillFactor", SqlDbType.Float).Value = fillFactor;
-            cmd.Parameters.Add("@FolderType", SqlDbType.TinyInt).Value = folderType;
+            cmd.Parameters.Add("@FootprintType", SqlDbType.TinyInt).Value = type;
             cmd.Parameters.Add("@FolderId", SqlDbType.BigInt).Value = folderId;
             cmd.Parameters.Add("@Comment", SqlDbType.NVarChar, -1).Value = comment;
 
-            SqlBytes bytes;
+           SqlBytes bytes;
             using (var ms = new MemoryStream())
             {
                 using (var w = new Spherical.IO.RegionWriter(ms))
                 {
                     if (this.region != null)
                     {
-                    w.Write(this.region);
-                    }
-                    else
-                    {
-                        w.Write(0);
+                        w.Write(this.region);
                     }
                 }
                 bytes = new SqlBytes(ms.ToArray());
@@ -245,7 +241,7 @@ namespace Jhu.Footprint.Web.Lib
             this.@public = (byte)dr["Public"];
             this.dateCreated = (DateTime)dr["DateCreated"];
             this.fillFactor = (double)dr["FillFactor"];
-            this.folderType = (FolderType)Enum.ToObject(typeof(FolderType),dr["FolderType"]);
+            this.type = (FootprintType)Enum.ToObject(typeof(FootprintType),dr["FootprintType"]);
             this.folderId = (long)dr["FolderID"];
             this.comment = (string)dr["Comment"];
             this.folderName = (string)dr["FolderName"];
@@ -258,6 +254,19 @@ namespace Jhu.Footprint.Web.Lib
             else
             {
                 this.region = null;
+            }
+        }
+
+        public override void Save()
+        {
+
+            if (this.id == 0)
+            {
+                Create();
+            }
+            else
+            {
+                Modify();
             }
         }
 
