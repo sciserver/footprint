@@ -92,5 +92,19 @@ namespace Jhu.Footprint.Web.Lib.Test
             }
 
         }
+
+        [TestMethod]
+        public void RefreshFolderFootprintTest()
+        {
+            using (var context = new Context())
+            {
+                var folder = new FootprintFolder(context);
+
+                folder.Id = 1;
+                folder.User = "evelin";
+                folder.Load();
+                folder.RefreshFolderFootprint();
+            }
+        }
     }
 }
