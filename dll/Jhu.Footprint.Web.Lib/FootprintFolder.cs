@@ -206,6 +206,7 @@ namespace Jhu.Footprint.Web.Lib
         public override void LoadFromDataReader(SqlDataReader dr)
         {
             this.id = (long)dr["FolderId"];
+            this.footprintId = (long)dr["FootprintId"];
             this.name = (string)dr["Name"];
             this.user = (string)dr["User"];
             this.type = (FolderType)Enum.ToObject(typeof(FolderType), dr["Type"]);
@@ -251,6 +252,11 @@ namespace Jhu.Footprint.Web.Lib
                     this.id = (long)cmd.Parameters["@NewID"].Value;
                 }
             }
+        }
+
+        public void Modify()
+        {
+            Modify(true);
         }
 
         public void Modify(bool refreshFolderFootprint)
@@ -350,7 +356,7 @@ namespace Jhu.Footprint.Web.Lib
         /// <summary>
         /// Updates region cache if a new region is linked to the RegionGroup
         /// </summary>
-        private void UpdateFolderFootprint(long newFootprintId)
+        public void UpdateFolderFootprint(long newFootprintId)
         {
             Spherical.Region region = null; // will contain the folderFootprint region;
 
@@ -447,15 +453,20 @@ namespace Jhu.Footprint.Web.Lib
         /// <summary>
         /// Refrehes the region cache completely after a RegionLink delete
         /// </summary>
-        private void RefreshFolderFootprint()
+        public void RefreshFolderFootprint()
         {
             IEnumerable<Footprint> footprints = GetFootprintsByFolderId();
+                    
+            folderFootprint = new Footprint(Context);
+            
 
             // if a folderFootprint exist, load it
             if (this.footprintId > 0)
             {
                 folderFootprint.Id = this.footprintId;
+                folderFootprint.User = this.user;
                 folderFootprint.Load();
+
             }
 
             // if less than 2 footprints are associated with this FootprintFolder,
@@ -474,11 +485,11 @@ namespace Jhu.Footprint.Web.Lib
                     this.FootprintId = footprints.ElementAt(0).Id;
                 }
                 else
-                { 
+                {
                     this.FootprintId = -1;
                 }
 
-                Save(false); 
+                Save(false);
 
                 return;
             }
@@ -527,7 +538,7 @@ namespace Jhu.Footprint.Web.Lib
                 folderFootprint.Save(); // save the new folderFootprint
 
                 this.footprintId = folderFootprint.Id;
-                Save(false); 
+                Save(false);
             }
 
         }
