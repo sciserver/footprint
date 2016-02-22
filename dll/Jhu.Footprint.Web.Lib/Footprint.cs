@@ -246,9 +246,10 @@ namespace Jhu.Footprint.Web.Lib
             this.comment = (string)dr["Comment"];
             this.folderName = (string)dr["FolderName"];
 
-            if (!dr.IsDBNull(dr.GetOrdinal("RegionBinary")))
+            var o = dr.GetOrdinal("RegionBinary");
+            if (!dr.IsDBNull(o))
             {
-                var bytes = (SqlBytes)dr["RegionBinary"];
+                var bytes = dr.GetSqlBytes(o);
                 this.region = bytes.IsNull ? null : Jhu.Spherical.Region.FromSqlBytes(bytes);
             }
             else
