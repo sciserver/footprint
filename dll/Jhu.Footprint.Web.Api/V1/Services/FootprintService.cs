@@ -150,9 +150,23 @@ namespace Jhu.Footprint.Web.Api.V1
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
         public string GetUserFootprintFolderRegion(string userName, string folderName)
         {
-            // TODO : Name? How will the folder's footprint be identified?
-            // e.g.: FolderFootprint, name of the folder...
-            throw new NotImplementedException();
+            Lib.Footprint footprint;
+            using (var context = new Lib.Context()) 
+            {
+                Lib.FootprintFolder folder = new Lib.FootprintFolder(context);
+                folder.User = userName;
+                folder.Name = folderName;
+                folder.Load();
+
+                footprint = new Lib.Footprint(context);
+                footprint.Id = folder.FootprintId;
+                footprint.User = userName;
+                footprint.Load();
+
+            }
+
+            var f = new Footprint(footprint);
+            return f.RegionString;
         }
 
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
