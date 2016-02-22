@@ -90,7 +90,11 @@ namespace Jhu.Footprint.Web.Api.V1
             this.FolderId = footprint.FolderId;
             //TODO : host name?
             this.Url = new Uri("http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/"+this.User+"/"+this.FolderName+"/"+this.Name);
-            //this.RegionString = footprint.Region.ToString();
+            if (footprint.Region != null)
+            {
+                this.RegionString = footprint.Region.ToString();
+            }
+            else this.RegionString = null;
         }
 
         public Jhu.Footprint.Web.Lib.Footprint GetValue()
@@ -106,7 +110,11 @@ namespace Jhu.Footprint.Web.Api.V1
             footprint.Type = this.FootprintType;
             footprint.Comment = this.Comment;
             footprint.FolderId = this.FolderId;
-            //footprint.RegionString = Jhu.Spherical.Region.Parse(this.RegionString);
+            if (this.RegionString != null)
+            {
+                footprint.Region = Jhu.Spherical.Region.Parse(this.RegionString);
+            }
+            else footprint.Region = null;
 
             return footprint;
         }

@@ -18,6 +18,11 @@ namespace Jhu.Footprint.Web.Api.V1
         [Description("Folder Id.")]
         public long Id { get; set; }
 
+
+        [DataMember(Name = "footprintId")]
+        [Description("Id of the folder footprint.")]
+        public long FootprintId { get; set; }
+
         [DataMember(Name = "url")]
         [Description("Folder url.")]
         public Uri Url { get; set; }
@@ -61,9 +66,10 @@ namespace Jhu.Footprint.Web.Api.V1
 
         public void SetValue(Jhu.Footprint.Web.Lib.FootprintFolder folder)
         {
+            this.Id = folder.Id;
+            this.FootprintId = folder.FootprintId;
             this.Name = folder.Name;
             this.User = folder.User;
-            this.Id = folder.Id;
             this.Public = folder.Public;
             this.Type = folder.Type;
             //TODO : host name?
@@ -75,9 +81,10 @@ namespace Jhu.Footprint.Web.Api.V1
         {
             var folder = new Jhu.Footprint.Web.Lib.FootprintFolder();
 
+            folder.Id = this.Id;
+            folder.FootprintId = this.FootprintId;
             folder.Name = this.Name;
             folder.User = this.User;
-            folder.Id = this.Id;
             folder.Public = this.Public;
             folder.Type = this.Type;
             folder.Comment = this.Comment;
