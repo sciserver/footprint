@@ -155,6 +155,7 @@ namespace Jhu.Footprint.Web.Lib
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
             cmd.Parameters.Add("@FolderID", SqlDbType.BigInt).Value = id;
+            cmd.Parameters.Add("@FootprintId", SqlDbType.BigInt).Value = (footprintId <= 0) ? DBNull.Value : (object)footprintId;
             AppendCreateModifyParameters(cmd);
 
             cmd.Parameters.Add("RETVAL", SqlDbType.Int).Direction = ParameterDirection.ReturnValue;
@@ -197,7 +198,6 @@ namespace Jhu.Footprint.Web.Lib
         {
             cmd.Parameters.Add("@Name", SqlDbType.NVarChar, 256).Value = name;
             cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = user;
-            cmd.Parameters.Add("@FootprintId", SqlDbType.BigInt).Value = footprintId;
             cmd.Parameters.Add("@Public", SqlDbType.TinyInt).Value = @public;
             cmd.Parameters.Add("@Type", SqlDbType.TinyInt).Value = Type;
             cmd.Parameters.Add("@Comment", SqlDbType.NVarChar, -1).Value = comment;
@@ -206,7 +206,7 @@ namespace Jhu.Footprint.Web.Lib
         public override void LoadFromDataReader(SqlDataReader dr)
         {
             this.id = (long)dr["FolderId"];
-            this.footprintId = (long)dr["FootprintId"];
+            this.footprintId = dr.IsDBNull(dr.GetOrdinal("FootprintId")) ? -1 : (long)dr["FootprintId"];
             this.name = (string)dr["Name"];
             this.user = (string)dr["User"];
             this.type = (FolderType)Enum.ToObject(typeof(FolderType), dr["Type"]);
@@ -359,6 +359,7 @@ namespace Jhu.Footprint.Web.Lib
         public void UpdateFolderFootprint(long newFootprintId)
         {
             Spherical.Region region = null; // will contain the folderFootprint region;
+            folderFootprint = new Footprint(Context);
 
             // if a folderFootprint exists, load it
             if (this.footprintId > 0)
