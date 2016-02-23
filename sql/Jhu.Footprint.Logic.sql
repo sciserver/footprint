@@ -216,7 +216,6 @@ GO
 CREATE PROC [fps].[spCreateFootprintFolder]
 	@Name nvarchar(256),
 	@User nvarchar(250),
-	@FootprintID bigint,
 	@Type tinyint,
 	@Public tinyint,
 	@Comment nvarchar(max),
@@ -224,10 +223,10 @@ CREATE PROC [fps].[spCreateFootprintFolder]
 	@NewID bigint OUTPUT
 AS
 	INSERT FootprintFolder
-		([Type],  [User], [Public], FootprintID, 
+		([Type],  [User], [Public], 
 			DateCreated, DateModified, Name, Comment)
 	VALUES
-		(@Type, @User, @Public, @FootprintID,
+		(@Type, @User, @Public,
 		GETDATE(), GETDATE(), @Name, @Comment)
 
 	SET @NewID = @@IDENTITY
