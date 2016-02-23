@@ -96,14 +96,90 @@ namespace Jhu.Footprint.Web.Lib.Test
         [TestMethod]
         public void RefreshFolderFootprintTest()
         {
+            // Num. of footprints < 2 , dedicated folder footprint
             using (var context = new Context())
             {
                 var folder = new FootprintFolder(context);
 
-                folder.Id = 1;
-                folder.User = "evelin";
+                folder.Id = 10;
+                folder.User = "test";
                 folder.Load();
                 folder.RefreshFolderFootprint();
+            }
+        }
+
+        [TestMethod]
+        public void RefreshFolderFootprintTest2()
+        {
+            // Num. of footprints < 2 , no dedicated folder footprint
+            using (var context = new Context())
+            {
+                var folder = new FootprintFolder(context);
+
+                folder.Id = 11;
+                folder.User = "test";
+                folder.Load();
+                folder.RefreshFolderFootprint();
+            }
+        }
+
+        [TestMethod]
+        public void RefreshFolderFootprintTest3()
+        {
+            // Num. of footprints >= 2, no dedicated folder fp.
+            using (var context = new Context())
+            {
+                var folder = new FootprintFolder(context);
+
+                folder.Id = 12;
+                folder.User = "test";
+                folder.Load();
+                folder.RefreshFolderFootprint();
+            }
+        }
+
+        [TestMethod]
+        public void RefreshFolderFootprintTest4()
+        {
+            // Num. of footprints >=2, dedicated folder fp., union
+            using (var context = new Context())
+            {
+                var folder = new FootprintFolder(context);
+
+                folder.Id = 13;
+                folder.User = "test";
+                folder.Load();
+                folder.RefreshFolderFootprint();
+            }
+        }
+
+
+        [TestMethod]
+        public void RefreshFolderFootprintTest5()
+        {
+            // Num. of footprints >= 2, dedicated folder fp., intersect.
+            using (var context = new Context())
+            {
+                var folder = new FootprintFolder(context);
+
+                folder.Id = 14;
+                folder.User = "test";
+                folder.Load();
+                folder.RefreshFolderFootprint();
+            }
+        }
+
+        [TestMethod]
+        public void UpdateFolderFootprintTest()
+        {
+            using (var context = new Context())
+            {
+                var folder = new FootprintFolder(context);
+
+                folder.Id = 8;
+                folder.User = "james";
+                folder.Load();
+                folder.UpdateFolderFootprint(7);
             }
         }
     }
