@@ -172,14 +172,73 @@ namespace Jhu.Footprint.Web.Lib.Test
         [TestMethod]
         public void UpdateFolderFootprintTest()
         {
+            // no dedicated footprints, num. of fps > 1, union
             using (var context = new Context())
             {
                 var folder = new FootprintFolder(context);
 
-                folder.Id = 8;
-                folder.User = "james";
+                folder.Id = 15;
+                folder.User = "test";
                 folder.Load();
-                folder.UpdateFolderFootprint(7);
+                folder.UpdateFolderFootprint(19);
+            }
+        }
+
+        [TestMethod]
+        public void UpdateFolderFootprintTest2()
+        {
+
+            //no dedicated folder fp., num of fps >1, intersect
+            using (var context = new Context())
+            {
+                var folder = new FootprintFolder(context);
+
+                folder.Id = 16;
+                folder.User = "test";
+                folder.Load();
+                folder.UpdateFolderFootprint(22);
+            }
+        }
+        [TestMethod]
+        public void UpdateFolderFootprintTest3()
+        {
+            // no dedicated folder fp., num of fps =1
+            using (var context = new Context())
+            {
+                var folder = new FootprintFolder(context);
+
+                folder.Id = 17;
+                folder.User = "test";
+                folder.Load();
+                folder.UpdateFolderFootprint(23);
+            }
+        }
+        [TestMethod]
+        public void UpdateFolderFootprintTest4()
+        {
+            // dedicated folder fp., union
+            using (var context = new Context())
+            {
+                var folder = new FootprintFolder(context);
+
+                folder.Id = 18;
+                folder.User = "test";
+                folder.Load();
+                folder.UpdateFolderFootprint(25);
+            }
+        }
+        [TestMethod]
+        public void UpdateFolderFootprintTest5()
+        {
+            // dedicated folder fp. intersect
+            using (var context = new Context())
+            {
+                var folder = new FootprintFolder(context);
+
+                folder.Id = 19;
+                folder.User = "test";
+                folder.Load();
+                folder.UpdateFolderFootprint(27);
             }
         }
     }
