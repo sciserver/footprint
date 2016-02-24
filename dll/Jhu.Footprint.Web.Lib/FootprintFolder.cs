@@ -365,6 +365,7 @@ namespace Jhu.Footprint.Web.Lib
             if (this.footprintId > 0)
             {
                 folderFootprint.Id = this.footprintId;
+                folderFootprint.User = this.User;
                 folderFootprint.Load();
             }
 
@@ -385,6 +386,7 @@ namespace Jhu.Footprint.Web.Lib
                         region.Add(new Spherical.Convex(new Spherical.Halfspace(0, 0, 1, false, -1)));
                     }
 
+                    region.Simplify();
                     foreach (Footprint f in footprints)
                     {
                         switch (type)
@@ -508,6 +510,8 @@ namespace Jhu.Footprint.Web.Lib
                 region.Add(new Spherical.Convex(new Spherical.Halfspace(0, 0, 1, false, -1)));
             }
 
+            region.Simplify();
+            
             // update the folderFootprint
             foreach (Footprint f in footprints)
             {

@@ -53,16 +53,16 @@ namespace Jhu.Footprint.Web.Lib.Test
             {
                 var footprint = new Footprint(context);
 
-                footprint.Id = 9;
-                footprint.User = "evelin";
+                footprint.Id = 17;
+                footprint.User = "test";
 
                 footprint.Load();
                 var s = @"REGION
 	CONVEX
-	-1 0 0 0.92934752422682254";
+	-0.49240387650610379 0.85286853195244328 0.17364817766693033 0.64278760968653936";
 
                 footprint.Region = Jhu.Spherical.Region.Parse(s);
-                
+                footprint.Region.Simplify();
                 footprint.Modify();
                 
             }
