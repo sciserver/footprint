@@ -41,7 +41,7 @@ namespace Jhu.Footprint.Web.Lib.Test
                 footprint.Type = FootprintType.None;
                 footprint.Comment = "Create Test";
 
-                footprint.Create();
+                footprint.Save();
                 
             }
         }
@@ -63,7 +63,7 @@ namespace Jhu.Footprint.Web.Lib.Test
 
                 footprint.Region = Jhu.Spherical.Region.Parse(s);
                 footprint.Region.Simplify();
-                footprint.Modify();
+                footprint.Save();
                 
             }
         }
