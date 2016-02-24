@@ -39,7 +39,7 @@ namespace Jhu.Footprint.Web.Lib.Test
                 folder.Public = 1;
                 folder.Comment = "FootprintFolder.Create Unit Test";
 
-                folder.Create();
+                folder.Save();
             }
         }
 
@@ -58,7 +58,7 @@ namespace Jhu.Footprint.Web.Lib.Test
                 folder.Name = "ModifyTest";
                 folder.Comment = "FootprintFolder.Modify Unit Test";
 
-                folder.Modify(false);
+                folder.Save();
 
                 folder.Load();
             }
@@ -91,6 +91,20 @@ namespace Jhu.Footprint.Web.Lib.Test
                 folder.Load();
             }
 
+        }
+
+        [TestMethod]
+        public void GetFootprintsByFolderIdTest()
+        {
+            using (var context = new Context())
+            {
+                var folder = new FootprintFolder(context);
+
+                folder.Id = 1;
+                folder.User = "evelin";
+
+                var footprints = folder.GetFootprintsByFolderId();
+            }
         }
 
         [TestMethod]
