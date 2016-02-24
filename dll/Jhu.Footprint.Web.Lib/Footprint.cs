@@ -271,7 +271,7 @@ namespace Jhu.Footprint.Web.Lib
             }
         }
 
-        public void Create()
+        private void Create()
         {
             using (var cmd = GetCreateCommand())
             {
@@ -297,7 +297,7 @@ namespace Jhu.Footprint.Web.Lib
 
         }
 
-        public void Modify()
+        private void Modify()
         {
             using (var cmd = GetModifyCommand())
             {

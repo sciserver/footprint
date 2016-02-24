@@ -176,7 +176,7 @@ namespace Jhu.Footprint.Web.Api.V1
             {
                 var folder = request.FootprintFolder.GetValue();
                 folder.Context = context;
-                folder.Create();
+                folder.Save();
             }
         }
 
@@ -187,7 +187,7 @@ namespace Jhu.Footprint.Web.Api.V1
             {
                 var folder = request.FootprintFolder.GetValue();
                 folder.Context = context;
-                folder.Modify();
+                folder.Save();
 
             }
         }
@@ -240,7 +240,7 @@ namespace Jhu.Footprint.Web.Api.V1
             {
                 var footprint = request.Footprint.GetValue();
                 footprint.Context = context;
-                footprint.Create();
+                footprint.Save();
             }
         }
 
@@ -251,7 +251,7 @@ namespace Jhu.Footprint.Web.Api.V1
             {
                 var footprint = request.Footprint.GetValue();
                 footprint.Context = context;
-                footprint.Modify();
+                footprint.Save();
             }
         }
 
