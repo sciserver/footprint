@@ -140,17 +140,19 @@ GO
 
 CREATE PROC [fps].[spFootprintNameIsAvailable]
 	@User nvarchar(250),
+	@FootprintId bigint,
 	@FolderId bigint,
 	@FootprintName nvarchar(256),
 
-	@MATCH int OUTPUT
+	@Match int OUTPUT
 
 AS
-	SET @MATCH = (SELECT COUNT(*) FROM Footprint
+	SET @Match = (SELECT COUNT(*) FROM Footprint
 	WHERE
 		Name = @FootprintName
 		AND [User] = @User
-		AND FolderId = @FolderId)
+		AND FolderId = @FolderId
+		AND (FootprintID != @FootprintId OR @FootprintID = 0)) 
 GO
 
 /****** Object:  StoredProcedure [fps].[spGetFootprintsByFolderId]  ******/

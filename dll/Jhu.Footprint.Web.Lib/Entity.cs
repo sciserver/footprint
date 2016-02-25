@@ -26,8 +26,12 @@ namespace Jhu.Footprint.Web.Lib
         protected abstract SqlCommand GetDeleteCommand();
 
         protected abstract SqlCommand GetLoadCommand();
+
+        protected abstract SqlCommand GetNameIsAvailableCommand();
         
         public abstract void LoadFromDataReader(SqlDataReader dr);
+
+        public abstract void Save();
 
         public void Load()
         {
@@ -43,7 +47,5 @@ namespace Jhu.Footprint.Web.Lib
                 }
             }
         }
-
-        public abstract void Save();
     }
 }

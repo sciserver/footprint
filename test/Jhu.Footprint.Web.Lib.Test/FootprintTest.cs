@@ -46,6 +46,31 @@ namespace Jhu.Footprint.Web.Lib.Test
             }
         }
 
+        [TestMethod]      
+        public void FootprintCreateTest2()
+        {
+            using (var context = new Context())
+            {
+                var footprint = new Footprint(context);
+
+                footprint.Name = "Stripe5";
+                footprint.User = "evelin";
+                footprint.FolderId = 1;
+
+                footprint.Comment = "duplicate name test.";
+
+                try
+                {
+                    footprint.Save();
+                }
+                catch (FootprintException e)
+                { 
+                    System.Diagnostics.Debug.Write(e);
+                }
+
+            }
+        }
+
         [TestMethod]
         public void FootprintModifyTest()
         {
@@ -53,8 +78,8 @@ namespace Jhu.Footprint.Web.Lib.Test
             {
                 var footprint = new Footprint(context);
 
-                footprint.Id = 17;
-                footprint.User = "test";
+                footprint.Id = 5;
+                footprint.User = "mike";
 
                 footprint.Load();
                 var s = @"REGION
@@ -65,6 +90,32 @@ namespace Jhu.Footprint.Web.Lib.Test
                 footprint.Region.Simplify();
                 footprint.Save();
                 
+            }
+        }
+
+        [TestMethod]
+        public void FootprintModifyTest2()
+        {
+            using (var context = new Context())
+            {
+                var footprint = new Footprint(context);
+
+                footprint.Id = 5;
+                footprint.User = "mike";
+
+                footprint.Load();
+
+                footprint.Name = "South";
+
+                try
+                {
+                    footprint.Save();
+                }
+                catch (FootprintException e)
+                {
+                    System.Diagnostics.Debug.Write(e);
+                }
+
             }
         }
 

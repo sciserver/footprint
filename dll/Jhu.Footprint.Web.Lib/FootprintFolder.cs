@@ -216,6 +216,11 @@ namespace Jhu.Footprint.Web.Lib
             this.comment = (string)dr["Comment"];
         }
 
+        protected override SqlCommand GetNameIsAvailableCommand()
+        {
+            throw new NotImplementedException();
+        }
+
         public override void Save()
         {
             Save(true);

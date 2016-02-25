@@ -12,13 +12,13 @@ using System.IO;
 
 namespace Jhu.Footprint.Web.Lib
 {
-    public class Footprint: Entity
+    public class Footprint : Entity
     {
         #region Member variables
 
         private long id;
         private string name;
-        private string user;               
+        private string user;
         private byte @public;                // public flag, >0 when visible to the public
         private DateTime dateCreated;
         private Region region;
@@ -97,7 +97,7 @@ namespace Jhu.Footprint.Web.Lib
             get { return fillFactor; }
             set { fillFactor = value; }
         }
-        
+
         public FootprintType Type
         {
             get { return type; }
@@ -141,11 +141,6 @@ namespace Jhu.Footprint.Web.Lib
         #endregion
 
         #region Methods
-        private Boolean FootprintNameIsAvailable()
-        {
-            throw new NotImplementedException();
-        }
-        
         protected override System.Data.SqlClient.SqlCommand GetCreateCommand()
         {
             string sql = "fps.spCreateFootprint";
@@ -162,7 +157,7 @@ namespace Jhu.Footprint.Web.Lib
 
         protected override System.Data.SqlClient.SqlCommand GetModifyCommand()
         {
-            if (this.id == 0) { GetFootprintId(); } 
+            if (this.id == 0) { GetFootprintId(); }
 
             string sql = "fps.spModifyFootprint";
             var cmd = new SqlCommand(sql);
@@ -178,7 +173,7 @@ namespace Jhu.Footprint.Web.Lib
 
         protected override System.Data.SqlClient.SqlCommand GetDeleteCommand()
         {
-            if (this.id == 0) { GetFootprintId(); } 
+            if (this.id == 0) { GetFootprintId(); }
 
             string sql = "fps.spDeleteFootprint";
             var cmd = new SqlCommand(sql);
@@ -194,8 +189,8 @@ namespace Jhu.Footprint.Web.Lib
 
         protected override SqlCommand GetLoadCommand()
         {
-            if (this.id == 0) { GetFootprintId(); } 
-            
+            if (this.id == 0) { GetFootprintId(); }
+
             var sql = "fps.spGetFootprint";
             var cmd = new SqlCommand(sql);
 
@@ -203,7 +198,7 @@ namespace Jhu.Footprint.Web.Lib
 
             cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = user;
             cmd.Parameters.Add("@FootprintId", SqlDbType.BigInt).Value = id;
-            
+
             return cmd;
         }
 
@@ -217,7 +212,7 @@ namespace Jhu.Footprint.Web.Lib
             cmd.Parameters.Add("@FolderId", SqlDbType.BigInt).Value = folderId;
             cmd.Parameters.Add("@Comment", SqlDbType.NVarChar, -1).Value = comment;
 
-           SqlBytes bytes;
+            SqlBytes bytes;
             using (var ms = new MemoryStream())
             {
                 using (var w = new Spherical.IO.RegionWriter(ms))
@@ -241,7 +236,7 @@ namespace Jhu.Footprint.Web.Lib
             this.@public = (byte)dr["Public"];
             this.dateCreated = (DateTime)dr["DateCreated"];
             this.fillFactor = (double)dr["FillFactor"];
-            this.type = (FootprintType)Enum.ToObject(typeof(FootprintType),dr["FootprintType"]);
+            this.type = (FootprintType)Enum.ToObject(typeof(FootprintType), dr["FootprintType"]);
             this.folderId = (long)dr["FolderID"];
             this.comment = (string)dr["Comment"];
             this.folderName = (string)dr["FolderName"];
@@ -258,8 +253,29 @@ namespace Jhu.Footprint.Web.Lib
             }
         }
 
+        protected override SqlCommand GetNameIsAvailableCommand()
+        {
+            var sql = "fps.spFootprintNameIsAvailable";
+            var cmd = new SqlCommand(sql);
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = this.user;
+            cmd.Parameters.Add("@FootprintId", SqlDbType.BigInt).Value = this.id;
+            cmd.Parameters.Add("@folderId", SqlDbType.BigInt).Value = this.folderId;
+            cmd.Parameters.Add("@FootprintName", SqlDbType.NVarChar, 256).Value = this.name;
+
+            cmd.Parameters.Add("@Match", SqlDbType.Int).Direction = ParameterDirection.Output;
+
+            return cmd;
+        }
+
         public override void Save()
         {
+            if (!NameIsAvailable())
+            {
+                throw Error.DuplicateFootprintName(this.name);
+            }
+
 
             if (this.id == 0)
             {
@@ -273,27 +289,25 @@ namespace Jhu.Footprint.Web.Lib
 
         private void Create()
         {
-            using (var cmd = GetCreateCommand())
-            {
-                cmd.Connection = Context.Connection;
-                cmd.Transaction = Context.Transaction;
 
-                cmd.ExecuteNonQuery();
-
-                int retval = (int)cmd.Parameters["RETVAL"].Value;
-
-                if (retval == 0)
+                using (var cmd = GetCreateCommand())
                 {
-                    throw new Exception("Cannot create Footprint.");
-                }
-                else
-                {
-                    this.id = (long)cmd.Parameters["@NewID"].Value;
-                }
+                    cmd.Connection = Context.Connection;
+                    cmd.Transaction = Context.Transaction;
 
-                // TODO
-                // throw Error.DuplicateFootprintName(name);
-            }
+                    cmd.ExecuteNonQuery();
+
+                    int retval = (int)cmd.Parameters["RETVAL"].Value;
+
+                    if (retval == 0)
+                    {
+                        throw new Exception("Cannot create Footprint.");
+                    }
+                    else
+                    {
+                        this.id = (long)cmd.Parameters["@NewID"].Value;
+                    }
+                }
 
         }
 
@@ -354,6 +368,31 @@ namespace Jhu.Footprint.Web.Lib
                 this.id = (long)cmd.Parameters["@FootprintId"].Value;
             }
         }
+        private Boolean NameIsAvailable()
+        {
+            using (var cmd = GetNameIsAvailableCommand())
+            {
+                cmd.Connection = Context.Connection;
+                cmd.Transaction = Context.Transaction;
+
+                cmd.ExecuteNonQuery();
+
+                int match = (int)cmd.Parameters["@Match"].Value;
+
+                if (match > 0)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+
+            }
+        }
+
         #endregion
+
+
     }
 }
