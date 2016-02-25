@@ -15,5 +15,14 @@ namespace Jhu.Footprint.Web.Lib
 
             return new FootprintException(message);
         }
+
+        public static FootprintFolderException DuplicateFootprintFolderName(string name)
+        {
+            var message = String.Format(
+                ExceptionMessages.DuplicateFootprintFolderName,
+                name);
+
+            return new FootprintFolderException(message);
+        }
     }
 }

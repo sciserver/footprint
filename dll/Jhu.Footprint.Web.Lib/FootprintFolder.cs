@@ -218,7 +218,19 @@ namespace Jhu.Footprint.Web.Lib
 
         protected override SqlCommand GetNameIsAvailableCommand()
         {
-            throw new NotImplementedException();
+            var sql = "fps.spFootprintFolderNameIsAvailable";
+            var cmd = new SqlCommand(sql);
+
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = this.user;
+            cmd.Parameters.Add("@FolderId", SqlDbType.BigInt).Value = this.id;
+            cmd.Parameters.Add("@FolderName", SqlDbType.NVarChar, 256).Value = this.name;
+
+
+            cmd.Parameters.Add("@Match", SqlDbType.Int).Direction = ParameterDirection.Output;
+
+            return cmd;
         }
 
         public override void Save()
@@ -227,6 +239,11 @@ namespace Jhu.Footprint.Web.Lib
         }
         public void Save(bool refreshFolderFootprint = true)
         {
+            if (!NameIsAvailable())
+            {
+                throw Error.DuplicateFootprintFolderName(this.name);
+            }
+
             if (this.id == 0)
             {
                 Create();

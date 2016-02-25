@@ -152,7 +152,7 @@ AS
 		Name = @FootprintName
 		AND [User] = @User
 		AND FolderId = @FolderId
-		AND (FootprintID != @FootprintId OR @FootprintID = 0)) 
+		AND FootprintID != @FootprintId) 
 GO
 
 /****** Object:  StoredProcedure [fps].[spGetFootprintsByFolderId]  ******/
@@ -386,4 +386,26 @@ AS
 	WHERE
 		Name = @FolderName
 		AND [User] = @User)
+GO
+
+
+/****** Object:  StoredProcedure [fps].[spFootprintFolderNameIsAvailable]  ******/
+
+IF (OBJECT_ID('[fps].[spFootprintFolderNameIsAvailable]') IS NOT NULL)
+	DROP PROC [fps].[spFootprintFolderNameIsAvailable]
+GO
+
+CREATE PROC [fps].[spFootprintFolderNameIsAvailable]
+	@User nvarchar(250),
+	@FolderId bigint,
+	@FolderName nvarchar(256),
+
+	@Match int OUTPUT
+
+AS
+	SET @Match = (SELECT COUNT(*) FROM FootprintFolder
+	WHERE
+		Name = @FolderName
+		AND [User] = @User
+		AND FolderId != @FolderId) 
 GO

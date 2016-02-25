@@ -368,28 +368,7 @@ namespace Jhu.Footprint.Web.Lib
                 this.id = (long)cmd.Parameters["@FootprintId"].Value;
             }
         }
-        private Boolean NameIsAvailable()
-        {
-            using (var cmd = GetNameIsAvailableCommand())
-            {
-                cmd.Connection = Context.Connection;
-                cmd.Transaction = Context.Transaction;
-
-                cmd.ExecuteNonQuery();
-
-                int match = (int)cmd.Parameters["@Match"].Value;
-
-                if (match > 0)
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
-
-            }
-        }
+        
 
         #endregion
 

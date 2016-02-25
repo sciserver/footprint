@@ -44,7 +44,29 @@ namespace Jhu.Footprint.Web.Lib.Test
         }
 
         [TestMethod]
+        public void FolderCreateTest2()
+        {
+            using (var context = new Context())
+            {
 
+                var folder = new FootprintFolder(context);
+
+                folder.Name = "SDSS.DR7";
+                folder.User = "evelin";
+                folder.Comment = "Duplicate name exception test";
+
+                try
+                {
+                    folder.Save();
+                }
+                catch (FootprintFolderException e)
+                {
+                    System.Diagnostics.Debug.Write(e);
+                }
+            }
+        }
+
+        [TestMethod]
         public void FolderModifyTest()
         {
             using (var context = new Context())
@@ -59,8 +81,31 @@ namespace Jhu.Footprint.Web.Lib.Test
                 folder.Comment = "FootprintFolder.Modify Unit Test";
 
                 folder.Save();
+            }
+        }
 
+        [TestMethod]
+        public void FolderModifyTest2()
+        {
+            using (var context = new Context())
+            {
+                var folder = new FootprintFolder(context);
+
+                folder.Id = 3;
+                folder.User = "bob";
                 folder.Load();
+
+                folder.Name = "2SLAQ";
+                folder.Comment = "duplicate name exception test";
+
+                try
+                {
+                folder.Save();
+                }
+                catch (FootprintFolderException e)
+                {
+                    System.Diagnostics.Debug.Write(e);
+                }
             }
         }
 

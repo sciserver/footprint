@@ -47,5 +47,28 @@ namespace Jhu.Footprint.Web.Lib
                 }
             }
         }
+
+        protected Boolean NameIsAvailable()
+        {
+            using (var cmd = GetNameIsAvailableCommand())
+            {
+                cmd.Connection = Context.Connection;
+                cmd.Transaction = Context.Transaction;
+
+                cmd.ExecuteNonQuery();
+
+                int match = (int)cmd.Parameters["@Match"].Value;
+
+                if (match > 0)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+
+            }
+        }
     }
 }
