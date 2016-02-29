@@ -124,6 +124,12 @@ namespace Jhu.Footprint.Web.Lib
             InitializeMembers();
         }
 
+        public Footprint(Footprint old)
+            :base(old)
+        {
+            CopyMembers(old);
+        }
+
         private void InitializeMembers()
         {
             this.id = 0;
@@ -135,12 +141,32 @@ namespace Jhu.Footprint.Web.Lib
             this.fillFactor = 0;
             this.type = FootprintType.None;
             this.folderId = 0;
-            this.folderName = "";
             this.comment = "";
-        }
-        #endregion
 
+
+            this.folderName = "";       // TODO: move to search
+        }
+
+        private void CopyMembers(Footprint old)
+        {
+            this.id = old.id;
+            this.name = old.name;
+            this.user = old.user;
+            this.@public = old.@public;
+            this.dateCreated = old.dateCreated;
+            this.region = new Region(old.region);
+            this.fillFactor = old.fillFactor;
+            this.type = old.type;
+            this.folderId = old.folderId;
+            this.comment = old.comment;
+
+
+            this.folderName = old.folderName;       // TODO: move to search
+        }
+
+        #endregion
         #region Methods
+
         protected override System.Data.SqlClient.SqlCommand GetCreateCommand()
         {
             string sql = "fps.spCreateFootprint";
@@ -253,8 +279,9 @@ namespace Jhu.Footprint.Web.Lib
             }
         }
 
-        protected override SqlCommand GetNameIsAvailableCommand()
+        protected override SqlCommand GetIsNameDuplicateCommand()
         {
+            // TODO
             var sql = "fps.spFootprintNameIsAvailable";
             var cmd = new SqlCommand(sql);
             cmd.CommandType = CommandType.StoredProcedure;
@@ -271,7 +298,7 @@ namespace Jhu.Footprint.Web.Lib
 
         public override void Save()
         {
-            if (!NameIsAvailable())
+            if (!IsNameDuplicate())
             {
                 throw Error.DuplicateFootprintName(this.name);
             }
