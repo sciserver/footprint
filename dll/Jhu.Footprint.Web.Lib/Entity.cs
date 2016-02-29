@@ -8,7 +8,7 @@ using System.Data.SqlClient;
 
 namespace Jhu.Footprint.Web.Lib
 {
-    public abstract class Entity: ContextObject
+    public abstract class Entity : ContextObject
     {
         protected Entity()
         {
@@ -16,6 +16,11 @@ namespace Jhu.Footprint.Web.Lib
 
         protected Entity(Context context)
             : base(context)
+        {
+        }
+
+        protected Entity(Entity old)
+            : base(old.Context)
         {
         }
 
@@ -27,8 +32,8 @@ namespace Jhu.Footprint.Web.Lib
 
         protected abstract SqlCommand GetLoadCommand();
 
-        protected abstract SqlCommand GetNameIsAvailableCommand();
-        
+        protected abstract SqlCommand GetIsNameDuplicateCommand();
+
         public abstract void LoadFromDataReader(SqlDataReader dr);
 
         public abstract void Save();
@@ -48,9 +53,9 @@ namespace Jhu.Footprint.Web.Lib
             }
         }
 
-        protected Boolean NameIsAvailable()
+        protected Boolean IsNameDuplicate()
         {
-            using (var cmd = GetNameIsAvailableCommand())
+            using (var cmd = GetIsNameDuplicateCommand())
             {
                 cmd.Connection = Context.Connection;
                 cmd.Transaction = Context.Transaction;
@@ -59,15 +64,7 @@ namespace Jhu.Footprint.Web.Lib
 
                 int match = (int)cmd.Parameters["@Match"].Value;
 
-                if (match > 0)
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
-
+                return match > 0;
             }
         }
     }
