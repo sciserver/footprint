@@ -128,6 +128,7 @@ namespace Jhu.Footprint.Web.Lib
         }
         #endregion
 
+        #region SQL - get commands
         protected override SqlCommand GetCreateCommand()
         {
             string sql = "fps.spCreateFootprintFolder";
@@ -219,7 +220,7 @@ namespace Jhu.Footprint.Web.Lib
         protected override SqlCommand GetIsNameDuplicateCommand()
         {
             // TODO
-            var sql = "fps.spFootprintFolderNameIsAvailable";
+            var sql = "fps.spIsDuplicateFootprintFolderName";
             var cmd = new SqlCommand(sql);
 
             cmd.CommandType = CommandType.StoredProcedure;
@@ -233,6 +234,8 @@ namespace Jhu.Footprint.Web.Lib
 
             return cmd;
         }
+
+#endregion
 
         public override void Save()
         {
@@ -407,11 +410,11 @@ namespace Jhu.Footprint.Web.Lib
         {
             LoadFolderFootprint();
 
-            if (folderFootprint.Region.ConvexList.Count == 0)
+            if (folderFootprint.Region == null)
             {
                 // If this is the first footprint in the folder
                 this.footprintId = newFootprint.Id;
-                Save();
+                Save(false);
                 return;
             }
 
@@ -437,94 +440,7 @@ namespace Jhu.Footprint.Web.Lib
 
             folderFootprint.Save();
             footprintId = folderFootprint.Id;
-            Save();
-            
-            // TODO: test and remove
-#if false
-            // folderFootprint.Type == FootprintType.None means we have a link to a single region, 
-            // no dedicated folderFootprint exists
-            if (folderFootprint.Type == FootprintType.None)
-            {
-                // creating a new folderFootprint region
-                IEnumerable<Footprint> footprints = GetFootprintsByFolderId();
-
-                if (footprints.Count() > 1)
-                {
-                    region = new Spherical.Region();
-
-                    // intersection must be started from an all-sky region
-                    if (type == FolderType.Intersection)
-                    {
-                        region.Add(new Spherical.Convex(new Spherical.Halfspace(0, 0, 1, false, -1)));
-                    }
-
-                    region.Simplify();
-
-                    foreach (Footprint f in footprints)
-                    {
-                        switch (type)
-                        {
-                            case FolderType.Union:
-                                region.SmartUnion(f.Region);
-                                break;
-                            case FolderType.Intersection:
-                                region.SmartIntersect(f.Region, false);
-                                break;
-                        }
-                    }
-                }
-                else if (footprints.Count() == 1)
-                {
-                    FootprintId = footprints.ElementAt(0).Id;
-                    Save(false);
-                    return;
-                }
-            }
-            else
-            {
-                // updating the existing folderFootprint region
-                Footprint f;
-                using (var context = new Context())
-                {
-                    f = new Footprint(new Context());
-                    f.User = user;
-                    f.Id = newFootprintId;
-                    f.Load();
-                }
-
-                region = new Spherical.Region(folderFootprint.Region);
-
-                switch (type)
-                {
-                    case FolderType.Union:
-                        region.SmartUnion(f.Region);
-                        break;
-                    case FolderType.Intersection:
-                        region.SmartIntersect(f.Region, false);
-                        break;
-                }
-            }
-
-            // save the new folderFootprint if required
-            if (region != null)
-            {
-                folderFootprint.Name = "folderFootprint";
-                folderFootprint.User = user;
-                folderFootprint.Type = FootprintType.Folder;
-                folderFootprint.Public = @public;
-                folderFootprint.Comment = "Footprint of the folder.";
-                folderFootprint.FolderId = id;
-                folderFootprint.FolderName = name;
-
-                region.Simplify();
-                folderFootprint.Region = region;
-
-                folderFootprint.Save(); // save the new folderFootprint
-
-                this.footprintId = folderFootprint.Id;
-                Save(false);
-            }
-#endif
+            Save(false);
         }
 
         /// <summary>
@@ -538,7 +454,7 @@ namespace Jhu.Footprint.Web.Lib
 
             // if less than 2 footprints are associated with this FootprintFolder,
             // FolderFootprint is not needed
-            if (footprints.Count() < 2)
+            if (footprints.Count() <= 2)
             {
                 // delete old folderFootprint if exists
                 if (folderFootprint != null && folderFootprint.Type == FootprintType.Folder)
@@ -593,11 +509,10 @@ namespace Jhu.Footprint.Web.Lib
             // save the new folderFootprint if required
             if (region != null)
             {
-                folderFootprint.Name = "folderFootprint";
+
+                InitializeFolderFootprint(folderFootprint);
                 folderFootprint.User = user;
-                folderFootprint.Type = FootprintType.Folder;
                 folderFootprint.Public = @public;
-                folderFootprint.Comment = "Footprint of the folder.";
                 folderFootprint.FolderId = id;
                 folderFootprint.FolderName = name;
 

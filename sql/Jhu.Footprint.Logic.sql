@@ -132,13 +132,13 @@ AS
 GO
 
 
-/****** Object:  StoredProcedure [fps].[spFootprintNameIsAvailable]  ******/
+/****** Object:  StoredProcedure [fps].[spIsDuplicateFootprintName]  ******/
 
-IF (OBJECT_ID('[fps].[spFootprintNameIsAvailable]') IS NOT NULL)
-	DROP PROC [fps].[spFootprintNameIsAvailable]
+IF (OBJECT_ID('[fps].[spIsDuplicateFootprintName]') IS NOT NULL)
+	DROP PROC [fps].[spIsDuplicateFootprintName]
 GO
 
-CREATE PROC [fps].[spFootprintNameIsAvailable]
+CREATE PROC [fps].[spIsDuplicateFootprintName]
 	@User nvarchar(250),
 	@FootprintId bigint,
 	@FolderId bigint,
@@ -389,13 +389,13 @@ AS
 GO
 
 
-/****** Object:  StoredProcedure [fps].[spFootprintFolderNameIsAvailable]  ******/
+/****** Object:  StoredProcedure [fps].[spIsDuplicateFootprintFolderName]  ******/
 
-IF (OBJECT_ID('[fps].[spFootprintFolderNameIsAvailable]') IS NOT NULL)
-	DROP PROC [fps].[spFootprintFolderNameIsAvailable]
+IF (OBJECT_ID('[fps].[spIsDuplicateFootprintFolderName]') IS NOT NULL)
+	DROP PROC [fps].[spIsDuplicateFootprintFolderName]
 GO
 
-CREATE PROC [fps].[spFootprintFolderNameIsAvailable]
+CREATE PROC [fps].[spIsDuplicateFootprintFolderName]
 	@User nvarchar(250),
 	@FolderId bigint,
 	@FolderName nvarchar(256),

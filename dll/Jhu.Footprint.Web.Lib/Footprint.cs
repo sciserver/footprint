@@ -165,8 +165,8 @@ namespace Jhu.Footprint.Web.Lib
         }
 
         #endregion
-        #region Methods
 
+        #region SQL - get commands
         protected override System.Data.SqlClient.SqlCommand GetCreateCommand()
         {
             string sql = "fps.spCreateFootprint";
@@ -282,7 +282,7 @@ namespace Jhu.Footprint.Web.Lib
         protected override SqlCommand GetIsNameDuplicateCommand()
         {
             // TODO
-            var sql = "fps.spFootprintNameIsAvailable";
+            var sql = "fps.spIsDuplicateFootprintName";
             var cmd = new SqlCommand(sql);
             cmd.CommandType = CommandType.StoredProcedure;
 
@@ -295,10 +295,11 @@ namespace Jhu.Footprint.Web.Lib
 
             return cmd;
         }
-
+#endregion
+        #region Methods
         public override void Save()
         {
-            if (!IsNameDuplicate())
+            if (IsNameDuplicate())
             {
                 throw Error.DuplicateFootprintName(this.name);
             }
