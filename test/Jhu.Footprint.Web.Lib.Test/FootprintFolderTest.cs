@@ -235,11 +235,15 @@ namespace Jhu.Footprint.Web.Lib.Test
             using (var context = new Context())
             {
                 var folder = new FootprintFolder(context);
+                var footprint = new Footprint(context);
+                footprint.Id = 19;
+                footprint.User = "test";
+                footprint.Load();
 
                 folder.Id = 15;
                 folder.User = "test";
                 folder.Load();
-                folder.UpdateFolderFootprint(19);
+                folder.UpdateFolderFootprint(footprint);
             }
         }
 
@@ -251,11 +255,16 @@ namespace Jhu.Footprint.Web.Lib.Test
             using (var context = new Context())
             {
                 var folder = new FootprintFolder(context);
+                var footprint = new Footprint(context);
+
+                footprint.Id = 22;
+                footprint.User = "test";
+                footprint.Load();
 
                 folder.Id = 16;
                 folder.User = "test";
                 folder.Load();
-                folder.UpdateFolderFootprint(22);
+                folder.UpdateFolderFootprint(footprint);
             }
         }
         [TestMethod]
@@ -265,11 +274,16 @@ namespace Jhu.Footprint.Web.Lib.Test
             using (var context = new Context())
             {
                 var folder = new FootprintFolder(context);
+                var footprint = new Footprint(context);
+
+                footprint.Id = 23;
+                footprint.User = "test";
+                footprint.Load();
 
                 folder.Id = 17;
                 folder.User = "test";
                 folder.Load();
-                folder.UpdateFolderFootprint(23);
+                folder.UpdateFolderFootprint(footprint);
             }
         }
         [TestMethod]
@@ -279,11 +293,16 @@ namespace Jhu.Footprint.Web.Lib.Test
             using (var context = new Context())
             {
                 var folder = new FootprintFolder(context);
+                var footprint = new Footprint(context);
+
+                footprint.Id = 25;
+                footprint.User = "test";
+                footprint.Load();
 
                 folder.Id = 18;
                 folder.User = "test";
                 folder.Load();
-                folder.UpdateFolderFootprint(25);
+                folder.UpdateFolderFootprint(footprint);
             }
         }
         [TestMethod]
@@ -293,11 +312,16 @@ namespace Jhu.Footprint.Web.Lib.Test
             using (var context = new Context())
             {
                 var folder = new FootprintFolder(context);
+                var footprint = new Footprint(context);
+
+                footprint.Id = 27;
+                footprint.User = "test";
+                footprint.Load();
 
                 folder.Id = 19;
                 folder.User = "test";
                 folder.Load();
-                folder.UpdateFolderFootprint(27);
+                folder.UpdateFolderFootprint(footprint);
             }
         }
     }
