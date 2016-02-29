@@ -216,8 +216,9 @@ namespace Jhu.Footprint.Web.Lib
             this.comment = (string)dr["Comment"];
         }
 
-        protected override SqlCommand GetNameIsAvailableCommand()
+        protected override SqlCommand GetIsNameDuplicateCommand()
         {
+            // TODO
             var sql = "fps.spFootprintFolderNameIsAvailable";
             var cmd = new SqlCommand(sql);
 
@@ -237,9 +238,10 @@ namespace Jhu.Footprint.Web.Lib
         {
             Save(true);
         }
-        public void Save(bool refreshFolderFootprint = true)
+
+        public void Save(bool refreshFolderFootprint)
         {
-            if (!NameIsAvailable())
+            if (IsNameDuplicate())
             {
                 throw Error.DuplicateFootprintFolderName(this.name);
             }
@@ -306,7 +308,7 @@ namespace Jhu.Footprint.Web.Lib
             }
         }
 
-        public void Delete(bool refreshFolderFootprint = true)
+        public void Delete()
         {
             using (var cmd = GetDeleteCommand())
             {
@@ -344,6 +346,7 @@ namespace Jhu.Footprint.Web.Lib
             }
         }
 
+        // TODO: move to Footprint search
         public IEnumerable<Footprint> GetFootprintsByFolderId()
         {
             var res = new List<Footprint>();
@@ -375,25 +378,72 @@ namespace Jhu.Footprint.Web.Lib
             return res;
         }
 
-        /// <summary>
-        /// Updates region cache if a new region is linked to the RegionGroup
-        /// </summary>
-        public void UpdateFolderFootprint(long newFootprintId)
+        private void LoadFolderFootprint()
         {
-            Spherical.Region region = null; // will contain the folderFootprint region;
-            folderFootprint = new Footprint(Context);
+            folderFootprint = new Footprint(Context)
+            {
+                Id = this.footprintId,
+                User = this.User,
+            };
 
             // if a folderFootprint exists, load it
             if (this.footprintId > 0)
             {
-                folderFootprint.Id = this.footprintId;
-                folderFootprint.User = this.User;
                 folderFootprint.Load();
             }
+        }
 
-            //  folderFootprint.Type == FootprintType.None means we have a link to a single region, 
+        private void InitializeFolderFootprint(Footprint f)
+        {
+            f.Type = FootprintType.Folder;
+            f.Name = "folderFootprint";
+            f.Comment = "Footprint of the folder.";
+        }
+
+        /// <summary>
+        /// Updates region cache if a new region is linked to the RegionGroup
+        /// </summary>
+        public void UpdateFolderFootprint(Footprint newFootprint)
+        {
+            LoadFolderFootprint();
+
+            if (folderFootprint.Region.ConvexList.Count == 0)
+            {
+                // If this is the first footprint in the folder
+                this.footprintId = newFootprint.Id;
+                Save();
+                return;
+            }
+
+            if (folderFootprint.Type == FootprintType.None)
+            {
+                // We only had one region in the folder so far, now need to create
+                // a new region to hold the intersection/union
+
+                folderFootprint = new Footprint(folderFootprint);
+                folderFootprint.Id = 0;
+                InitializeFolderFootprint(folderFootprint);
+            }
+
+            switch (type)
+            {
+                case FolderType.Union:
+                    folderFootprint.Region.SmartUnion(newFootprint.Region);
+                    break;
+                case FolderType.Intersection:
+                    folderFootprint.Region.SmartIntersect(newFootprint.Region, false);
+                    break;
+            }
+
+            folderFootprint.Save();
+            footprintId = folderFootprint.Id;
+            Save();
+            
+            // TODO: test and remove
+#if false
+            // folderFootprint.Type == FootprintType.None means we have a link to a single region, 
             // no dedicated folderFootprint exists
-            if (this.folderFootprint == null || folderFootprint.Type == FootprintType.None)
+            if (folderFootprint.Type == FootprintType.None)
             {
                 // creating a new folderFootprint region
                 IEnumerable<Footprint> footprints = GetFootprintsByFolderId();
@@ -409,6 +459,7 @@ namespace Jhu.Footprint.Web.Lib
                     }
 
                     region.Simplify();
+
                     foreach (Footprint f in footprints)
                     {
                         switch (type)
@@ -473,6 +524,7 @@ namespace Jhu.Footprint.Web.Lib
                 this.footprintId = folderFootprint.Id;
                 Save(false);
             }
+#endif
         }
 
         /// <summary>
@@ -480,19 +532,9 @@ namespace Jhu.Footprint.Web.Lib
         /// </summary>
         public void RefreshFolderFootprint()
         {
-            IEnumerable<Footprint> footprints = GetFootprintsByFolderId();
-                    
-            folderFootprint = new Footprint(Context);
+            LoadFolderFootprint();
             
-
-            // if a folderFootprint exist, load it
-            if (this.footprintId > 0)
-            {
-                folderFootprint.Id = this.footprintId;
-                folderFootprint.User = this.user;
-                folderFootprint.Load();
-
-            }
+            IEnumerable<Footprint> footprints = GetFootprintsByFolderId();
 
             // if less than 2 footprints are associated with this FootprintFolder,
             // FolderFootprint is not needed
