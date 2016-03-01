@@ -235,7 +235,7 @@ namespace Jhu.Footprint.Web.Lib
             return cmd;
         }
 
-#endregion
+        #endregion
 
         public override void Save()
         {
@@ -444,17 +444,17 @@ namespace Jhu.Footprint.Web.Lib
         }
 
         /// <summary>
-        /// Refrehes the region cache completely after a RegionLink delete
+        /// Refrehes the region cache completely after a footprint delete
         /// </summary>
         public void RefreshFolderFootprint()
         {
             LoadFolderFootprint();
-            
+
             IEnumerable<Footprint> footprints = GetFootprintsByFolderId();
 
             // if less than 2 footprints are associated with this FootprintFolder,
             // FolderFootprint is not needed
-            if (footprints.Count() <= 2)
+            if (footprints.Count() <= 1)
             {
                 // delete old folderFootprint if exists
                 if (folderFootprint != null && folderFootprint.Type == FootprintType.Folder)
@@ -463,17 +463,9 @@ namespace Jhu.Footprint.Web.Lib
                 }
 
                 // (folder)footprintID must be set in DB
-                if (footprints.Count() == 1)
-                {
-                    this.FootprintId = footprints.ElementAt(0).Id;
-                }
-                else
-                {
-                    this.FootprintId = -1;
-                }
+                this.FootprintId = footprints.Count() == 1 ? footprints.ElementAt(0).Id : -1;
 
                 Save(false);
-
                 return;
             }
 
@@ -488,10 +480,10 @@ namespace Jhu.Footprint.Web.Lib
             if (this.type == FolderType.Intersection)
             {
                 region.Add(new Spherical.Convex(new Spherical.Halfspace(0, 0, 1, false, -1)));
+                region.Simplify();
             }
 
-            region.Simplify();
-            
+
             // update the folderFootprint
             foreach (Footprint f in footprints)
             {
@@ -514,7 +506,6 @@ namespace Jhu.Footprint.Web.Lib
                 folderFootprint.User = user;
                 folderFootprint.Public = @public;
                 folderFootprint.FolderId = id;
-                folderFootprint.FolderName = name;
 
                 region.Simplify();
                 folderFootprint.Region = region;
