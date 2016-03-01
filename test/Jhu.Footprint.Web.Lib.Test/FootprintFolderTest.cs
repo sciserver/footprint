@@ -143,12 +143,12 @@ namespace Jhu.Footprint.Web.Lib.Test
         {
             using (var context = new Context())
             {
-                var folder = new FootprintFolder(context);
+                var search = new FootprintSearch(context);
 
-                folder.Id = 1;
-                folder.User = "evelin";
+                search.User = "evelin";
 
-                var footprints = folder.GetFootprintsByFolderId();
+
+                var footprints = search.GetFootprintsByFolderId(1);
             }
         }
 
