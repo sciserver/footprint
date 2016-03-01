@@ -296,6 +296,7 @@ namespace Jhu.Footprint.Web.Lib
             return cmd;
         }
 #endregion
+
         #region Methods
         public override void Save()
         {
