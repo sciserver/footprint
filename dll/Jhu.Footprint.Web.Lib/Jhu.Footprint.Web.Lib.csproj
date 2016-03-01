@@ -56,6 +56,7 @@
     <Compile Include="FootprintFolder.cs" />
     <Compile Include="FootprintFolderException.cs" />
     <Compile Include="FootprintFolderSearch.cs" />
+    <Compile Include="FootprintSearch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

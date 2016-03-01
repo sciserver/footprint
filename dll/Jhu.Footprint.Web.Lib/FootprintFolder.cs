@@ -349,37 +349,6 @@ namespace Jhu.Footprint.Web.Lib
             }
         }
 
-        // TODO: move to Footprint search
-        public IEnumerable<Footprint> GetFootprintsByFolderId()
-        {
-            var res = new List<Footprint>();
-            string sql = "fps.spGetFootprintsByFolderId";
-
-
-            using (var cmd = new SqlCommand(sql))
-            {
-                cmd.Connection = Context.Connection;
-                cmd.Transaction = Context.Transaction;
-                cmd.CommandType = CommandType.StoredProcedure;
-
-                cmd.Parameters.Add("@FolderId", SqlDbType.BigInt).Value = this.id;
-                cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = this.user;
-
-                using (var dr = cmd.ExecuteReader())
-                {
-                    while (dr.Read())
-                    {
-                        var f = new Footprint(Context);
-                        f.LoadFromDataReader(dr);
-
-                        res.Add(f);
-                    }
-                }
-
-            }
-
-            return res;
-        }
 
         private void LoadFolderFootprint()
         {
@@ -425,7 +394,6 @@ namespace Jhu.Footprint.Web.Lib
 
                 folderFootprint = new Footprint(folderFootprint);
                 folderFootprint.Id = 0;
-                InitializeFolderFootprint(folderFootprint);
             }
 
             switch (type)
@@ -438,6 +406,8 @@ namespace Jhu.Footprint.Web.Lib
                     break;
             }
 
+
+            InitializeFolderFootprint(folderFootprint);
             folderFootprint.Save();
             footprintId = folderFootprint.Id;
             Save(false);
@@ -450,7 +420,8 @@ namespace Jhu.Footprint.Web.Lib
         {
             LoadFolderFootprint();
 
-            IEnumerable<Footprint> footprints = GetFootprintsByFolderId();
+            var search = new FootprintSearch(Context) { User = this.User };
+            IEnumerable<Footprint> footprints = search.GetFootprintsByFolderId(this.id);
 
             // if less than 2 footprints are associated with this FootprintFolder,
             // FolderFootprint is not needed
