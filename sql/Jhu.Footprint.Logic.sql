@@ -171,6 +171,7 @@ AS
 	WHERE
 		F.FolderId = @FolderId
 		AND F.[User]= @User
+		AND F.FootprintType != 1
 	ORDER BY Name
 GO
 
