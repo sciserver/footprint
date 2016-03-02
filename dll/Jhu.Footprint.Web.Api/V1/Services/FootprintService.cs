@@ -135,7 +135,8 @@ namespace Jhu.Footprint.Web.Api.V1
                 folder.Load();
                 
                 //get footprints from folder
-                footprints = folder.GetFootprintsByFolderId();
+                var search = new Lib.FootprintSearch(context) { User = folder.User };
+                footprints = search.GetFootprintsByFolderId(folder.Id);
             }
 
             var f = new FootprintFolder(folder);
