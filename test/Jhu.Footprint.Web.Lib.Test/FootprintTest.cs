@@ -34,7 +34,7 @@ namespace Jhu.Footprint.Web.Lib.Test
                 var footprint = new Footprint(context);
 
                 footprint.Name = "Csik2";
-                footprint.User = "webtestuser";
+                context.User = "webtestuser";
                 footprint.Public = 1;
                 footprint.FillFactor = 0.9;
                 footprint.FolderId = 2;
@@ -54,7 +54,7 @@ namespace Jhu.Footprint.Web.Lib.Test
                 var footprint = new Footprint(context);
 
                 footprint.Name = "Stripe5";
-                footprint.User = "evelin";
+                context.User = "evelin";
                 footprint.FolderId = 1;
 
                 footprint.Comment = "duplicate name test.";
@@ -79,7 +79,7 @@ namespace Jhu.Footprint.Web.Lib.Test
                 var footprint = new Footprint(context);
 
                 footprint.Id = 5;
-                footprint.User = "mike";
+                context.User = "mike";
 
                 footprint.Load();
                 var s = @"REGION
@@ -101,7 +101,7 @@ namespace Jhu.Footprint.Web.Lib.Test
                 var footprint = new Footprint(context);
 
                 footprint.Id = 5;
-                footprint.User = "mike";
+                context.User = "mike";
 
                 footprint.Load();
 
@@ -127,7 +127,7 @@ namespace Jhu.Footprint.Web.Lib.Test
                 var footprint = new Footprint(context);
 
                 footprint.Id = 6;
-                footprint.User = "bob";
+                context.User = "bob";
 
                 footprint.Delete();
             }
@@ -142,7 +142,7 @@ namespace Jhu.Footprint.Web.Lib.Test
                 var footprint = new Footprint(context);
 
                 footprint.Id = 1;
-                footprint.User = "evelin";
+                context.User = "evelin";
 
                 footprint.Load();
             }

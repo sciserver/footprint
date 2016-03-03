@@ -174,7 +174,7 @@ namespace Jhu.Footprint.Web.Lib
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
             cmd.Parameters.Add("@FolderId", SqlDbType.BigInt).Value = id;
-            cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = user;
+            cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = Context.User;
 
             cmd.Parameters.Add("RETVAL", SqlDbType.Int).Direction = ParameterDirection.ReturnValue;
             return cmd;
@@ -190,7 +190,7 @@ namespace Jhu.Footprint.Web.Lib
             cmd.CommandType = CommandType.StoredProcedure;
 
             cmd.Parameters.Add("@FolderId", SqlDbType.BigInt).Value = id;
-            cmd.Parameters.Add("@user", SqlDbType.NVarChar, 250).Value = user;
+            cmd.Parameters.Add("@user", SqlDbType.NVarChar, 250).Value = Context.User;
 
             return cmd;
         }
@@ -198,7 +198,7 @@ namespace Jhu.Footprint.Web.Lib
         private void AppendCreateModifyParameters(SqlCommand cmd)
         {
             cmd.Parameters.Add("@Name", SqlDbType.NVarChar, 256).Value = name;
-            cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = user;
+            cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = Context.User;
             cmd.Parameters.Add("@Public", SqlDbType.TinyInt).Value = @public;
             cmd.Parameters.Add("@Type", SqlDbType.TinyInt).Value = Type;
             cmd.Parameters.Add("@Comment", SqlDbType.NVarChar, -1).Value = comment;
@@ -219,7 +219,6 @@ namespace Jhu.Footprint.Web.Lib
 
         protected override SqlCommand GetIsNameDuplicateCommand()
         {
-            // TODO
             var sql = "fps.spIsDuplicateFootprintFolderName";
             var cmd = new SqlCommand(sql);
 
