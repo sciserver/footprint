@@ -63,9 +63,13 @@ namespace Jhu.Footprint.Web.Api.V1
         
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/{footprintName}/footprint")]
-        [Description("Returns the footprint of a footprint")]
+        [Description("Returns the footprint of a footprint.")]
         string GetUserFootprintRegion(string userName, string folderName, string footprintName);
-        
+
+        [OperationContract]
+        [WebGet(UriTemplate = "/users/{userName}/{folderName}/{footprintName}/footprint/outline")]
+        [Description("Returns the outline of a footprint.")]
+        string GetUserFootprintRegionOutline(string userName, string folderName, string footprintName);
 
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/users/{userName}/{folderName}/{footprintName}")]
@@ -237,6 +241,14 @@ namespace Jhu.Footprint.Web.Api.V1
             var fp = GetUserFootprint(userName, folderName, footprintName);
             return fp.Footprint.RegionString;
         }
+
+        [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
+        public string GetUserFootprintRegionOutline(string userName, string folderName, string footprintName)
+        {
+            var fp = GetUserFootprint(userName, folderName, footprintName);
+            var region = Jhu.Spherical.Region.Parse(fp.Footprint.RegionString);
+            return region.Outline.ToString();
+         }
 
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
         public void CreateUserFootprint(string userName, string folderName, string footprintName, FootprintRequest request)
