@@ -146,9 +146,10 @@ namespace Jhu.Footprint.Web.Lib.Test
                 var search = new FootprintSearch(context);
 
                 search.User = "evelin";
+                search.FolderId = 1;
 
 
-                var footprints = search.GetFootprintsByFolderId(1);
+                var footprints = search.GetFootprintsByFolderId();
             }
         }
 

@@ -420,8 +420,8 @@ namespace Jhu.Footprint.Web.Lib
         {
             LoadFolderFootprint();
 
-            var search = new FootprintSearch(Context) { User = this.User };
-            IEnumerable<Footprint> footprints = search.GetFootprintsByFolderId(this.id);
+            var search = new FootprintSearch(Context) { User = this.User, FolderId = this.id };
+            IEnumerable<Footprint> footprints = search.GetFootprintsByFolderId();
 
             // if less than 2 footprints are associated with this FootprintFolder,
             // FolderFootprint is not needed
