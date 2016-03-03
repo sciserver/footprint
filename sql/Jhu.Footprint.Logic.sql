@@ -96,8 +96,8 @@ CREATE PROC [fps].[spGetFootprint]
 AS
 	SELECT F.FootprintID AS FootprintID, F.Name AS Name, F.[User] AS [User], F.[Public] AS [Public], 
 	F.DateCreated AS [DateCreated], F.[FillFactor] AS [FillFactor], F.FootprintType AS FootprintType, 
-	F.FolderId AS FolderId, F.Comment AS Comment, FF.Name AS FolderName, F.RegionBinary AS RegionBinary
-	FROM Footprint AS F INNER JOIN FootprintFolder AS FF ON F.FolderId = FF.FolderID
+	F.FolderId AS FolderId, F.Comment AS Comment, F.RegionBinary AS RegionBinary
+	FROM Footprint AS F 
 	
 	WHERE
 		F.FootprintID = @FootprintID
@@ -166,8 +166,8 @@ CREATE PROC [fps].[spGetFootprintsByFolderId]
 AS
 	SELECT F.FootprintID AS FootprintID, F.Name AS Name, F.[User] AS [User], F.[Public] AS [Public],
 	F.DateCreated AS [DateCreated], F.[FillFactor] AS [FillFactor],	F.FootprintType AS FootprintType, 
-	F.FolderId AS FolderId, F.Comment AS Comment, FF.Name AS FolderName, F.RegionBinary AS RegionBinary
-	FROM Footprint AS F INNER JOIN FootprintFolder AS FF ON F.FolderId = FF.FolderID
+	F.FolderId AS FolderId, F.Comment AS Comment, F.RegionBinary AS RegionBinary
+	FROM Footprint AS F 
 	WHERE
 		F.FolderId = @FolderId
 		AND F.[User]= @User

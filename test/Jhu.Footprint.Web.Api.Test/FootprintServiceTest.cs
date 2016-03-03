@@ -155,15 +155,17 @@ namespace Jhu.Footprint.Web.Api.V1
             {
                 var client = CreateClient(session);
                 var request = new FootprintRequest();
+
+
                 var footprint = new Lib.Footprint();
                 footprint.Comment = "Test Api Create Footprint";
                 footprint.User = "Evelin";
                 footprint.Name = "Test api";
-                footprint.FolderName = "TestFolder";
+                footprint.FolderId = 1;
 
-                request.Footprint = new V1.Footprint(footprint);
+                request.Footprint = new V1.Footprint(footprint,"SDSS.DR7");
 
-                client.CreateUserFootprint(request.Footprint.User, request.Footprint.FolderName, request.Footprint.Name, request);
+                client.CreateUserFootprint(request.Footprint.User, "SDSS.DR7", request.Footprint.Name, request);
 
             }
         }
@@ -187,7 +189,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
                 footprint.Comment = "Api modification test.";
 
-                request.Footprint = new V1.Footprint(footprint);
+                request.Footprint = new V1.Footprint(footprint,"2MASS");
 
                 client.ModifyUserFootprint("mike", "2MASS", "South", request);
             }

@@ -135,13 +135,13 @@ namespace Jhu.Footprint.Web.Api.V1
                 folder.Load();
                 
                 //get footprints from folder
-                var search = new Lib.FootprintSearch(context) { User = folder.User };
-                footprints = search.GetFootprintsByFolderId(folder.Id);
+                var search = new Lib.FootprintSearch(context) { User = folder.User, FolderId = folder.Id };
+                footprints = search.GetFootprintsByFolderId();
             }
 
             var f = new FootprintFolder(folder);
 
-            var list = footprints.Select(fp => new Footprint(fp).Url).ToArray();
+            var list = footprints.Select(fp => new Footprint(fp, folderName).Url).ToArray();
             var r = new FootprintFolderResponse(f,list);
             return r;
 
@@ -166,7 +166,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
             }
 
-            var f = new Footprint(footprint);
+            var f = new Footprint(footprint, folderName);
             return f.RegionString;
         }
 
@@ -214,15 +214,19 @@ namespace Jhu.Footprint.Web.Api.V1
             Lib.Footprint footprint;
             using (var context = new Lib.Context())
             {
+                var search = new Lib.FootprintSearch(context);
+                search.User = userName;
+                search.FolderName = folderName;
+                search.FootprintName = footprintName;
+
+                // load footprint
                 footprint = new Lib.Footprint(context);
                 footprint.User = userName;
-                footprint.FolderName = folderName;
-                footprint.Name = footprintName;
+                footprint.Id = search.GetFootprintId();
                 footprint.Load();
-                // load footprint
             }
 
-            var f = new Footprint(footprint);
+            var f = new Footprint(footprint, folderName);
             var r = new FootprintResponse(f);
             return r;
         }
@@ -261,10 +265,14 @@ namespace Jhu.Footprint.Web.Api.V1
         {
             using (var context = new Lib.Context())
             {
+                var search = new Lib.FootprintSearch(context);
+                search.FootprintName = footprintName;
+                search.FolderName = folderName;
+                search.User = userName;
+
                 var footprint = new Lib.Footprint(context);
-                footprint.Name = footprintName;
-                footprint.FolderName = folderName;
                 footprint.User = userName;
+                footprint.Id = search.GetFootprintId();
                 footprint.Delete();
             }
         }

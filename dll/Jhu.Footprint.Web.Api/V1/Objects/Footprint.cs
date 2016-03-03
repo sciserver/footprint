@@ -72,14 +72,14 @@ namespace Jhu.Footprint.Web.Api.V1
         {
         }
 
-        public Footprint(Jhu.Footprint.Web.Lib.Footprint footprint)
+        public Footprint(Jhu.Footprint.Web.Lib.Footprint footprint, string folderName)
         {
-            SetValue(footprint);
+            SetValue(footprint, folderName);
         }
 
-        public void SetValue(Jhu.Footprint.Web.Lib.Footprint footprint)
+        public void SetValue(Jhu.Footprint.Web.Lib.Footprint footprint, string folderName)
         {
-            this.FolderName = footprint.FolderName;
+            this.FolderName =  folderName;
             this.Name = footprint.Name;
             this.User = footprint.User;
             this.Id = footprint.Id;
@@ -102,7 +102,6 @@ namespace Jhu.Footprint.Web.Api.V1
             var footprint = new Jhu.Footprint.Web.Lib.Footprint();
 
             footprint.Name = this.Name;
-            footprint.FolderName = this.FolderName;
             footprint.User = this.User;
             footprint.Id = this.Id;
             footprint.Public = this.Public;

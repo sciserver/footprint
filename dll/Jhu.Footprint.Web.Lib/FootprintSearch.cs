@@ -13,6 +13,9 @@ namespace Jhu.Footprint.Web.Lib
     {
         #region Member variables
         private string user;
+        private string footprintName;
+        private string folderName;
+        private long folderId;
         #endregion
 
         #region Properties
@@ -21,9 +24,36 @@ namespace Jhu.Footprint.Web.Lib
             get { return user; }
             set { user = value; }
         }
+
+        public string FootprintName
+        {
+            get { return footprintName; }
+            set { footprintName = value; }
+        }
+
+        public string FolderName
+        {
+            get 
+            {
+                return folderName;
+            }
+            set { folderName = value; }
+        }
+
+        public long FolderId
+        {
+            get { return folderId; }
+            set { folderId = value; }
+        }
         #endregion
 
         #region Constructors & intitializers
+        public FootprintSearch()
+            : base()
+        {
+            InitializeMembers();
+        }
+
         public FootprintSearch(Context context)
             : base(context)
         {
@@ -38,7 +68,7 @@ namespace Jhu.Footprint.Web.Lib
         #endregion
 
         #region Methods
-        public IEnumerable<Footprint> GetFootprintsByFolderId(long folderId)
+        public IEnumerable<Footprint> GetFootprintsByFolderId()
         {
             var res = new List<Footprint>();
             string sql = "fps.spGetFootprintsByFolderId";
@@ -50,7 +80,7 @@ namespace Jhu.Footprint.Web.Lib
                 cmd.Transaction = Context.Transaction;
                 cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.Add("@FolderId", SqlDbType.BigInt).Value = folderId;
+                cmd.Parameters.Add("@FolderId", SqlDbType.BigInt).Value = this.folderId;
                 cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = this.user;
 
                 using (var dr = cmd.ExecuteReader())
@@ -68,6 +98,29 @@ namespace Jhu.Footprint.Web.Lib
 
             return res;
         }
-        #endregion
+
+        public long GetFootprintId()
+        {
+            var sql = "fps.spGetFootprintId";
+            using (var cmd = new SqlCommand(sql))
+            {
+                cmd.Connection = Context.Connection;
+                cmd.Transaction = Context.Transaction;
+
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = this.user;
+                cmd.Parameters.Add("@FolderName", SqlDbType.NVarChar, 256).Value = this.folderName;
+                cmd.Parameters.Add("@FootprintName", SqlDbType.NVarChar, 256).Value = this.footprintName;
+                cmd.Parameters.Add("@FootprintId", SqlDbType.BigInt).Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+
+                return (long)cmd.Parameters["@FootprintId"].Value;
+            }
+        }
+         #endregion
+
+
     }
 }

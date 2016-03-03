@@ -146,18 +146,6 @@ namespace Jhu.Footprint.Web.Lib.Test
 
                 footprint.Load();
             }
-
-            // Test loading by name-user-folderName
-            using (var context = new Context())
-            {
-                var footprint = new Footprint(context);
-
-                footprint.Name = "Stripe2";
-                footprint.User = "evelin";
-                footprint.FolderName = "SDSS.DR7";
-
-                footprint.Load();
-            }
         }
     }
 }
