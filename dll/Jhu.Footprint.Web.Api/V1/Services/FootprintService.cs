@@ -43,19 +43,40 @@ namespace Jhu.Footprint.Web.Api.V1
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/footprint/outline")]
         [Description("Returns the outline of a footprint.")]
         string GetUserFootprintFolderRegionOutline(string userName, string folderName);
+        
+        [OperationContract]
+        [WebGet(UriTemplate = "/users/{userName}/{folderName}/footprint/outline/points?res={resolution}")]
+        [Description("Returns the points of the outline of a footprint.")]
+        IEnumerable<Lib.Point> GetUserFootprintFolderRegionOutlinePoints(string userName, string folderName, double resolution);
+        
+        [OperationContract]
+        [WebGet(UriTemplate = "/users/{userName}/{folderName}/footprint/convexhull")]
+        [Description("Returns the convex hull of the folder footprint.")]
+        string GetUserFootprintFolderRegionConvexHull(string userName, string folderName);
+
 
         [OperationContract]
-        [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/users/{userName}/footprints/{folderName}")]
+        [WebGet(UriTemplate = "/users/{userName}/{folderName}/footprint/convexhull/outline")]
+        [Description("Returns the outline of the convex hull of the folder footprint.")]
+        string GetUserFootprintFolderRegionConvexHullOutline(string userName, string folderName);
+
+        [OperationContract]
+        [WebGet(UriTemplate = "/users/{userName}/{folderName}/footprint/convexhull/outline/points?res={resolution}")]
+        [Description("Returns the points of the outline of the convex hull of the folder footprint.")]
+        IEnumerable<Lib.Point> GetUserFootprintFolderRegionConvexHullOutlinePoints(string userName, string folderName, double resolution);
+
+        [OperationContract]
+        [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/users/{userName}/{folderName}")]
         [Description("Create new footprint folder.")]
         void CreateUserFootprintFolder(string userName, string folderName, FootprintFolderRequest request);
 
         [OperationContract]
-        [WebInvoke(Method = HttpMethod.Put, UriTemplate = "/users/{userName}/footprints/{folderName}")]
+        [WebInvoke(Method = HttpMethod.Put, UriTemplate = "/users/{userName}/{folderName}")]
         [Description("Modify existing footprint folder.")]
         void ModifyUserFootprintFolder(string userName, string folderName, FootprintFolderRequest request);
 
         [OperationContract]
-        [WebInvoke(Method = HttpMethod.Delete, UriTemplate = "/users/{userName}/footprints/{folderName}")]
+        [WebInvoke(Method = HttpMethod.Delete, UriTemplate = "/users/{userName}/{folderName}")]
         [Description("Delete footprint folder.")]
         void DeleteUserFootprintFolder(string userName, string folderName);
         #endregion
@@ -74,8 +95,28 @@ namespace Jhu.Footprint.Web.Api.V1
 
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/{footprintName}/footprint/outline")]
-        [Description("Returns the outline of a footprint.")]
+        [Description("Returns the points of the outline of a footprint.")]
         string GetUserFootprintRegionOutline(string userName, string folderName, string footprintName);
+
+        [OperationContract]
+        [WebGet(UriTemplate = "/users/{userName}/{folderName}/{footprintName}/footprint/outline/points?res={resolution}")]
+        [Description("Returns the outline of a footprint.")]
+        IEnumerable<Lib.Point> GetUserFootprintRegionOutlinePoints(string userName, string folderName, string footprintName, double resolution);
+        
+        [OperationContract]
+        [WebGet(UriTemplate = "/users/{userName}/{folderName}/{footprintName}/footprint/convexhull")]
+        [Description("Returns the convex hull of the footprint.")]
+        string GetUserFootprintRegionConvexHull(string userName, string folderName, string footprintName);
+
+        [OperationContract]
+        [WebGet(UriTemplate = "/users/{userName}/{folderName}/{footprintName}/footprint/convexhull/outline")]
+        [Description("Returns the outline of the convex hull of the footprint.")]
+        string GetUserFootprintRegionConvexHullOutline(string userName, string folderName, string footprintName);
+
+        [OperationContract]
+        [WebGet(UriTemplate = "/users/{userName}/{folderName}/{footprintName}/footprint/convexhull/outline/points?res={resolution}")]
+        [Description("Returns the points of the outline of the convex hull of the footprint.")]
+        IEnumerable<Lib.Point> GetUserFootprintRegionConvexHullOutlinePoints(string userName, string folderName, string footprintName, double resolution);
 
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/users/{userName}/{folderName}/{footprintName}")]
@@ -227,6 +268,37 @@ namespace Jhu.Footprint.Web.Api.V1
         }
 
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
+        public string GetUserFootprintFolderRegionConvexHull(string userName, string folderName)
+        {
+            var fp = GetFolderFootprint(userName, folderName);
+            fp.Region.Simplify();
+
+            var chull = fp.Region.Outline.GetConvexHull();
+            chull.Simplify();
+
+            return chull.Outline.ToString();
+        }
+
+        [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
+        public string GetUserFootprintFolderRegionConvexHullOutline(string userName, string folderName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Lib.Point> GetUserFootprintFolderRegionConvexHullOutlinePoints(string userName, string folderName, double resolution)
+        {
+            throw new NotImplementedException();
+        }
+
+        [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
+        public IEnumerable<Lib.Point> GetUserFootprintFolderRegionOutlinePoints(string userName, string folderName, double resolution)
+        {
+            var footprint = GetFolderFootprint(userName, folderName);
+            footprint.Region.Simplify();
+            return Lib.FootprintFormatter.InterpolateOutlinePoints(footprint.Region.Outline, resolution);
+        }
+
+        [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
         public void CreateUserFootprintFolder(string userName, string folderName, FootprintFolderRequest request)
         {
             using (var context = new Jhu.Footprint.Web.Lib.Context())
@@ -292,6 +364,31 @@ namespace Jhu.Footprint.Web.Api.V1
             var fp = GetFootprint(userName, folderName, footprintName);
             fp.Region.Simplify();
             return fp.Region.Outline.ToString();
+        }
+
+        [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
+        public IEnumerable<Lib.Point> GetUserFootprintRegionOutlinePoints(string userName, string folderName, string footprintName, double resolution)
+        {
+            var fp = GetFootprint(userName, folderName, footprintName);
+            fp.Region.Simplify();
+            return Lib.FootprintFormatter.InterpolateOutlinePoints(fp.Region.Outline, resolution);
+        }
+
+        [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
+        public string GetUserFootprintRegionConvexHull(string userName, string folderName, string footprintName)
+        {
+            throw new NotImplementedException();
+        }
+
+        [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
+        public string GetUserFootprintRegionConvexHullOutline(string userName, string folderName, string footprintName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Lib.Point> GetUserFootprintRegionConvexHullOutlinePoints(string userName, string folderName, string footprintName, double resolution)
+        {
+            throw new NotImplementedException();
         }
 
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
