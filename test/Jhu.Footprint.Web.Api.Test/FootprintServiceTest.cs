@@ -73,6 +73,16 @@ namespace Jhu.Footprint.Web.Api.V1
         }
 
         [TestMethod]
+        public void GetUserFootprintFolderRegionOutlineTest()
+        {
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session);
+                var folder = client.GetUserFootprintFolderRegionOutline("evelin", "SDSS.DR7");
+            }
+        }
+
+        [TestMethod]
         public void CreateUserFootprintFolderTest()
         {
             using (var session = new RestClientSession())
@@ -148,6 +158,18 @@ namespace Jhu.Footprint.Web.Api.V1
             }
         }
 
+
+
+        [TestMethod]
+        public void GetUserFootprintRegionOutlineTest()
+        {
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session);
+                var footprint = client.GetUserFootprintRegionOutline("evelin", "SDSS.DR7", "Stripe2");
+            }
+        }
+
         [TestMethod]
         public void CreatUserFootprintTest()
         {
@@ -206,5 +228,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 client.DeleteUserFootprint("evelin", "SDSS.DR7", "ApiDelete");
             }
         }
+
+
     }
 }
