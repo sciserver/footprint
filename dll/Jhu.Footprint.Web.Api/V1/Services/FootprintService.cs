@@ -38,6 +38,12 @@ namespace Jhu.Footprint.Web.Api.V1
         [Description("Returns the footprint of a folder")]
         string GetUserFootprintFolderRegion(string userName, string folderName);
 
+
+        [OperationContract]
+        [WebGet(UriTemplate = "/users/{userName}/{folderName}/footprint/outline")]
+        [Description("Returns the outline of a footprint.")]
+        string GetUserFootprintFolderRegionOutline(string userName, string folderName);
+
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/users/{userName}/footprints/{folderName}")]
         [Description("Create new footprint folder.")]
@@ -60,7 +66,7 @@ namespace Jhu.Footprint.Web.Api.V1
         [Description("Returns the details of a footprint under an existing folder.")]
         FootprintResponse GetUserFootprint(string userName, string folderName, string footprintName);
 
-        
+
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/{footprintName}/footprint")]
         [Description("Returns the footprint of a footprint.")]
@@ -106,6 +112,54 @@ namespace Jhu.Footprint.Web.Api.V1
 
         #endregion
 
+        #region Private Methods
+        private Lib.Footprint GetFootprint(string userName, string folderName, string footprintName)
+        {
+            using (var context = new Lib.Context())
+            {
+                // TODO : REAL AUTHENTICATION
+                context.User = userName;
+
+                var search = new Lib.FootprintSearch(context);
+                search.User = userName;
+                search.FolderName = folderName;
+                search.FootprintName = footprintName;
+
+                // load footprint
+                var footprint = new Lib.Footprint(context);
+                footprint.User = userName;
+                footprint.Id = search.GetFootprintId();
+                footprint.Load();
+
+                return footprint;
+            }
+
+        }
+
+        private Lib.Footprint GetFolderFootprint(string userName, string folderName)
+        {
+            using (var context = new Lib.Context())
+            {
+                // TODO : REAL AUTHENTICATION
+                context.User = userName;
+
+                Lib.FootprintFolder folder = new Lib.FootprintFolder(context);
+                folder.User = userName;
+                folder.Name = folderName;
+                folder.Id = -1;
+                folder.Load();
+
+                var footprint = new Lib.Footprint(context);
+                footprint.Id = folder.FootprintId;
+                footprint.User = userName;
+                footprint.Load();
+
+                return footprint;
+            }
+        }
+
+        #endregion
+
         #region FootprintFolder Methods
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
         public FootprintFolderListResponse GetUserFootprintFolderList(string userName)
@@ -119,7 +173,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 search.Source = Lib.SearchSource.My;
                 folders = search.Find();
             }
-            
+
             var r = new FootprintFolderListResponse(folders);
             return r;
         }
@@ -131,13 +185,17 @@ namespace Jhu.Footprint.Web.Api.V1
             Lib.FootprintFolder folder;
             IEnumerable<Lib.Footprint> footprints;
             using (var context = new Lib.Context())
-            {   
+            {
+                // TODO : REAL AUTHENTICATION
+                context.User = userName;
+
                 // load footprint folder info
                 folder = new Lib.FootprintFolder(context);
                 folder.User = userName;
                 folder.Name = folderName;
+                folder.Id = -1; 
                 folder.Load();
-                
+
                 //get footprints from folder
                 var search = new Lib.FootprintSearch(context) { User = folder.User, FolderId = folder.Id };
                 footprints = search.GetFootprintsByFolderId();
@@ -146,7 +204,7 @@ namespace Jhu.Footprint.Web.Api.V1
             var f = new FootprintFolder(folder);
 
             var list = footprints.Select(fp => new Footprint(fp, folderName).Url).ToArray();
-            var r = new FootprintFolderResponse(f,list);
+            var r = new FootprintFolderResponse(f, list);
             return r;
 
         }
@@ -155,23 +213,17 @@ namespace Jhu.Footprint.Web.Api.V1
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
         public string GetUserFootprintFolderRegion(string userName, string folderName)
         {
-            Lib.Footprint footprint;
-            using (var context = new Lib.Context()) 
-            {
-                Lib.FootprintFolder folder = new Lib.FootprintFolder(context);
-                folder.User = userName;
-                folder.Name = folderName;
-                folder.Load();
-
-                footprint = new Lib.Footprint(context);
-                footprint.Id = folder.FootprintId;
-                footprint.User = userName;
-                footprint.Load();
-
-            }
-
+            var footprint = GetFolderFootprint(userName, folderName);
             var f = new Footprint(footprint, folderName);
             return f.RegionString;
+        }
+
+        [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
+        public string GetUserFootprintFolderRegionOutline(string userName, string folderName)
+        {
+            var footprint = GetFolderFootprint(userName, folderName);
+            footprint.Region.Simplify();
+            return footprint.Region.Outline.ToString();
         }
 
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
@@ -190,6 +242,9 @@ namespace Jhu.Footprint.Web.Api.V1
         {
             using (var context = new Jhu.Footprint.Web.Lib.Context())
             {
+                // TODO : REAL AUTHENTICATION
+                context.User = userName;
+
                 var folder = request.FootprintFolder.GetValue();
                 folder.Context = context;
                 folder.Save();
@@ -202,10 +257,13 @@ namespace Jhu.Footprint.Web.Api.V1
         {
             using (var context = new Jhu.Footprint.Web.Lib.Context())
             {
+                // TODO : REAL AUTHENTICATION
+                context.User = userName;
+
                 var folder = new Jhu.Footprint.Web.Lib.FootprintFolder(context);
                 folder.Name = folderName;
                 folder.User = userName;
-
+                folder.Id = -1;
                 folder.Delete();
             }
         }
@@ -215,21 +273,7 @@ namespace Jhu.Footprint.Web.Api.V1
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
         public FootprintResponse GetUserFootprint(string userName, string folderName, string footprintName)
         {
-            Lib.Footprint footprint;
-            using (var context = new Lib.Context())
-            {
-                var search = new Lib.FootprintSearch(context);
-                search.User = userName;
-                search.FolderName = folderName;
-                search.FootprintName = footprintName;
-
-                // load footprint
-                footprint = new Lib.Footprint(context);
-                footprint.User = userName;
-                footprint.Id = search.GetFootprintId();
-                footprint.Load();
-            }
-
+            var footprint = GetFootprint(userName, folderName, footprintName);
             var f = new Footprint(footprint, folderName);
             var r = new FootprintResponse(f);
             return r;
@@ -238,17 +282,17 @@ namespace Jhu.Footprint.Web.Api.V1
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
         public string GetUserFootprintRegion(string userName, string folderName, string footprintName)
         {
-            var fp = GetUserFootprint(userName, folderName, footprintName);
-            return fp.Footprint.RegionString;
+            var fp = GetFootprint(userName, folderName, footprintName);
+            return fp.Region.ToString();
         }
 
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
         public string GetUserFootprintRegionOutline(string userName, string folderName, string footprintName)
         {
-            var fp = GetUserFootprint(userName, folderName, footprintName);
-            var region = Jhu.Spherical.Region.Parse(fp.Footprint.RegionString);
-            return region.Outline.ToString();
-         }
+            var fp = GetFootprint(userName, folderName, footprintName);
+            fp.Region.Simplify();
+            return fp.Region.Outline.ToString();
+        }
 
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
         public void CreateUserFootprint(string userName, string folderName, string footprintName, FootprintRequest request)
@@ -266,6 +310,9 @@ namespace Jhu.Footprint.Web.Api.V1
         {
             using (var context = new Lib.Context())
             {
+                // TODO : REAL AUTHENTICATION
+                context.User = userName;
+
                 var footprint = request.Footprint.GetValue();
                 footprint.Context = context;
                 footprint.Save();
@@ -277,6 +324,10 @@ namespace Jhu.Footprint.Web.Api.V1
         {
             using (var context = new Lib.Context())
             {
+
+                // TODO : REAL AUTHENTICATION
+                context.User = userName;
+
                 var search = new Lib.FootprintSearch(context);
                 search.FootprintName = footprintName;
                 search.FolderName = folderName;
