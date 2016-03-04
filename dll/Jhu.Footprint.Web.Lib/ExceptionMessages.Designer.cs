@@ -61,6 +61,24 @@ namespace Jhu.Footprint.Web.Lib {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot find the specified footprint: &apos;{0}/{1}/{2}&apos;..
+        /// </summary>
+        internal static string CannotFindFootprint {
+            get {
+                return ResourceManager.GetString("CannotFindFootprint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot find the specified footprint folder: &apos;{0}/{1}&apos;..
+        /// </summary>
+        internal static string CannotFindFootprintFolder {
+            get {
+                return ResourceManager.GetString("CannotFindFootprintFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Duplicate footprint folder name:  &apos;{0}&apos;..
         /// </summary>
         internal static string DuplicateFootprintFolderName {
@@ -75,6 +93,24 @@ namespace Jhu.Footprint.Web.Lib {
         internal static string DuplicateFootprintName {
             get {
                 return ResourceManager.GetString("DuplicateFootprintName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot load specified footprint..
+        /// </summary>
+        internal static string NoFootprintDataToLoad {
+            get {
+                return ResourceManager.GetString("NoFootprintDataToLoad", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot load specified footprint folder..
+        /// </summary>
+        internal static string NoFootprintFolderDataToLoad {
+            get {
+                return ResourceManager.GetString("NoFootprintFolderDataToLoad", resourceCulture);
             }
         }
     }

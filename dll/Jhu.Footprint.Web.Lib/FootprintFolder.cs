@@ -148,7 +148,7 @@ namespace Jhu.Footprint.Web.Lib
 
         protected override SqlCommand GetModifyCommand()
         {
-            if (this.id == 0) { GetFootprintFolderId(); }
+            if (this.id == -1) { GetFootprintFolderId(); }
 
             string sql = "fps.spModifyFootprintFolder";
             var cmd = new SqlCommand(sql);
@@ -166,7 +166,7 @@ namespace Jhu.Footprint.Web.Lib
 
         protected override SqlCommand GetDeleteCommand()
         {
-            if (this.id == 0) { GetFootprintFolderId(); }
+            if (this.id == -1) { GetFootprintFolderId(); }
 
             string sql = "fps.spDeleteFootprintFolder";
             var cmd = new SqlCommand(sql);
@@ -182,7 +182,7 @@ namespace Jhu.Footprint.Web.Lib
 
         protected override SqlCommand GetLoadCommand()
         {
-            if (this.id == 0) { GetFootprintFolderId(); }
+            if (this.id == -1) { GetFootprintFolderId(); }
 
             string sql = "fps.spGetFootprintFolder";
             var cmd = new SqlCommand(sql);
@@ -343,6 +343,11 @@ namespace Jhu.Footprint.Web.Lib
                 cmd.Parameters.Add("@FolderId", SqlDbType.BigInt).Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
+
+                if (cmd.Parameters["@FolderId"].Value == DBNull.Value)
+                {
+                    throw Error.CannotFindfootprintFolder(this.user, this.name);
+                }
 
                 this.id = (long)cmd.Parameters["@FolderId"].Value;
             }

@@ -238,6 +238,11 @@ namespace Jhu.Footprint.Web.Lib
 
         public override void LoadFromDataReader(SqlDataReader dr)
         {
+            if (dr == null || !dr.HasRows)
+            {
+                throw Error.NoFootprintDataToLoad();
+            }
+
             this.id = (long)dr["FootprintID"];
             this.name = (string)dr["Name"];
             this.user = (string)dr["User"];
@@ -356,8 +361,6 @@ namespace Jhu.Footprint.Web.Lib
                 }
             }
         }
-
-
         #endregion
     }
 }

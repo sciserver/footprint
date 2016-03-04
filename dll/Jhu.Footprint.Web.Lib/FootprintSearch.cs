@@ -116,6 +116,11 @@ namespace Jhu.Footprint.Web.Lib
 
                 cmd.ExecuteNonQuery();
 
+                if (cmd.Parameters["@FootprintId"].Value == DBNull.Value)
+                {
+                    throw Error.CannotFindFootprint(this.user, this.folderName, this.footprintName);
+                }
+
                 return (long)cmd.Parameters["@FootprintId"].Value;
             }
         }
