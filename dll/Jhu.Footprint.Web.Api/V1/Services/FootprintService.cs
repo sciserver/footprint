@@ -171,6 +171,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 footprint.User = userName;
                 footprint.Id = search.GetFootprintId();
                 footprint.Load();
+                footprint.Region.Simplify();
 
                 return footprint;
             }
@@ -195,8 +196,30 @@ namespace Jhu.Footprint.Web.Api.V1
                 footprint.User = userName;
                 footprint.Load();
 
+                footprint.Region.Simplify();
+
                 return footprint;
             }
+        }
+
+        private Spherical.Region GetFootprintConvexHull(string userName, string folderName, string footprintName)
+        {
+            var fp = GetFootprint(userName, folderName, footprintName);
+
+            var chull = fp.Region.Outline.GetConvexHull();
+            chull.Simplify();
+
+            return chull;
+        }
+
+        private Spherical.Region GetFolderFootprintConvexHull(string userName, string folderName)
+        {
+            var fp = GetFolderFootprint(userName, folderName);
+
+            var chull = fp.Region.Outline.GetConvexHull();
+            chull.Simplify();
+
+            return chull;      
         }
 
         #endregion
@@ -263,38 +286,34 @@ namespace Jhu.Footprint.Web.Api.V1
         public string GetUserFootprintFolderRegionOutline(string userName, string folderName)
         {
             var footprint = GetFolderFootprint(userName, folderName);
-            footprint.Region.Simplify();
             return footprint.Region.Outline.ToString();
         }
 
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
         public string GetUserFootprintFolderRegionConvexHull(string userName, string folderName)
         {
-            var fp = GetFolderFootprint(userName, folderName);
-            fp.Region.Simplify();
-
-            var chull = fp.Region.Outline.GetConvexHull();
-            chull.Simplify();
-
-            return chull.Outline.ToString();
+            var chull = GetFolderFootprintConvexHull(userName, folderName);
+            return chull.ToString();
         }
 
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
         public string GetUserFootprintFolderRegionConvexHullOutline(string userName, string folderName)
         {
-            throw new NotImplementedException();
+            var chull = GetFolderFootprintConvexHull(userName, folderName);
+            return chull.Outline.ToString();
         }
 
         public IEnumerable<Lib.Point> GetUserFootprintFolderRegionConvexHullOutlinePoints(string userName, string folderName, double resolution)
         {
-            throw new NotImplementedException();
+            var chull = GetFolderFootprintConvexHull(userName, folderName);
+            
+            return Lib.FootprintFormatter.InterpolateOutlinePoints(chull.Outline, resolution);
         }
 
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
         public IEnumerable<Lib.Point> GetUserFootprintFolderRegionOutlinePoints(string userName, string folderName, double resolution)
         {
             var footprint = GetFolderFootprint(userName, folderName);
-            footprint.Region.Simplify();
             return Lib.FootprintFormatter.InterpolateOutlinePoints(footprint.Region.Outline, resolution);
         }
 
@@ -362,7 +381,6 @@ namespace Jhu.Footprint.Web.Api.V1
         public string GetUserFootprintRegionOutline(string userName, string folderName, string footprintName)
         {
             var fp = GetFootprint(userName, folderName, footprintName);
-            fp.Region.Simplify();
             return fp.Region.Outline.ToString();
         }
 
@@ -370,25 +388,27 @@ namespace Jhu.Footprint.Web.Api.V1
         public IEnumerable<Lib.Point> GetUserFootprintRegionOutlinePoints(string userName, string folderName, string footprintName, double resolution)
         {
             var fp = GetFootprint(userName, folderName, footprintName);
-            fp.Region.Simplify();
             return Lib.FootprintFormatter.InterpolateOutlinePoints(fp.Region.Outline, resolution);
         }
 
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
         public string GetUserFootprintRegionConvexHull(string userName, string folderName, string footprintName)
         {
-            throw new NotImplementedException();
+            var chull = GetFootprintConvexHull(userName, folderName, footprintName);
+            return chull.ToString();
         }
 
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
         public string GetUserFootprintRegionConvexHullOutline(string userName, string folderName, string footprintName)
         {
-            throw new NotImplementedException();
+            var chull = GetFootprintConvexHull(userName, folderName, footprintName);
+            return chull.Outline.ToString();
         }
 
         public IEnumerable<Lib.Point> GetUserFootprintRegionConvexHullOutlinePoints(string userName, string folderName, string footprintName, double resolution)
         {
-            throw new NotImplementedException();
+            var chull = GetFootprintConvexHull(userName, folderName, footprintName);
+            return Lib.FootprintFormatter.InterpolateOutlinePoints(chull.Outline, resolution);
         }
 
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]

@@ -83,6 +83,47 @@ namespace Jhu.Footprint.Web.Api.V1
         }
 
         [TestMethod]
+        public void GetUserFootprintFolderRegionOutlinePointsTest()
+        {
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session);
+                var folder = client.GetUserFootprintFolderRegionOutlinePoints("evelin", "SDSS.DR7", 0.3);
+            }
+        
+        }
+
+        [TestMethod]
+        public void GetUserFootprintFolderRegionConvexHullTest()
+        {
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session);
+                var folder = client.GetUserFootprintFolderRegionConvexHull("evelin", "SDSS.DR7");
+            }        
+        }
+
+        [TestMethod]
+        public void GetUserFootprintFolderRegionConvexHullOutlineTest()
+        {
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session);
+                var folder = client.GetUserFootprintFolderRegionConvexHullOutline("evelin", "SDSS.DR7");
+            }
+        }
+
+        [TestMethod]
+        public void GetUserFootprintFolderRegionConvexHullOutlinePointsTest()
+        {
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session);
+                var folder = client.GetUserFootprintFolderRegionConvexHullOutlinePoints("evelin", "SDSS.DR7", 0.3);
+            }
+        }
+
+        [TestMethod]
         public void CreateUserFootprintFolderTest()
         {
             using (var session = new RestClientSession())
@@ -168,6 +209,49 @@ namespace Jhu.Footprint.Web.Api.V1
                 var client = CreateClient(session);
                 var footprint = client.GetUserFootprintRegionOutline("evelin", "SDSS.DR7", "Stripe2");
             }
+        }
+
+        [TestMethod]
+        public void GetUserFootprintRegionOutlinePointsTest()
+        {
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session);
+                var footprint = client.GetUserFootprintRegionOutlinePoints("evelin", "SDSS.DR7", "Stripe2",0.9);
+            }            
+        }
+
+        [TestMethod]
+        public void GetUserFootprintRegionConvexHullTest()
+        {
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session);
+                var footprint = client.GetUserFootprintRegionConvexHullOutline("evelin", "SDSS.DR7", "Stripe5");
+            }
+
+        }
+
+        [TestMethod]
+        public void GetUserFootprintRegionConvexHullOutlineTest()
+        {
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session);
+                var footprint = client.GetUserFootprintRegionConvexHullOutline("evelin", "SDSS.DR7", "Stripe5");
+            }
+
+        }
+
+        [TestMethod]
+        public void GetUserFootprintRegionConvexHullOutlinePointsTest()
+        {
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session);
+                var footprint = client.GetUserFootprintRegionConvexHullOutlinePoints("evelin", "SDSS.DR7", "Stripe5", 0.1);
+            }
+
         }
 
         [TestMethod]
