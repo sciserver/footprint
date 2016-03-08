@@ -25,44 +25,44 @@ namespace Jhu.Footprint.Web.Api.V1
         #region FootprintFolder Operation Contracts
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}")]
-        [Description("Returns a list of all user created folders.")]
+        [Description("Return the list of all user created folders.")]
         FootprintFolderListResponse GetUserFootprintFolderList(string userName);
 
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/")]
-        [Description("Returns the details of an existing folder and the list of the footprints in it.")]
+        [Description("Return the details of an existing folder and the list of the footprints in it.")]
         FootprintFolderResponse GetUserFootprintFolder(string userName, string folderName);
 
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/footprint")]
-        [Description("Returns the footprint of a folder")]
+        [Description("Return the footprint of a folder")]
         string GetUserFootprintFolderRegion(string userName, string folderName);
 
 
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/footprint/outline")]
-        [Description("Returns the outline of a footprint.")]
+        [Description("Return the outline of a folder footprint.")]
         string GetUserFootprintFolderRegionOutline(string userName, string folderName);
         
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/footprint/outline/points?res={resolution}")]
-        [Description("Returns the points of the outline of a footprint.")]
+        [Description("Return the points of the outline of a footprint.")]
         IEnumerable<Lib.Point> GetUserFootprintFolderRegionOutlinePoints(string userName, string folderName, double resolution);
         
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/footprint/convexhull")]
-        [Description("Returns the convex hull of the folder footprint.")]
+        [Description("Return the convex hull of a folder footprint.")]
         string GetUserFootprintFolderRegionConvexHull(string userName, string folderName);
 
 
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/footprint/convexhull/outline")]
-        [Description("Returns the outline of the convex hull of the folder footprint.")]
+        [Description("Return the outline of the convex hull of a folder footprint.")]
         string GetUserFootprintFolderRegionConvexHullOutline(string userName, string folderName);
 
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/footprint/convexhull/outline/points?res={resolution}")]
-        [Description("Returns the points of the outline of the convex hull of the folder footprint.")]
+        [Description("Return the points of the outline of the convex hull of a folder footprint.")]
         IEnumerable<Lib.Point> GetUserFootprintFolderRegionConvexHullOutlinePoints(string userName, string folderName, double resolution);
 
         [OperationContract]
@@ -90,32 +90,32 @@ namespace Jhu.Footprint.Web.Api.V1
 
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/{footprintName}/footprint")]
-        [Description("Returns the footprint of a footprint.")]
+        [Description("Return the footprint of a footprint.")]
         string GetUserFootprintRegion(string userName, string folderName, string footprintName);
 
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/{footprintName}/footprint/outline")]
-        [Description("Returns the points of the outline of a footprint.")]
+        [Description("Return the outline of a footprint.")]
         string GetUserFootprintRegionOutline(string userName, string folderName, string footprintName);
 
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/{footprintName}/footprint/outline/points?res={resolution}")]
-        [Description("Returns the outline of a footprint.")]
+        [Description("Return the points of the outline of a footprint.")]
         IEnumerable<Lib.Point> GetUserFootprintRegionOutlinePoints(string userName, string folderName, string footprintName, double resolution);
         
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/{footprintName}/footprint/convexhull")]
-        [Description("Returns the convex hull of the footprint.")]
+        [Description("Return the convex hull of the footprint.")]
         string GetUserFootprintRegionConvexHull(string userName, string folderName, string footprintName);
 
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/{footprintName}/footprint/convexhull/outline")]
-        [Description("Returns the outline of the convex hull of the footprint.")]
+        [Description("Return the outline of the convex hull of the footprint.")]
         string GetUserFootprintRegionConvexHullOutline(string userName, string folderName, string footprintName);
 
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/{footprintName}/footprint/convexhull/outline/points?res={resolution}")]
-        [Description("Returns the points of the outline of the convex hull of the footprint.")]
+        [Description("Return the points of the outline of the convex hull of the footprint.")]
         IEnumerable<Lib.Point> GetUserFootprintRegionConvexHullOutlinePoints(string userName, string folderName, string footprintName, double resolution);
 
         [OperationContract]
