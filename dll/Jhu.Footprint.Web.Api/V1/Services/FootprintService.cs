@@ -43,12 +43,12 @@ namespace Jhu.Footprint.Web.Api.V1
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/footprint/outline")]
         [Description("Return the outline of a folder footprint.")]
         string GetUserFootprintFolderRegionOutline(string userName, string folderName);
-        
+
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/footprint/outline/points?res={resolution}")]
         [Description("Return the points of the outline of a footprint.")]
         IEnumerable<Lib.Point> GetUserFootprintFolderRegionOutlinePoints(string userName, string folderName, double resolution);
-        
+
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/footprint/convexhull")]
         [Description("Return the convex hull of a folder footprint.")]
@@ -102,7 +102,7 @@ namespace Jhu.Footprint.Web.Api.V1
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/{footprintName}/footprint/outline/points?res={resolution}")]
         [Description("Return the points of the outline of a footprint.")]
         IEnumerable<Lib.Point> GetUserFootprintRegionOutlinePoints(string userName, string folderName, string footprintName, double resolution);
-        
+
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/{footprintName}/footprint/convexhull")]
         [Description("Return the convex hull of the footprint.")]
@@ -117,6 +117,12 @@ namespace Jhu.Footprint.Web.Api.V1
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/{footprintName}/footprint/convexhull/outline/points?res={resolution}")]
         [Description("Return the points of the outline of the convex hull of the footprint.")]
         IEnumerable<Lib.Point> GetUserFootprintRegionConvexHullOutlinePoints(string userName, string folderName, string footprintName, double resolution);
+
+        [OperationContract]
+        [WebGet(UriTemplate = "/users/{userName}/{folderName}/{footprintName}/plot?proj={projection}&width={width}&height={height}")]
+        [Description("Plot Footprint")]
+        void GetUserFootprintPlot(string userName, string folderName, string footprintName, string projection, float width, float height);
+
 
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/users/{userName}/{folderName}/{footprintName}")]
@@ -219,7 +225,7 @@ namespace Jhu.Footprint.Web.Api.V1
             var chull = fp.Region.Outline.GetConvexHull();
             chull.Simplify();
 
-            return chull;      
+            return chull;
         }
 
         #endregion
@@ -257,7 +263,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 folder = new Lib.FootprintFolder(context);
                 folder.User = userName;
                 folder.Name = folderName;
-                folder.Id = -1; 
+                folder.Id = -1;
                 folder.Load();
 
                 //get footprints from folder
@@ -306,7 +312,7 @@ namespace Jhu.Footprint.Web.Api.V1
         public IEnumerable<Lib.Point> GetUserFootprintFolderRegionConvexHullOutlinePoints(string userName, string folderName, double resolution)
         {
             var chull = GetFolderFootprintConvexHull(userName, folderName);
-            
+
             return Lib.FootprintFormatter.InterpolateOutlinePoints(chull.Outline, resolution);
         }
 
@@ -411,6 +417,17 @@ namespace Jhu.Footprint.Web.Api.V1
             return Lib.FootprintFormatter.InterpolateOutlinePoints(chull.Outline, resolution);
         }
 
+        public void GetUserFootprintPlot(string userName, string folderName, string footprintName, string projection, float width, float height)
+        {
+            var fp = GetFootprint(userName, folderName,footprintName);
+            fp.Region.Simplify();            
+
+            var plot = new Lib.Plot();
+            plot.PlotFootprint(fp.Region,width,height,projection);
+        }
+
+        #region Create, modify, delete footprint
+
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
         public void CreateUserFootprint(string userName, string folderName, string footprintName, FootprintRequest request)
         {
@@ -456,6 +473,8 @@ namespace Jhu.Footprint.Web.Api.V1
                 footprint.Delete();
             }
         }
+        #endregion
+
         #endregion
     }
 }
