@@ -34,6 +34,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -58,10 +59,15 @@
     <Compile Include="FootprintFolderSearch.cs" />
     <Compile Include="FootprintFormatter.cs" />
     <Compile Include="FootprintSearch.cs" />
+    <Compile Include="Plot.cs" />
     <Compile Include="Point.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\spherical\src\Jhu.Spherical.Visualizer\Jhu.Spherical.Visualizer.csproj">
+      <Project>{1dcd8ac1-dcdd-4941-9e3f-d9ef60a078f9}</Project>
+      <Name>Jhu.Spherical.Visualizer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\spherical\src\Jhu.Spherical\Jhu.Spherical.csproj">
       <Project>{93efa6ad-0c3f-4c7f-b1f7-d697d0ba49f7}</Project>
       <Name>Jhu.Spherical</Name>
