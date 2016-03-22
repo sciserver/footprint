@@ -13,25 +13,24 @@ namespace Jhu.Footprint.Web.Lib
 {
     public class Plot
     {
-
         public Plot()
         {
         }
 
 
-        public void PlotFootprint(Jhu.Spherical.Region region, float w, float h, string projection)
+        public void PlotFootprint(Jhu.Spherical.Region region, float w, float h, string projection, string degStyle)
         {
             var plot = InitPlot(w, h, projection);
 
             AppendRegionsLayer(plot, region);
-            AppendGridLayer(plot);
-            FinishPlot(plot);
+            AppendGridLayer(plot, degStyle);
+            FinishPlot(plot, degStyle);
         }
 
         private Jhu.Spherical.Visualizer.Plot InitPlot(float w, float h, string projection)
         {
             if (w == 0f) w = 7f; // setup default value
-            if (h == 0f) h = 5f; // setup default value
+            if (h == 0f) h = 7f; // setup default value
 
             w = (float)(w * 96);
             h = (float)(h * 96);
@@ -40,7 +39,7 @@ namespace Jhu.Footprint.Web.Lib
 
             try
             {
-                projection = "Jhu.Spherical.Visualizer." + projection + ",Jhu.Spherical.Visualizer";
+                projection = "Jhu.Spherical.Visualizer." + projection + "Projection,Jhu.Spherical.Visualizer";
                 var t = Type.GetType(projection);
                 p = (Jhu.Spherical.Visualizer.Projection)Activator.CreateInstance(t);
             }
@@ -52,23 +51,23 @@ namespace Jhu.Footprint.Web.Lib
 
             var plot = new Jhu.Spherical.Visualizer.Plot()
             {
+                AutoScale = true,
                 Width = w,
                 Height = h,
                 ImageSize = new System.Drawing.SizeF(w, h),
                 Projection = p
             };
 
-            if (projection == "StereographicProjection" | projection == "OrthographicProjection")
+            if (p.GetType().Name == "EquirectangularProjection" | p.GetType().Name == "StereographicProjection" | p.GetType().Name == "OrthographicProjection")
             {
-                plot.AutoRotate = true;
                 plot.AutoZoom = true;
-                plot.AutoScale = true;
+                plot.AutoRotate = true;
             }
 
-            plot.Margins.Left = 1f;
-            plot.Margins.Right = 1f;
-            plot.Margins.Top = 1f;
-            plot.Margins.Bottom = 1f;
+            plot.Margins.Left = 50f;
+            plot.Margins.Right = 50f;
+            plot.Margins.Top = 50f;
+            plot.Margins.Bottom = 50f;
 
             plot.Layers.Add(new BorderLayer());
 
@@ -96,34 +95,64 @@ namespace Jhu.Footprint.Web.Lib
 
         }
 
-        static void AppendGridLayer(Jhu.Spherical.Visualizer.Plot plot)
+        static void AppendGridLayer(Jhu.Spherical.Visualizer.Plot plot, string degStyle)
         {
             var grid = new GridLayer();
-            grid.RaScale.Density = 200f;
             grid.Line.Pen = Pens.LightGray;
+            grid.DecScale.Density = 150f;
+
+            switch (degStyle)
+            {
+                default:
+                case "dms":
+                    grid.RaScale.DegreeFormat.DegreeStyle = DegreeStyle.Decimal;
+                    grid.DecScale.DegreeFormat.DegreeStyle = DegreeStyle.Decimal;
+                    break;
+                case "hms":
+                    grid.RaScale.DegreeFormat.DegreeStyle = DegreeStyle.Hours;
+                    grid.DecScale.DegreeFormat.DegreeStyle = DegreeStyle.Symbols;
+                    break;
+            }
 
             plot.Layers.Add(grid);
         }
 
-        private void FinishPlot(Spherical.Visualizer.Plot plot)
+        private void FinishPlot(Spherical.Visualizer.Plot plot, string degStyle)
         {
-
+            // TODO: Axis labels not showin up...
             var font = new Font("Consolas", 7.5f);
 
             var axes = new AxesLayer();
-            axes.X1Axis.Title.Text = "Right ascension (deg)";
             axes.X1Axis.Title.Font = font;
             axes.X1Axis.Labels.Font = font;
-            axes.X1Axis.Scale.Density = 200f;
-            axes.X2Axis.Scale.DegreeFormat.DegreeStyle = DegreeStyle.Decimal;
             axes.X2Axis.Labels.Visible = false;
-            axes.Y1Axis.Title.Text = "Declination (deg)";
             axes.Y1Axis.Title.Font = font;
             axes.Y1Axis.Labels.Font = font;
-            axes.Y2Axis.Scale.DegreeFormat.DegreeStyle = DegreeStyle.Decimal;
+            axes.Y1Axis.Title.Text = "Declination (deg)";
             axes.Y2Axis.Labels.Visible = false;
 
+            switch (degStyle.ToLower())
+            {
+                default:
+                case "dms":
+                    axes.X1Axis.Title.Text = "Right ascension (deg)";
+                    axes.X1Axis.Scale.DegreeFormat.DegreeStyle = DegreeStyle.Decimal;
+                    axes.X2Axis.Scale.DegreeFormat.DegreeStyle = DegreeStyle.Decimal;
+                    axes.Y1Axis.Scale.DegreeFormat.DegreeStyle = DegreeStyle.Decimal;
+                    axes.Y2Axis.Scale.DegreeFormat.DegreeStyle = DegreeStyle.Decimal;
+                    break;
+                case "hms":
+                    axes.X1Axis.Title.Text = "Right ascension (hour)";
+                    axes.X1Axis.Scale.DegreeFormat.DegreeStyle = DegreeStyle.Hours;
+                    axes.X2Axis.Scale.DegreeFormat.DegreeStyle = DegreeStyle.Hours;
+                    axes.Y1Axis.Scale.DegreeFormat.DegreeStyle = DegreeStyle.Symbols;
+                    axes.Y2Axis.Scale.DegreeFormat.DegreeStyle = DegreeStyle.Symbols;
+                    break;
+
+            }
+
             plot.Layers.Add(axes);
+
 
             plot.Projection.InvertX = true;
 

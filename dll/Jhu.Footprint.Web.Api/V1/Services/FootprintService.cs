@@ -119,9 +119,13 @@ namespace Jhu.Footprint.Web.Api.V1
         IEnumerable<Lib.Point> GetUserFootprintRegionConvexHullOutlinePoints(string userName, string folderName, string footprintName, double resolution);
 
         [OperationContract]
-        [WebGet(UriTemplate = "/users/{userName}/{folderName}/{footprintName}/plot?proj={projection}&width={width}&height={height}")]
-        [Description("Plot Footprint")]
-        void GetUserFootprintPlot(string userName, string folderName, string footprintName, string projection, float width, float height);
+        [WebGet(UriTemplate = "/users/{userName}/{folderName}/{footprintName}/plot?proj={projection}&width={width}&height={height}&degStyle={degStyle}")]
+        [Description(@"Plot Footprint. There are several keywords to costumize a plot:
+            proj -- set projection. Available values: Aitoff, Equirectangular, HammerAitoff (deafult), Mollweide, Orthographic, Stereographic
+            width -- set width of plot.
+            height -- set height of plot.
+            degStyle -- set the grid and label style. Available values: hms - hexagecimal, dms (default) - degree.")]
+        void GetUserFootprintPlot(string userName, string folderName, string footprintName, string projection, float width, float height, string degStyle);
 
 
         [OperationContract]
@@ -417,13 +421,13 @@ namespace Jhu.Footprint.Web.Api.V1
             return Lib.FootprintFormatter.InterpolateOutlinePoints(chull.Outline, resolution);
         }
 
-        public void GetUserFootprintPlot(string userName, string folderName, string footprintName, string projection, float width, float height)
+        public void GetUserFootprintPlot(string userName, string folderName, string footprintName, string projection, float width, float height, string degStyle)
         {
-            var fp = GetFootprint(userName, folderName,footprintName);
-            fp.Region.Simplify();            
+            var fp = GetFootprint(userName, folderName, footprintName);
+            fp.Region.Simplify();
 
             var plot = new Lib.Plot();
-            plot.PlotFootprint(fp.Region,width,height,projection);
+            plot.PlotFootprint(fp.Region, width, height, projection, degStyle);
         }
 
         #region Create, modify, delete footprint
