@@ -1,29 +1,17 @@
 ﻿using System;
 using System.IO;
-using Microsoft.SqlServer.Management.Common;
-using Microsoft.SqlServer.Management.Smo;
-using Microsoft.SqlServer.Management.Sdk;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Xml.Serialization;
 
-namespace Jhu.Footprint.Web.Lib.Test
+namespace Jhu.Footprint.Web.Lib
 {
     [TestClass]
-    public class FootprintTest
+    public class FootprintTest : FootprintTestBase
     {
-
         [ClassInitialize]
         public static void ClassInit(TestContext testContext)
         {
-            using (var context = new Context())
-            {
-                string path = Path.GetDirectoryName((string)Environment.GetEnvironmentVariables()["SolutionPath"]);
-                string script = File.ReadAllText(path + @"\footprint\sql\Jhu.Footprint.Tables.sql");
-                script += File.ReadAllText(path + @"\footprint\sql\Jhu.Footprint.FootprintFolder.TestInit.sql");
-
-                var server = new Server(new ServerConnection(context.Connection));
-                server.ConnectionContext.ExecuteNonQuery(script);
-            }
+            InitDatabase();
         }
 
         [TestMethod]

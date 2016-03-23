@@ -5,8 +5,14 @@ using Jhu.Graywulf.Test;
 namespace Jhu.Footprint.Web.Lib.Test
 {
     [TestClass]
-    public class SearchTest
+    public class SearchTest : FootprintTestBase
     {
+        [ClassInitialize]
+        public static void ClassInit(TestContext testContext)
+        {
+            InitDatabase();
+        }
+
         [TestMethod]
         public void FindNameTest()
         {

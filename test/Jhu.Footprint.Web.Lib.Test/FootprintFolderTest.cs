@@ -1,28 +1,18 @@
 ﻿using System;
 using System.IO;
-using Microsoft.SqlServer.Management.Common;
-using Microsoft.SqlServer.Management.Smo;
-using Microsoft.SqlServer.Management.Sdk;
+using System.Data;
+using System.Data.SqlClient;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Jhu.Footprint.Web.Lib.Test
+namespace Jhu.Footprint.Web.Lib
 {
-
     [TestClass]
-    public class FootprintFolderTest
+    public class FootprintFolderTest : FootprintTestBase
     {
         [ClassInitialize]
         public static void ClassInit(TestContext testContext)
         {
-            using (var context = new Context())
-            {
-                string path = Path.GetDirectoryName((string)Environment.GetEnvironmentVariables()["SolutionPath"]);
-                string script = File.ReadAllText(path + @"\footprint\sql\Jhu.Footprint.Tables.sql");
-                script += File.ReadAllText(path + @"\footprint\sql\Jhu.Footprint.FootprintFolder.TestInit.sql");
-
-                var server = new Server(new ServerConnection(context.Connection));
-                server.ConnectionContext.ExecuteNonQuery(script);
-            }
+            InitDatabase();
         }
 
         [TestMethod]
@@ -30,7 +20,6 @@ namespace Jhu.Footprint.Web.Lib.Test
         {
             using (var context = new Context())
             {
-
                 var folder = new FootprintFolder(context);
 
                 folder.Name = "CreateTest";
@@ -44,6 +33,7 @@ namespace Jhu.Footprint.Web.Lib.Test
         }
 
         [TestMethod]
+        [ExpectedException(typeof(FootprintFolderException))]
         public void FolderCreateTest2()
         {
             using (var context = new Context())
@@ -55,14 +45,7 @@ namespace Jhu.Footprint.Web.Lib.Test
                 folder.User = "evelin";
                 folder.Comment = "Duplicate name exception test";
 
-                try
-                {
-                    folder.Save();
-                }
-                catch (FootprintFolderException e)
-                {
-                    System.Diagnostics.Debug.Write(e);
-                }
+                folder.Save();
             }
         }
 
@@ -100,7 +83,7 @@ namespace Jhu.Footprint.Web.Lib.Test
 
                 try
                 {
-                folder.Save();
+                    folder.Save();
                 }
                 catch (FootprintFolderException e)
                 {
@@ -125,7 +108,7 @@ namespace Jhu.Footprint.Web.Lib.Test
 
         [TestMethod]
         public void FolderLoadTest()
-        { 
+        {
             using (var context = new Context())
             {
                 var folder = new FootprintFolder(context);
