@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -66,6 +67,15 @@ namespace Jhu.Footprint.Web.Api.V1
         IEnumerable<Lib.Point> GetUserFootprintFolderRegionConvexHullOutlinePoints(string userName, string folderName, double resolution);
 
         [OperationContract]
+        [WebGet(UriTemplate = "/users/{userName}/{folderName}/plot?proj={projection}&width={width}&height={height}&degStyle={degStyle}")]
+        [Description(@"Plot Footprint. There are several keywords to costumize a plot:
+            proj -- set projection. Available values: Aitoff, Equirectangular, HammerAitoff (deafult), Mollweide, Orthographic, Stereographic
+            width -- set width of plot.
+            height -- set height of plot.
+            degStyle -- set the grid and label style. Available values: hms - hexagecimal, dms (default) - degree.")]
+        Stream GetUserFootprintFolderPlot(string userName, string folderName, string projection, float width, float height, string degStyle);
+        
+        [OperationContract]
         [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/users/{userName}/{folderName}")]
         [Description("Create new footprint folder.")]
         void CreateUserFootprintFolder(string userName, string folderName, FootprintFolderRequest request);
@@ -125,9 +135,8 @@ namespace Jhu.Footprint.Web.Api.V1
             width -- set width of plot.
             height -- set height of plot.
             degStyle -- set the grid and label style. Available values: hms - hexagecimal, dms (default) - degree.")]
-        void GetUserFootprintPlot(string userName, string folderName, string footprintName, string projection, float width, float height, string degStyle);
-
-
+        Stream GetUserFootprintPlot(string userName, string folderName, string footprintName, string projection, float width, float height, string degStyle);
+        
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/users/{userName}/{folderName}/{footprintName}")]
         [Description("Create new footprint under an existing folder.")]
@@ -231,7 +240,6 @@ namespace Jhu.Footprint.Web.Api.V1
 
             return chull;
         }
-
         #endregion
 
         #region FootprintFolder Methods
@@ -325,6 +333,23 @@ namespace Jhu.Footprint.Web.Api.V1
         {
             var footprint = GetFolderFootprint(userName, folderName);
             return Lib.FootprintFormatter.InterpolateOutlinePoints(footprint.Region.Outline, resolution);
+        }
+        public Stream GetUserFootprintFolderPlot(string userName, string folderName, string projection, float width, float height, string degStyle)
+        {
+            var fp = GetFolderFootprint(userName, folderName);
+            fp.Region.Simplify();
+
+            using (MemoryStream ms = new MemoryStream()) 
+            { 
+
+            var plot = new Lib.Plot();
+            plot.PlotFootprint(fp.Region, width, height, projection, degStyle, ms);
+            ms.Position = 0;
+
+            WebOperationContext.Current.OutgoingResponse.ContentType = "image/jpeg";
+
+            return ms;            
+            }
         }
 
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
@@ -421,14 +446,21 @@ namespace Jhu.Footprint.Web.Api.V1
             return Lib.FootprintFormatter.InterpolateOutlinePoints(chull.Outline, resolution);
         }
 
-        public void GetUserFootprintPlot(string userName, string folderName, string footprintName, string projection, float width, float height, string degStyle)
+        public Stream GetUserFootprintPlot(string userName, string folderName, string footprintName, string projection, float width, float height, string degStyle)
         {
             var fp = GetFootprint(userName, folderName, footprintName);
             fp.Region.Simplify();
 
+            MemoryStream ms = new MemoryStream();
+
             var plot = new Lib.Plot();
-            plot.PlotFootprint(fp.Region, width, height, projection, degStyle);
+            plot.PlotFootprint(fp.Region, width, height, projection, degStyle,ms);
+            ms.Position = 0;
+
+            WebOperationContext.Current.OutgoingResponse.ContentType = "image/jpeg";
+            return ms;
         }
+
 
         #region Create, modify, delete footprint
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,13 +19,13 @@ namespace Jhu.Footprint.Web.Lib
         }
 
 
-        public void PlotFootprint(Jhu.Spherical.Region region, float w, float h, string projection, string degStyle)
+        public void PlotFootprint(Jhu.Spherical.Region region, float w, float h, string projection, string degStyle, MemoryStream stream)
         {
             var plot = InitPlot(w, h, projection);
 
             AppendRegionsLayer(plot, region);
             AppendGridLayer(plot, degStyle);
-            FinishPlot(plot, degStyle);
+            FinishPlot(plot, degStyle,stream);
         }
 
         private Jhu.Spherical.Visualizer.Plot InitPlot(float w, float h, string projection)
@@ -117,7 +118,7 @@ namespace Jhu.Footprint.Web.Lib
             plot.Layers.Add(grid);
         }
 
-        private void FinishPlot(Spherical.Visualizer.Plot plot, string degStyle)
+        private void FinishPlot(Spherical.Visualizer.Plot plot, string degStyle, MemoryStream stream)
         {
             // TODO: Axis labels not showin up...
             var font = new Font("Consolas", 7.5f);
@@ -131,7 +132,9 @@ namespace Jhu.Footprint.Web.Lib
             axes.Y1Axis.Title.Text = "Declination (deg)";
             axes.Y2Axis.Labels.Visible = false;
 
-            switch (degStyle.ToLower())
+            if (degStyle != null ) degStyle.ToLower();
+
+            switch (degStyle)
             {
                 default:
                 case "dms":
@@ -156,8 +159,9 @@ namespace Jhu.Footprint.Web.Lib
 
             plot.Projection.InvertX = true;
 
-            var fileName = String.Format("C:\\Data\\ebanyai\\0.jpg");
-            plot.RenderToBitmap(fileName, System.Drawing.Imaging.ImageFormat.Jpeg);
+
+            // TODO : streaming bytes
+            plot.RenderToBitmap(stream, System.Drawing.Imaging.ImageFormat.Jpeg);
         }
     }
 }
