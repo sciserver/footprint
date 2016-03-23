@@ -1,9 +1,14 @@
 USE [Footprint]
+
 -- CREATE SCHEMA --
-/*
+
+IF SCHEMA_ID('fps') IS NOT NULL
+DROP SCHEMA fps
+GO
+
 CREATE SCHEMA [fps]
 GO
-*/
+
 
 /***********************************************************************/
 /******                     FOOTPRINT PROCEDURES                  ******/
