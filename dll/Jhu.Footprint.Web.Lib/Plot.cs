@@ -19,12 +19,12 @@ namespace Jhu.Footprint.Web.Lib
         }
 
 
-        public void PlotFootprint(Jhu.Spherical.Region region, float w, float h, string projection, string degStyle, MemoryStream stream)
+        public void PlotFootprint(Jhu.Spherical.Region region, float w, float h, string projection, string degStyle, bool grid, MemoryStream stream)
         {
             var plot = InitPlot(w, h, projection);
 
             AppendRegionsLayer(plot, region);
-            AppendGridLayer(plot, degStyle);
+            if (grid) AppendGridLayer(plot, degStyle);
             FinishPlot(plot, degStyle,stream);
         }
 
