@@ -13,13 +13,13 @@ namespace Jhu.Footprint.Web.UI.Plot {
     public partial class FootprintPlot {
         
         /// <summary>
-        /// canvas control.
+        /// PlotCanvas control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Jhu.Spherical.Web.Controls.PlotCanvas canvas;
+        protected global::System.Web.UI.WebControls.Image PlotCanvas;
         
         /// <summary>
         /// plotProjectionStyle control.
@@ -29,5 +29,23 @@ namespace Jhu.Footprint.Web.UI.Plot {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RadioButtonList plotProjectionStyle;
+        
+        /// <summary>
+        /// plotDegreeStyle control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButtonList plotDegreeStyle;
+        
+        /// <summary>
+        /// plotGrid control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox plotGrid;
     }
 }

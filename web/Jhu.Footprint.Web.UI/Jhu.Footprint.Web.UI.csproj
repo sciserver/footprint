@@ -421,6 +421,7 @@
     </Compile>
     <Compile Include="Plot\FootprintPlot.aspx.cs">
       <DependentUpon>FootprintPlot.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Plot\FootprintPlot.aspx.designer.cs">
       <DependentUpon>FootprintPlot.aspx</DependentUpon>

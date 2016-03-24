@@ -15,7 +15,7 @@ namespace Jhu.Footprint.Web.UI.Plot
     {
         #region Event handlers
         protected void Page_Load(object sender, EventArgs e)
-        {
+        {   
 
         }
 
@@ -30,29 +30,67 @@ namespace Jhu.Footprint.Web.UI.Plot
 
         protected void GeneratePlot()
         {
-            // TODO : minimalis canvas + grid + footprint
+            
+            // in early develop phase           
+
+            // TODO :  footprint request
 
 
-            // Create plot
-            canvas.Plot.Projection = new OrthographicProjection();
-            canvas.Plot.Projection.InvertX = true;
-
-            var grid = new GridLayer();
-            grid.RaScale.Density = 100;
-            grid.DecScale.Density = 100;
-
-            //if (plotGrid.Checked)
-            //{
-            canvas.Plot.Layers.Add(grid);
-            canvas.Plot.Layers.Add(new BorderLayer());
-            //}
+            string imgUrl = "http://localhost/footprint/api/v1/Footprint.svc/users/evelin/SDSS.DR7/Stripe5/plot?";
 
 
-            var axes = new AxesLayer();
-            canvas.Plot.Layers.Add(axes);
+            // Setup image url
+
+            switch (plotDegreeStyle.SelectedValue)
+            { 
+                default:
+                case "Decimal":
+                    imgUrl += "degStyle=dms";
+                    break;
+                case "Sexagesimal":
+                    imgUrl += "degStyle=hms";
+                    break;
+            }
+
+            switch (plotProjectionStyle.SelectedValue)
+            { 
+                default:
+                case "Aitoff":
+                    imgUrl += "&proj=Aitoff";
+                    break;
+                case "Equirectangular":
+                    imgUrl += "&proj=Equirectangular";
+                    break;
+                case "HammerAitoff":
+                    imgUrl += "&proj=HammerAitoff";
+                    break;
+                case "Mollweide":
+                    imgUrl += "&proj=Mollweide";
+                    break;
+                case "Orthographic":
+                    imgUrl += "&proj=Orthographic";
+                    break;
+                case "Stereographic":
+                    imgUrl += "&proj=Stereographic";
+                    break;
+            }
+
+            if (plotGrid.Checked) imgUrl += "&grid=true";
+
+            // TODO : auto rotate, auto zoom ( check box ?)
+
+            // TODO : zoom ( slider )
+
+            // TODO : save as : jpg, pdf stb
+
+            PlotCanvas.ImageUrl = imgUrl;
+            PlotCanvas.Width = 7 * 96;
+            PlotCanvas.Height = 7 *96;
+
         }
+        // TODO save png
 
-        //TODO save png
+        
 
     }
 }
