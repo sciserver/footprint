@@ -36,14 +36,4 @@ namespace Jhu.Footprint.Web.Lib
         None = 0,
         Folder = 1
     }
-
-    public enum RestrictedNames
-    {
-        plot,
-        convexhull,
-        footprint,
-        points,
-        outline,
-        reduced
-    }
 }

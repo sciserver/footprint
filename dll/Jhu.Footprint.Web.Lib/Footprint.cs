@@ -301,11 +301,17 @@ namespace Jhu.Footprint.Web.Lib
             }
         }
 
+        private void EnsureNameNotRestricted()
+        {
+            if (Constants.RestictedNames.Contains(this.name))
+            {
+                throw Error.FootprintNameNotAvailable(this.name);
+            }
+        }
+
         private void Create()
         {
-            var values = (string[])Enum.GetValues(typeof(RestrictedNames)) ;            
-
-            if (values.Contains(this.name.ToLower())) throw Error.FootprintNameNotAvailable(this.name);
+            EnsureNameNotRestricted();
 
             using (var cmd = GetCreateCommand())
             {
@@ -330,9 +336,7 @@ namespace Jhu.Footprint.Web.Lib
 
         private void Modify()
         {
-            var values = (string[])Enum.GetValues(typeof(RestrictedNames));
-
-            if (values.Contains(this.name.ToLower())) throw Error.FootprintNameNotAvailable(this.name);
+            EnsureNameNotRestricted();
 
             using (var cmd = GetModifyCommand())
             {
