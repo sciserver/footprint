@@ -303,6 +303,9 @@ namespace Jhu.Footprint.Web.Lib
 
         private void Create()
         {
+            var values = (string[])Enum.GetValues(typeof(RestrictedNames)) ;            
+
+            if (values.Contains(this.name)) throw Error.FootprintNameNotAvailable(this.name);
 
             using (var cmd = GetCreateCommand())
             {

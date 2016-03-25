@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Jhu.Footprint.Web.Lib
 {
     public enum FootprintSearchMethod
-    { 
+    {
         Name,
         Object,
         Point,
@@ -37,5 +37,13 @@ namespace Jhu.Footprint.Web.Lib
         Folder = 1
     }
 
-
+    public enum RestrictedNames
+    {
+        plot,
+        convexhull,
+        footprint,
+        points,
+        outline,
+        reduced
+    }
 }

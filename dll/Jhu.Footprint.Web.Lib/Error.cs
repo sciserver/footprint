@@ -30,6 +30,13 @@ namespace Jhu.Footprint.Web.Lib
                 user, folder, name);
             return new FootprintException(message);
         }
+
+        public static FootprintException FootprintNameNotAvailable(string name)
+        {
+            var message = String.Format(ExceptionMessages.FootprintNameNotAvailable,
+                name);
+            return new FootprintException(message);
+        }
         #endregion
 
         #region Footprint Folder Errors
