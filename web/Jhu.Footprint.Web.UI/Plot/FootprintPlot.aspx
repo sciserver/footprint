@@ -39,6 +39,8 @@
                                 <tr>
                                     <td>
                                         <asp:CheckBox ID="plotGrid" runat="server" AutoPostBack="True" Checked="True" Text="Grid" />
+                                        <asp:CheckBox ID="plotAutoZoom" runat="server" AutoPostBack="True" Checked="True" Text="Auto Zoom" />
+                                        <asp:CheckBox ID="plotAutoRotate" runat="server" AutoPostBack="True" Checked="True" Text="Auto Rotate" />
                                     </td>
                                 </tr>
 

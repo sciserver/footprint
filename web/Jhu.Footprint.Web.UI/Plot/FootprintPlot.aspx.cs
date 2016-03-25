@@ -77,7 +77,10 @@ namespace Jhu.Footprint.Web.UI.Plot
 
             if (plotGrid.Checked) imgUrl += "&grid=true";
 
-            // TODO : auto rotate, auto zoom ( check box ?)
+            if (plotAutoRotate.Checked) imgUrl += "&autoRotate=true";
+
+            if (plotAutoZoom.Checked) imgUrl += "&autoZoom=true";
+
 
             // TODO : zoom ( slider )
 

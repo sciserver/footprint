@@ -47,5 +47,23 @@ namespace Jhu.Footprint.Web.UI.Plot {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox plotGrid;
+        
+        /// <summary>
+        /// plotAutoZoom control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox plotAutoZoom;
+        
+        /// <summary>
+        /// plotAutoRotate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox plotAutoRotate;
     }
 }
