@@ -3,11 +3,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Mime;
-using Microsoft.SqlServer.Management.Common;
-using Microsoft.SqlServer.Management.Smo;
-using Microsoft.SqlServer.Management.Sdk;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Jhu.Footprint.Web.Lib;
+using Jhu.Footprint.Web.Api.Test;
 using Jhu.Graywulf.Web.Api.V1;
 using Jhu.Graywulf.Web.Services;
 
@@ -15,31 +13,12 @@ using Jhu.Graywulf.Web.Services;
 namespace Jhu.Footprint.Web.Api.V1
 {
     [TestClass]
-    public class FootprintServiceTest : ApiTestBase
+    public class FootprintServiceTest : FootprintApiTestBase
     {
         [ClassInitialize]
         public static void ClassInit(TestContext testContext)
         {
-            using (var context = new Context())
-            {
-                string path = Path.GetDirectoryName((string)Environment.GetEnvironmentVariables()["SolutionPath"]);
-                string script = File.ReadAllText(path + @"\footprint\sql\Jhu.Footprint.Tables.sql");
-                script += File.ReadAllText(path + @"\footprint\sql\Jhu.Footprint.FootprintFolder.TestInit.sql");
-
-                var server = new Server(new ServerConnection(context.Connection));
-                server.ConnectionContext.ExecuteNonQuery(script);
-            }
-        }
-        protected IFootprintService CreateClient(RestClientSession session)
-        {
-            AuthenticateTestUser(session);
-
-            var host = Environment.MachineName;
-
-            var uri = new Uri("http://" + host + "/footprint/api/v1/Footprint.svc");
-
-            var client = session.CreateClient<IFootprintService>(uri, null);
-            return client;
+            InitDatabase();
         }
 
         [TestMethod]

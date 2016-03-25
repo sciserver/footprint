@@ -58,6 +58,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="FootprintApiTestBase.cs" />
     <Compile Include="FootprintServiceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -81,6 +82,10 @@
     <ProjectReference Include="..\..\dll\Jhu.Footprint.Web.Lib\Jhu.Footprint.Web.Lib.csproj">
       <Project>{8d06003c-676e-48e0-87bf-db12da746b50}</Project>
       <Name>Jhu.Footprint.Web.Lib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Jhu.Footprint.Web.Lib.Test\Jhu.Footprint.Web.Lib.Test.csproj">
+      <Project>{75f61ea3-fb34-4fb1-8016-8d7d7f95b969}</Project>
+      <Name>Jhu.Footprint.Web.Lib.Test</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
