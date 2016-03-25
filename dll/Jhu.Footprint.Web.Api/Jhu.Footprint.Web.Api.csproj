@@ -64,6 +64,10 @@
       <Project>{e9d182cf-746e-4e40-b01c-74a32fb70749}</Project>
       <Name>Jhu.Graywulf.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\spherical\src\Jhu.Spherical.Visualizer\Jhu.Spherical.Visualizer.csproj">
+      <Project>{1dcd8ac1-dcdd-4941-9e3f-d9ef60a078f9}</Project>
+      <Name>Jhu.Spherical.Visualizer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\spherical\src\Jhu.Spherical\Jhu.Spherical.csproj">
       <Project>{93efa6ad-0c3f-4c7f-b1f7-d697d0ba49f7}</Project>
       <Name>Jhu.Spherical</Name>

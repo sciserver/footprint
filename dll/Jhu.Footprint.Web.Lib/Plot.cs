@@ -12,23 +12,170 @@ using System.Data.SqlClient;
 
 namespace Jhu.Footprint.Web.Lib
 {
-    public class Plot
+    public class Plot: Jhu.Spherical.Visualizer.Plot
     {
-        public Plot()
+        private Jhu.Spherical.Region region;
+        private string degStyle;
+        private bool grid;
+
+        public Jhu.Spherical.Region Region
         {
+            get { return region; }
+            set { region = value; }
+        }
+
+        public string DegStyle
+        {
+            get { return degStyle; }
+            set { degStyle = value; }
+        }
+
+        public bool Grid
+        {
+            get { return grid; }
+            set { grid = value; }
         }
 
 
-        public void PlotFootprint(Jhu.Spherical.Region region, float w, float h, string projection, string degStyle, bool grid, MemoryStream stream)
+        public Plot()
+            : base()
         {
-            var plot = InitPlot(w, h, projection);
+            InitializeMembers();
+        }
+
+        private void InitializeMembers()
+        {
+
+            this.region = null;
+
+            Width = 7f * 96;
+            Height = 7f * 96;
+            //this.projection = "Aitoff";
+            Projection = new AitoffProjection();
+            this.degStyle = "dms";
+            this.grid = true;
+            AutoZoom = false;
+            AutoRotate = false;
+
+            Margins.Left = 50f;
+            Margins.Right = 50f;
+            Margins.Top = 50f;
+            Margins.Bottom = 50f;
+        }
+        
+
+
+        public void PlotFootprint(MemoryStream stream)
+        {
+
+            Layers.Add(new BorderLayer());
+            AppendRegionsLayer();
+
+            if (this.grid) AppendGridLayer();
+
+            FinishPlot(stream);
+        
+        }
+
+        private void AppendRegionsLayer()
+        {
+
+            var rl = new RegionsLayer();
+            rl.DataSource = new ObjectListDataSource(new[] { this.region });
+
+            // fill area of the region
+            rl.Outline.Visible = false;
+            rl.Fill.Brushes = new Brush[] { Brushes.LightYellow };
+
+            // draw outline of the region
+            var ol = new RegionsLayer();
+            ol.DataSource = new ObjectListDataSource(new[] { this.region });
+            ol.Outline.Pens = new Pen[] { Pens.Red };
+            ol.Fill.Visible = false;
+
+            Layers.Add(rl);
+            Layers.Add(ol);
+
+        }
+
+        private void AppendGridLayer()
+        {
+            var grid = new GridLayer();
+            grid.Line.Pen = Pens.LightGray;
+            grid.DecScale.Density = 150f;
+
+            switch (this.degStyle)
+            {
+                default:
+                case "dms":
+                    grid.RaScale.DegreeFormat.DegreeStyle = DegreeStyle.Decimal;
+                    grid.DecScale.DegreeFormat.DegreeStyle = DegreeStyle.Decimal;
+                    break;
+                case "hms":
+                    grid.RaScale.DegreeFormat.DegreeStyle = DegreeStyle.Hours;
+                    grid.DecScale.DegreeFormat.DegreeStyle = DegreeStyle.Symbols;
+                    break;
+            }
+
+            Layers.Add(grid);
+        }
+
+        private void FinishPlot(MemoryStream stream)
+        {
+            var font = new Font("Consolas", 7.5f);
+
+            var axes = new AxesLayer();
+            axes.X1Axis.Title.Font = font;
+            axes.X1Axis.Labels.Font = font;
+            axes.X2Axis.Labels.Visible = false;
+            axes.Y1Axis.Title.Font = font;
+            axes.Y1Axis.Labels.Font = font;
+            axes.Y1Axis.Title.Text = "Declination (deg)";
+            axes.Y2Axis.Labels.Visible = false;
+
+            if (this.degStyle != null) this.degStyle.ToLower();
+
+            switch (this.degStyle)
+            {
+                default:
+                case "dms":
+                    axes.X1Axis.Title.Text = "Right ascension (deg)";
+                    axes.X1Axis.Scale.DegreeFormat.DegreeStyle = DegreeStyle.Decimal;
+                    axes.X2Axis.Scale.DegreeFormat.DegreeStyle = DegreeStyle.Decimal;
+                    axes.Y1Axis.Scale.DegreeFormat.DegreeStyle = DegreeStyle.Decimal;
+                    axes.Y2Axis.Scale.DegreeFormat.DegreeStyle = DegreeStyle.Decimal;
+                    break;
+                case "hms":
+                    axes.X1Axis.Title.Text = "Right ascension (hour)";
+                    axes.X1Axis.Scale.DegreeFormat.DegreeStyle = DegreeStyle.Hours;
+                    axes.X2Axis.Scale.DegreeFormat.DegreeStyle = DegreeStyle.Hours;
+                    axes.Y1Axis.Scale.DegreeFormat.DegreeStyle = DegreeStyle.Symbols;
+                    axes.Y2Axis.Scale.DegreeFormat.DegreeStyle = DegreeStyle.Symbols;
+                    break;
+
+            }
+
+            Layers.Add(axes);
+
+            Projection.InvertX = true;
+
+
+            RenderToBitmap(stream, System.Drawing.Imaging.ImageFormat.Jpeg);
+        }
+
+        /*
+
+
+        public void PlotFootprint(Jhu.Spherical.Region region, float w, float h, string projection, string degStyle, bool grid, bool autoZoom, bool autoRotate, MemoryStream stream)
+        {
+            var plot = InitPlot(w, h, projection,autoZoom, autoRotate);
 
             AppendRegionsLayer(plot, region);
             if (grid) AppendGridLayer(plot, degStyle);
             FinishPlot(plot, degStyle,stream);
         }
 
-        private Jhu.Spherical.Visualizer.Plot InitPlot(float w, float h, string projection)
+        private Jhu.Spherical.Visualizer.Plot InitPlot(float w, float h, string projection, bool autoZoom, bool autoRotate)
         {
             if (w == 0f) w = 7f; // setup default value
             if (h == 0f) h = 7f; // setup default value
@@ -64,6 +211,7 @@ namespace Jhu.Footprint.Web.Lib
                 plot.AutoZoom = true;
                 plot.AutoRotate = true;
             }
+
 
             plot.Margins.Left = 50f;
             plot.Margins.Right = 50f;
@@ -163,5 +311,6 @@ namespace Jhu.Footprint.Web.Lib
             // TODO : streaming bytes
             plot.RenderToBitmap(stream, System.Drawing.Imaging.ImageFormat.Jpeg);
         }
+         */
     }
 }

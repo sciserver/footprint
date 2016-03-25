@@ -13,6 +13,7 @@ using System.Security.Permissions;
 using Jhu.Graywulf.Web.Services;
 using Lib = Jhu.Footprint.Web.Lib;
 
+
 namespace Jhu.Footprint.Web.Api.V1
 {
     [ServiceContract]
@@ -38,7 +39,7 @@ namespace Jhu.Footprint.Web.Api.V1
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/footprint")]
         [Description("Returns the footprint of a folder")]
         string GetUserFootprintFolderRegion(string userName, string folderName);
-        
+
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/footprint/outline")]
         [Description("Returns the outline of a folder footprint.")]
@@ -76,15 +77,17 @@ namespace Jhu.Footprint.Web.Api.V1
         IEnumerable<Lib.Point> GetUserFootprintFolderRegionConvexHullOutlinePoints(string userName, string folderName, double resolution);
 
         [OperationContract]
-        [WebGet(UriTemplate = "/users/{userName}/{folderName}/plot?proj={projection}&width={width}&height={height}&degStyle={degStyle}&grid={grid}")]
+        [WebGet(UriTemplate = "/users/{userName}/{folderName}/plot?proj={projection}&width={width}&height={height}&degStyle={degStyle}&grid={grid}&autoZoom={autoZoom}&autoRotate={autoRotate}")]
         [Description(@"Plot Footprint. There are several keywords to costumize a plot:
             proj -- set projection. Available values: Aitoff, Equirectangular, HammerAitoff (deafult), Mollweide, Orthographic, Stereographic
             width -- set width of plot.
             height -- set height of plot.
             degStyle -- set the grid and label style. Available values: hms - hexagecimal, dms (default) - degree.
-            grid -- turn grid on/off. Values = true, false (default)")]
-        Stream GetUserFootprintFolderPlot(string userName, string folderName, string projection, float width, float height, string degStyle, bool grid);
-        
+            grid -- turn grid on/off. Values = true, false (default)
+            autoZoom -- turn auto zoom on/off. Values = true, false (default)
+            autoRotate -- turn auto rotate on/off. Values = true, false (default)")]
+        Stream GetUserFootprintFolderPlot(string userName, string folderName, string projection, float width, float height, string degStyle, bool grid, bool autoZoom, bool autoRotate);
+
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/users/{userName}/{folderName}")]
         [Description("Create new footprint folder.")]
@@ -149,15 +152,17 @@ namespace Jhu.Footprint.Web.Api.V1
         IEnumerable<Lib.Point> GetUserFootprintRegionConvexHullOutlinePoints(string userName, string folderName, string footprintName, double resolution);
 
         [OperationContract]
-        [WebGet(UriTemplate = "/users/{userName}/{folderName}/{footprintName}/plot?proj={projection}&width={width}&height={height}&degStyle={degStyle}&grid={grid}")]
+        [WebGet(UriTemplate = "/users/{userName}/{folderName}/{footprintName}/plot?proj={projection}&width={width}&height={height}&degStyle={degStyle}&grid={grid}&autoZoom={autoZoom}&autoRotate={autoRotate}")]
         [Description(@"Plot Footprint. There are several keywords to costumize a plot:
             proj -- set projection. Available values: Aitoff, Equirectangular, HammerAitoff (deafult), Mollweide, Orthographic, Stereographic
             width -- set width of plot.
             height -- set height of plot.
             degStyle -- set the grid and label style. Available values: hms - hexagecimal, dms (default) - degree.
-            grid -- turn grid on/off. Values = true, false (default)")]
-        Stream GetUserFootprintPlot(string userName, string folderName, string footprintName, string projection, float width, float height, string degStyle, bool grid);
-        
+            grid -- turn grid on/off. Values = true, false (default)
+            autoZoom -- turn auto zoom on/off. Values = true, false (default)
+            autoRotate -- turn auto rotate on/off. Values = true, false (default)")]
+        Stream GetUserFootprintPlot(string userName, string folderName, string footprintName, string projection, float width, float height, string degStyle, bool grid, bool autoZoom, bool autoRotate);
+
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/users/{userName}/{folderName}/{footprintName}")]
         [Description("Create new footprint under an existing folder.")]
@@ -261,6 +266,32 @@ namespace Jhu.Footprint.Web.Api.V1
 
             return chull;
         }
+
+        private void SetPlotProperties(Lib.Plot plot, Spherical.Region region, float width, float height, string projection, string degStyle, bool grid, bool autoZoom, bool autoRotate)
+        {
+            plot.Region = region;
+            if (width > 0) plot.Width = width;
+            if (height > 0) plot.Height = height;
+
+            try
+            {
+                projection = "Jhu.Spherical.Visualizer." + projection + "Projection,Jhu.Spherical.Visualizer";
+                var t = Type.GetType(projection);
+                plot.Projection = (Jhu.Spherical.Visualizer.Projection)Activator.CreateInstance(t);
+            }
+            catch (Exception e)
+            {
+                plot.Projection = new Jhu.Spherical.Visualizer.AitoffProjection();
+            }
+
+            plot.DegStyle = degStyle;
+            plot.Grid = grid;
+            plot.AutoZoom = autoZoom;
+            plot.AutoRotate = autoRotate;
+
+        }
+
+
         #endregion
 
         #region FootprintFolder Methods
@@ -364,28 +395,28 @@ namespace Jhu.Footprint.Web.Api.V1
             var chull = GetFolderFootprintConvexHull(userName, folderName);
             return chull.Outline.ToString();
         }
-        
+
         public IEnumerable<Lib.Point> GetUserFootprintFolderRegionConvexHullOutlinePoints(string userName, string folderName, double resolution)
         {
             var chull = GetFolderFootprintConvexHull(userName, folderName);
 
             return Lib.FootprintFormatter.InterpolateOutlinePoints(chull.Outline, resolution);
         }
-        public Stream GetUserFootprintFolderPlot(string userName, string folderName, string projection, float width, float height, string degStyle, bool grid)
+        public Stream GetUserFootprintFolderPlot(string userName, string folderName, string projection, float width, float height, string degStyle, bool grid, bool autoZoom, bool autoRotate)
         {
             var fp = GetFolderFootprint(userName, folderName);
             fp.Region.Simplify();
 
-            using (MemoryStream ms = new MemoryStream()) 
-            { 
+            using (MemoryStream ms = new MemoryStream())
+            {
 
-            var plot = new Lib.Plot();
-            plot.PlotFootprint(fp.Region, width, height, projection, degStyle, grid, ms);
-            ms.Position = 0;
+                var plot = new Lib.Plot(); SetPlotProperties(plot, fp.Region, width, height, projection, degStyle, grid, autoZoom, autoRotate);
+                plot.PlotFootprint(ms);
+                ms.Position = 0;
 
-            WebOperationContext.Current.OutgoingResponse.ContentType = "image/jpeg";
+                WebOperationContext.Current.OutgoingResponse.ContentType = "image/jpeg";
 
-            return ms;            
+                return ms;
             }
         }
 
@@ -499,7 +530,7 @@ namespace Jhu.Footprint.Web.Api.V1
             return Lib.FootprintFormatter.InterpolateOutlinePoints(chull.Outline, resolution);
         }
 
-        public Stream GetUserFootprintPlot(string userName, string folderName, string footprintName, string projection, float width, float height, string degStyle, bool grid=true)
+        public Stream GetUserFootprintPlot(string userName, string folderName, string footprintName, string projection, float width, float height, string degStyle, bool grid, bool autoZoom, bool autoRotate)
         {
             var fp = GetFootprint(userName, folderName, footprintName);
             fp.Region.Simplify();
@@ -507,7 +538,8 @@ namespace Jhu.Footprint.Web.Api.V1
             MemoryStream ms = new MemoryStream();
 
             var plot = new Lib.Plot();
-            plot.PlotFootprint(fp.Region, width, height, projection, degStyle, grid, ms);
+            SetPlotProperties(plot, fp.Region, width, height, projection, degStyle, grid, autoZoom, autoRotate);
+            plot.PlotFootprint(ms);
             ms.Position = 0;
 
             WebOperationContext.Current.OutgoingResponse.ContentType = "image/jpeg";
