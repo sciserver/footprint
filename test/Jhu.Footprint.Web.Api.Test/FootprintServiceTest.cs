@@ -103,6 +103,28 @@ namespace Jhu.Footprint.Web.Api.V1
         }
 
         [TestMethod]
+        public void GetUserFootprintFolderRegionReducedOutlineTest()
+        {
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session);
+                var footprint = client.GetUserFootprintFolderRegionReducedOutline("evelin", "SDSS.DR7", 100);
+            }
+
+        }
+
+        [TestMethod]
+        public void GetUserFootprintFolderRegionReducedOutlinePointsTest()
+        {
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session);
+                var footprint = client.GetUserFootprintFolderRegionReducedOutlinePoints("evelin", "SDSS.DR7", 0.1, 100);
+            }
+
+        }
+
+        [TestMethod]
         public void CreateUserFootprintFolderTest()
         {
             using (var session = new RestClientSession())
@@ -232,6 +254,30 @@ namespace Jhu.Footprint.Web.Api.V1
             }
 
         }
+
+        [TestMethod]
+        public void GetUserFootprintRegionReducedOutlineTest()
+        {
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session);
+                var footprint = client.GetUserFootprintRegionReducedOutline("evelin", "SDSS.DR7", "Stripe5", 100);
+            }
+
+        }
+
+        [TestMethod]
+        public void GetUserFootprintRegionReducedOutlinePointsTest()
+        {
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session);
+                var footprint = client.GetUserFootprintRegionReducedOutlinePoints("evelin", "SDSS.DR7", "Stripe5", 0.1, 100);
+            }
+
+        }
+
+
 
         [TestMethod]
         public void CreatUserFootprintTest()
