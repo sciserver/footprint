@@ -285,6 +285,8 @@ namespace Jhu.Footprint.Web.Lib
         #region Methods
         public override void Save()
         {
+            EnsureNameNotRestricted();
+
             if (IsNameDuplicate())
             {
                 throw Error.DuplicateFootprintName(this.name);
@@ -311,7 +313,6 @@ namespace Jhu.Footprint.Web.Lib
 
         private void Create()
         {
-            EnsureNameNotRestricted();
 
             using (var cmd = GetCreateCommand())
             {
@@ -336,8 +337,6 @@ namespace Jhu.Footprint.Web.Lib
 
         private void Modify()
         {
-            EnsureNameNotRestricted();
-
             using (var cmd = GetModifyCommand())
             {
                 cmd.Connection = Context.Connection;
