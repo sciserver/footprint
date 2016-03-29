@@ -125,6 +125,16 @@ namespace Jhu.Footprint.Web.Api.V1
         }
 
         [TestMethod]
+        public void GetUserFootprintFolderPlotTest()
+        {
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session);
+                var footprint = client.GetUserFootprintFolderPlot("evelin", "SDSS.DR7", "Equirectangular", 0f, 0f, "", true, true, true);
+            }
+        }
+
+        [TestMethod]
         public void CreateUserFootprintFolderTest()
         {
             using (var session = new RestClientSession())
@@ -275,6 +285,16 @@ namespace Jhu.Footprint.Web.Api.V1
                 var footprint = client.GetUserFootprintRegionReducedOutlinePoints("evelin", "SDSS.DR7", "Stripe5", 0.1, 100);
             }
 
+        }
+
+        [TestMethod]
+        public void GetUserFootprintPlotTest()
+        {
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session);
+                var footprint = client.GetUserFootprintPlot("evelin", "SDSS.DR7", "Stripe5", "Equirectangular", 0f, 0f, "", true, true, true);
+            }
         }
 
 
