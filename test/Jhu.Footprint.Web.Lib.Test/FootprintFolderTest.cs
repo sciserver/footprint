@@ -68,6 +68,7 @@ namespace Jhu.Footprint.Web.Lib
         }
 
         [TestMethod]
+        [ExpectedException(typeof(FootprintFolderException))]
         public void FolderModifyTest2()
         {
             using (var context = new Context())
@@ -81,14 +82,7 @@ namespace Jhu.Footprint.Web.Lib
                 folder.Name = "2SLAQ";
                 folder.Comment = "duplicate name exception test";
 
-                try
-                {
-                    folder.Save();
-                }
-                catch (FootprintFolderException e)
-                {
-                    System.Diagnostics.Debug.Write(e);
-                }
+                folder.Save();
             }
         }
 

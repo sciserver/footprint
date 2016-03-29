@@ -35,6 +35,7 @@ namespace Jhu.Footprint.Web.Lib
         }
 
         [TestMethod]      
+        [ExpectedException(typeof(FootprintException))]
         public void FootprintCreateTest2()
         {
             using (var context = new Context())
@@ -46,16 +47,7 @@ namespace Jhu.Footprint.Web.Lib
                 footprint.FolderId = 1;
 
                 footprint.Comment = "duplicate name test.";
-
-                try
-                {
-                    footprint.Save();
-                }
-                catch (FootprintException e)
-                { 
-                    System.Diagnostics.Debug.Write(e);
-                }
-
+                footprint.Save();
             }
         }
 
@@ -90,6 +82,7 @@ namespace Jhu.Footprint.Web.Lib
         }
 
         [TestMethod]
+        [ExpectedException(typeof(FootprintException))]
         public void FootprintModifyTest2()
         {
             using (var context = new Context())
@@ -103,14 +96,7 @@ namespace Jhu.Footprint.Web.Lib
 
                 footprint.Name = "South";
 
-                try
-                {
-                    footprint.Save();
-                }
-                catch (FootprintException e)
-                {
-                    System.Diagnostics.Debug.Write(e);
-                }
+                footprint.Save();
 
             }
         }
