@@ -407,17 +407,16 @@ namespace Jhu.Footprint.Web.Api.V1
             var fp = GetFolderFootprint(userName, folderName);
             fp.Region.Simplify();
 
-            using (MemoryStream ms = new MemoryStream())
-            {
+            MemoryStream ms = new MemoryStream();
 
-                var plot = new Lib.Plot(); SetPlotProperties(plot, fp.Region, width, height, projection, degStyle, grid, autoZoom, autoRotate);
-                plot.PlotFootprint(ms);
-                ms.Position = 0;
+            var plot = new Lib.Plot();
+            SetPlotProperties(plot, fp.Region, width, height, projection, degStyle, grid, autoZoom, autoRotate);
+            plot.PlotFootprint(ms);
+            ms.Position = 0;
 
-                WebOperationContext.Current.OutgoingResponse.ContentType = "image/jpeg";
+            WebOperationContext.Current.OutgoingResponse.ContentType = "image/jpeg";
 
-                return ms;
-            }
+            return ms;
         }
 
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
