@@ -52,6 +52,23 @@ namespace Jhu.Footprint.Web.Lib
             }
         }
 
+
+        [TestMethod]
+        [ExpectedException(typeof(FootprintException))]
+        public void FootprintCreateTest3()
+        {
+            using (var context = new Context())
+            {
+                var footprint = new Footprint(context);
+
+                footprint.Name = "footprint";
+                footprint.FolderId = 1;
+
+                context.User = "evelin";
+                footprint.Save();
+            }
+        }
+
         [TestMethod]
         public void FootprintModifyTest()
         {
