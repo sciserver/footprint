@@ -43,9 +43,10 @@ namespace Jhu.Footprint.Web.Lib
                 var footprint = new Footprint(context);
 
                 footprint.Name = "Stripe5";
-                context.User = "evelin";
                 footprint.FolderId = 1;
+                footprint.User = "evelin";
 
+                context.User = "evelin";
                 footprint.Comment = "duplicate name test.";
                 footprint.Save();
             }
