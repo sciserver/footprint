@@ -43,7 +43,6 @@
                                         <asp:CheckBox ID="plotAutoRotate" runat="server" AutoPostBack="True" Checked="True" Text="Auto Rotate" />
                                     </td>
                                 </tr>
-
                             </table>
                         </td>
                     </tr>
