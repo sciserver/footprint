@@ -270,8 +270,8 @@ namespace Jhu.Footprint.Web.Api.V1
         private void SetPlotProperties(Lib.Plot plot, Spherical.Region region, float width, float height, string projection, string degStyle, bool grid, bool autoZoom, bool autoRotate)
         {
             plot.Region = region;
-            if (width > 0) plot.Width = width;
-            if (height > 0) plot.Height = height;
+            if (width > 0) plot.Width = width * 96;
+            if (height > 0) plot.Height = height * 96;
 
             try
             {
@@ -542,6 +542,7 @@ namespace Jhu.Footprint.Web.Api.V1
             ms.Position = 0;
 
             WebOperationContext.Current.OutgoingResponse.ContentType = "image/jpeg";
+
             return ms;
         }
 
