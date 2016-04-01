@@ -48,7 +48,7 @@ namespace Jhu.Footprint.Web.Api.V1
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/footprint/outline/points?res={resolution}")]
         [Description("Returns the points of the outline of a footprint.")]
-        IEnumerable<Lib.Point> GetUserFootprintFolderRegionOutlinePoints(string userName, string folderName, double resolution);
+        IEnumerable<Lib.EquatorialPoint> GetUserFootprintFolderRegionOutlinePoints(string userName, string folderName, double resolution);
 
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/footprint/outline/reduced?limit={limit}")]
@@ -58,7 +58,7 @@ namespace Jhu.Footprint.Web.Api.V1
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/footprint/outline/points/reduced?res={resolution}&limit={limit}")]
         [Description("Returns the points of the reduced outline of a footprint.")]
-        IEnumerable<Lib.Point> GetUserFootprintFolderRegionReducedOutlinePoints(string userName, string folderName, double resolution, double limit);
+        IEnumerable<Lib.EquatorialPoint> GetUserFootprintFolderRegionReducedOutlinePoints(string userName, string folderName, double resolution, double limit);
 
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/footprint/convexhull")]
@@ -74,7 +74,7 @@ namespace Jhu.Footprint.Web.Api.V1
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/footprint/convexhull/outline/points?res={resolution}")]
         [Description("Returns the points of the outline of the convex hull of a folder footprint.")]
-        IEnumerable<Lib.Point> GetUserFootprintFolderRegionConvexHullOutlinePoints(string userName, string folderName, double resolution);
+        IEnumerable<Lib.EquatorialPoint> GetUserFootprintFolderRegionConvexHullOutlinePoints(string userName, string folderName, double resolution);
 
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/plot?proj={projection}&width={width}&height={height}&degStyle={degStyle}&grid={grid}&autoZoom={autoZoom}&autoRotate={autoRotate}")]
@@ -124,7 +124,7 @@ namespace Jhu.Footprint.Web.Api.V1
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/{footprintName}/footprint/outline/points?res={resolution}")]
         [Description("Return the points of the outline of a footprint.")]
-        IEnumerable<Lib.Point> GetUserFootprintRegionOutlinePoints(string userName, string folderName, string footprintName, double resolution);
+        IEnumerable<Lib.EquatorialPoint> GetUserFootprintRegionOutlinePoints(string userName, string folderName, string footprintName, double resolution);
 
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/{footprintName}/footprint/outline/reduced?limit={limit}")]
@@ -134,7 +134,7 @@ namespace Jhu.Footprint.Web.Api.V1
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/{footprintName}/footprint/outline/points/reduced?res={resolution}&limit={limit}")]
         [Description("Returns the points of the reduced outline of a footprint.")]
-        IEnumerable<Lib.Point> GetUserFootprintRegionReducedOutlinePoints(string userName, string folderName, string footprintName, double resolution, double limit);
+        IEnumerable<Lib.EquatorialPoint> GetUserFootprintRegionReducedOutlinePoints(string userName, string folderName, string footprintName, double resolution, double limit);
 
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/{footprintName}/footprint/convexhull")]
@@ -149,7 +149,7 @@ namespace Jhu.Footprint.Web.Api.V1
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/{footprintName}/footprint/convexhull/outline/points?res={resolution}")]
         [Description("Return the points of the outline of the convex hull of the footprint.")]
-        IEnumerable<Lib.Point> GetUserFootprintRegionConvexHullOutlinePoints(string userName, string folderName, string footprintName, double resolution);
+        IEnumerable<Lib.EquatorialPoint> GetUserFootprintRegionConvexHullOutlinePoints(string userName, string folderName, string footprintName, double resolution);
 
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/{footprintName}/plot?proj={projection}&width={width}&height={height}&degStyle={degStyle}&grid={grid}&autoZoom={autoZoom}&autoRotate={autoRotate}")]
@@ -360,7 +360,7 @@ namespace Jhu.Footprint.Web.Api.V1
         }
 
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
-        public IEnumerable<Lib.Point> GetUserFootprintFolderRegionOutlinePoints(string userName, string folderName, double resolution)
+        public IEnumerable<Lib.EquatorialPoint> GetUserFootprintFolderRegionOutlinePoints(string userName, string folderName, double resolution)
         {
             var footprint = GetFolderFootprint(userName, folderName);
             return Lib.FootprintFormatter.InterpolateOutlinePoints(footprint.Region.Outline, resolution);
@@ -375,7 +375,7 @@ namespace Jhu.Footprint.Web.Api.V1
         }
 
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
-        public IEnumerable<Lib.Point> GetUserFootprintFolderRegionReducedOutlinePoints(string userName, string folderName, double resolution, double limit)
+        public IEnumerable<Lib.EquatorialPoint> GetUserFootprintFolderRegionReducedOutlinePoints(string userName, string folderName, double resolution, double limit)
         {
             var footprint = GetFolderFootprint(userName, folderName);
             footprint.Region.Outline.Reduce(limit / 648000.0 * Math.PI);
@@ -396,7 +396,7 @@ namespace Jhu.Footprint.Web.Api.V1
             return chull.Outline.ToString();
         }
 
-        public IEnumerable<Lib.Point> GetUserFootprintFolderRegionConvexHullOutlinePoints(string userName, string folderName, double resolution)
+        public IEnumerable<Lib.EquatorialPoint> GetUserFootprintFolderRegionConvexHullOutlinePoints(string userName, string folderName, double resolution)
         {
             var chull = GetFolderFootprintConvexHull(userName, folderName);
 
@@ -487,7 +487,7 @@ namespace Jhu.Footprint.Web.Api.V1
         }
 
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
-        public IEnumerable<Lib.Point> GetUserFootprintRegionOutlinePoints(string userName, string folderName, string footprintName, double resolution)
+        public IEnumerable<Lib.EquatorialPoint> GetUserFootprintRegionOutlinePoints(string userName, string folderName, string footprintName, double resolution)
         {
             var fp = GetFootprint(userName, folderName, footprintName);
             return Lib.FootprintFormatter.InterpolateOutlinePoints(fp.Region.Outline, resolution);
@@ -502,7 +502,7 @@ namespace Jhu.Footprint.Web.Api.V1
         }
 
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
-        public IEnumerable<Lib.Point> GetUserFootprintRegionReducedOutlinePoints(string userName, string folderName, string footprintName, double resolution, double limit)
+        public IEnumerable<Lib.EquatorialPoint> GetUserFootprintRegionReducedOutlinePoints(string userName, string folderName, string footprintName, double resolution, double limit)
         {
             var fp = GetFolderFootprint(userName, folderName);
             fp.Region.Outline.Reduce(limit / 648000.0 * Math.PI);
@@ -523,7 +523,7 @@ namespace Jhu.Footprint.Web.Api.V1
             return chull.Outline.ToString();
         }
 
-        public IEnumerable<Lib.Point> GetUserFootprintRegionConvexHullOutlinePoints(string userName, string folderName, string footprintName, double resolution)
+        public IEnumerable<Lib.EquatorialPoint> GetUserFootprintRegionConvexHullOutlinePoints(string userName, string folderName, string footprintName, double resolution)
         {
             var chull = GetFootprintConvexHull(userName, folderName, footprintName);
             return Lib.FootprintFormatter.InterpolateOutlinePoints(chull.Outline, resolution);
