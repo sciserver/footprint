@@ -62,7 +62,7 @@
     <Compile Include="FootprintFolderTest.cs" />
     <Compile Include="FootprintTest.cs" />
     <Compile Include="SearchTest.cs" />
-    <Compile Include="PointTest.cs" />
+    <Compile Include="CoordinateTransformationTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\graywulf\test\Jhu.Graywulf.Test\Jhu.Graywulf.Test.csproj">
