@@ -88,8 +88,8 @@ namespace Jhu.Footprint.Web.Lib
 
             // Ensure ra lies in the range 0-2pi 
 
-            if (ra < 0) l = l + (2.0 * Math.PI);
-            if (ra > (2.0 * Math.PI)) l = l - (2.0 * Math.PI);
+            if (ra < 0) ra = ra + (2.0 * Math.PI);
+            if (ra > (2.0 * Math.PI)) ra = ra - (2.0 * Math.PI);
 
             return ToDeg(ra);
         }

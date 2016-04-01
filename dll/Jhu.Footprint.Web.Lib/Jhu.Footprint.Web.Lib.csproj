@@ -48,6 +48,7 @@
     <Compile Include="CoordinateTransformations.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Enum.cs" />
+    <Compile Include="EquatorialPoint.cs" />
     <Compile Include="Error.cs" />
     <Compile Include="ExceptionMessages.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -63,7 +64,6 @@
     <Compile Include="FootprintSearch.cs" />
     <Compile Include="GalacticPoint.cs" />
     <Compile Include="Plot.cs" />
-    <Compile Include="Point.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

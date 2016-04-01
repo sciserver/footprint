@@ -29,7 +29,7 @@ namespace Jhu.Footprint.Web.Lib.Test
         [TestMethod]
         public void ConvertGalacticToEquatorialTest1()
         {
-            GalacticPoint gp = new Cartesian(15, 15);
+            GalacticPoint gp = new GalacticPoint() { L = 126.0, B = 47.0};
             EquatorialPoint ep = gp;
 
             var output = String.Format("{0}, {1}", ep.RA, ep.Dec);
