@@ -69,8 +69,8 @@ namespace Jhu.Footprint.Web.Lib
         {
             Layers.Add(new BorderLayer());
 
+            RotateRegion(degStyle);
             AppendRegionsLayer();
-            if (this.degStyle.Equals("galactic")) RotateRegionToGalactic();
             if (this.grid) AppendGridLayer();
 
             FinishPlot(stream);
@@ -120,10 +120,19 @@ namespace Jhu.Footprint.Web.Lib
             Layers.Add(grid);
         }
 
-        private void RotateRegionToGalactic()
+        private void RotateRegion(string transform)
         {
-            var rotation = new Rotation(Constant.EquatorialToGalacticMatrix, Constant.GalacticToEquatorialMatrix);
-            this.region.Rotate(rotation);
+            switch (transform)
+            {
+                case "galactic":
+                    this.region.Rotate(Rotation.EquatorialToGalactic);
+                    break;
+                default:
+                    this.region.Rotate(Rotation.Zero);
+                    break;
+
+            }
+
         }
 
         private void FinishPlot(MemoryStream stream)
@@ -177,8 +186,8 @@ namespace Jhu.Footprint.Web.Lib
         private void plotTestPoints()
         {
             var pl = new PointsLayer();
-            var points = Lib.FootprintFormatter.InterpolateOutlinePoints(this.region.Outline,0.1);
-            var galPoints = points.Select<EquatorialPoint,GalacticPoint>(x => x).ToList();
+            var points = Lib.FootprintFormatter.InterpolateOutlinePoints(this.region.Outline, 0.1);
+            var galPoints = points.Select<EquatorialPoint, GalacticPoint>(x => x).ToList();
             IEnumerable<Cartesian> cartPoints = galPoints.Select(x => new Cartesian(x.L, x.B)).ToList();
             pl.DataSource = new ObjectListDataSource(cartPoints);
 
