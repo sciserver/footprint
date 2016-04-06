@@ -50,6 +50,9 @@ namespace Jhu.Footprint.Web.UI.Plot
                 case "Sexagesimal":
                     imgUrl += "degStyle=hms";
                     break;
+                case "Galactic":
+                    imgUrl += "degStyle=galactic";
+                    break;
             }
 
             switch (plotProjectionStyle.SelectedValue)
