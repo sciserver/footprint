@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Jhu.Spherical;
 
 namespace Jhu.Footprint.Web.Lib
 {
@@ -11,18 +12,18 @@ namespace Jhu.Footprint.Web.Lib
         #region Equatorial to Galactic
         public static double GetLatitudeFromEquatorial(double ra, double dec)
         {
-            ra = ToRad(ra);
-            dec = ToRad(dec);
+            ra = ra * Constant.Degree2Radian;
+            dec = dec * Constant.Degree2Radian;
             double sinb = Math.Sin(Constants.decGP) * Math.Sin(dec) + Math.Cos(Constants.decGP) * Math.Cos(dec) * Math.Cos(ra - Constants.raGP);
             double b = Math.Asin(sinb);
-            return ToDeg(b);
+            return b * Constant.Radian2Degree;
         }
 
         public static double GetLongitudeFromEquatorial(double ra, double dec, double b)
         {
-            ra = ToRad(ra);
-            dec = ToRad(dec);
-            b = ToRad(b);
+            ra = ra * Constant.Degree2Radian;
+            dec = dec * Constant.Degree2Radian;
+            b = b * Constant.Degree2Radian;
 
             // the two equation to get sin(l_CP-l) = sinE and cos(l_CP-l) = cosE
             double sinE = (Math.Cos(dec) * Math.Sin(ra - Constants.raGP)) / Math.Cos(b);
@@ -47,26 +48,26 @@ namespace Jhu.Footprint.Web.Lib
             if (l < 0) l = l + (2.0 * Math.PI);
             if (l > (2.0 * Math.PI)) l = l - (2.0 * Math.PI);
 
-            return ToDeg(l);
+            return l * Constant.Radian2Degree;
         }
         #endregion
 
         #region Galactic to Equatorial
         public static double GetDeclinationFromGalactic(double l, double b)
         {
-            l = ToRad(l);
-            b = ToRad(b);
+            l = l * Constant.Degree2Radian;
+            b = b * Constant.Degree2Radian;
 
             double sind = Math.Sin(Constants.decGP) * Math.Sin(b) + Math.Cos(Constants.decGP) * Math.Cos(b) * Math.Cos(Constants.lCP - l);
             double dec = Math.Asin(sind);
-            return ToDeg(dec);
+            return dec * Constant.Radian2Degree;
         }
 
         public static double GetRightAscensionFromGalactic(double l, double b, double dec)
         {
-            l = ToRad(l);
-            b = ToRad(b);
-            dec = ToRad(dec);
+            l = l * Constant.Degree2Radian;
+            b = b * Constant.Degree2Radian;
+            dec = dec * Constant.Degree2Radian;
 
             // the two equation to get sin(ra - ra_GP) = sinE and cos(ra - ra_GP) = cosE
             double sinE = (Math.Cos(b) * Math.Sin(Constants.lCP - l)) / Math.Cos(dec);
@@ -86,26 +87,14 @@ namespace Jhu.Footprint.Web.Lib
 
             double ra = Constants.raGP + E;
 
-            // Ensure ra lies in the range 0-2pi 
+            // Ensure right ascension (ra) lies in the range 0-2pi 
 
             if (ra < 0) ra = ra + (2.0 * Math.PI);
             if (ra > (2.0 * Math.PI)) ra = ra - (2.0 * Math.PI);
 
-            return ToDeg(ra);
+            return ra * Constant.Radian2Degree;
         }
 
-        #endregion
-
-        #region Radian - degree conversions
-        private static double ToRad(double x)
-        {
-            return x * 2 * Math.PI / 360;
-        }
-
-        private static double ToDeg(double x)
-        {
-            return x * 360 / (2 * Math.PI);
-        }
         #endregion
     }
 }
