@@ -9,7 +9,7 @@ using System.Data.SqlClient;
 
 namespace Jhu.Footprint.Web.Lib
 {
-    public class FootprintFolderSearch: ContextObject
+    public class FootprintFolderSearch: Jhu.Graywulf.Entities.EntitySearch<FootprintFolder>
     {
         private FootprintSearchMethod searchMethod;
         private string user;
@@ -152,7 +152,7 @@ namespace Jhu.Footprint.Web.Lib
                 {
                     while (dr.Read())
                     {
-                        var ff = new FootprintFolder(Context);
+                        var ff = new FootprintFolder((Context)Context);
                         ff.LoadFromDataReader(dr);
 
                         res.Add(ff);

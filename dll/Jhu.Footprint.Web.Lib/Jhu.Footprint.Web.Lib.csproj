@@ -44,9 +44,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Context.cs" />
-    <Compile Include="ContextObject.cs" />
     <Compile Include="CoordinateTransformations.cs" />
-    <Compile Include="Entity.cs" />
     <Compile Include="Enum.cs" />
     <Compile Include="EquatorialPoint.cs" />
     <Compile Include="Error.cs" />
@@ -67,6 +65,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\graywulf-entities\dll\Jhu.Graywulf.Entities\Jhu.Graywulf.Entities.csproj">
+      <Project>{cf0cec0a-139f-40f5-a6dd-2708400b539d}</Project>
+      <Name>Jhu.Graywulf.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\spherical\src\Jhu.Spherical.Visualizer\Jhu.Spherical.Visualizer.csproj">
       <Project>{1dcd8ac1-dcdd-4941-9e3f-d9ef60a078f9}</Project>
       <Name>Jhu.Spherical.Visualizer</Name>

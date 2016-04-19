@@ -145,7 +145,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 var folder = new Lib.FootprintFolder();
 
                 folder.Comment = "Test Api Create Folder";
-                folder.User = "Evelin";
+                folder.Owner = "Evelin";
                 folder.Name = "Test Api";
                 folder.Type = FolderType.Intersection;
 

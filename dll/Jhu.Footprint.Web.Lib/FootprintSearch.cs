@@ -9,7 +9,7 @@ using System.Xml.Serialization;
 
 namespace Jhu.Footprint.Web.Lib
 {
-    public class FootprintSearch : ContextObject
+    public class FootprintSearch : Jhu.Graywulf.Entities.EntitySearch<Footprint>
     {
         #region Member variables
         private string user;
@@ -87,7 +87,7 @@ namespace Jhu.Footprint.Web.Lib
                 {
                     while (dr.Read())
                     {
-                        var f = new Footprint(Context);
+                        var f = new Footprint((Context)Context);
                         f.LoadFromDataReader(dr);
 
                         res.Add(f);

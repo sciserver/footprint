@@ -23,7 +23,7 @@ namespace Jhu.Footprint.Web.Lib
                 var folder = new FootprintFolder(context);
 
                 folder.Name = "CreateTest";
-                folder.User = "webtestuser";
+                folder.Owner = "webtestuser";
                 folder.Type = FolderType.None;
                 folder.Public = 1;
                 folder.Comment = "FootprintFolder.Create Unit Test";
@@ -42,7 +42,7 @@ namespace Jhu.Footprint.Web.Lib
                 var folder = new FootprintFolder(context);
 
                 folder.Name = "SDSS.DR7";
-                folder.User = "evelin";
+                folder.Owner = "evelin";
                 folder.Comment = "Duplicate name exception test";
 
                 folder.Save();

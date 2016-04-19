@@ -231,7 +231,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 context.User = userName;
 
                 Lib.FootprintFolder folder = new Lib.FootprintFolder(context);
-                folder.User = userName;
+                folder.Owner = userName;
                 folder.Name = folderName;
                 folder.Id = -1;
                 folder.Load();
@@ -325,13 +325,13 @@ namespace Jhu.Footprint.Web.Api.V1
 
                 // load footprint folder info
                 folder = new Lib.FootprintFolder(context);
-                folder.User = userName;
+                folder.Owner = userName;
                 folder.Name = folderName;
                 folder.Id = -1;
                 folder.Load();
 
                 //get footprints from folder
-                var search = new Lib.FootprintSearch(context) { User = folder.User, FolderId = folder.Id };
+                var search = new Lib.FootprintSearch(context) { User = folder.Owner, FolderId = folder.Id };
                 footprints = search.GetFootprintsByFolderId();
             }
 
@@ -455,7 +455,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
                 var folder = new Jhu.Footprint.Web.Lib.FootprintFolder(context);
                 folder.Name = folderName;
-                folder.User = userName;
+                folder.Owner = userName;
                 folder.Id = -1;
                 folder.Delete();
             }

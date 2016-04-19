@@ -5,22 +5,20 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
-using Jhu.Spherical;
 using System.Xml.Serialization;
+using Jhu.Graywulf.Entities.Mapping;
+using Jhu.Spherical;
 
 namespace Jhu.Footprint.Web.Lib
 {
-    public class FootprintFolder : Entity
+    public class FootprintFolder : Jhu.Graywulf.Entities.SecurableEntity
     {
         #region Member variables
 
         private long id;
-        private long footprintId;
         private string name;
-        private string user;
+        private long footprintId;
         private FolderType type;
-
-        private byte @public;
         private DateTime dateCreated;
         private DateTime dateModified;
         private string comment;
@@ -29,61 +27,60 @@ namespace Jhu.Footprint.Web.Lib
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// Returns or sets the database ID of the region. Set this before loading or
+        /// modifying. If set to 0, Save() will create a new record in the database.
+        /// </summary>
+        [DbColumn(Binding = DbColumnBinding.Key)]
         public long Id
         {
             get { return id; }
             set { id = value; }
         }
 
-        public long FootprintId
-        {
-            get { return footprintId; }
-            set { footprintId = value; }
-        }
-
+        [DbColumn]
         public string Name
         {
             get { return name; }
             set { name = value; }
         }
 
+        [DbColumn]
+        [XmlIgnore]
+        public string Owner
+        {
+            get { return Permissions.Owner; }
+            set { Permissions.Owner = value; }
+        }
 
+        [DbColumn]
+        public long FootprintId
+        {
+            get { return footprintId; }
+            set { footprintId = value; }
+        }
+
+        [DbColumn]
         public FolderType Type
         {
             get { return type; }
             set { type = value; }
         }
 
-        [XmlIgnore]
-        public string User
-        {
-            get { return user; }
-            set
-            {
-                user = value;
-            }
-        }
-
-        public byte Public
-        {
-            get { return @public; }
-            set
-            {
-                @public = (byte)value;
-            }
-        }
-
+        [DbColumn]
         public DateTime DateCreated
         {
             get { return dateCreated; }
         }
 
+        [DbColumn]
         public DateTime DateModified
         {
             get { return dateModified; }
         }
 
-
+        [DbColumn]
         public string Comment
         {
             get { return comment; }
@@ -100,236 +97,93 @@ namespace Jhu.Footprint.Web.Lib
         }
 
         #endregion
-
         #region Contsructors and Initializers
+
         public FootprintFolder()
         {
             InitializeMembers();
         }
+
         public FootprintFolder(Context context)
             : base(context)
         {
             InitializeMembers();
         }
 
+        public FootprintFolder(FootprintFolder old)
+            : base(old)
+        {
+            CopyMembers(old);
+        }
+
         private void InitializeMembers()
         {
             this.id = 0;
-            this.footprintId = 0;
             this.name = "";
-            this.user = "";
+            this.footprintId = 0;
             this.type = FolderType.None;
-
-            this.@public = 0;
             this.dateCreated = DateTime.Now;
             this.dateModified = DateTime.Now;
             this.comment = "";
             this.folderFootprint = null;
         }
-        #endregion
 
-        #region SQL - get commands
-        protected override SqlCommand GetCreateCommand()
+        private void CopyMembers(FootprintFolder old)
         {
-            string sql = "fps.spCreateFootprintFolder";
-            var cmd = new SqlCommand(sql);
-
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-
-            AppendCreateModifyParameters(cmd);
-
-            cmd.Parameters.Add("@NewID", SqlDbType.BigInt).Direction = ParameterDirection.Output;
-            cmd.Parameters.Add("RETVAL", SqlDbType.Int).Direction = ParameterDirection.ReturnValue;
-
-            return cmd;
-
-        }
-
-
-        protected override SqlCommand GetModifyCommand()
-        {
-            if (this.id == -1) { GetFootprintFolderId(); }
-
-            string sql = "fps.spModifyFootprintFolder";
-            var cmd = new SqlCommand(sql);
-
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-
-            cmd.Parameters.Add("@FolderID", SqlDbType.BigInt).Value = id;
-            cmd.Parameters.Add("@FootprintId", SqlDbType.BigInt).Value = (footprintId <= 0) ? DBNull.Value : (object)footprintId;
-            AppendCreateModifyParameters(cmd);
-
-            cmd.Parameters.Add("RETVAL", SqlDbType.Int).Direction = ParameterDirection.ReturnValue;
-
-            return cmd;
-        }
-
-        protected override SqlCommand GetDeleteCommand()
-        {
-            if (this.id == -1) { GetFootprintFolderId(); }
-
-            string sql = "fps.spDeleteFootprintFolder";
-            var cmd = new SqlCommand(sql);
-
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-
-            cmd.Parameters.Add("@FolderId", SqlDbType.BigInt).Value = id;
-            cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = Context.User;
-
-            cmd.Parameters.Add("RETVAL", SqlDbType.Int).Direction = ParameterDirection.ReturnValue;
-            return cmd;
-        }
-
-        protected override SqlCommand GetLoadCommand()
-        {
-            if (this.id == -1) { GetFootprintFolderId(); }
-
-            string sql = "fps.spGetFootprintFolder";
-            var cmd = new SqlCommand(sql);
-
-            cmd.CommandType = CommandType.StoredProcedure;
-
-            cmd.Parameters.Add("@FolderId", SqlDbType.BigInt).Value = id;
-            cmd.Parameters.Add("@user", SqlDbType.NVarChar, 250).Value = Context.User;
-
-            return cmd;
-        }
-
-        private void AppendCreateModifyParameters(SqlCommand cmd)
-        {
-            cmd.Parameters.Add("@Name", SqlDbType.NVarChar, 256).Value = name;
-            cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = Context.User;
-            cmd.Parameters.Add("@Public", SqlDbType.TinyInt).Value = @public;
-            cmd.Parameters.Add("@Type", SqlDbType.TinyInt).Value = Type;
-            cmd.Parameters.Add("@Comment", SqlDbType.NVarChar, -1).Value = comment;
-        }
-
-        public override void LoadFromDataReader(SqlDataReader dr)
-        {
-            this.id = (long)dr["FolderId"];
-            this.footprintId = dr.IsDBNull(dr.GetOrdinal("FootprintId")) ? -1 : (long)dr["FootprintId"];
-            this.name = (string)dr["Name"];
-            this.user = (string)dr["User"];
-            this.type = (FolderType)Enum.ToObject(typeof(FolderType), dr["Type"]);
-            this.@public = (byte)dr["Public"];
-            this.dateCreated = (DateTime)dr["DateCreated"];
-            this.dateModified = (DateTime)dr["DateModified"];
-            this.comment = (string)dr["Comment"];
-        }
-
-        protected override SqlCommand GetIsNameDuplicateCommand()
-        {
-            var sql = "fps.spIsDuplicateFootprintFolderName";
-            var cmd = new SqlCommand(sql);
-
-            cmd.CommandType = CommandType.StoredProcedure;
-
-            cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = this.user;
-            cmd.Parameters.Add("@FolderId", SqlDbType.BigInt).Value = this.id;
-            cmd.Parameters.Add("@FolderName", SqlDbType.NVarChar, 256).Value = this.name;
-
-
-            cmd.Parameters.Add("@Match", SqlDbType.Int).Direction = ParameterDirection.Output;
-
-            return cmd;
+            this.id = old.id;
+            this.name = old.name;
+            this.footprintId = old.footprintId;
+            this.type = old.type;
+            this.dateCreated = old.dateCreated;
+            this.dateModified = old.dateModified;
+            this.comment = old.comment;
+            this.folderFootprint = new Footprint(old.folderFootprint);
         }
 
         #endregion
-
-        public override void Save()
+        
+        protected Boolean IsNameDuplicate()
         {
-            Save(true);
+            var sql = @"
+SELECT COUNT(*) FROM FootprintFolder
+WHERE Owner = @Owner
+	  AND FolderId != @FolderId
+      AND Name = @Name";
+
+            using (var cmd = Context.CreateCommand(sql))
+            {
+                cmd.Parameters.Add("@Owner", SqlDbType.NVarChar, 250).Value = this.Owner;
+                cmd.Parameters.Add("@FolderId", SqlDbType.BigInt).Value = this.Id;
+                cmd.Parameters.Add("@Name", SqlDbType.NVarChar, 256).Value = this.Name;
+
+                return (int)Context.ExecuteCommandScalar(cmd) > 0;
+            }
         }
 
-        public void Save(bool refreshFolderFootprint)
+        protected override void OnSaving(Graywulf.Entities.EntityEventArgs e)
         {
+            // TODO: validate name
+
             if (IsNameDuplicate())
             {
                 throw Error.DuplicateFootprintFolderName(this.name);
             }
 
-            if (this.id == 0)
-            {
-                Create();
-            }
-            else
-            {
-                Modify(refreshFolderFootprint);
-            }
+            base.OnSaving(e);
         }
 
-        private void Create()
+        protected override void OnModifying(Graywulf.Entities.EntityEventArgs e)
         {
-            using (var cmd = GetCreateCommand())
-            {
-                cmd.Connection = Context.Connection;
-                cmd.Transaction = Context.Transaction;
-
-                cmd.ExecuteNonQuery();
-
-                int retval = (int)cmd.Parameters["RETVAL"].Value;
-
-                if (retval == 0)
-                {
-                    throw new Exception("Cannot create FootprintFolder.");
-                }
-                else
-                {
-                    this.id = (long)cmd.Parameters["@NewID"].Value;
-                }
-            }
+            this.dateModified = DateTime.Now;
+            
+            base.OnModifying(e);
         }
 
-        private void Modify()
-        {
-            Modify(true);
-        }
-
-        private void Modify(bool refreshFolderFootprint)
-        {
-            using (var cmd = GetModifyCommand())
-            {
-                cmd.Connection = Context.Connection;
-                cmd.Transaction = Context.Transaction;
-
-                cmd.ExecuteNonQuery();
-
-                int retval = (int)cmd.Parameters["RETVAL"].Value;
-
-                if (retval == 0)
-                {
-                    throw new Exception("Cannot update FootprintFolder.");
-                }
-
-            }
-
-            // false parameter prevents recursive updating!
-            if (refreshFolderFootprint)
-            {
-                RefreshFolderFootprint();
-            }
-        }
-
-        public void Delete()
-        {
-            using (var cmd = GetDeleteCommand())
-            {
-                cmd.Connection = Context.Connection;
-                cmd.Transaction = Context.Transaction;
-
-                cmd.ExecuteNonQuery();
-
-                int retval = (int)cmd.Parameters["RETVAL"].Value;
-
-                if (retval == 0)
-                {
-                    throw new Exception("Cannot delete FootprintFolder.");
-                }
-            }
-        }
-
+        /*
         private void GetFootprintFolderId()
         {
+            // TODO: move to search class
+
             var sql = "fps.spGetFootprintFolderId";
             using (var cmd = new SqlCommand(sql))
             {
@@ -339,27 +193,26 @@ namespace Jhu.Footprint.Web.Lib
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = user;
-                cmd.Parameters.Add("@FolderName", SqlDbType.NVarChar, 256).Value = name;
+                cmd.Parameters.Add("@FolderName", SqlDbType.NVarChar, 256).Value = Name;
                 cmd.Parameters.Add("@FolderId", SqlDbType.BigInt).Direction = ParameterDirection.Output;
 
                 cmd.ExecuteNonQuery();
 
                 if (cmd.Parameters["@FolderId"].Value == DBNull.Value)
                 {
-                    throw Error.CannotFindfootprintFolder(this.user, this.name);
+                    throw Error.CannotFindfootprintFolder(this.user, this.Name);
                 }
 
-                this.id = (long)cmd.Parameters["@FolderId"].Value;
+                this.Id = (long)cmd.Parameters["@FolderId"].Value;
             }
         }
-
+        */
 
         private void LoadFolderFootprint()
         {
-            folderFootprint = new Footprint(Context)
+            folderFootprint = new Footprint((Context)Context)
             {
                 Id = this.footprintId,
-                User = this.User,
             };
 
             // if a folderFootprint exists, load it
@@ -373,7 +226,6 @@ namespace Jhu.Footprint.Web.Lib
         {
             f.Type = FootprintType.Folder;
             f.Name = "folderFootprint";
-            f.Comment = "Footprint of the folder.";
         }
 
         /// <summary>
@@ -387,7 +239,7 @@ namespace Jhu.Footprint.Web.Lib
             {
                 // If this is the first footprint in the folder
                 this.footprintId = newFootprint.Id;
-                Save(false);
+                Save();
                 return;
             }
 
@@ -414,7 +266,7 @@ namespace Jhu.Footprint.Web.Lib
             InitializeFolderFootprint(folderFootprint);
             folderFootprint.Save();
             footprintId = folderFootprint.Id;
-            Save(false);
+            Save();
         }
 
         /// <summary>
@@ -424,7 +276,7 @@ namespace Jhu.Footprint.Web.Lib
         {
             LoadFolderFootprint();
 
-            var search = new FootprintSearch(Context) { User = this.User, FolderId = this.id };
+            var search = new FootprintSearch((Context)Context) { User = this.Owner, FolderId = this.id };
             IEnumerable<Footprint> footprints = search.GetFootprintsByFolderId();
 
             // if less than 2 footprints are associated with this FootprintFolder,
@@ -440,7 +292,7 @@ namespace Jhu.Footprint.Web.Lib
                 // (folder)footprintID must be set in DB
                 this.FootprintId = footprints.Count() == 1 ? footprints.ElementAt(0).Id : -1;
 
-                Save(false);
+                Save();
                 return;
             }
 
@@ -476,10 +328,7 @@ namespace Jhu.Footprint.Web.Lib
             // save the new folderFootprint if required
             if (region != null)
             {
-
                 InitializeFolderFootprint(folderFootprint);
-                folderFootprint.User = user;
-                folderFootprint.Public = @public;
                 folderFootprint.FolderId = id;
 
                 region.Simplify();
@@ -488,7 +337,7 @@ namespace Jhu.Footprint.Web.Lib
                 folderFootprint.Save(); // save the new folderFootprint
 
                 this.footprintId = folderFootprint.Id;
-                Save(false);
+                Save();
             }
 
         }

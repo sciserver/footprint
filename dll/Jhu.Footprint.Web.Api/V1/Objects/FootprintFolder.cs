@@ -69,7 +69,7 @@ namespace Jhu.Footprint.Web.Api.V1
             this.Id = folder.Id;
             this.FootprintId = folder.FootprintId;
             this.Name = folder.Name;
-            this.User = folder.User;
+            this.User = folder.Owner;
             this.Public = folder.Public;
             this.Type = folder.Type;
             //TODO : host name?
@@ -84,7 +84,7 @@ namespace Jhu.Footprint.Web.Api.V1
             folder.Id = this.Id;
             folder.FootprintId = this.FootprintId;
             folder.Name = this.Name;
-            folder.User = this.User;
+            folder.Owner = this.User;
             folder.Public = this.Public;
             folder.Type = this.Type;
             folder.Comment = this.Comment;
