@@ -26,7 +26,7 @@ namespace Jhu.Footprint.Web.Lib
                 folder.Owner = "webtestuser";
                 folder.Type = FolderType.None;
                 folder.Public = 1;
-                folder.Comment = "FootprintFolder.Create Unit Test";
+                folder.Comments = "FootprintFolder.Create Unit Test";
 
                 folder.Save();
             }
@@ -43,7 +43,7 @@ namespace Jhu.Footprint.Web.Lib
 
                 folder.Name = "SDSS.DR7";
                 folder.Owner = "evelin";
-                folder.Comment = "Duplicate name exception test";
+                folder.Comments = "Duplicate name exception test";
 
                 folder.Save();
             }
@@ -61,7 +61,7 @@ namespace Jhu.Footprint.Web.Lib
                 folder.Load();
 
                 folder.Name = "ModifyTest";
-                folder.Comment = "FootprintFolder.Modify Unit Test";
+                folder.Comments = "FootprintFolder.Modify Unit Test";
 
                 folder.Save();
             }
@@ -80,7 +80,7 @@ namespace Jhu.Footprint.Web.Lib
                 folder.Load();
 
                 folder.Name = "2SLAQ";
-                folder.Comment = "duplicate name exception test";
+                folder.Comments = "duplicate name exception test";
 
                 folder.Save();
             }

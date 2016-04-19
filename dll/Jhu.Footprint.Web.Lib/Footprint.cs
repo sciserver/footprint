@@ -18,11 +18,12 @@ namespace Jhu.Footprint.Web.Lib
         #region Member variables
 
         private long id;
-        private string name;
         private long folderId;
-        private Region region;
+        private string name;
         private double fillFactor;
         private FootprintType type;
+        private Region region;
+        private byte[] thumbnail;
 
         #endregion
         #region Properties
@@ -35,22 +36,31 @@ namespace Jhu.Footprint.Web.Lib
         }
 
         [DbColumn]
-        public string Name
-        {
-            get { return name; }
-            set { name = value; }
-        }
-
         public long FolderId
         {
             get { return folderId; }
             set { folderId = value; }
         }
 
-        public SqlBytes RegionBinary
+        [DbColumn]
+        public string Name
         {
-            get { return region.ToSqlBytes(); }
-            set { region = Region.FromSqlBytes(value); }
+            get { return name; }
+            set { name = value; }
+        }
+
+        [DbColumn]
+        public double FillFactor
+        {
+            get { return fillFactor; }
+            set { fillFactor = value; }
+        }
+
+        [DbColumn]
+        public FootprintType Type
+        {
+            get { return type; }
+            set { type = value; }
         }
 
         public Region Region
@@ -59,16 +69,18 @@ namespace Jhu.Footprint.Web.Lib
             set { region = value; }
         }
 
-        public double FillFactor
+        [DbColumn]
+        public SqlBytes RegionBinary
         {
-            get { return fillFactor; }
-            set { fillFactor = value; }
+            get { return region.ToSqlBytes(); }
+            set { region = Region.FromSqlBytes(value); }
         }
 
-        public FootprintType Type
+        [DbColumn]
+        public SqlBytes Thumbnail
         {
-            get { return type; }
-            set { type = value; }
+            get { return new SqlBytes(thumbnail); }
+            set { thumbnail = value.Value; }
         }
 
         #endregion
@@ -94,25 +106,27 @@ namespace Jhu.Footprint.Web.Lib
         private void InitializeMembers()
         {
             this.id = 0;
-            this.name = "";
             this.folderId = 0;
-            this.region = null;
+            this.name = "";
             this.fillFactor = 0;
             this.type = FootprintType.None;
+            this.region = null;
+            this.thumbnail = null;
         }
 
         private void CopyMembers(Footprint old)
         {
             this.id = old.id;
-            this.name = old.name;
             this.folderId = old.folderId;
-            this.region = new Region(old.region);
+            this.name = old.name;
             this.fillFactor = old.fillFactor;
             this.type = old.type;
+            this.region = new Region(old.region);
+            this.thumbnail = old.thumbnail;
         }
 
         #endregion
-        
+
         protected Boolean IsNameDuplicate()
         {
             var sql = @"

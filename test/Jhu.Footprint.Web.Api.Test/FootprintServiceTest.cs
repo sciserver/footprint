@@ -144,7 +144,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 var request = new FootprintFolderRequest();
                 var folder = new Lib.FootprintFolder();
 
-                folder.Comment = "Test Api Create Folder";
+                folder.Comments = "Test Api Create Folder";
                 folder.Owner = "Evelin";
                 folder.Name = "Test Api";
                 folder.Type = FolderType.Intersection;
@@ -171,7 +171,7 @@ namespace Jhu.Footprint.Web.Api.V1
                     folder.Load();
                 }
 
-                folder.Comment = "Api modification test.";
+                folder.Comments = "Api modification test.";
 
                 request.FootprintFolder = new V1.FootprintFolder(folder);
 

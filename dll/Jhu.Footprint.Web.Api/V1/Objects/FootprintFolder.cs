@@ -74,7 +74,7 @@ namespace Jhu.Footprint.Web.Api.V1
             this.Type = folder.Type;
             //TODO : host name?
             this.Url = new Uri("http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + this.User + "/" + this.Name);
-            this.Comment = folder.Comment;
+            this.Comment = folder.Comments;
         }
 
         public Jhu.Footprint.Web.Lib.FootprintFolder GetValue()
@@ -87,7 +87,7 @@ namespace Jhu.Footprint.Web.Api.V1
             folder.Owner = this.User;
             folder.Public = this.Public;
             folder.Type = this.Type;
-            folder.Comment = this.Comment;
+            folder.Comments = this.Comment;
 
             return folder;
         }

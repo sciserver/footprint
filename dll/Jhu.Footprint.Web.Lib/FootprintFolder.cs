@@ -21,7 +21,7 @@ namespace Jhu.Footprint.Web.Lib
         private FolderType type;
         private DateTime dateCreated;
         private DateTime dateModified;
-        private string comment;
+        private string comments;
         private Footprint folderFootprint;
 
         #endregion
@@ -72,21 +72,23 @@ namespace Jhu.Footprint.Web.Lib
         public DateTime DateCreated
         {
             get { return dateCreated; }
+            protected set { dateCreated = value; }
         }
 
         [DbColumn]
         public DateTime DateModified
         {
             get { return dateModified; }
+            protected set { dateCreated = value; }
         }
 
         [DbColumn]
-        public string Comment
+        public string Comments
         {
-            get { return comment; }
+            get { return comments; }
             set
             {
-                comment = value;
+                comments = value;
             }
         }
 
@@ -124,7 +126,7 @@ namespace Jhu.Footprint.Web.Lib
             this.type = FolderType.None;
             this.dateCreated = DateTime.Now;
             this.dateModified = DateTime.Now;
-            this.comment = "";
+            this.comments = "";
             this.folderFootprint = null;
         }
 
@@ -136,7 +138,7 @@ namespace Jhu.Footprint.Web.Lib
             this.type = old.type;
             this.dateCreated = old.dateCreated;
             this.dateModified = old.dateModified;
-            this.comment = old.comment;
+            this.comments = old.comments;
             this.folderFootprint = new Footprint(old.folderFootprint);
         }
 
@@ -341,6 +343,5 @@ WHERE Owner = @Owner
             }
 
         }
-
     }
 }
