@@ -24,7 +24,7 @@ namespace Jhu.Footprint.Web.Lib
     }
 
     [Flags]
-    public enum FolderType : byte
+    public enum FootprintType : byte
     {
         None = 0,
         Union = 1,
@@ -33,7 +33,7 @@ namespace Jhu.Footprint.Web.Lib
         Any = 0x7F,
     }
 
-    public enum FootprintType : byte
+    public enum RegionType : byte
     {
         Region = 0,
         Footprint = 1

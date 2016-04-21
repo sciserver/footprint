@@ -10,12 +10,12 @@ using System.ServiceModel;
 
 namespace Jhu.Footprint.Web.Api.V1
 {
-    [DataContract(Name = "footprintList")]
-    [Description("Represents a list of footprints.")]
+    [DataContract(Name = "footprint")]
+    [Description("Represents a footprint.")]
     public class FootprintResponse
     {
-        [DataMember(Name = "footprintfolder")]
-        [Description("Footprint folder.")]
+        [DataMember(Name = "footprint")]
+        [Description("Footprint.")]
         public Footprint FootprintFolder { get; set; }
 
         [DataMember(Name = "footprintList")]

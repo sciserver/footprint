@@ -19,7 +19,7 @@ namespace Jhu.Footprint.Web.Lib
         private int id;
         private string name;
         private int regionId;
-        private FolderType type;
+        private FootprintType type;
         private DateTime dateCreated;
         private DateTime dateModified;
         private string comments;
@@ -63,7 +63,7 @@ namespace Jhu.Footprint.Web.Lib
         }
 
         [DbColumn]
-        public FolderType Type
+        public FootprintType Type
         {
             get { return type; }
             set { type = value; }
@@ -124,7 +124,7 @@ namespace Jhu.Footprint.Web.Lib
             this.id = 0;
             this.regionId = 0;
             this.name = "";
-            this.type = FolderType.None;
+            this.type = FootprintType.None;
             this.dateCreated = DateTime.Now;
             this.dateModified = DateTime.Now;
             this.comments = "";
@@ -237,7 +237,7 @@ WHERE Owner = @Owner
 
         private void InitializeFootprintRegion(FootprintRegion f)
         {
-            f.Type = FootprintType.Footprint;
+            f.Type = RegionType.Footprint;
             f.Name = "footprintRegion";
         }
 
@@ -256,7 +256,7 @@ WHERE Owner = @Owner
                 return;
             }
 
-            if (region.Type == FootprintType.Region)
+            if (region.Type == RegionType.Region)
             {
                 // We only had one region in the folder so far, now need to create
                 // a new region to hold the intersection/union
@@ -267,10 +267,10 @@ WHERE Owner = @Owner
 
             switch (type)
             {
-                case FolderType.Union:
+                case FootprintType.Union:
                     region.Region.SmartUnion(newFootprint.Region);
                     break;
-                case FolderType.Intersection:
+                case FootprintType.Intersection:
                     region.Region.SmartIntersect(newFootprint.Region, false);
                     break;
             }
@@ -300,7 +300,7 @@ WHERE Owner = @Owner
             if (footprints.Count() <= 1)
             {
                 // delete old folderFootprint if exists
-                if (region != null && region.Type == FootprintType.Footprint)
+                if (region != null && region.Type == RegionType.Footprint)
                 {
                     region.Delete();
                 }
@@ -314,13 +314,13 @@ WHERE Owner = @Owner
 
             Spherical.Region r = new Spherical.Region();
 
-            if (region == null || region.Type != FootprintType.Footprint)
+            if (region == null || region.Type != RegionType.Footprint)
             {
                 region.Id = 0; // brand new folderFootprint 
             }
 
             // intersection must be started from an all-sky region
-            if (this.type == FolderType.Intersection)
+            if (this.type == FootprintType.Intersection)
             {
                 r.Add(new Spherical.Convex(new Spherical.Halfspace(0, 0, 1, false, -1)));
                 r.Simplify();
@@ -332,10 +332,10 @@ WHERE Owner = @Owner
             {
                 switch (this.type)
                 {
-                    case FolderType.Union:
+                    case FootprintType.Union:
                         r.SmartUnion(f.Region);
                         break;
-                    case FolderType.Intersection:
+                    case FootprintType.Intersection:
                         r = r.SmartIntersect(f.Region, false);
                         break;
                 }
@@ -355,6 +355,14 @@ WHERE Owner = @Owner
                 Save();
             }
 
+        }
+
+        public void SetPublic()
+        {
+        }
+
+        public void SetPrivate()
+        {
         }
     }
 }

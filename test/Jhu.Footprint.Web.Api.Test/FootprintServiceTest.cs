@@ -147,7 +147,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 folder.Comments = "Test Api Create Folder";
                 folder.Owner = "Evelin";
                 folder.Name = "Test Api";
-                folder.Type = FolderType.Intersection;
+                folder.Type = FootprintType.Intersection;
 
                 request.FootprintFolder = new V1.Footprint(folder);
                 client.CreateUserFootprintFolder(request.FootprintFolder.User, request.FootprintFolder.Name, request);
@@ -314,9 +314,9 @@ namespace Jhu.Footprint.Web.Api.V1
                 footprint.Name = "Test api";
                 footprint.FolderId = 1;
 
-                request.Footprint = new V1.FootprintRegion(footprint,"SDSS.DR7");
+                request.Region = new V1.FootprintRegion(footprint,"SDSS.DR7");
 
-                client.CreateUserFootprint(request.Footprint.User, "SDSS.DR7", request.Footprint.Name, request);
+                client.CreateUserFootprint(request.Region.User, "SDSS.DR7", request.Region.Name, request);
 
             }
         }
@@ -340,7 +340,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
                 footprint.Comment = "Api modification test.";
 
-                request.Footprint = new V1.FootprintRegion(footprint,"2MASS");
+                request.Region = new V1.FootprintRegion(footprint,"2MASS");
 
                 client.ModifyUserFootprint("mike", "2MASS", "South", request);
             }

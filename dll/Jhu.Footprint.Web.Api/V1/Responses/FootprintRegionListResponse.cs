@@ -9,21 +9,21 @@ using System.ServiceModel;
 
 namespace Jhu.Footprint.Web.Api.V1
 {
-    [DataContract(Name = "footprintList")]
-    [Description("Represents a list of footprints.")]
+    [DataContract(Name = "regionList")]
+    [Description("Represents a list of regions.")]
     public class FootprintRegionListResponse
     {
-        [DataMember(Name = "footprints")]
-        [Description("List of footprints.")]
-        public FootprintRegion[] Footprints { get; set; }
+        [DataMember(Name = "regions")]
+        [Description("List of regions.")]
+        public FootprintRegion[] Regions { get; set; }
 
         public FootprintRegionListResponse()
         {
         }
 
-        public FootprintRegionListResponse(IEnumerable<Lib.Footprint> footprints, string folderName)
+        public FootprintRegionListResponse(IEnumerable<Lib.FootprintRegion> regions, string folderName)
         {
-            this.Footprints = footprints.Select(f => new FootprintRegion(f, folderName)).ToArray();
+            this.Regions = regions.Select(f => new FootprintRegion(f, folderName)).ToArray();
         }
     }
 }

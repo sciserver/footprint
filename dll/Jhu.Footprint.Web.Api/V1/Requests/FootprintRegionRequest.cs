@@ -8,13 +8,13 @@ using System.ComponentModel;
 namespace Jhu.Footprint.Web.Api.V1
 {
     [DataContract]
-    [Description("Represents a footprint.")]
+    [Description("Represents a region.")]
     public class FootprintRegionRequest
     {
-        [DataMember(Name = "footprint", EmitDefaultValue = false)]
+        [DataMember(Name = "region", EmitDefaultValue = false)]
         [DefaultValue(null)]
-        [Description("Conveys a footprint.")]
-        public FootprintRegion Footprint { get; set; }
+        [Description("Conveys a region.")]
+        public FootprintRegion Region { get; set; }
 
         public FootprintRegionRequest()
         {

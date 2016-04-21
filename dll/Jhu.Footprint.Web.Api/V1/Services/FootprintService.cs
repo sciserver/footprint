@@ -554,7 +554,7 @@ namespace Jhu.Footprint.Web.Api.V1
         {
             using (var context = new Lib.Context())
             {
-                var footprint = request.Footprint.GetValue();
+                var footprint = request.Region.GetValue();
                 footprint.Context = context;
                 footprint.Save();
             }
@@ -568,7 +568,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 // TODO : REAL AUTHENTICATION
                 context.User = userName;
 
-                var footprint = request.Footprint.GetValue();
+                var footprint = request.Region.GetValue();
                 footprint.Context = context;
                 footprint.Save();
             }

@@ -23,7 +23,7 @@ namespace Jhu.Footprint.Web.Lib
         private int footprintId;
         private string name;
         private double fillFactor;
-        private FootprintType type;
+        private RegionType type;
         private Region region;
         private byte[] thumbnail;
 
@@ -59,7 +59,7 @@ namespace Jhu.Footprint.Web.Lib
         }
 
         [DbColumn]
-        public FootprintType Type
+        public RegionType Type
         {
             get { return type; }
             set { type = value; }
@@ -113,7 +113,7 @@ namespace Jhu.Footprint.Web.Lib
             this.footprintId = 0;
             this.name = "";
             this.fillFactor = 1.0;
-            this.type = FootprintType.Region;
+            this.type = RegionType.Region;
             this.region = null;
             this.thumbnail = null;
         }

@@ -10,86 +10,81 @@ using Lib = Jhu.Footprint.Web.Lib;
 
 namespace Jhu.Footprint.Web.Api.V1
 {
-    [DataContract(Name = "footprintfolder")]
-    [Description("Folder that is able to contain footprint(s).")]
+    [DataContract(Name = "footprint")]
+    [Description("A footprint is a collection of regions representing the sky coverage of observations.")]
     public class Footprint
     {
         [DataMember(Name = "id")]
-        [Description("Folder Id.")]
-        public long Id { get; set; }
-
-
-        [DataMember(Name = "footprintId")]
-        [Description("Id of the folder footprint.")]
-        public long FootprintId { get; set; }
+        [Description("Footprint Id.")]
+        public int Id { get; set; }
 
         [DataMember(Name = "url")]
-        [Description("Folder url.")]
+        [Description("Footprint url.")]
         public Uri Url { get; set; }
 
         [DataMember(Name = "name")]
         [Description("Name of the folder containing the footprint.")]
         public string Name { get; set; }
 
-        [DataMember(Name = "user")]
-        [Description("User of the folder.")]
-        public string User { get; set; }
-
-        [DataMember(Name = "public")]
-        [Description("Publicity of folder. 0 - not public, 1 - public.")]
-        public byte Public { get; set; }
+        [DataMember(Name = "owner")]
+        [Description("Owner of the footprint.")]
+        public string Owner { get; set; }
 
         [IgnoreDataMember]
-        public Jhu.Footprint.Web.Lib.FolderType Type { get; set; }
+        public Jhu.Footprint.Web.Lib.FootprintType Type { get; set; }
 
         [DataMember(Name = "type")]
-        [Description("Type of the folder. Could be: Any, Unknown, Union, Intersection, None.")]
+        [Description("Method to combine regions: union, intersection or none.")]
         public string Type_ForXml
         {
             get { return Util.EnumFormatter.ToXmlString(Type); }
-            set { Type = Util.EnumFormatter.FromXmlString<Lib.FolderType>(value); }
-
+            set { Type = Util.EnumFormatter.FromXmlString<Lib.FootprintType>(value); }
         }
 
-        [DataMember(Name = "comment")]
-        [Description("Comment.")]
-        public string Comment { get; set; }
+        [DataMember(Name = "comments")]
+        [Description("Comments.")]
+        public string Comments { get; set; }
 
-                public Footprint()
+        [DataMember(Name = "public")]
+        [DefaultValue(false)]
+        [Description("Visibility of the footprint to the public.")]
+        public bool Public { get; set; }
+
+        public Footprint()
         {
         }
 
-        public Footprint(Jhu.Footprint.Web.Lib.FootprintFolder folder)
+        public Footprint(Jhu.Footprint.Web.Lib.Footprint footprint)
         {
-            SetValue(folder);
+            SetValue(footprint);
         }
 
-        public void SetValue(Jhu.Footprint.Web.Lib.FootprintFolder folder)
+        public void SetValue(Jhu.Footprint.Web.Lib.Footprint footprint)
         {
-            this.Id = folder.Id;
-            this.FootprintId = folder.FootprintId;
-            this.Name = folder.Name;
-            this.User = folder.Owner;
-            this.Public = folder.Public;
-            this.Type = folder.Type;
+            this.Id = footprint.Id;
+            this.Name = footprint.Name;
+            this.Owner = footprint.Owner;
+            this.Type = footprint.Type;
+            this.Comments = footprint.Comments;
+
             //TODO : host name?
-            this.Url = new Uri("http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + this.User + "/" + this.Name);
-            this.Comment = folder.Comments;
+            //this.Url = new Uri("http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + this.User + "/" + this.Name);
         }
 
-        public Jhu.Footprint.Web.Lib.FootprintFolder GetValue()
+        public Jhu.Footprint.Web.Lib.Footprint GetValue()
         {
-            var folder = new Jhu.Footprint.Web.Lib.FootprintFolder();
+            var footprint =  new Jhu.Footprint.Web.Lib.Footprint()
+            {
+                Id = this.Id,
+                Name = this.Name,
+                Owner = this.Owner,
+                Type = this.Type,
+                Comments = this.Comments
+            };
 
-            folder.Id = this.Id;
-            folder.FootprintId = this.FootprintId;
-            folder.Name = this.Name;
-            folder.Owner = this.User;
-            folder.Public = this.Public;
-            folder.Type = this.Type;
-            folder.Comments = this.Comment;
+            // TODO: public/private?
 
-            return folder;
+            return footprint;
         }
     }
 }

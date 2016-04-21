@@ -10,21 +10,21 @@ using Lib = Jhu.Footprint.Web.Lib;
 
 namespace Jhu.Footprint.Web.Api.V1
 {
-    [DataContract(Name = "footprintFolderList")]
-    [Description("Represents a list of footprint folder queues.")]
+    [DataContract(Name = "footprintList")]
+    [Description("Represents a list of footprints.")]
     public class FootprintListResponse
     {
-        [DataMember(Name = "footprintFolders")]
-        [Description("List of footprint folders.")]
-        public Footprint[] FootprintFolders { get; set; }
+        [DataMember(Name = "footprints")]
+        [Description("List of footprints.")]
+        public Footprint[] Footprints { get; set; }
 
         public FootprintListResponse()
         {
         }
 
-        public FootprintListResponse(IEnumerable<Lib.FootprintFolder> folders)
+        public FootprintListResponse(IEnumerable<Lib.Footprint> footprints)
         {
-            this.FootprintFolders = folders.Select(f => new Footprint(f)).ToArray();
+            this.Footprints = footprints.Select(f => new Footprint(f)).ToArray();
         }
     }
 }

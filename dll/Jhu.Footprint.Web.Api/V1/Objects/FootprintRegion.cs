@@ -10,59 +10,41 @@ using Lib = Jhu.Footprint.Web.Lib;
 
 namespace Jhu.Footprint.Web.Api.V1
 {
-    [DataContract(Name = "footprint")]
-    [Description("TODO")]
+    [DataContract(Name = "region")]
+    [Description("Represents a celestial region.")]
     public class FootprintRegion
     {
-
         [DataMember(Name = "id")]
-        [Description("Footprint Id.")]
-        public long Id { get; set; }
+        [Description("Region Id.")]
+        public int Id { get; set; }
 
         [DataMember(Name = "url")]
-        [Description("Footprint url.")]
+        [Description("Region url.")]
         public Uri Url { get; set; }
 
-        [DataMember(Name = "folderId")]
-        [Description("Id of the folder containing the footprint.")]
-        public long FolderId { get; set; }
+        [DataMember(Name = "footprintId")]
+        [Description("Id of the footprint containing the region.")]
+        public int FootprintId { get; set; }
 
-        [DataMember(Name = "folderName")]
-        [Description("Name of the folder containing the footprint.")]
+        [DataMember(Name = "footprintUrl")]
+        [Description("Footprint url.")]
+        public Uri FootprintUrl { get; set; }
+
+        [DataMember(Name = "footprintName")]
+        [Description("Name of the footprint containing the region.")]
         public string FolderName { get; set; }
 
         [DataMember(Name = "name")]
-        [Description("Name of the footprint.")]
+        [Description("Name of the region.")]
         public string Name { get; set; }
 
-        [DataMember(Name = "user")]
-        [Description("User of the footprint.")]
-        public string User { get; set; }
-
-        [DataMember(Name = "public")]
-        [Description("Publicity of footprint. 0 - not public, 1 - public.")]
-        public byte Public { get; set; }
+        [DataMember(Name = "owner")]
+        [Description("Owner of the footprint.")]
+        public string Owner { get; set; }
 
         [DataMember(Name = "fillFactor")]
-        [Description("TODO")]
+        [Description("Fill factor of the region.")]
         public double FillFactor { get; set; }
-
-        [IgnoreDataMember]
-        public Jhu.Footprint.Web.Lib.FootprintType FootprintType { get; set; }
-
-        [DataMember(Name = "folderType")]
-        [Description("Type of the folder containing the footprint. Could be: Any, Unknown, Union, Intersection, None.")]
-        public string Type_ForXml
-        {
-            get { return Util.EnumFormatter.ToXmlString(FootprintType); }
-            set { FootprintType = Util.EnumFormatter.FromXmlString<Lib.FootprintType>(value); }
-
-        }
-
-
-        [DataMember(Name = "comment")]
-        [Description("Comment.")]
-        public string Comment { get; set; }
 
         [DataMember(Name = "regionString")]
         [Description("Region string.")]
@@ -72,50 +54,56 @@ namespace Jhu.Footprint.Web.Api.V1
         {
         }
 
-        public FootprintRegion(Jhu.Footprint.Web.Lib.Footprint footprint, string folderName)
+        public FootprintRegion(Jhu.Footprint.Web.Lib.FootprintRegion region, string folderName)
         {
-            SetValue(footprint, folderName);
+            SetValue(region, folderName);
         }
 
-        public void SetValue(Jhu.Footprint.Web.Lib.Footprint footprint, string folderName)
+        public void SetValue(Jhu.Footprint.Web.Lib.FootprintRegion region, string folderName)
         {
+            this.Id = region.Id;
+
+            /*
             this.FolderName =  folderName;
-            this.Name = footprint.Name;
-            this.User = footprint.User;
-            this.Id = footprint.Id;
-            this.Public = footprint.Public;
-            this.FillFactor = footprint.FillFactor;
-            this.FootprintType = footprint.Type;
-            this.Comment = footprint.Comment;
-            this.FolderId = footprint.FolderId;
+            this.Name = region.Name;
+            this.User = region.User;
+            
+            this.Public = region.Public;
+            this.FillFactor = region.FillFactor;
+            this.FootprintType = region.Type;
+            this.Comment = region.Comment;
+            this.FootprintId = region.FolderId;
             //TODO : host name?
             this.Url = new Uri("http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/"+this.User+"/"+this.FolderName+"/"+this.Name);
-            if (footprint.Region != null)
+            if (region.Region != null)
             {
-                this.RegionString = footprint.Region.ToString();
+                this.RegionString = region.Region.ToString();
             }
             else this.RegionString = null;
+             * */
         }
 
-        public Jhu.Footprint.Web.Lib.Footprint GetValue()
+        public Jhu.Footprint.Web.Lib.FootprintRegion GetValue()
         {
-            var footprint = new Jhu.Footprint.Web.Lib.Footprint();
+            var region = new Jhu.Footprint.Web.Lib.FootprintRegion();
 
-            footprint.Name = this.Name;
-            footprint.User = this.User;
-            footprint.Id = this.Id;
-            footprint.Public = this.Public;
-            footprint.FillFactor = this.FillFactor;
-            footprint.Type = this.FootprintType;
-            footprint.Comment = this.Comment;
-            footprint.FolderId = this.FolderId;
+            /*
+            region.Name = this.Name;
+            region.User = this.User;
+            region.Id = this.Id;
+            region.Public = this.Public;
+            region.FillFactor = this.FillFactor;
+            region.Type = this.FootprintType;
+            region.Comment = this.Comment;
+            region.FolderId = this.FootprintId;
             if (this.RegionString != null)
             {
-                footprint.Region = Jhu.Spherical.Region.Parse(this.RegionString);
+                region.Region = Jhu.Spherical.Region.Parse(this.RegionString);
             }
-            else footprint.Region = null;
+            else region.Region = null;
+             * */
 
-            return footprint;
+            return region;
         }
     }
 }

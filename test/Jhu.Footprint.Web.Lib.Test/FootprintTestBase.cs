@@ -107,7 +107,7 @@ namespace Jhu.Footprint.Web.Lib
             var region = new FootprintRegion(footprint)
             {
                 Name = name,
-                Type = FootprintType.Region,
+                Type = RegionType.Region,
                 Region = Spherical.Region.Parse("CIRCLE J2000 10 10 10")
             };
 
