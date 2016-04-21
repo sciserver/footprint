@@ -58,7 +58,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FootprintException.cs" />
-    <Compile Include="FootprintFolderException.cs" />
     <Compile Include="FootprintFormatter.cs" />
     <Compile Include="FootprintRegion.cs" />
     <Compile Include="FootprintRegionSearch.cs" />

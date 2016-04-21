@@ -16,136 +16,135 @@ namespace Jhu.Footprint.Web.Lib
         }
 
         [TestMethod]
-        public void CreateFolderTest()
+        public void CreateFootprintTest()
         {
             int id;
 
             using (var context = CreateContext())
             {
-                var folder = new FootprintFolder(context)
+                var footprint = new Footprint(context)
                 {
-                    Name = "CreateFolderTest",
+                    Name = "CreateFootprintTest",
                 };
 
-                id = (int)folder.Save();
+                id = (int)footprint.Save();
             }
 
             using (var context = CreateContext())
             {
-                var folder = new FootprintFolder(context);
-                folder.Load(id);
+                var footprint = new Footprint(context);
+                footprint.Load(id);
             }
         }
 
         [TestMethod]
         [ExpectedException(typeof(DuplicateNameException))]
-        public void DuplicateFolderNameCreateTest()
+        public void DuplicateFootprintNameCreateTest()
         {
             using (var context = CreateContext())
             {
-                var folder = new FootprintFolder(context)
+                var footprint = new Footprint(context)
                 {
-                    Name = "DuplicateFolderNameTest",
+                    Name = "DuplicateFootprintNameCreateTest",
                 };
 
-                folder.Save();
+                footprint.Save();
             }
 
             using (var context = CreateContext())
             {
-                var folder = new FootprintFolder(context)
+                var footprint = new Footprint(context)
                 {
-                    Name = "DuplicateFolderNameTest",
+                    Name = "DuplicateFootprintNameCreateTest",
                 };
 
-                folder.Save();
+                footprint.Save();
             }
         }
 
         [TestMethod]
-        public void ModifyFolderTest()
+        public void ModifyFootprintTest()
         {
             int id;
 
             using (var context = CreateContext())
             {
-                var folder = new FootprintFolder(context)
+                var footprint = new Footprint(context)
                 {
-                    Name = "ModifyFolderTest",
+                    Name = "ModifyFootprintTest",
                 };
 
-                id = (int)folder.Save();
+                id = (int)footprint.Save();
             }
 
             using (var context = CreateContext())
             {
-                var folder = new FootprintFolder(context);
-                folder.Load(id);
+                var footprint = new Footprint(context);
+                footprint.Load(id);
 
-                folder.Name = "Rename";
-                folder.Comments = "FootprintFolder.Modify Unit Test";
+                footprint.Name = "Rename";
 
-                folder.Save();
+                footprint.Save();
             }
         }
 
         [TestMethod]
-        [ExpectedException(typeof(FootprintFolderException))]
-        public void DuplicateFolderNameModifyTest()
+        [ExpectedException(typeof(DuplicateNameException))]
+        public void DuplicateFootprintNameModifyTest()
         {
             int id;
 
             using (var context = CreateContext())
             {
-                var folder = new FootprintFolder(context)
+                var footprint = new Footprint(context)
                 {
-                    Name = "DuplicateFolderNameModifyTest",
+                    Name = "DuplicateFootprintNameModifyTest",
                 };
 
-                id = (int)folder.Save();
+                id = (int)footprint.Save();
             }
 
             using (var context = CreateContext())
             {
-                var folder = new FootprintFolder(context)
+                var footprint = new Footprint(context)
                 {
                     Name = "DuplicateFolderNameModifyTest2",
                 };
 
-                id = (int)folder.Save();
+                id = (int)footprint.Save();
             }
 
             using (var context = CreateContext())
             {
-                var folder = new FootprintFolder(context);
-                folder.Load(id);
+                var footprint = new Footprint(context);
+                footprint.Load(id);
 
-                folder.Name = "DuplicateFolderNameModifyTest";
+                footprint.Name = "DuplicateFootprintNameModifyTest";
 
-                folder.Save();
+                footprint.Save();
             }
         }
 
         [TestMethod]
-        public void DeleteFolderTest()
+        public void DeleteFootprintTest()
         {
             int id;
 
             using (var context = CreateContext())
             {
-                var folder = new FootprintFolder(context)
+                var footprint = new Footprint(context)
                 {
-                    Name = "DeleteFolderTest",
+                    Name = "DeleteFootprintTest",
                 };
 
-                id = (int)folder.Save();
+                id = (int)footprint.Save();
             }
 
             using (var context = CreateContext())
             {
-                var folder = new FootprintFolder(context);
-                folder.Load(id);
-                folder.Delete();
+                var footprint = new Footprint(context);
+                footprint.Load(id);
+                footprint.Delete();
             }
         }
 

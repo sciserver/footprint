@@ -55,19 +55,19 @@ namespace Jhu.Footprint.Web.Lib
             return new DuplicateNameException(message);
         }
 
-        public static FootprintFolderException NoFootprintFolderDataToLoad()
+        public static FootprintException NoFootprintFolderDataToLoad()
         {
             var message = ExceptionMessages.NoFootprintFolderDataToLoad;
-            return new FootprintFolderException(message);
+            return new FootprintException(message);
         }
 
-        public static FootprintFolderException CannotFindfootprintFolder(string user, string name)
+        public static FootprintException CannotFindfootprintFolder(string user, string name)
         {
             var message = String.Format(
                 ExceptionMessages.CannotFindFootprintFolder,
                 user, name);
 
-            return new FootprintFolderException(message);
+            return new FootprintException(message);
         }
         #endregion
     }

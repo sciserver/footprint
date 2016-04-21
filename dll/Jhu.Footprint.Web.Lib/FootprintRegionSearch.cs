@@ -6,23 +6,34 @@ using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
 using System.Xml.Serialization;
+using Jhu.Graywulf.Entities.Mapping;
 
 namespace Jhu.Footprint.Web.Lib
 {
     public class FootprintRegionSearch : Jhu.Graywulf.Entities.EntitySearch<FootprintRegion>
     {
         #region Member variables
-        private string user;
-        private string footprintName;
-        private string folderName;
-        private long folderId;
-        #endregion
 
+        private string owner;
+        private int? folderId;
+        private string footprintName;
+        private string name;
+
+        #endregion
         #region Properties
-        public string User
+
+        [DbColumn]
+        public string Owner
         {
-            get { return user; }
-            set { user = value; }
+            get { return owner; }
+            set { owner = value; }
+        }
+
+        [DbColumn]
+        public int? FolderId
+        {
+            get { return folderId; }
+            set { folderId = value; }
         }
 
         public string FootprintName
@@ -31,23 +42,17 @@ namespace Jhu.Footprint.Web.Lib
             set { footprintName = value; }
         }
 
-        public string FolderName
+        [DbColumn]
+        public string Name
         {
-            get 
-            {
-                return folderName;
-            }
-            set { folderName = value; }
+            get { return name; }
+            set { name = value; }
         }
 
-        public long FolderId
-        {
-            get { return folderId; }
-            set { folderId = value; }
-        }
         #endregion
 
         #region Constructors & intitializers
+
         public FootprintRegionSearch()
             : base()
         {
@@ -62,70 +67,12 @@ namespace Jhu.Footprint.Web.Lib
 
         public void InitializeMembers()
         {
-            this.user = "";
+            this.owner = null;
+            this.folderId = null;
+            this.footprintName = null;
+            this.name = null;
         }
 
         #endregion
-
-        #region Methods
-        public IEnumerable<FootprintRegion> GetFootprintsByFolderId()
-        {
-            var res = new List<FootprintRegion>();
-            string sql = "fps.spGetFootprintsByFolderId";
-
-
-            using (var cmd = new SqlCommand(sql))
-            {
-                cmd.Connection = Context.Connection;
-                cmd.Transaction = Context.Transaction;
-                cmd.CommandType = CommandType.StoredProcedure;
-
-                cmd.Parameters.Add("@FolderId", SqlDbType.BigInt).Value = this.folderId;
-                cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = this.user;
-
-                using (var dr = cmd.ExecuteReader())
-                {
-                    while (dr.Read())
-                    {
-                        var f = new FootprintRegion((Context)Context);
-                        f.LoadFromDataReader(dr);
-
-                        res.Add(f);
-                    }
-                }
-
-            }
-
-            return res;
-        }
-
-        public long GetFootprintId()
-        {
-            var sql = "fps.spGetFootprintId";
-            using (var cmd = new SqlCommand(sql))
-            {
-                cmd.Connection = Context.Connection;
-                cmd.Transaction = Context.Transaction;
-
-                cmd.CommandType = CommandType.StoredProcedure;
-
-                cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = this.user;
-                cmd.Parameters.Add("@FolderName", SqlDbType.NVarChar, 256).Value = this.folderName;
-                cmd.Parameters.Add("@FootprintName", SqlDbType.NVarChar, 256).Value = this.footprintName;
-                cmd.Parameters.Add("@FootprintId", SqlDbType.BigInt).Direction = ParameterDirection.Output;
-
-                cmd.ExecuteNonQuery();
-
-                if (cmd.Parameters["@FootprintId"].Value == DBNull.Value)
-                {
-                    throw Error.CannotFindFootprint(this.user, this.folderName, this.footprintName);
-                }
-
-                return (long)cmd.Parameters["@FootprintId"].Value;
-            }
-        }
-         #endregion
-
-
     }
 }

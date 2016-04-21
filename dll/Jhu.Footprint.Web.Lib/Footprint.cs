@@ -221,7 +221,7 @@ WHERE Owner = @Owner
         }
         */
 
-        private void LoadFolderFootprint()
+        private void LoadFootprintRegion()
         {
             region = new FootprintRegion((Context)Context)
             {
@@ -235,7 +235,7 @@ WHERE Owner = @Owner
             }
         }
 
-        private void InitializeRegion(FootprintRegion f)
+        private void InitializeFootprintRegion(FootprintRegion f)
         {
             f.Type = FootprintType.Folder;
             f.Name = "footprintRegion";
@@ -246,7 +246,7 @@ WHERE Owner = @Owner
         /// </summary>
         public void UpdateRegion(FootprintRegion newFootprint)
         {
-            LoadFolderFootprint();
+            LoadFootprintRegion();
 
             if (region.Region == null)
             {
@@ -276,7 +276,7 @@ WHERE Owner = @Owner
             }
 
 
-            InitializeRegion(region);
+            InitializeFootprintRegion(region);
             region.Save();
             regionId = region.Id;
             Save();
@@ -287,10 +287,13 @@ WHERE Owner = @Owner
         /// </summary>
         public void RefreshRegion()
         {
-            LoadFolderFootprint();
+            LoadFootprintRegion();
 
-            var search = new FootprintSearch((Context)Context) { User = this.Owner, FolderId = this.id };
-            IEnumerable<FootprintRegion> footprints = search.GetFootprintsByFolderId();
+            var search = new FootprintRegionSearch((Context)Context)
+            { 
+                FolderId = this.id
+            };
+            var footprints = search.Find();
 
             // if less than 2 footprints are associated with this FootprintFolder,
             // FolderFootprint is not needed
@@ -309,7 +312,7 @@ WHERE Owner = @Owner
                 return;
             }
 
-            Spherical.Region region = new Spherical.Region();
+            Spherical.Region r = new Spherical.Region();
 
             if (region == null || region.Type != FootprintType.Folder)
             {
@@ -319,8 +322,8 @@ WHERE Owner = @Owner
             // intersection must be started from an all-sky region
             if (this.type == FolderType.Intersection)
             {
-                region.Add(new Spherical.Convex(new Spherical.Halfspace(0, 0, 1, false, -1)));
-                region.Simplify();
+                r.Add(new Spherical.Convex(new Spherical.Halfspace(0, 0, 1, false, -1)));
+                r.Simplify();
             }
 
 
@@ -330,10 +333,10 @@ WHERE Owner = @Owner
                 switch (this.type)
                 {
                     case FolderType.Union:
-                        region.SmartUnion(f.Region);
+                        r.SmartUnion(f.Region);
                         break;
                     case FolderType.Intersection:
-                        region = region.SmartIntersect(f.Region, false);
+                        r = r.SmartIntersect(f.Region, false);
                         break;
                 }
             }
@@ -341,11 +344,11 @@ WHERE Owner = @Owner
             // save the new folderFootprint if required
             if (region != null)
             {
-                InitializeRegion(region);
+                InitializeFootprintRegion(region);
                 region.FolderId = id;
 
-                region.Simplify();
-                region.Region = region;
+                r.Simplify();
+                region.Region = r;
 
                 region.Save(); // save the new folderFootprint
 
