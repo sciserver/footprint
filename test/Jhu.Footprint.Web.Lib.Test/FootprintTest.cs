@@ -150,38 +150,6 @@ namespace Jhu.Footprint.Web.Lib
 
         /*
 
-        
-
-        [TestMethod]
-        public void FolderLoadTest()
-        {
-            using (var context = new Context())
-            {
-                var folder = new FootprintFolder(context);
-
-                folder.Id = 6;
-                context.User = "kate";
-
-                folder.Load();
-            }
-
-        }
-
-        [TestMethod]
-        public void GetFootprintsByFolderIdTest()
-        {
-            using (var context = new Context())
-            {
-                var search = new FootprintSearch(context);
-
-                search.User = "evelin";
-                search.FolderId = 1;
-
-
-                var footprints = search.GetFootprintsByFolderId();
-            }
-        }
-
         [TestMethod]
         public void RefreshFolderFootprintTest()
         {

@@ -28,12 +28,12 @@ namespace Jhu.Footprint.Web.Api.V1
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}")]
         [Description("Returns the list of all user created folders.")]
-        FootprintFolderListResponse GetUserFootprintFolderList(string userName);
+        FootprintListResponse GetUserFootprintFolderList(string userName);
 
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/")]
         [Description("Returns the details of an existing folder and the list of the footprints in it.")]
-        FootprintFolderResponse GetUserFootprintFolder(string userName, string folderName);
+        FootprintResponse GetUserFootprintFolder(string userName, string folderName);
 
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/footprint")]
@@ -91,12 +91,12 @@ namespace Jhu.Footprint.Web.Api.V1
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/users/{userName}/{folderName}")]
         [Description("Create new footprint folder.")]
-        void CreateUserFootprintFolder(string userName, string folderName, FootprintFolderRequest request);
+        void CreateUserFootprintFolder(string userName, string folderName, FootprintRequest request);
 
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Put, UriTemplate = "/users/{userName}/{folderName}")]
         [Description("Modify existing footprint folder.")]
-        void ModifyUserFootprintFolder(string userName, string folderName, FootprintFolderRequest request);
+        void ModifyUserFootprintFolder(string userName, string folderName, FootprintRequest request);
 
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Delete, UriTemplate = "/users/{userName}/{folderName}")]
@@ -108,7 +108,7 @@ namespace Jhu.Footprint.Web.Api.V1
         [OperationContract]
         [WebGet(UriTemplate = "/users/{userName}/{folderName}/{footprintName}")]
         [Description("Returns the details of a footprint under an existing folder.")]
-        FootprintResponse GetUserFootprint(string userName, string folderName, string footprintName);
+        FootprintRegionResponse GetUserFootprint(string userName, string folderName, string footprintName);
 
 
         [OperationContract]
@@ -166,12 +166,12 @@ namespace Jhu.Footprint.Web.Api.V1
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/users/{userName}/{folderName}/{footprintName}")]
         [Description("Create new footprint under an existing folder.")]
-        void CreateUserFootprint(string userName, string folderName, string footprintName, FootprintRequest request);
+        void CreateUserFootprint(string userName, string folderName, string footprintName, FootprintRegionRequest request);
 
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Put, UriTemplate = "/users/{userName}/{folderName}/{footprintName}")]
         [Description("Modify footprint under an existing folder.")]
-        void ModifyUserFootprint(string userName, string folderName, string footprintName, FootprintRequest request);
+        void ModifyUserFootprint(string userName, string folderName, string footprintName, FootprintRegionRequest request);
 
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Delete, UriTemplate = "/users/{userName}/{folderName}/{footprintName}")]
@@ -296,7 +296,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
         #region FootprintFolder Methods
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
-        public FootprintFolderListResponse GetUserFootprintFolderList(string userName)
+        public FootprintListResponse GetUserFootprintFolderList(string userName)
         {
             IEnumerable<Lib.FootprintFolder> folders;
 
@@ -308,13 +308,13 @@ namespace Jhu.Footprint.Web.Api.V1
                 folders = search.Find();
             }
 
-            var r = new FootprintFolderListResponse(folders);
+            var r = new FootprintListResponse(folders);
             return r;
         }
 
 
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
-        public FootprintFolderResponse GetUserFootprintFolder(string userName, string folderName)
+        public FootprintResponse GetUserFootprintFolder(string userName, string folderName)
         {
             Lib.FootprintFolder folder;
             IEnumerable<Lib.Footprint> footprints;
@@ -335,10 +335,10 @@ namespace Jhu.Footprint.Web.Api.V1
                 footprints = search.GetFootprintsByFolderId();
             }
 
-            var f = new FootprintFolder(folder);
+            var f = new Footprint(folder);
 
-            var list = footprints.Select(fp => new Footprint(fp, folderName).Url).ToArray();
-            var r = new FootprintFolderResponse(f, list);
+            var list = footprints.Select(fp => new FootprintRegion(fp, folderName).Url).ToArray();
+            var r = new FootprintResponse(f, list);
             return r;
 
         }
@@ -348,7 +348,7 @@ namespace Jhu.Footprint.Web.Api.V1
         public string GetUserFootprintFolderRegion(string userName, string folderName)
         {
             var footprint = GetFolderFootprint(userName, folderName);
-            var f = new Footprint(footprint, folderName);
+            var f = new FootprintRegion(footprint, folderName);
             return f.RegionString;
         }
 
@@ -420,7 +420,7 @@ namespace Jhu.Footprint.Web.Api.V1
         }
 
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
-        public void CreateUserFootprintFolder(string userName, string folderName, FootprintFolderRequest request)
+        public void CreateUserFootprintFolder(string userName, string folderName, FootprintRequest request)
         {
             using (var context = new Jhu.Footprint.Web.Lib.Context())
             {
@@ -431,7 +431,7 @@ namespace Jhu.Footprint.Web.Api.V1
         }
 
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
-        public void ModifyUserFootprintFolder(string userName, string folderName, FootprintFolderRequest request)
+        public void ModifyUserFootprintFolder(string userName, string folderName, FootprintRequest request)
         {
             using (var context = new Jhu.Footprint.Web.Lib.Context())
             {
@@ -464,11 +464,11 @@ namespace Jhu.Footprint.Web.Api.V1
 
         #region Footprint Methods
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
-        public FootprintResponse GetUserFootprint(string userName, string folderName, string footprintName)
+        public FootprintRegionResponse GetUserFootprint(string userName, string folderName, string footprintName)
         {
             var footprint = GetFootprint(userName, folderName, footprintName);
-            var f = new Footprint(footprint, folderName);
-            var r = new FootprintResponse(f);
+            var f = new FootprintRegion(footprint, folderName);
+            var r = new FootprintRegionResponse(f);
             return r;
         }
 
@@ -550,7 +550,7 @@ namespace Jhu.Footprint.Web.Api.V1
         #region Create, modify, delete footprint
 
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
-        public void CreateUserFootprint(string userName, string folderName, string footprintName, FootprintRequest request)
+        public void CreateUserFootprint(string userName, string folderName, string footprintName, FootprintRegionRequest request)
         {
             using (var context = new Lib.Context())
             {
@@ -561,7 +561,7 @@ namespace Jhu.Footprint.Web.Api.V1
         }
 
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
-        public void ModifyUserFootprint(string userName, string folderName, string footprintName, FootprintRequest request)
+        public void ModifyUserFootprint(string userName, string folderName, string footprintName, FootprintRegionRequest request)
         {
             using (var context = new Lib.Context())
             {

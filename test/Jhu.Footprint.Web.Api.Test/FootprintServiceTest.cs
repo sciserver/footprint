@@ -141,7 +141,7 @@ namespace Jhu.Footprint.Web.Api.V1
             {
                 var client = CreateClient(session);
 
-                var request = new FootprintFolderRequest();
+                var request = new FootprintRequest();
                 var folder = new Lib.FootprintFolder();
 
                 folder.Comments = "Test Api Create Folder";
@@ -149,7 +149,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 folder.Name = "Test Api";
                 folder.Type = FolderType.Intersection;
 
-                request.FootprintFolder = new V1.FootprintFolder(folder);
+                request.FootprintFolder = new V1.Footprint(folder);
                 client.CreateUserFootprintFolder(request.FootprintFolder.User, request.FootprintFolder.Name, request);
             }
         }
@@ -162,7 +162,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 var client = CreateClient(session);
 
                 var folder = new Jhu.Footprint.Web.Lib.FootprintFolder();
-                var request = new FootprintFolderRequest();
+                var request = new FootprintRequest();
 
                 using (var context = new Context())
                 {
@@ -173,7 +173,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
                 folder.Comments = "Api modification test.";
 
-                request.FootprintFolder = new V1.FootprintFolder(folder);
+                request.FootprintFolder = new V1.Footprint(folder);
 
                 client.ModifyUserFootprintFolder(request.FootprintFolder.User, request.FootprintFolder.Name, request);
             }
@@ -305,7 +305,7 @@ namespace Jhu.Footprint.Web.Api.V1
             using (var session = new RestClientSession())
             {
                 var client = CreateClient(session);
-                var request = new FootprintRequest();
+                var request = new FootprintRegionRequest();
 
 
                 var footprint = new Lib.Footprint();
@@ -314,7 +314,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 footprint.Name = "Test api";
                 footprint.FolderId = 1;
 
-                request.Footprint = new V1.Footprint(footprint,"SDSS.DR7");
+                request.Footprint = new V1.FootprintRegion(footprint,"SDSS.DR7");
 
                 client.CreateUserFootprint(request.Footprint.User, "SDSS.DR7", request.Footprint.Name, request);
 
@@ -329,7 +329,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 var client = CreateClient(session);
 
                 var footprint = new Jhu.Footprint.Web.Lib.Footprint();
-                var request = new FootprintRequest();
+                var request = new FootprintRegionRequest();
 
                 using (var context = new Context())
                 {
@@ -340,7 +340,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
                 footprint.Comment = "Api modification test.";
 
-                request.Footprint = new V1.Footprint(footprint,"2MASS");
+                request.Footprint = new V1.FootprintRegion(footprint,"2MASS");
 
                 client.ModifyUserFootprint("mike", "2MASS", "South", request);
             }

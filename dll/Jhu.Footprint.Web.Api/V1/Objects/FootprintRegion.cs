@@ -12,7 +12,7 @@ namespace Jhu.Footprint.Web.Api.V1
 {
     [DataContract(Name = "footprint")]
     [Description("TODO")]
-    public class Footprint
+    public class FootprintRegion
     {
 
         [DataMember(Name = "id")]
@@ -68,11 +68,11 @@ namespace Jhu.Footprint.Web.Api.V1
         [Description("Region string.")]
         public string RegionString { get; set; }
 
-        public Footprint()
+        public FootprintRegion()
         {
         }
 
-        public Footprint(Jhu.Footprint.Web.Lib.Footprint footprint, string folderName)
+        public FootprintRegion(Jhu.Footprint.Web.Lib.Footprint footprint, string folderName)
         {
             SetValue(footprint, folderName);
         }

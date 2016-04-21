@@ -12,7 +12,7 @@ namespace Jhu.Footprint.Web.Api.V1
 {
     [DataContract(Name = "footprintfolder")]
     [Description("Folder that is able to contain footprint(s).")]
-    public class FootprintFolder
+    public class Footprint
     {
         [DataMember(Name = "id")]
         [Description("Folder Id.")]
@@ -55,11 +55,11 @@ namespace Jhu.Footprint.Web.Api.V1
         [Description("Comment.")]
         public string Comment { get; set; }
 
-                public FootprintFolder()
+                public Footprint()
         {
         }
 
-        public FootprintFolder(Jhu.Footprint.Web.Lib.FootprintFolder folder)
+        public Footprint(Jhu.Footprint.Web.Lib.FootprintFolder folder)
         {
             SetValue(folder);
         }

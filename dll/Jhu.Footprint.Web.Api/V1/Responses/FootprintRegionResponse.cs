@@ -11,13 +11,13 @@ namespace Jhu.Footprint.Web.Api.V1
 {
     [DataContract(Name = "footprint")]
     [Description("Represents a footprint.")]
-    public class FootprintResponse
+    public class FootprintRegionResponse
     {
         [DataMember(Name = "footprint")]
         [Description("A footprint.")]
-        public Footprint Footprint { get; set; }
+        public FootprintRegion Footprint { get; set; }
 
-        public FootprintResponse(Footprint footprint)
+        public FootprintRegionResponse(FootprintRegion footprint)
         {
             this.Footprint = footprint;
         }

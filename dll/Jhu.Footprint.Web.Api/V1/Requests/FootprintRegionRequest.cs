@@ -9,14 +9,14 @@ namespace Jhu.Footprint.Web.Api.V1
 {
     [DataContract]
     [Description("Represents a footprint.")]
-    public class FootprintRequest
+    public class FootprintRegionRequest
     {
         [DataMember(Name = "footprint", EmitDefaultValue = false)]
         [DefaultValue(null)]
         [Description("Conveys a footprint.")]
-        public Footprint Footprint { get; set; }
+        public FootprintRegion Footprint { get; set; }
 
-        public FootprintRequest()
+        public FootprintRegionRequest()
         {
         }
     }
