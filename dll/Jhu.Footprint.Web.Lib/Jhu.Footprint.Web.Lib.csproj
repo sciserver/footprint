@@ -54,12 +54,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ExceptionMessages.resx</DependentUpon>
     </Compile>
-    <Compile Include="Footprint.cs" />
     <Compile Include="FootprintException.cs" />
     <Compile Include="FootprintFolder.cs" />
     <Compile Include="FootprintFolderException.cs" />
     <Compile Include="FootprintFolderSearch.cs" />
     <Compile Include="FootprintFormatter.cs" />
+    <Compile Include="FootprintRegion.cs" />
     <Compile Include="FootprintSearch.cs" />
     <Compile Include="GalacticPoint.cs" />
     <Compile Include="Plot.cs" />

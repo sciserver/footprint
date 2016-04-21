@@ -23,7 +23,7 @@ namespace Jhu.Footprint.Web.Lib
         private DateTime dateCreated;
         private DateTime dateModified;
         private string comments;
-        private Footprint folderFootprint;
+        private FootprintRegion folderFootprint;
 
         #endregion
 
@@ -93,7 +93,7 @@ namespace Jhu.Footprint.Web.Lib
             }
         }
 
-        public Footprint FolderFootprint
+        public FootprintRegion FolderFootprint
         {
             get { return folderFootprint; }
             set { folderFootprint = value; }
@@ -140,7 +140,7 @@ namespace Jhu.Footprint.Web.Lib
             this.dateCreated = old.dateCreated;
             this.dateModified = old.dateModified;
             this.comments = old.comments;
-            this.folderFootprint = new Footprint(old.folderFootprint);
+            this.folderFootprint = new FootprintRegion(old.folderFootprint);
         }
 
         #endregion
@@ -221,7 +221,7 @@ WHERE Owner = @Owner
 
         private void LoadFolderFootprint()
         {
-            folderFootprint = new Footprint((Context)Context)
+            folderFootprint = new FootprintRegion((Context)Context)
             {
                 Id = this.footprintId,
             };
@@ -233,7 +233,7 @@ WHERE Owner = @Owner
             }
         }
 
-        private void InitializeFolderFootprint(Footprint f)
+        private void InitializeFolderFootprint(FootprintRegion f)
         {
             f.Type = FootprintType.Folder;
             f.Name = "folderFootprint";
@@ -242,7 +242,7 @@ WHERE Owner = @Owner
         /// <summary>
         /// Updates region cache if a new region is linked to the RegionGroup
         /// </summary>
-        public void UpdateFolderFootprint(Footprint newFootprint)
+        public void UpdateFolderFootprint(FootprintRegion newFootprint)
         {
             LoadFolderFootprint();
 
@@ -259,7 +259,7 @@ WHERE Owner = @Owner
                 // We only had one region in the folder so far, now need to create
                 // a new region to hold the intersection/union
 
-                folderFootprint = new Footprint(folderFootprint);
+                folderFootprint = new FootprintRegion(folderFootprint);
                 folderFootprint.Id = 0;
             }
 
@@ -288,7 +288,7 @@ WHERE Owner = @Owner
             LoadFolderFootprint();
 
             var search = new FootprintSearch((Context)Context) { User = this.Owner, FolderId = this.id };
-            IEnumerable<Footprint> footprints = search.GetFootprintsByFolderId();
+            IEnumerable<FootprintRegion> footprints = search.GetFootprintsByFolderId();
 
             // if less than 2 footprints are associated with this FootprintFolder,
             // FolderFootprint is not needed
@@ -323,7 +323,7 @@ WHERE Owner = @Owner
 
 
             // update the folderFootprint
-            foreach (Footprint f in footprints)
+            foreach (FootprintRegion f in footprints)
             {
                 switch (this.type)
                 {

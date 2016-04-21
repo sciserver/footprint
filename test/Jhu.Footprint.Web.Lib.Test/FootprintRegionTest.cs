@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 namespace Jhu.Footprint.Web.Lib
 {
     [TestClass]
-    public class FootprintTest : FootprintTestBase
+    public class FootprintRegionTest : FootprintTestBase
     {
         [ClassInitialize]
         public static void ClassInit(TestContext testContext)
@@ -28,7 +28,7 @@ namespace Jhu.Footprint.Web.Lib
 
                 folderid = (int)folder.Save();
 
-                var footprint = new Footprint(context)
+                var footprint = new FootprintRegion(context)
                 {
                     FolderId = folderid,
                     Name = "CreateFootprintTest",
@@ -55,7 +55,7 @@ namespace Jhu.Footprint.Web.Lib
 
                 folderid = (int)folder.Save();
 
-                var footprint = new Footprint(context)
+                var footprint = new FootprintRegion(context)
                 {
                     FolderId = folderid,
                     Name = "DuplicateFootprintNameTest",
@@ -65,7 +65,7 @@ namespace Jhu.Footprint.Web.Lib
 
                 footprint.Save();
 
-                footprint = new Footprint(context)
+                footprint = new FootprintRegion(context)
                 {
                     FolderId = folderid,
                     Name = "DuplicateFootprintNameTest",

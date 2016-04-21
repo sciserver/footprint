@@ -9,7 +9,7 @@ using System.Xml.Serialization;
 
 namespace Jhu.Footprint.Web.Lib
 {
-    public class FootprintSearch : Jhu.Graywulf.Entities.EntitySearch<Footprint>
+    public class FootprintSearch : Jhu.Graywulf.Entities.EntitySearch<FootprintRegion>
     {
         #region Member variables
         private string user;
@@ -68,9 +68,9 @@ namespace Jhu.Footprint.Web.Lib
         #endregion
 
         #region Methods
-        public IEnumerable<Footprint> GetFootprintsByFolderId()
+        public IEnumerable<FootprintRegion> GetFootprintsByFolderId()
         {
-            var res = new List<Footprint>();
+            var res = new List<FootprintRegion>();
             string sql = "fps.spGetFootprintsByFolderId";
 
 
@@ -87,7 +87,7 @@ namespace Jhu.Footprint.Web.Lib
                 {
                     while (dr.Read())
                     {
-                        var f = new Footprint((Context)Context);
+                        var f = new FootprintRegion((Context)Context);
                         f.LoadFromDataReader(dr);
 
                         res.Add(f);

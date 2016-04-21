@@ -14,7 +14,7 @@ using Jhu.Graywulf.Entities.Mapping;
 namespace Jhu.Footprint.Web.Lib
 {
     [DbTable]
-    public class Footprint : Jhu.Graywulf.Entities.Entity
+    public class FootprintRegion : Jhu.Graywulf.Entities.Entity
     {
         #region Member variables
 
@@ -87,18 +87,18 @@ namespace Jhu.Footprint.Web.Lib
         #endregion
 
         #region Constructors & Initializer
-        public Footprint()
+        public FootprintRegion()
         {
             InitializeMembers();
         }
 
-        public Footprint(Context context)
+        public FootprintRegion(Context context)
             : base(context)
         {
             InitializeMembers();
         }
 
-        public Footprint(Footprint old)
+        public FootprintRegion(FootprintRegion old)
             : base(old)
         {
             CopyMembers(old);
@@ -115,7 +115,7 @@ namespace Jhu.Footprint.Web.Lib
             this.thumbnail = null;
         }
 
-        private void CopyMembers(Footprint old)
+        private void CopyMembers(FootprintRegion old)
         {
             this.id = old.id;
             this.folderId = old.folderId;
