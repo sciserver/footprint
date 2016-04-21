@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Jhu.Footprint.Web.Lib
 {
     [TestClass]
-    public class FootprintFolderTest : FootprintTestBase
+    public class FootprintTest : FootprintTestBase
     {
         [ClassInitialize]
         public static void ClassInit(TestContext testContext)

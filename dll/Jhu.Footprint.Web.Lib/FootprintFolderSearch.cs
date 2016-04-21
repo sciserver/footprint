@@ -9,7 +9,7 @@ using System.Data.SqlClient;
 
 namespace Jhu.Footprint.Web.Lib
 {
-    public class FootprintFolderSearch: Jhu.Graywulf.Entities.EntitySearch<FootprintFolder>
+    public class FootprintFolderSearch: Jhu.Graywulf.Entities.EntitySearch<Footprint>
     {
         private FootprintSearchMethod searchMethod;
         private string user;
@@ -117,7 +117,7 @@ namespace Jhu.Footprint.Web.Lib
             }
         }
 
-        public IEnumerable<FootprintFolder> Find()
+        public IEnumerable<Footprint> Find()
         {
             switch (SearchMethod)
             {
@@ -135,9 +135,9 @@ namespace Jhu.Footprint.Web.Lib
             }
         }
 
-        private IEnumerable<FootprintFolder> FindByName()
+        private IEnumerable<Footprint> FindByName()
         { 
-            var res = new List<FootprintFolder>();
+            var res = new List<Footprint>();
             string sql = "fps.spFindFootprintFolderByName";
 
             using (var cmd = new SqlCommand(sql,Context.Connection,Context.Transaction))
@@ -152,7 +152,7 @@ namespace Jhu.Footprint.Web.Lib
                 {
                     while (dr.Read())
                     {
-                        var ff = new FootprintFolder((Context)Context);
+                        var ff = new Footprint((Context)Context);
                         ff.LoadFromDataReader(dr);
 
                         res.Add(ff);

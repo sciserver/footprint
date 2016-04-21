@@ -21,7 +21,7 @@ namespace Jhu.Footprint.Web.Lib
 
             using (var context = CreateContext())
             {
-                var folder = new FootprintFolder(context)
+                var folder = new Footprint(context)
                 {
                     Name = "CreateFootprintTest",
                 };
@@ -48,7 +48,7 @@ namespace Jhu.Footprint.Web.Lib
 
             using (var context = CreateContext())
             {
-                var folder = new FootprintFolder(context)
+                var folder = new Footprint(context)
                 {
                     Name = "DuplicateFootprintNameTest",
                 };

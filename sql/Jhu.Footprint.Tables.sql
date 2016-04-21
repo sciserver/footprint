@@ -1,23 +1,23 @@
+IF (OBJECT_ID('[dbo].[FootprintRegion]') IS NOT NULL)
+DROP TABLE [dbo].[FootprintRegion]
+GO
+
 IF (OBJECT_ID('[dbo].[Footprint]') IS NOT NULL)
 DROP TABLE [dbo].[Footprint]
 GO
 
-IF (OBJECT_ID('[dbo].[FootprintFolder]') IS NOT NULL)
-DROP TABLE [dbo].[FootprintFolder]
-GO
-
-CREATE TABLE [dbo].[FootprintFolder]
+CREATE TABLE [dbo].[Footprint]
 (
 	[ID] [int] IDENTITY(1,1) NOT NULL,
 	[Name] [nvarchar](256) NOT NULL,
 	[Owner] [nvarchar](250) NOT NULL,
-	[FootprintID] [int] NOT NULL,
+	[RegionID] [int] NOT NULL,
 	[Type] [tinyint] NOT NULL,
 	[DateCreated] [datetime] NOT NULL,
 	[DateModified] [datetime] NOT NULL,
 	[Comments] [nvarchar](max) NOT NULL,
 	[__acl] [varbinary](1024) NOT NULL,
-	CONSTRAINT [PK_FootprintFolder] PRIMARY KEY CLUSTERED
+	CONSTRAINT [PK_Footprint] PRIMARY KEY CLUSTERED
 	(
 		[ID] ASC
 	)
@@ -25,21 +25,21 @@ CREATE TABLE [dbo].[FootprintFolder]
  
 GO
 
-CREATE TABLE [dbo].[Footprint]
+CREATE TABLE [dbo].[FootprintRegion]
 (
 	[ID] [int] IDENTITY(1,1) NOT NULL,
-	[FolderID] [int] NOT NULL,
+	[FootprintID] [int] NOT NULL,
 	[Name] [nvarchar](256) NOT NULL, 
 	[FillFactor] [float] NOT NULL,
 	[Type] [tinyint] NOT NULL,
 	[Region] [varbinary](max) NULL,
 	[Thumbnail] [varbinary](max) NULL,
-	CONSTRAINT [PK_Footprint] PRIMARY KEY CLUSTERED
+	CONSTRAINT [PK_FootprintRegion] PRIMARY KEY CLUSTERED
 	(
 		[ID] ASC
 	),
-	CONSTRAINT FK_FootprintFolder_ID FOREIGN KEY (FolderID) 
-	REFERENCES FootprintFolder (ID)
+	CONSTRAINT FK_Footprint_ID FOREIGN KEY (FootprintID) 
+	REFERENCES Footprint (ID)
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
  
 GO

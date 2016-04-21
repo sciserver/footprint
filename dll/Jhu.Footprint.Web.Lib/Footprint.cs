@@ -12,21 +12,21 @@ using Jhu.Spherical;
 namespace Jhu.Footprint.Web.Lib
 {
     [DbTable]
-    public class FootprintFolder : Jhu.Graywulf.Entities.SecurableEntity
+    public class Footprint : Jhu.Graywulf.Entities.SecurableEntity
     {
         #region Member variables
 
         private int id;
-        private int footprintId;
         private string name;
+        private int regionId;
         private FolderType type;
         private DateTime dateCreated;
         private DateTime dateModified;
         private string comments;
-        private FootprintRegion folderFootprint;
+
+        private FootprintRegion region;
 
         #endregion
-
         #region Properties
 
         /// <summary>
@@ -41,17 +41,17 @@ namespace Jhu.Footprint.Web.Lib
         }
 
         [DbColumn]
-        public int FootprintId
-        {
-            get { return footprintId; }
-            set { footprintId = value; }
-        }
-
-        [DbColumn]
         public string Name
         {
             get { return name; }
             set { name = value; }
+        }
+
+        [DbColumn]
+        public int RegionId
+        {
+            get { return regionId; }
+            set { regionId = value; }
         }
 
         [DbColumn]
@@ -93,27 +93,27 @@ namespace Jhu.Footprint.Web.Lib
             }
         }
 
-        public FootprintRegion FolderFootprint
+        public FootprintRegion Region
         {
-            get { return folderFootprint; }
-            set { folderFootprint = value; }
+            get { return region; }
+            set { region = value; }
         }
 
         #endregion
         #region Contsructors and Initializers
 
-        public FootprintFolder()
+        public Footprint()
         {
             InitializeMembers();
         }
 
-        public FootprintFolder(Context context)
+        public Footprint(Context context)
             : base(context)
         {
             InitializeMembers();
         }
 
-        public FootprintFolder(FootprintFolder old)
+        public Footprint(Footprint old)
             : base(old)
         {
             CopyMembers(old);
@@ -122,25 +122,27 @@ namespace Jhu.Footprint.Web.Lib
         private void InitializeMembers()
         {
             this.id = 0;
+            this.regionId = 0;
             this.name = "";
-            this.footprintId = 0;
             this.type = FolderType.None;
             this.dateCreated = DateTime.Now;
             this.dateModified = DateTime.Now;
             this.comments = "";
-            this.folderFootprint = null;
+
+            this.region = null;
         }
 
-        private void CopyMembers(FootprintFolder old)
+        private void CopyMembers(Footprint old)
         {
             this.id = old.id;
             this.name = old.name;
-            this.footprintId = old.footprintId;
+            this.regionId = old.regionId;
             this.type = old.type;
             this.dateCreated = old.dateCreated;
             this.dateModified = old.dateModified;
             this.comments = old.comments;
-            this.folderFootprint = new FootprintRegion(old.folderFootprint);
+
+            this.region = new FootprintRegion(old.region);
         }
 
         #endregion
@@ -148,7 +150,7 @@ namespace Jhu.Footprint.Web.Lib
         protected Boolean IsNameDuplicate()
         {
             var sql = @"
-SELECT COUNT(*) FROM [FootprintFolder]
+SELECT COUNT(*) FROM [Footprint]
 WHERE Owner = @Owner
       AND ID != @ID
       AND Name = @Name";
@@ -221,69 +223,69 @@ WHERE Owner = @Owner
 
         private void LoadFolderFootprint()
         {
-            folderFootprint = new FootprintRegion((Context)Context)
+            region = new FootprintRegion((Context)Context)
             {
-                Id = this.footprintId,
+                Id = this.regionId,
             };
 
             // if a folderFootprint exists, load it
-            if (this.footprintId > 0)
+            if (this.regionId > 0)
             {
-                folderFootprint.Load();
+                region.Load();
             }
         }
 
-        private void InitializeFolderFootprint(FootprintRegion f)
+        private void InitializeRegion(FootprintRegion f)
         {
             f.Type = FootprintType.Folder;
-            f.Name = "folderFootprint";
+            f.Name = "footprintRegion";
         }
 
         /// <summary>
         /// Updates region cache if a new region is linked to the RegionGroup
         /// </summary>
-        public void UpdateFolderFootprint(FootprintRegion newFootprint)
+        public void UpdateRegion(FootprintRegion newFootprint)
         {
             LoadFolderFootprint();
 
-            if (folderFootprint.Region == null)
+            if (region.Region == null)
             {
                 // If this is the first footprint in the folder
-                this.footprintId = newFootprint.Id;
+                this.regionId = newFootprint.Id;
                 Save();
                 return;
             }
 
-            if (folderFootprint.Type == FootprintType.Region)
+            if (region.Type == FootprintType.Region)
             {
                 // We only had one region in the folder so far, now need to create
                 // a new region to hold the intersection/union
 
-                folderFootprint = new FootprintRegion(folderFootprint);
-                folderFootprint.Id = 0;
+                region = new FootprintRegion(region);
+                region.Id = 0;
             }
 
             switch (type)
             {
                 case FolderType.Union:
-                    folderFootprint.Region.SmartUnion(newFootprint.Region);
+                    region.Region.SmartUnion(newFootprint.Region);
                     break;
                 case FolderType.Intersection:
-                    folderFootprint.Region.SmartIntersect(newFootprint.Region, false);
+                    region.Region.SmartIntersect(newFootprint.Region, false);
                     break;
             }
 
 
-            InitializeFolderFootprint(folderFootprint);
-            folderFootprint.Save();
-            footprintId = folderFootprint.Id;
+            InitializeRegion(region);
+            region.Save();
+            regionId = region.Id;
             Save();
         }
 
         /// <summary>
-        /// Refrehes the region cache completely after a footprint delete
+        /// Refrehes the region cache completely after a region delete
         /// </summary>
-        public void RefreshFolderFootprint()
+        public void RefreshRegion()
         {
             LoadFolderFootprint();
 
@@ -295,13 +297,13 @@ WHERE Owner = @Owner
             if (footprints.Count() <= 1)
             {
                 // delete old folderFootprint if exists
-                if (folderFootprint != null && folderFootprint.Type == FootprintType.Folder)
+                if (region != null && region.Type == FootprintType.Folder)
                 {
-                    folderFootprint.Delete();
+                    region.Delete();
                 }
 
                 // (folder)footprintID must be set in DB
-                this.FootprintId = footprints.Count() == 1 ? footprints.ElementAt(0).Id : -1;
+                this.RegionId = footprints.Count() == 1 ? footprints.ElementAt(0).Id : -1;
 
                 Save();
                 return;
@@ -309,9 +311,9 @@ WHERE Owner = @Owner
 
             Spherical.Region region = new Spherical.Region();
 
-            if (folderFootprint == null || folderFootprint.Type != FootprintType.Folder)
+            if (region == null || region.Type != FootprintType.Folder)
             {
-                folderFootprint.Id = 0; // brand new folderFootprint 
+                region.Id = 0; // brand new folderFootprint 
             }
 
             // intersection must be started from an all-sky region
@@ -339,15 +341,15 @@ WHERE Owner = @Owner
             // save the new folderFootprint if required
             if (region != null)
             {
-                InitializeFolderFootprint(folderFootprint);
-                folderFootprint.FolderId = id;
+                InitializeRegion(region);
+                region.FolderId = id;
 
                 region.Simplify();
-                folderFootprint.Region = region;
+                region.Region = region;
 
-                folderFootprint.Save(); // save the new folderFootprint
+                region.Save(); // save the new folderFootprint
 
-                this.footprintId = folderFootprint.Id;
+                this.regionId = region.Id;
                 Save();
             }
 
