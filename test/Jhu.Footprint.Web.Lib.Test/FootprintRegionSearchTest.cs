@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Jhu.Graywulf.Test;
+using Jhu.Graywulf.Entities.AccessControl;
 
 namespace Jhu.Footprint.Web.Lib.Test
 {
@@ -13,54 +13,36 @@ namespace Jhu.Footprint.Web.Lib.Test
         {
             InitializeDatabase();
 
-            using (var context = CreateContext())
+        }
+
+        protected void CreateRegion(Context context, string name)
+        {
+            var footprint = new Footprint(context)
             {
-                context.Identity = CreateTestIdentity();
+                Name = name,
+            };
 
-                var footprint = new Footprint(context)
-                {
-                    Name = "FootprintRegionSearchTest",
-                };
+            footprint.Save();
 
-                footprint.Save();
-
-                var region = new FootprintRegion(context)
-                {
-                    FootprintId = footprint.Id,
-                    Name = "FootprintRegionSearchTest",
-                    Type = FootprintType.Region,
-                    Region = Spherical.Region.Parse("CIRCLE J2000 10 10 10")
-                };
-
-                region.Save();
-            }
-
-            using (var context = CreateContext())
+            var region = new FootprintRegion(footprint)
             {
-                context.Identity = CreateOtherIdentity();
+                Name = name,
+                Type = FootprintType.Region,
+                Region = Spherical.Region.Parse("CIRCLE J2000 10 10 10")
+            };
 
-                var footprint = new Footprint(context)
-                {
-                    Name = "OtherFootprint",
-                };
-
-                footprint.Save();
-
-                var region = new FootprintRegion(context)
-                {
-                    FootprintId = footprint.Id,
-                    Name = "OtherFootprint",
-                    Type = FootprintType.Region,
-                    Region = Spherical.Region.Parse("CIRCLE J2000 10 10 10")
-                };
-
-                region.Save();
-            }
+            region.Save();
         }
 
         [TestMethod]
-        public void FindByOwnerTest()
+        public void FindRegionByOwnerTest()
         {
+            using (var context = CreateContext())
+            {
+                context.Identity = CreateTestIdentity();
+                CreateRegion(context, "FindRegionByOwnerTest");
+            }
+
             using (var context = CreateContext())
             {
                 var search = new FootprintRegionSearch(context)
@@ -74,15 +56,21 @@ namespace Jhu.Footprint.Web.Lib.Test
         }
 
         [TestMethod]
-        public void FindByNameTest()
+        public void FindRegionByNameTest()
         {
+            using (var context = CreateContext())
+            {
+                context.Identity = CreateTestIdentity();
+                CreateRegion(context, "FindRegionByNameTest");
+            }
+
             using (var context = CreateContext())
             {
                 var search = new FootprintRegionSearch(context)
                 {
                     Owner = context.Identity.Name,
-                    FootprintName = "FootprintRegionSearch%",
-                    Name = "FootprintRegionSearch%"
+                    FootprintName = "FindRegionByName%",
+                    Name = "FindRegionByName%"
                 };
 
                 Assert.AreEqual(1, search.Count());
@@ -91,7 +79,7 @@ namespace Jhu.Footprint.Web.Lib.Test
         }
 
         [TestMethod]
-        public void FindByFootprintIdTest()
+        public void FindRegionByFootprintIdTest()
         {
             int footprintid;
 
@@ -104,9 +92,8 @@ namespace Jhu.Footprint.Web.Lib.Test
 
                 footprintid = (int)footprint.Save();
 
-                var region = new FootprintRegion(context)
+                var region = new FootprintRegion(footprint)
                 {
-                    FootprintId = footprint.Id,
                     Name = "FindByFootprintIdTest",
                     Type = FootprintType.Region,
                     Region = Spherical.Region.Parse("CIRCLE J2000 10 10 10")
@@ -128,7 +115,7 @@ namespace Jhu.Footprint.Web.Lib.Test
         }
 
         [TestMethod]
-        public void AccessDeniedTest()
+        public void RegionAccessDeniedTest()
         {
             int footprintid;
 
@@ -141,9 +128,8 @@ namespace Jhu.Footprint.Web.Lib.Test
 
                 footprintid = (int)footprint.Save();
 
-                var region = new FootprintRegion(context)
+                var region = new FootprintRegion(footprint)
                 {
-                    FootprintId = footprint.Id,
                     Name = "AccessDeniedTest",
                     Type = FootprintType.Region,
                     Region = Spherical.Region.Parse("CIRCLE J2000 10 10 10")

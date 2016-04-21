@@ -28,9 +28,8 @@ namespace Jhu.Footprint.Web.Lib
 
                 footprintid = (int)footprint.Save();
 
-                var region = new FootprintRegion(context)
+                var region = new FootprintRegion(footprint)
                 {
-                    FootprintId = footprintid,
                     Name = "CreateRegionTest",
                     Type = FootprintType.Region,
                     Region = Spherical.Region.Parse("CIRCLE J2000 10 10 10"),
@@ -55,9 +54,8 @@ namespace Jhu.Footprint.Web.Lib
 
                 footprintid = (int)footprint.Save();
 
-                var region = new FootprintRegion(context)
+                var region = new FootprintRegion(footprint)
                 {
-                    FootprintId = footprintid,
                     Name = "DuplicateRegionNameTest",
                     Type = FootprintType.Region,
                     Region = Spherical.Region.Parse("CIRCLE J2000 10 10 10"),
@@ -65,9 +63,8 @@ namespace Jhu.Footprint.Web.Lib
 
                 region.Save();
 
-                region = new FootprintRegion(context)
+                region = new FootprintRegion(footprint)
                 {
-                    FootprintId = footprintid,
                     Name = "DuplicateRegionNameTest",
                     Type = FootprintType.Region,
                     Region = Spherical.Region.Parse("CIRCLE J2000 10 10 10"),

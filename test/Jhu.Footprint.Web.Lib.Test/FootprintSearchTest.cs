@@ -39,7 +39,7 @@ namespace Jhu.Footprint.Web.Lib.Test
         }
 
         [TestMethod]
-        public void FindByOwnerTest()
+        public void FindFootprintByOwnerTest()
         {
             using (var context = CreateContext())
             {
@@ -54,7 +54,7 @@ namespace Jhu.Footprint.Web.Lib.Test
         }
 
         [TestMethod]
-        public void FindByNameTest()
+        public void FindFootprintByNameTest()
         {
             using (var context = CreateContext())
             {
