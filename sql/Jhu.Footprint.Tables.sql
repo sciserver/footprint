@@ -22,7 +22,13 @@ CREATE TABLE [dbo].[Footprint]
 		[ID] ASC
 	)
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
- 
+
+CREATE INDEX IX_Footprint_Name ON [dbo].[Footprint]
+(
+	[Owner],
+	[Name]
+)
+
 GO
 
 CREATE TABLE [dbo].[FootprintRegion]

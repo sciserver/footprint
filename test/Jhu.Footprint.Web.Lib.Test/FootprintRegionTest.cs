@@ -15,24 +15,24 @@ namespace Jhu.Footprint.Web.Lib
         }
 
         [TestMethod]
-        public void CreateFootprintTest()
+        public void CreateRegionTest()
         {
-            int folderid;
+            int footprintid;
 
             using (var context = CreateContext())
             {
-                var folder = new Footprint(context)
+                var footprint = new Footprint(context)
                 {
-                    Name = "CreateFootprintTest",
+                    Name = "CreateRegionTest",
                 };
 
-                folderid = (int)folder.Save();
+                footprintid = (int)footprint.Save();
 
-                var footprint = new FootprintRegion(context)
+                var region = new FootprintRegion(context)
                 {
-                    FolderId = folderid,
-                    Name = "CreateFootprintTest",
-                    Type =FootprintType.Region,
+                    FootprintId = footprintid,
+                    Name = "CreateRegionTest",
+                    Type = FootprintType.Region,
                     Region = Spherical.Region.Parse("CIRCLE J2000 10 10 10"),
                 };
 
@@ -42,38 +42,38 @@ namespace Jhu.Footprint.Web.Lib
 
         [TestMethod]
         [ExpectedException(typeof(DuplicateNameException))]
-        public void DuplicateFootprintNameTest()
+        public void DuplicateRegionNameTest()
         {
-            int folderid;
+            int footprintid;
 
             using (var context = CreateContext())
             {
-                var folder = new Footprint(context)
+                var footprint = new Footprint(context)
                 {
-                    Name = "DuplicateFootprintNameTest",
+                    Name = "DuplicateRegionNameTest",
                 };
 
-                folderid = (int)folder.Save();
+                footprintid = (int)footprint.Save();
 
-                var footprint = new FootprintRegion(context)
+                var region = new FootprintRegion(context)
                 {
-                    FolderId = folderid,
-                    Name = "DuplicateFootprintNameTest",
+                    FootprintId = footprintid,
+                    Name = "DuplicateRegionNameTest",
                     Type = FootprintType.Region,
                     Region = Spherical.Region.Parse("CIRCLE J2000 10 10 10"),
                 };
 
-                footprint.Save();
+                region.Save();
 
-                footprint = new FootprintRegion(context)
+                region = new FootprintRegion(context)
                 {
-                    FolderId = folderid,
-                    Name = "DuplicateFootprintNameTest",
+                    FootprintId = footprintid,
+                    Name = "DuplicateRegionNameTest",
                     Type = FootprintType.Region,
                     Region = Spherical.Region.Parse("CIRCLE J2000 10 10 10"),
                 };
 
-                footprint.Save();
+                region.Save();
             }
         }
 

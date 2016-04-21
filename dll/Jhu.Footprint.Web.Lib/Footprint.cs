@@ -237,7 +237,7 @@ WHERE Owner = @Owner
 
         private void InitializeFootprintRegion(FootprintRegion f)
         {
-            f.Type = FootprintType.Folder;
+            f.Type = FootprintType.Footprint;
             f.Name = "footprintRegion";
         }
 
@@ -291,7 +291,7 @@ WHERE Owner = @Owner
 
             var search = new FootprintRegionSearch((Context)Context)
             { 
-                FolderId = this.id
+                FootprintId = this.id
             };
             var footprints = search.Find();
 
@@ -300,7 +300,7 @@ WHERE Owner = @Owner
             if (footprints.Count() <= 1)
             {
                 // delete old folderFootprint if exists
-                if (region != null && region.Type == FootprintType.Folder)
+                if (region != null && region.Type == FootprintType.Footprint)
                 {
                     region.Delete();
                 }
@@ -314,7 +314,7 @@ WHERE Owner = @Owner
 
             Spherical.Region r = new Spherical.Region();
 
-            if (region == null || region.Type != FootprintType.Folder)
+            if (region == null || region.Type != FootprintType.Footprint)
             {
                 region.Id = 0; // brand new folderFootprint 
             }
@@ -345,7 +345,7 @@ WHERE Owner = @Owner
             if (region != null)
             {
                 InitializeFootprintRegion(region);
-                region.FolderId = id;
+                region.FootprintId = id;
 
                 r.Simplify();
                 region.Region = r;

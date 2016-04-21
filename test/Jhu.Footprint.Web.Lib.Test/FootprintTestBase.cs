@@ -14,7 +14,13 @@ namespace Jhu.Footprint.Web.Lib
         protected const string TestUser = "test";
         protected const string OtherUser = "other";
 
-        protected static string MapPath(string path)
+        protected static string MapSolutionRelativePath(string path)
+        {
+            var dir = Path.GetDirectoryName(Environment.GetEnvironmentVariable("SolutionPath"));
+            return Path.Combine(dir, path);
+        }
+
+        protected static string MapProjectRelativePath(string path)
         {
             return Path.Combine(Environment.CurrentDirectory, @"..\..\..\..\", path);
         }
@@ -49,9 +55,30 @@ namespace Jhu.Footprint.Web.Lib
 
         protected static void InitializeDatabase()
         {
+            string script;
+            string bin;
+
+#if DEBUG
+            bin = @"bin\Debug";
+#else
+                bin = @"bin\Release";
+#endif
+
             using (var context = CreateContext())
             {
-                string script = File.ReadAllText(MapPath(@"sql\Jhu.Footprint.Tables.sql"));
+                script = File.ReadAllText(MapSolutionRelativePath(bin + @"\Graywulf.Entities.Sql.Drop.sql"));
+                context.ExecuteScriptNonQuery(script);
+            }
+
+            using (var context = CreateContext())
+            {
+                script = File.ReadAllText(MapSolutionRelativePath(bin + @"\Graywulf.Entities.Sql.Create.sql"));
+                context.ExecuteScriptNonQuery(script);
+            }
+
+            using (var context = CreateContext())
+            {
+                script = File.ReadAllText(MapProjectRelativePath(@"sql\Jhu.Footprint.Tables.sql"));
                 context.ExecuteScriptNonQuery(script);
             }
         }

@@ -58,6 +58,8 @@
   </Choose>
   <ItemGroup>
     <Compile Include="FootprintRegionTest.cs" />
+    <Compile Include="FootprintRegionSearchTest.cs" />
+    <Compile Include="FootprintSearchTest.cs" />
     <Compile Include="FootprintTest.cs">
       <SubType>Code</SubType>
     </Compile>

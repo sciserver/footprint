@@ -19,7 +19,7 @@ namespace Jhu.Footprint.Web.Lib
         #region Member variables
 
         private int id;
-        private int folderId;
+        private int footprintId;
         private string name;
         private double fillFactor;
         private FootprintType type;
@@ -37,10 +37,10 @@ namespace Jhu.Footprint.Web.Lib
         }
 
         [DbColumn]
-        public int FolderId
+        public int FootprintId
         {
-            get { return folderId; }
-            set { folderId = value; }
+            get { return footprintId; }
+            set { footprintId = value; }
         }
 
         [DbColumn]
@@ -107,7 +107,7 @@ namespace Jhu.Footprint.Web.Lib
         private void InitializeMembers()
         {
             this.id = 0;
-            this.folderId = 0;
+            this.footprintId = 0;
             this.name = "";
             this.fillFactor = 1.0;
             this.type = FootprintType.Region;
@@ -118,7 +118,7 @@ namespace Jhu.Footprint.Web.Lib
         private void CopyMembers(FootprintRegion old)
         {
             this.id = old.id;
-            this.folderId = old.folderId;
+            this.footprintId = old.footprintId;
             this.name = old.name;
             this.fillFactor = old.fillFactor;
             this.type = old.type;
@@ -128,18 +128,28 @@ namespace Jhu.Footprint.Web.Lib
 
         #endregion
 
+        protected override string GetTableQuery()
+        {
+            return @"
+SELECT r.*, f.Owner, f.__acl
+FROM [FootprintRegion] r
+INNER JOIN [Footprint] f
+    ON r.FootprintID = f.ID
+";
+        }
+
         protected Boolean IsNameDuplicate()
         {
             var sql = @"
-SELECT COUNT(*) FROM Footprint
+SELECT COUNT(*) FROM FootprintRegion
 WHERE ID != @ID
-      AND FolderID = @FolderID
+      AND FootprintID = @FootprintID
 	  AND Name = @Name";
 
             using (var cmd = Context.CreateCommand(sql))
             {
                 cmd.Parameters.Add("@ID", SqlDbType.BigInt).Value = this.Id;
-                cmd.Parameters.Add("@FolderID", SqlDbType.BigInt).Value = this.folderId;
+                cmd.Parameters.Add("@FootprintID", SqlDbType.BigInt).Value = this.footprintId;
                 cmd.Parameters.Add("@Name", SqlDbType.NVarChar, 256).Value = this.Name;
 
                 return (int)Context.ExecuteCommandScalar(cmd) > 0;

@@ -10,12 +10,12 @@ using Jhu.Graywulf.Entities.Mapping;
 
 namespace Jhu.Footprint.Web.Lib
 {
-    public class FootprintRegionSearch : Jhu.Graywulf.Entities.EntitySearch<FootprintRegion>
+    public class FootprintRegionSearch : Jhu.Graywulf.Entities.SecurableEntitySearch<FootprintRegion>
     {
         #region Member variables
 
         private string owner;
-        private int? folderId;
+        private int? footprintId;
         private string footprintName;
         private string name;
 
@@ -30,10 +30,10 @@ namespace Jhu.Footprint.Web.Lib
         }
 
         [DbColumn]
-        public int? FolderId
+        public int? FootprintId
         {
-            get { return folderId; }
-            set { folderId = value; }
+            get { return footprintId; }
+            set { footprintId = value; }
         }
 
         public string FootprintName
@@ -68,7 +68,7 @@ namespace Jhu.Footprint.Web.Lib
         public void InitializeMembers()
         {
             this.owner = null;
-            this.folderId = null;
+            this.footprintId = null;
             this.footprintName = null;
             this.name = null;
         }

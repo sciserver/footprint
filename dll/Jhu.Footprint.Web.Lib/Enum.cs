@@ -36,6 +36,6 @@ namespace Jhu.Footprint.Web.Lib
     public enum FootprintType
     {
         Region = 0,
-        Folder = 1
+        Footprint = 1
     }
 }
