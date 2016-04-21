@@ -58,9 +58,11 @@
   </Choose>
   <ItemGroup>
     <Compile Include="FootprintRegionTest.cs" />
+    <Compile Include="FootprintTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="FootprintTestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="FootprintFolderTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\graywulf-entities\dll\Jhu.Graywulf.Entities\Jhu.Graywulf.Entities.csproj">
