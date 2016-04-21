@@ -63,6 +63,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\graywulf-entities\dll\Jhu.Graywulf.Entities\Jhu.Graywulf.Entities.csproj">
+      <Project>{cf0cec0a-139f-40f5-a6dd-2708400b539d}</Project>
+      <Name>Jhu.Graywulf.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\graywulf\dll\Jhu.Graywulf.Web\Jhu.Graywulf.Web.csproj">
       <Project>{e9d182cf-746e-4e40-b01c-74a32fb70749}</Project>
       <Name>Jhu.Graywulf.Web</Name>

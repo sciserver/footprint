@@ -22,9 +22,9 @@ namespace Jhu.Footprint.Web.Api.V1
         [Description("List of fooptrint in folder.")]
         public Uri[] FootprintList { get; set; }
 
-        public FootprintResponse(Footprint folder, Uri[] footprintList)
+        public FootprintResponse(Footprint footprint, Uri[] footprintList)
         {
-            this.FootprintFolder = folder;
+            this.FootprintFolder = footprint;
             this.FootprintList = footprintList;
         }
     }

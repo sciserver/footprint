@@ -61,6 +61,15 @@ namespace Jhu.Footprint.Web.Lib {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Access denied..
+        /// </summary>
+        internal static string AccessDenied {
+            get {
+                return ResourceManager.GetString("AccessDenied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot find the specified footprint: &apos;{0}/{1}/{2}&apos;..
         /// </summary>
         internal static string CannotFindFootprint {

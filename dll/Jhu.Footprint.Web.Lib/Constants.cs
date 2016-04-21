@@ -13,10 +13,14 @@ namespace Jhu.Footprint.Web.Lib
             "plot",
             "convexhull",
             "footprint",
+            "region",
             "points",
             "outline",
             "reduced"
         };
+
+        public const string GroupRoleAdmin = "admin";
+        public const string GroupRoleMember = "member";
 
         public static readonly Regex NamePattern = new Regex(@"^[a-zA-Z0-9\-\.\+]{3,}$", RegexOptions.Compiled );
 

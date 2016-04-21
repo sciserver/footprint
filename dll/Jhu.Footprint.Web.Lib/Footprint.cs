@@ -7,6 +7,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Xml.Serialization;
 using Jhu.Graywulf.Entities.Mapping;
+using Jhu.Graywulf.Entities.AccessControl;
 using Jhu.Spherical;
 
 namespace Jhu.Footprint.Web.Lib
@@ -183,6 +184,19 @@ WHERE Owner = @Owner
             }
 
             base.OnValidating(e);
+        }
+
+        protected override void OnSaving(Graywulf.Entities.EntityEventArgs e)
+        {
+            // Make sure user can save footprint with specified owner
+
+            if (!Context.Identity.IsSame(this.Owner) &&
+                !Context.Identity.IsInRole(this.Owner, Constants.GroupRoleAdmin))
+            {
+                throw Error.AccessDenied();
+            }
+            
+            base.OnSaving(e);
         }
 
         protected override void OnModifying(Graywulf.Entities.EntityEventArgs e)

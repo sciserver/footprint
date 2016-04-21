@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Security;
 
 namespace Jhu.Footprint.Web.Lib
 {
@@ -69,6 +70,12 @@ namespace Jhu.Footprint.Web.Lib
 
             return new FootprintException(message);
         }
+
+        public static SecurityException AccessDenied()
+        {
+            return new SecurityException(ExceptionMessages.AccessDenied);
+        }
+
         #endregion
     }
 }
