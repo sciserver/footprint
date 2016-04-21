@@ -41,7 +41,7 @@ namespace Jhu.Footprint.Web.Lib
         public int FootprintId
         {
             get { return footprintId; }
-            protected set { footprintId = value; }
+            set { footprintId = value; }
         }
 
         [DbColumn]

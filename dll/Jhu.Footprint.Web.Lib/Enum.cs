@@ -33,7 +33,7 @@ namespace Jhu.Footprint.Web.Lib
         Any = 0x7F,
     }
 
-    public enum FootprintType
+    public enum FootprintType : byte
     {
         Region = 0,
         Footprint = 1

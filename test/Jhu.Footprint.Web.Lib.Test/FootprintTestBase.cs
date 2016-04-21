@@ -94,5 +94,26 @@ namespace Jhu.Footprint.Web.Lib
                 cmd.ExecuteNonQuery();
             }
         }*/
+
+        protected FootprintRegion CreateRegion(Context context, string name)
+        {
+            var footprint = new Footprint(context)
+            {
+                Name = name,
+            };
+
+            footprint.Save();
+
+            var region = new FootprintRegion(footprint)
+            {
+                Name = name,
+                Type = FootprintType.Region,
+                Region = Spherical.Region.Parse("CIRCLE J2000 10 10 10")
+            };
+
+            region.Save();
+
+            return region;
+        }
     }
 }

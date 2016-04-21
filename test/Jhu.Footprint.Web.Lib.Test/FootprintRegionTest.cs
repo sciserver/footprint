@@ -2,6 +2,7 @@
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Xml.Serialization;
+using Jhu.Graywulf.Entities.AccessControl;
 
 namespace Jhu.Footprint.Web.Lib
 {
@@ -71,6 +72,54 @@ namespace Jhu.Footprint.Web.Lib
                 };
 
                 region.Save();
+            }
+        }
+
+        [TestMethod]
+        public void AccessDeniedCreateRegionTest()
+        {
+            int regionId;
+            int footprintid;
+
+            using (var context = CreateContext())
+            {
+                var region = CreateRegion(context, "AccessDeniedCreateRegionTest");
+                regionId = region.Id;
+                footprintid = region.FootprintId;
+
+                // grant access to other identity
+
+                var footprint = new Footprint(context);
+                footprint.Load(footprintid);
+                footprint.Permissions.Grant(CreateOtherIdentity().Name, DefaultAccess.Read);
+                footprint.Save();
+            }
+
+            using (var context = CreateContext())
+            {
+                context.Identity = CreateOtherIdentity();
+
+                var footprint = new Footprint(context);
+                footprint.Load(footprintid);
+
+                var region = new FootprintRegion(footprint)
+                {
+                    FootprintId = footprintid,
+                    Id = regionId
+                };
+
+                region.Load();
+
+                // Now try to modify, this should fail
+
+                try
+                {
+                    region.Save();
+                    Assert.Fail();
+                }
+                catch (System.Security.SecurityException)
+                {
+                }
             }
         }
 
