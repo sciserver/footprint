@@ -9,7 +9,7 @@ using System.Xml.Serialization;
 
 namespace Jhu.Footprint.Web.Lib
 {
-    public class FootprintSearch : Jhu.Graywulf.Entities.EntitySearch<FootprintRegion>
+    public class FootprintRegionSearch : Jhu.Graywulf.Entities.EntitySearch<FootprintRegion>
     {
         #region Member variables
         private string user;
@@ -48,13 +48,13 @@ namespace Jhu.Footprint.Web.Lib
         #endregion
 
         #region Constructors & intitializers
-        public FootprintSearch()
+        public FootprintRegionSearch()
             : base()
         {
             InitializeMembers();
         }
 
-        public FootprintSearch(Context context)
+        public FootprintRegionSearch(Context context)
             : base(context)
         {
             InitializeMembers();
