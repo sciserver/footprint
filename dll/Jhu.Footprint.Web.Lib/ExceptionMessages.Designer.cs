@@ -97,6 +97,15 @@ namespace Jhu.Footprint.Web.Lib {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid footprint name &apos;{0}&apos;..
+        /// </summary>
+        internal static string FootprintNameInvalid {
+            get {
+                return ResourceManager.GetString("FootprintNameInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot use &apos;{0}&apos; as name of the footprint. The following strings are probhited: convexhull, footprint, outline, plot, points, reduced..
         /// </summary>
         internal static string FootprintNameNotAvailable {

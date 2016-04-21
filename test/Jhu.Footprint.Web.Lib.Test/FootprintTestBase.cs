@@ -5,37 +5,58 @@ using System.Text;
 using System.IO;
 using System.Data;
 using System.Data.SqlClient;
+using Jhu.Graywulf.Entities.AccessControl;
 
 namespace Jhu.Footprint.Web.Lib
 {
     public class FootprintTestBase
     {
-        protected static void InitDatabase()
-        {
-            using (var context = new Context())
-            {
-                string path = Path.GetDirectoryName((string)Environment.GetEnvironmentVariables()["SolutionPath"]);
+        protected const string TestUser = "test";
+        protected const string OtherUser = "other";
 
-                ExecuteSqlScript(context, File.ReadAllText(Path.Combine(path, @"footprint\sql\Jhu.Footprint.Tables.sql")));
-                
-                ExecuteSqlBulkInsert(context, "Footprint", Path.Combine(path, @"footprint\data\test\footprint.dat"));
-                ExecuteSqlBulkInsert(context, "FootprintFolder", Path.Combine(path, @"footprint\data\test\footprintfolder.dat"));
+        protected static string MapPath(string path)
+        {
+            return Path.Combine(Environment.CurrentDirectory, @"..\..\..\..\", path);
+        }
+
+        protected static Identity CreateTestIdentity()
+        {
+            return new Identity()
+            {
+                IsAuthenticated = true,
+                Name = TestUser
+            };
+        }
+
+        protected static Identity CreateOtherIdentity()
+        {
+            return new Identity()
+            {
+                IsAuthenticated = true,
+                Name = OtherUser
+            };
+        }
+
+        protected static Context CreateContext()
+        {
+            var context = new Context()
+            {
+                Identity = CreateTestIdentity()
+            };
+
+            return context;
+        }
+
+        protected static void InitializeDatabase()
+        {
+            using (var context = CreateContext())
+            {
+                string script = File.ReadAllText(MapPath(@"sql\Jhu.Footprint.Tables.sql"));
+                context.ExecuteScriptNonQuery(script);
             }
         }
 
-        private static void ExecuteSqlScript(Context context, string script)
-        {
-            var scripts = script.Split(new string[] { "\r\nGO", "\nGO" }, StringSplitOptions.RemoveEmptyEntries);
-
-            foreach (var sql in scripts)
-            {
-                using (var cmd = new SqlCommand(sql, context.Connection))
-                {
-                    cmd.ExecuteNonQuery();
-                }
-            }
-        }
-
+        /*
         private static void ExecuteSqlBulkInsert(Context context, string table, string filename)
         {
             var sql = @"BULK INSERT {0} FROM '{1}' WITH (DATAFILETYPE = 'native')";
@@ -45,6 +66,6 @@ namespace Jhu.Footprint.Web.Lib
             {
                 cmd.ExecuteNonQuery();
             }
-        }
+        }*/
     }
 }

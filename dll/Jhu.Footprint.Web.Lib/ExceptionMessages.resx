@@ -129,6 +129,9 @@
   <data name="DuplicateFootprintName" xml:space="preserve">
     <value>Duplicate footprint name: '{0}'.</value>
   </data>
+  <data name="FootprintNameInvalid" xml:space="preserve">
+    <value>Invalid footprint name '{0}'.</value>
+  </data>
   <data name="FootprintNameNotAvailable" xml:space="preserve">
     <value>Cannot use '{0}' as name of the footprint. The following strings are probhited: convexhull, footprint, outline, plot, points, reduced.</value>
   </data>

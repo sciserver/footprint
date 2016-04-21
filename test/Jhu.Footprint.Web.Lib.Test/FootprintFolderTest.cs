@@ -12,55 +12,77 @@ namespace Jhu.Footprint.Web.Lib
         [ClassInitialize]
         public static void ClassInit(TestContext testContext)
         {
-            InitDatabase();
+            InitializeDatabase();
         }
 
         [TestMethod]
-        public void FolderCreateTest()
+        public void CreateFolderTest()
         {
-            using (var context = new Context())
+            int id;
+
+            using (var context = CreateContext())
+            {
+                var folder = new FootprintFolder(context)
+                {
+                    Name = "CreateFolderTest",
+                };
+
+                id = (int)folder.Save();
+            }
+
+            using (var context = CreateContext())
             {
                 var folder = new FootprintFolder(context);
-
-                folder.Name = "CreateTest";
-                folder.Owner = "webtestuser";
-                folder.Type = FolderType.None;
-                folder.Public = 1;
-                folder.Comments = "FootprintFolder.Create Unit Test";
-
-                folder.Save();
+                folder.Load(id);
             }
         }
 
         [TestMethod]
         [ExpectedException(typeof(FootprintFolderException))]
-        public void FolderCreateTest2()
+        public void DuplicateFolderNameCreateTest()
         {
-            using (var context = new Context())
+            using (var context = CreateContext())
             {
+                var folder = new FootprintFolder(context)
+                {
+                    Name = "DuplicateFolderNameTest",
+                };
 
-                var folder = new FootprintFolder(context);
+                folder.Save();
+            }
 
-                folder.Name = "SDSS.DR7";
-                folder.Owner = "evelin";
-                folder.Comments = "Duplicate name exception test";
+            using (var context = CreateContext())
+            {
+                var folder = new FootprintFolder(context)
+                {
+                    Name = "DuplicateFolderNameTest",
+                };
 
                 folder.Save();
             }
         }
 
         [TestMethod]
-        public void FolderModifyTest()
+        public void ModifyFolderTest()
         {
-            using (var context = new Context())
+            int id;
+
+            using (var context = CreateContext())
+            {
+                var folder = new FootprintFolder(context)
+                {
+                    Name = "ModifyFolderTest",
+                };
+
+                id = (int)folder.Save();
+            }
+
+            using (var context = CreateContext())
             {
                 var folder = new FootprintFolder(context);
+                folder.Load(id);
 
-                folder.Id = 4;
-                context.User = "mike";
-                folder.Load();
-
-                folder.Name = "ModifyTest";
+                folder.Name = "Rename";
                 folder.Comments = "FootprintFolder.Modify Unit Test";
 
                 folder.Save();
@@ -69,36 +91,67 @@ namespace Jhu.Footprint.Web.Lib
 
         [TestMethod]
         [ExpectedException(typeof(FootprintFolderException))]
-        public void FolderModifyTest2()
+        public void DuplicateFolderNameModifyTest()
         {
-            using (var context = new Context())
+            int id;
+
+            using (var context = CreateContext())
+            {
+                var folder = new FootprintFolder(context)
+                {
+                    Name = "DuplicateFolderNameModifyTest",
+                };
+
+                id = (int)folder.Save();
+            }
+
+            using (var context = CreateContext())
+            {
+                var folder = new FootprintFolder(context)
+                {
+                    Name = "DuplicateFolderNameModifyTest2",
+                };
+
+                id = (int)folder.Save();
+            }
+
+            using (var context = CreateContext())
             {
                 var folder = new FootprintFolder(context);
+                folder.Load(id);
 
-                folder.Id = 3;
-                context.User = "bob";
-                folder.Load();
-
-                folder.Name = "2SLAQ";
-                folder.Comments = "duplicate name exception test";
+                folder.Name = "DuplicateFolderNameModifyTest";
 
                 folder.Save();
             }
         }
 
         [TestMethod]
-        public void FolderDeleteTest()
+        public void DeleteFolderTest()
         {
-            using (var context = new Context())
+            int id;
+
+            using (var context = CreateContext())
+            {
+                var folder = new FootprintFolder(context)
+                {
+                    Name = "DeleteFolderTest",
+                };
+
+                id = (int)folder.Save();
+            }
+
+            using (var context = CreateContext())
             {
                 var folder = new FootprintFolder(context);
-
-                folder.Id = 9;
-                context.User = "lilly";
-
+                folder.Load(id);
                 folder.Delete();
             }
         }
+
+        /*
+
+        
 
         [TestMethod]
         public void FolderLoadTest()
@@ -302,5 +355,6 @@ namespace Jhu.Footprint.Web.Lib
                 folder.UpdateFolderFootprint(footprint);
             }
         }
+         * */
     }
 }

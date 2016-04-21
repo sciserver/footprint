@@ -11,13 +11,14 @@ using Jhu.Spherical;
 
 namespace Jhu.Footprint.Web.Lib
 {
+    [DbTable]
     public class FootprintFolder : Jhu.Graywulf.Entities.SecurableEntity
     {
         #region Member variables
 
-        private long id;
+        private int id;
+        private int footprintId;
         private string name;
-        private long footprintId;
         private FolderType type;
         private DateTime dateCreated;
         private DateTime dateModified;
@@ -33,10 +34,17 @@ namespace Jhu.Footprint.Web.Lib
         /// modifying. If set to 0, Save() will create a new record in the database.
         /// </summary>
         [DbColumn(Binding = DbColumnBinding.Key)]
-        public long Id
+        public int Id
         {
             get { return id; }
             set { id = value; }
+        }
+
+        [DbColumn]
+        public int FootprintId
+        {
+            get { return footprintId; }
+            set { footprintId = value; }
         }
 
         [DbColumn]
@@ -52,13 +60,6 @@ namespace Jhu.Footprint.Web.Lib
         {
             get { return Permissions.Owner; }
             set { Permissions.Owner = value; }
-        }
-
-        [DbColumn]
-        public long FootprintId
-        {
-            get { return footprintId; }
-            set { footprintId = value; }
         }
 
         [DbColumn]
@@ -147,31 +148,39 @@ namespace Jhu.Footprint.Web.Lib
         protected Boolean IsNameDuplicate()
         {
             var sql = @"
-SELECT COUNT(*) FROM FootprintFolder
+SELECT COUNT(*) FROM [FootprintFolder]
 WHERE Owner = @Owner
-	  AND FolderId != @FolderId
+      AND ID != @ID
       AND Name = @Name";
 
             using (var cmd = Context.CreateCommand(sql))
             {
                 cmd.Parameters.Add("@Owner", SqlDbType.NVarChar, 250).Value = this.Owner;
-                cmd.Parameters.Add("@FolderId", SqlDbType.BigInt).Value = this.Id;
+                cmd.Parameters.Add("@ID", SqlDbType.BigInt).Value = this.Id;
                 cmd.Parameters.Add("@Name", SqlDbType.NVarChar, 256).Value = this.Name;
 
                 return (int)Context.ExecuteCommandScalar(cmd) > 0;
             }
         }
 
-        protected override void OnSaving(Graywulf.Entities.EntityEventArgs e)
+        protected override void OnValidating(Graywulf.Entities.EntityEventArgs e)
         {
-            // TODO: validate name
+            if (Constants.RestictedNames.Contains(this.name))
+            {
+                throw Error.FootprintNameNotAvailable(this.name);
+            }
+
+            if (!Constants.NamePattern.Match(this.name).Success)
+            {
+                throw Error.FootprintNameInvalid(this.name);
+            }
 
             if (IsNameDuplicate())
             {
                 throw Error.DuplicateFootprintFolderName(this.name);
             }
 
-            base.OnSaving(e);
+            base.OnValidating(e);
         }
 
         protected override void OnModifying(Graywulf.Entities.EntityEventArgs e)

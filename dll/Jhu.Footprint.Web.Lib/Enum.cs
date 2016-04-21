@@ -23,12 +23,14 @@ namespace Jhu.Footprint.Web.Lib
         //All = 0x04,      // all public owned by noone // Do we really need this?
     }
 
-    public enum FolderType
+    [Flags]
+    public enum FolderType : byte
     {
-        Any = -1,
         None = 0,
         Union = 1,
-        Intersection = 2
+        Intersection = 2,
+
+        Any = 0x7F,
     }
 
     public enum FootprintType

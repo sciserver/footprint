@@ -17,8 +17,8 @@ namespace Jhu.Footprint.Web.Lib
     {
         #region Member variables
 
-        private long id;
-        private long folderId;
+        private int id;
+        private int folderId;
         private string name;
         private double fillFactor;
         private FootprintType type;
@@ -29,14 +29,14 @@ namespace Jhu.Footprint.Web.Lib
         #region Properties
 
         [DbColumn(Binding = DbColumnBinding.Key)]
-        public long Id
+        public int Id
         {
             get { return id; }
             set { id = value; }
         }
 
         [DbColumn]
-        public long FolderId
+        public int FolderId
         {
             get { return folderId; }
             set { folderId = value; }

@@ -33,10 +33,16 @@ namespace Jhu.Footprint.Web.Lib
 
         public static FootprintException FootprintNameNotAvailable(string name)
         {
-            var message = String.Format(ExceptionMessages.FootprintNameNotAvailable,
-                name);
+            var message = String.Format(ExceptionMessages.FootprintNameNotAvailable, name);
             return new FootprintException(message);
         }
+
+        public static FootprintException FootprintNameInvalid(string name)
+        {
+            var message = String.Format(ExceptionMessages.FootprintNameInvalid, name);
+            return new FootprintException(message);
+        }
+
         #endregion
 
         #region Footprint Folder Errors

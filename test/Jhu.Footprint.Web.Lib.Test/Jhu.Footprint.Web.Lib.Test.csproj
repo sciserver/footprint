@@ -60,11 +60,12 @@
     <Compile Include="FootprintTestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FootprintFolderTest.cs" />
-    <Compile Include="FootprintTest.cs" />
-    <Compile Include="SearchTest.cs" />
-    <Compile Include="CoordinateTransformationTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\graywulf-entities\dll\Jhu.Graywulf.Entities\Jhu.Graywulf.Entities.csproj">
+      <Project>{cf0cec0a-139f-40f5-a6dd-2708400b539d}</Project>
+      <Name>Jhu.Graywulf.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\graywulf\test\Jhu.Graywulf.Test\Jhu.Graywulf.Test.csproj">
       <Project>{ea6164ba-b283-46c2-874b-348d6bad41ad}</Project>
       <Name>Jhu.Graywulf.Test</Name>
