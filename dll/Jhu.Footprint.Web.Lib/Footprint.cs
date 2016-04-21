@@ -13,6 +13,7 @@ using Jhu.Graywulf.Entities.Mapping;
 
 namespace Jhu.Footprint.Web.Lib
 {
+    [DbTable]
     public class Footprint : Jhu.Graywulf.Entities.Entity
     {
         #region Member variables
@@ -69,18 +70,18 @@ namespace Jhu.Footprint.Web.Lib
             set { region = value; }
         }
 
-        [DbColumn]
-        public SqlBytes RegionBinary
+        [DbColumn(Name = "Region")]
+        public byte[] RegionBinary
         {
-            get { return region.ToSqlBytes(); }
-            set { region = Region.FromSqlBytes(value); }
+            get { return region.ToSqlBytes().Value; }
+            set { region = Region.FromSqlBytes(new SqlBytes(value)); }
         }
 
         [DbColumn]
-        public SqlBytes Thumbnail
+        public byte[] Thumbnail
         {
-            get { return new SqlBytes(thumbnail); }
-            set { thumbnail = value.Value; }
+            get { return thumbnail; }
+            set { thumbnail = value; }
         }
 
         #endregion
@@ -108,8 +109,8 @@ namespace Jhu.Footprint.Web.Lib
             this.id = 0;
             this.folderId = 0;
             this.name = "";
-            this.fillFactor = 0;
-            this.type = FootprintType.None;
+            this.fillFactor = 1.0;
+            this.type = FootprintType.Region;
             this.region = null;
             this.thumbnail = null;
         }
@@ -131,14 +132,14 @@ namespace Jhu.Footprint.Web.Lib
         {
             var sql = @"
 SELECT COUNT(*) FROM Footprint
-WHERE FolderId = @FolderId
-      AND FootprintID != @FootprintId
+WHERE ID != @ID
+      AND FolderID = @FolderID
 	  AND Name = @Name";
 
             using (var cmd = Context.CreateCommand(sql))
             {
-                cmd.Parameters.Add("@folderId", SqlDbType.BigInt).Value = this.folderId;
-                cmd.Parameters.Add("@FootprintId", SqlDbType.BigInt).Value = this.Id;
+                cmd.Parameters.Add("@ID", SqlDbType.BigInt).Value = this.Id;
+                cmd.Parameters.Add("@FolderID", SqlDbType.BigInt).Value = this.folderId;
                 cmd.Parameters.Add("@Name", SqlDbType.NVarChar, 256).Value = this.Name;
 
                 return (int)Context.ExecuteCommandScalar(cmd) > 0;
@@ -146,6 +147,26 @@ WHERE FolderId = @FolderId
         }
 
         #region Methods
+
+        protected override void OnValidating(Graywulf.Entities.EntityEventArgs e)
+        {
+            if (Constants.RestictedNames.Contains(this.name))
+            {
+                throw Error.FootprintNameNotAvailable(this.name);
+            }
+
+            if (!Constants.NamePattern.Match(this.name).Success)
+            {
+                throw Error.FootprintNameInvalid(this.name);
+            }
+
+            if (IsNameDuplicate())
+            {
+                throw Error.DuplicateFootprintFolderName(this.name);
+            }
+
+            base.OnValidating(e);
+        }
 
         protected override void OnSaving(Graywulf.Entities.EntityEventArgs e)
         {

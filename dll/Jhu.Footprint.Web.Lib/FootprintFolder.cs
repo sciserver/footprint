@@ -254,7 +254,7 @@ WHERE Owner = @Owner
                 return;
             }
 
-            if (folderFootprint.Type == FootprintType.None)
+            if (folderFootprint.Type == FootprintType.Region)
             {
                 // We only had one region in the folder so far, now need to create
                 // a new region to hold the intersection/union

@@ -45,6 +45,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Context.cs" />
     <Compile Include="CoordinateTransformations.cs" />
+    <Compile Include="DuplicateNameException.cs" />
     <Compile Include="Enum.cs" />
     <Compile Include="EquatorialPoint.cs" />
     <Compile Include="Error.cs" />

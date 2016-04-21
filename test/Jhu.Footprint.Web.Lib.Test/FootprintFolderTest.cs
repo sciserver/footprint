@@ -38,7 +38,7 @@ namespace Jhu.Footprint.Web.Lib
         }
 
         [TestMethod]
-        [ExpectedException(typeof(FootprintFolderException))]
+        [ExpectedException(typeof(DuplicateNameException))]
         public void DuplicateFolderNameCreateTest()
         {
             using (var context = CreateContext())

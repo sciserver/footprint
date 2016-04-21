@@ -8,13 +8,13 @@ namespace Jhu.Footprint.Web.Lib
     static class Error
     {
         #region Footprint Errors
-        public static FootprintException DuplicateFootprintName(string name)
+        public static DuplicateNameException DuplicateFootprintName(string name)
         {
             var message = String.Format(
                 ExceptionMessages.DuplicateFootprintName,
                 name);
 
-            return new FootprintException(message);
+            return new DuplicateNameException(message);
         }
 
         public static FootprintException NoFootprintDataToLoad()
@@ -46,13 +46,13 @@ namespace Jhu.Footprint.Web.Lib
         #endregion
 
         #region Footprint Folder Errors
-        public static FootprintFolderException DuplicateFootprintFolderName(string name)
+        public static DuplicateNameException DuplicateFootprintFolderName(string name)
         {
             var message = String.Format(
                 ExceptionMessages.DuplicateFootprintFolderName,
                 name);
 
-            return new FootprintFolderException(message);
+            return new DuplicateNameException(message);
         }
 
         public static FootprintFolderException NoFootprintFolderDataToLoad()

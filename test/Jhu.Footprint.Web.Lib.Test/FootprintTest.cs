@@ -11,29 +11,73 @@ namespace Jhu.Footprint.Web.Lib
         [ClassInitialize]
         public static void ClassInit(TestContext testContext)
         {
-            InitDatabase();
+            InitializeDatabase();
         }
 
         [TestMethod]
-        public void FootprintCreateTest()
+        public void CreateFootprintTest()
         {
-            using (var context = new Context())
-            {
-                var footprint = new Footprint(context);
+            int folderid;
 
-                footprint.Name = "Csik2";
-                context.User = "webtestuser";
-                footprint.Public = 1;
-                footprint.FillFactor = 0.9;
-                footprint.FolderId = 2;
-                footprint.Type = FootprintType.None;
-                footprint.Comment = "Create Test";
+            using (var context = CreateContext())
+            {
+                var folder = new FootprintFolder(context)
+                {
+                    Name = "CreateFootprintTest",
+                };
+
+                folderid = (int)folder.Save();
+
+                var footprint = new Footprint(context)
+                {
+                    FolderId = folderid,
+                    Name = "CreateFootprintTest",
+                    Type =FootprintType.Region,
+                    Region = Spherical.Region.Parse("CIRCLE J2000 10 10 10"),
+                };
 
                 footprint.Save();
-                
             }
         }
 
+        [TestMethod]
+        [ExpectedException(typeof(DuplicateNameException))]
+        public void DuplicateFootprintNameTest()
+        {
+            int folderid;
+
+            using (var context = CreateContext())
+            {
+                var folder = new FootprintFolder(context)
+                {
+                    Name = "DuplicateFootprintNameTest",
+                };
+
+                folderid = (int)folder.Save();
+
+                var footprint = new Footprint(context)
+                {
+                    FolderId = folderid,
+                    Name = "DuplicateFootprintNameTest",
+                    Type = FootprintType.Region,
+                    Region = Spherical.Region.Parse("CIRCLE J2000 10 10 10"),
+                };
+
+                footprint.Save();
+
+                footprint = new Footprint(context)
+                {
+                    FolderId = folderid,
+                    Name = "DuplicateFootprintNameTest",
+                    Type = FootprintType.Region,
+                    Region = Spherical.Region.Parse("CIRCLE J2000 10 10 10"),
+                };
+
+                footprint.Save();
+            }
+        }
+
+        /*
         [TestMethod]      
         [ExpectedException(typeof(FootprintException))]
         public void FootprintCreateTest2()
@@ -147,5 +191,6 @@ namespace Jhu.Footprint.Web.Lib
                 footprint.Load();
             }
         }
+         * */
     }
 }
