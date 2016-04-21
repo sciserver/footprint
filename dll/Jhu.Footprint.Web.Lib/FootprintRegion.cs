@@ -10,6 +10,7 @@ using System.Data.SqlClient;
 using System.Data.SqlTypes;
 using System.IO;
 using Jhu.Graywulf.Entities.Mapping;
+using Jhu.Graywulf.Entities.AccessControl;
 
 namespace Jhu.Footprint.Web.Lib
 {
@@ -40,7 +41,7 @@ namespace Jhu.Footprint.Web.Lib
         public int FootprintId
         {
             get { return footprintId; }
-            set { footprintId = value; }
+            protected set { footprintId = value; }
         }
 
         [DbColumn]
@@ -85,17 +86,19 @@ namespace Jhu.Footprint.Web.Lib
         }
 
         #endregion
+        #region Constructors and initializers
 
-        #region Constructors & Initializer
         public FootprintRegion()
         {
             InitializeMembers();
         }
 
-        public FootprintRegion(Context context)
-            : base(context)
+        public FootprintRegion(Footprint footprint)
+            :base(footprint.Context)
         {
             InitializeMembers();
+
+            this.footprintId = footprint.Id;
         }
 
         public FootprintRegion(FootprintRegion old)
@@ -158,6 +161,13 @@ WHERE ID != @ID
 
         #region Methods
 
+        private AccessCollection EvaluateAccess()
+        {
+            var footprint = new Footprint((Context)Context);
+            footprint.Load(this.footprintId);
+            return footprint.Permissions.EvaluateAccess(Context.Identity);
+        }
+
         protected override void OnValidating(Graywulf.Entities.EntityEventArgs e)
         {
             if (Constants.RestictedNames.Contains(this.name))
@@ -178,16 +188,25 @@ WHERE ID != @ID
             base.OnValidating(e);
         }
 
-        protected override void OnSaving(Graywulf.Entities.EntityEventArgs e)
+        protected override void OnCreating(Graywulf.Entities.EntityEventArgs e)
         {
-            // TODO: validate name
+            EvaluateAccess().EnsureUpdate();
 
-            if (IsNameDuplicate())
-            {
-                throw Error.DuplicateFootprintName(this.Name);
-            }
+            base.OnCreating(e);
+        }
 
-            base.OnSaving(e);
+        protected override void OnModifying(Graywulf.Entities.EntityEventArgs e)
+        {
+            EvaluateAccess().EnsureUpdate();
+
+            base.OnModifying(e);
+        }
+
+        protected override void OnDeleting(Graywulf.Entities.EntityEventArgs e)
+        {
+            EvaluateAccess().EnsureUpdate();
+
+            base.OnDeleting(e);
         }
 
         #endregion

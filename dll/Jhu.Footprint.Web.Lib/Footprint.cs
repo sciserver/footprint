@@ -223,7 +223,7 @@ WHERE Owner = @Owner
 
         private void LoadFootprintRegion()
         {
-            region = new FootprintRegion((Context)Context)
+            region = new FootprintRegion(this)
             {
                 Id = this.regionId,
             };
@@ -345,7 +345,6 @@ WHERE Owner = @Owner
             if (region != null)
             {
                 InitializeFootprintRegion(region);
-                region.FootprintId = id;
 
                 r.Simplify();
                 region.Region = r;
