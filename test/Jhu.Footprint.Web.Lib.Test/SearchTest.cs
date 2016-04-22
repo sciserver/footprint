@@ -26,6 +26,8 @@ namespace Jhu.Footprint.Web.Lib.Test
                 search.SearchMethod = FootprintSearchMethod.Name;
 
                 var res = search.Find();
+
+                System.Diagnostics.Debug.WriteLine(res);
             }
         }
     }
