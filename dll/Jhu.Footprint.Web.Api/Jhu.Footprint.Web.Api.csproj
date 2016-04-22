@@ -54,6 +54,7 @@
     <Compile Include="V1\Responses\FootprintRegionResponse.cs" />
     <Compile Include="V1\Responses\FootprintResponse.cs" />
     <Compile Include="V1\Services\FootprintService.cs" />
+    <Compile Include="V1\Services\IFootprintService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\graywulf-entities\dll\Jhu.Graywulf.Entities\Jhu.Graywulf.Entities.csproj">

@@ -22,7 +22,7 @@ namespace Jhu.Footprint.Web.Lib
         public const string GroupRoleAdmin = "admin";
         public const string GroupRoleMember = "member";
 
-        public static readonly Regex NamePattern = new Regex(@"^[a-zA-Z0-9\-\.\+]{3,}$", RegexOptions.Compiled );
+        public static readonly Regex NamePattern = new Regex(@"^[a-zA-Z0-9_\-\.\+]{3,}$", RegexOptions.Compiled );
 
         /*
          *   North galactic pole and zeropoint of l are from : astropy-1.0.6-np110py34_0 package

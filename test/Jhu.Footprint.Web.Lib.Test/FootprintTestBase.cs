@@ -25,7 +25,7 @@ namespace Jhu.Footprint.Web.Lib
             return Path.Combine(Environment.CurrentDirectory, @"..\..\..\..\", path);
         }
 
-        protected static Identity CreateTestIdentity()
+        public static Identity CreateTestIdentity()
         {
             return new Identity()
             {
@@ -34,7 +34,7 @@ namespace Jhu.Footprint.Web.Lib
             };
         }
 
-        protected static Identity CreateOtherIdentity()
+        public static Identity CreateOtherIdentity()
         {
             return new Identity()
             {
@@ -43,7 +43,7 @@ namespace Jhu.Footprint.Web.Lib
             };
         }
 
-        protected static Context CreateContext()
+        public static Context CreateContext()
         {
             var context = new Context()
             {
@@ -53,7 +53,7 @@ namespace Jhu.Footprint.Web.Lib
             return context;
         }
 
-        protected static void InitializeDatabase()
+        public static void InitializeDatabase()
         {
             string script;
             string bin;

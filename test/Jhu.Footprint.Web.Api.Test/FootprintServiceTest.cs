@@ -4,8 +4,8 @@ using System.IO;
 using System.Net;
 using System.Net.Mime;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Jhu.Footprint.Web.Lib;
-using Jhu.Footprint.Web.Api.Test;
+using Lib = Jhu.Footprint.Web.Lib;
+using Jhu.Spherical;
 using Jhu.Graywulf.Web.Api.V1;
 using Jhu.Graywulf.Web.Services;
 
@@ -18,26 +18,60 @@ namespace Jhu.Footprint.Web.Api.V1
         [ClassInitialize]
         public static void ClassInit(TestContext testContext)
         {
-            InitDatabase();
+            InitializeDatabase();
+        }
+
+        protected Lib.Footprint CreateFootprint(Lib.Context context, string name)
+        {
+            int footprintid;
+
+            var footprint = new Lib.Footprint(context)
+            {
+                Name = name,
+            };
+
+            footprintid = (int)footprint.Save();
+
+            var region = new Lib.FootprintRegion(footprint)
+            {
+                Name = name,
+                Type = Lib.RegionType.Region,
+                Region = Spherical.Region.Parse("CIRCLE J2000 10 10 10"),
+            };
+
+            footprint.Save();
+
+            return footprint;
         }
 
         [TestMethod]
-        public void GetUserFootprintFolderListTest()
+        public void GetUserFootprintTest()
         {
+            var owner = CreateTestIdentity().Name;
+            var name = GetTestUniqueName();
+
+            using (var context = CreateContext())
+            {
+                CreateFootprint(context, name);
+            }
+
             using (var session = new RestClientSession())
             {
                 var client = CreateClient(session);
-                var folders = client.GetUserFootprintFolderList("evelin");
+                var footprint = client.GetUserFootprint(owner, name);
+
+                Assert.AreEqual(name, footprint.Footprint.Name);
             }
         }
 
+#if false
         [TestMethod]
         public void GetUserFootprintFolderTest()
         {
             using (var session = new RestClientSession())
             {
                 var client = CreateClient(session);
-                var folder = client.GetUserFootprintFolder("evelin","SDSS.DR7");
+                var folder = client.GetUserFootprintFolder("evelin", "SDSS.DR7");
             }
         }
 
@@ -47,7 +81,7 @@ namespace Jhu.Footprint.Web.Api.V1
             using (var session = new RestClientSession())
             {
                 var client = CreateClient(session);
-                var folder = client.GetUserFootprintFolderRegion("evelin","SDSS.DR7");
+                var footprint = client.GetUserFootprintFolderRegion("evelin", "SDSS.DR7");
             }
         }
 
@@ -69,7 +103,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 var client = CreateClient(session);
                 var folder = client.GetUserFootprintFolderRegionOutlinePoints("evelin", "SDSS.DR7", 0.3);
             }
-        
+
         }
 
         [TestMethod]
@@ -79,7 +113,7 @@ namespace Jhu.Footprint.Web.Api.V1
             {
                 var client = CreateClient(session);
                 var folder = client.GetUserFootprintFolderRegionConvexHull("evelin", "SDSS.DR7");
-            }        
+            }
         }
 
         [TestMethod]
@@ -206,7 +240,7 @@ namespace Jhu.Footprint.Web.Api.V1
             using (var session = new RestClientSession())
             {
                 var client = CreateClient(session);
-                var footprint = client.GetUserFootprintRegion("evelin","SDSS.DR7","Stripe2");
+                var footprint = client.GetUserFootprintRegion("evelin", "SDSS.DR7", "Stripe2");
             }
         }
 
@@ -228,8 +262,8 @@ namespace Jhu.Footprint.Web.Api.V1
             using (var session = new RestClientSession())
             {
                 var client = CreateClient(session);
-                var footprint = client.GetUserFootprintRegionOutlinePoints("evelin", "SDSS.DR7", "Stripe2",0.9);
-            }            
+                var footprint = client.GetUserFootprintRegionOutlinePoints("evelin", "SDSS.DR7", "Stripe2", 0.9);
+            }
         }
 
         [TestMethod]
@@ -314,7 +348,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 footprint.Name = "Test api";
                 footprint.FolderId = 1;
 
-                request.Region = new V1.FootprintRegion(footprint,"SDSS.DR7");
+                request.Region = new V1.FootprintRegion(footprint, "SDSS.DR7");
 
                 client.CreateUserFootprint(request.Region.User, "SDSS.DR7", request.Region.Name, request);
 
@@ -340,7 +374,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
                 footprint.Comment = "Api modification test.";
 
-                request.Region = new V1.FootprintRegion(footprint,"2MASS");
+                request.Region = new V1.FootprintRegion(footprint, "2MASS");
 
                 client.ModifyUserFootprint("mike", "2MASS", "South", request);
             }
@@ -358,6 +392,6 @@ namespace Jhu.Footprint.Web.Api.V1
             }
         }
 
-
+#endif
     }
 }

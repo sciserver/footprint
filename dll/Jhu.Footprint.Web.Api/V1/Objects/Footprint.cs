@@ -54,37 +54,38 @@ namespace Jhu.Footprint.Web.Api.V1
         {
         }
 
-        public Footprint(Jhu.Footprint.Web.Lib.Footprint footprint)
+        public static implicit operator Lib.Footprint(Footprint footprint)
         {
-            SetValue(footprint);
-        }
-
-        public void SetValue(Jhu.Footprint.Web.Lib.Footprint footprint)
-        {
-            this.Id = footprint.Id;
-            this.Name = footprint.Name;
-            this.Owner = footprint.Owner;
-            this.Type = footprint.Type;
-            this.Comments = footprint.Comments;
-
-            //TODO : host name?
-            //this.Url = new Uri("http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + this.User + "/" + this.Name);
-        }
-
-        public Jhu.Footprint.Web.Lib.Footprint GetValue()
-        {
-            var footprint =  new Jhu.Footprint.Web.Lib.Footprint()
+            var f = new Lib.Footprint()
             {
-                Id = this.Id,
-                Name = this.Name,
-                Owner = this.Owner,
-                Type = this.Type,
-                Comments = this.Comments
+                Id = footprint.Id,
+                Name = footprint.Name,
+                Owner = footprint.Owner,
+                Type = footprint.Type,
+                Comments = footprint.Comments
             };
 
             // TODO: public/private?
 
-            return footprint;
+            return f;
         }
+
+        public static implicit operator Footprint(Lib.Footprint footprint)
+        {
+            var f = new Footprint()
+            {
+                Id = footprint.Id,
+                Name = footprint.Name,
+                Owner = footprint.Owner,
+                Type = footprint.Type,
+                Comments = footprint.Comments,
+            };
+
+            //TODO : host name?
+            //this.Url = new Uri("http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + this.User + "/" + this.Name);
+
+            return f;
+        }
+
     }
 }

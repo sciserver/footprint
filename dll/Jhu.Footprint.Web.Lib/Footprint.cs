@@ -147,6 +147,36 @@ namespace Jhu.Footprint.Web.Lib
         }
 
         #endregion
+
+        protected override SqlCommand GetSelectCommand()
+        {
+            if (id == 0 && Owner != null && Name != null)
+            {
+                var sql = @"
+WITH __e AS
+(
+{0}
+)
+SELECT * 
+FROM __e
+WHERE Owner = @Owner AND Name = @Name;
+";
+
+                var cmd = new SqlCommand(
+                String.Format(
+                    sql,
+                    GetTableQuery()));
+
+                cmd.Parameters.Add("@Owner", SqlDbType.NVarChar).Value = Owner;
+                cmd.Parameters.Add("@Name", SqlDbType.NVarChar).Value = Name;
+
+                return cmd;
+            }
+            else
+            {
+                return base.GetSelectCommand();
+            }
+        }
         
         protected Boolean IsNameDuplicate()
         {

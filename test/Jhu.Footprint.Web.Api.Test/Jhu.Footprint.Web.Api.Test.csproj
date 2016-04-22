@@ -44,6 +44,8 @@
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Channels" />
     <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -78,6 +80,10 @@
     <ProjectReference Include="..\..\..\graywulf\test\Jhu.Graywulf.Web.Test\Jhu.Graywulf.Web.Test.csproj">
       <Project>{3c9ea0e6-dad6-4f6e-bfba-f24cfc8e2a66}</Project>
       <Name>Jhu.Graywulf.Web.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\spherical\src\Jhu.Spherical\Jhu.Spherical.csproj">
+      <Project>{93efa6ad-0c3f-4c7f-b1f7-d697d0ba49f7}</Project>
+      <Name>Jhu.Spherical</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\dll\Jhu.Footprint.Web.Api\Jhu.Footprint.Web.Api.csproj">
       <Project>{24570021-f4c8-4015-a0af-82d4bbbec40d}</Project>
