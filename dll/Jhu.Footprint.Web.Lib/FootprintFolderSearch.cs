@@ -110,7 +110,7 @@ namespace Jhu.Footprint.Web.Lib
 
                 cmd.Parameters.Add("@Name", SqlDbType.NVarChar, 256).Value = this.name;
                 cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = this.user;
-                //cmd.Parameters.Add("@Source", SqlDbType.Int).Value = (int)this.source;
+                cmd.Parameters.Add("@Source", SqlDbType.Int).Value = (int)this.source;
                 cmd.Parameters.Add("RETVAL", SqlDbType.Int).Direction = ParameterDirection.ReturnValue;
 
                 return (int)cmd.Parameters["RETVAL"].Value;
