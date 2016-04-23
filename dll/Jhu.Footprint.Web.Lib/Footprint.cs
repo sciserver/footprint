@@ -220,7 +220,7 @@ WHERE Owner = @Owner
         {
             // Make sure user can save footprint with specified owner
 
-            if (!Context.Principal.Identity.IsSame(this.Owner) &&
+            if (!Context.Principal.Identity.CompareByName(this.Owner) &&
                 !Context.Principal.IsInRole(this.Owner, Constants.RoleAdmin) &&
                 !Context.Principal.IsInRole(this.Owner, Constants.RoleWriter))
             {
