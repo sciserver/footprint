@@ -2,7 +2,7 @@
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Xml.Serialization;
-using Jhu.Graywulf.Entities.AccessControl;
+using Jhu.Graywulf.AccessControl;
 
 namespace Jhu.Footprint.Web.Lib
 {
@@ -91,13 +91,13 @@ namespace Jhu.Footprint.Web.Lib
 
                 var footprint = new Footprint(context);
                 footprint.Load(footprintid);
-                footprint.Permissions.Grant(CreateOtherIdentity().Name, DefaultAccess.Read);
+                footprint.Permissions.Grant(CreateOtherPrincipal().Identity.Name, DefaultAccess.Read);
                 footprint.Save();
             }
 
             using (var context = CreateContext())
             {
-                context.Identity = CreateOtherIdentity();
+                context.Principal = CreateOtherPrincipal();
 
                 var footprint = new Footprint(context);
                 footprint.Load(footprintid);

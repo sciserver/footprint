@@ -10,7 +10,7 @@ using System.Data.SqlClient;
 using System.Data.SqlTypes;
 using System.IO;
 using Jhu.Graywulf.Entities.Mapping;
-using Jhu.Graywulf.Entities.AccessControl;
+using Jhu.Graywulf.AccessControl;
 
 namespace Jhu.Footprint.Web.Lib
 {
@@ -165,7 +165,7 @@ WHERE ID != @ID
         {
             var footprint = new Footprint((Context)Context);
             footprint.Load(this.footprintId);
-            return footprint.Permissions.EvaluateAccess(Context.Identity);
+            return footprint.Permissions.EvaluateAccess(Context.Principal);
         }
 
         protected override void OnValidating(Graywulf.Entities.EntityEventArgs e)

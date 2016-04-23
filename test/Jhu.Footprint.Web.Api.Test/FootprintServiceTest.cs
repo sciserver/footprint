@@ -47,7 +47,7 @@ namespace Jhu.Footprint.Web.Api.V1
         [TestMethod]
         public void GetUserFootprintTest()
         {
-            var owner = CreateTestIdentity().Name;
+            var owner = CreateTestPrincipal().Identity.Name;
             var name = GetTestUniqueName();
 
             using (var context = CreateContext())

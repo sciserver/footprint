@@ -5,7 +5,7 @@ using System.Text;
 using System.IO;
 using System.Data;
 using System.Data.SqlClient;
-using Jhu.Graywulf.Entities.AccessControl;
+using Jhu.Graywulf.AccessControl;
 
 namespace Jhu.Footprint.Web.Lib
 {
@@ -25,21 +25,27 @@ namespace Jhu.Footprint.Web.Lib
             return Path.Combine(Environment.CurrentDirectory, @"..\..\..\..\", path);
         }
 
-        public static Identity CreateTestIdentity()
+        public static Principal CreateTestPrincipal()
         {
-            return new Identity()
+            return new Principal()
             {
-                IsAuthenticated = true,
-                Name = TestUser
+                Identity = new Identity()
+                {
+                    IsAuthenticated = true,
+                    Name = TestUser
+                }
             };
         }
 
-        public static Identity CreateOtherIdentity()
+        public static Principal CreateOtherPrincipal()
         {
-            return new Identity()
+            return new Principal()
             {
-                IsAuthenticated = true,
-                Name = OtherUser
+                Identity = new Identity()
+                {
+                    IsAuthenticated = true,
+                    Name = OtherUser
+                }
             };
         }
 
@@ -47,7 +53,7 @@ namespace Jhu.Footprint.Web.Lib
         {
             var context = new Context()
             {
-                Identity = CreateTestIdentity()
+                Principal = CreateTestPrincipal()
             };
 
             return context;

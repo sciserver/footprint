@@ -15,7 +15,7 @@ namespace Jhu.Footprint.Web.Lib.Test
 
             using (var context = CreateContext())
             {
-                context.Identity = CreateTestIdentity();
+                context.Principal = CreateTestPrincipal();
 
                 var footprint = new Footprint(context)
                 {
@@ -27,7 +27,7 @@ namespace Jhu.Footprint.Web.Lib.Test
 
             using (var context = CreateContext())
             {
-                context.Identity = CreateOtherIdentity();
+                context.Principal = CreateOtherPrincipal();
 
                 var footprint = new Footprint(context)
                 {
@@ -45,7 +45,7 @@ namespace Jhu.Footprint.Web.Lib.Test
             {
                 var search = new FootprintSearch(context)
                 {
-                    Owner = context.Identity.Name
+                    Owner = context.Principal.Identity.Name
                 };
 
                 Assert.AreEqual(1, search.Count());
@@ -60,7 +60,7 @@ namespace Jhu.Footprint.Web.Lib.Test
             {
                 var search = new FootprintSearch(context)
                 {
-                    Owner = context.Identity.Name,
+                    Owner = context.Principal.Identity.Name,
                     Name = "FootprintSearch%"
                 };
 

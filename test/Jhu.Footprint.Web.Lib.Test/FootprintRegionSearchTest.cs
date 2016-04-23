@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Jhu.Graywulf.Entities.AccessControl;
+using Jhu.Graywulf.AccessControl;
 
 namespace Jhu.Footprint.Web.Lib.Test
 {
@@ -20,7 +20,7 @@ namespace Jhu.Footprint.Web.Lib.Test
         {
             using (var context = CreateContext())
             {
-                context.Identity = CreateTestIdentity();
+                context.Principal = CreateTestPrincipal();
                 CreateRegion(context, "FindRegionByOwnerTest");
             }
 
@@ -28,7 +28,7 @@ namespace Jhu.Footprint.Web.Lib.Test
             {
                 var search = new FootprintRegionSearch(context)
                 {
-                    Owner = context.Identity.Name
+                    Owner = context.Principal.Identity.Name
                 };
 
                 Assert.IsTrue(1 <= search.Count());
@@ -41,7 +41,7 @@ namespace Jhu.Footprint.Web.Lib.Test
         {
             using (var context = CreateContext())
             {
-                context.Identity = CreateTestIdentity();
+                context.Principal = CreateTestPrincipal();
                 CreateRegion(context, "FindRegionByNameTest");
             }
 
@@ -49,7 +49,7 @@ namespace Jhu.Footprint.Web.Lib.Test
             {
                 var search = new FootprintRegionSearch(context)
                 {
-                    Owner = context.Identity.Name,
+                    Owner = context.Principal.Identity.Name,
                     FootprintName = "FindRegionByName%",
                     Name = "FindRegionByName%"
                 };
@@ -121,7 +121,7 @@ namespace Jhu.Footprint.Web.Lib.Test
 
             using (var context = CreateContext())
             {
-                context.Identity = CreateOtherIdentity();
+                context.Principal = CreateOtherPrincipal();
 
                 var search = new FootprintRegionSearch(context)
                 {

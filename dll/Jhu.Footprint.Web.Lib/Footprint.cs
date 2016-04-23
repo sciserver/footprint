@@ -7,7 +7,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Xml.Serialization;
 using Jhu.Graywulf.Entities.Mapping;
-using Jhu.Graywulf.Entities.AccessControl;
+using Jhu.Graywulf.AccessControl;
 using Jhu.Spherical;
 
 namespace Jhu.Footprint.Web.Lib
@@ -220,8 +220,9 @@ WHERE Owner = @Owner
         {
             // Make sure user can save footprint with specified owner
 
-            if (!Context.Identity.IsSame(this.Owner) &&
-                !Context.Identity.IsInRole(this.Owner, Constants.GroupRoleAdmin))
+            if (!Context.Principal.Identity.IsSame(this.Owner) &&
+                !Context.Principal.IsInRole(this.Owner, Constants.RoleAdmin) &&
+                !Context.Principal.IsInRole(this.Owner, Constants.RoleWriter))
             {
                 throw Error.AccessDenied();
             }

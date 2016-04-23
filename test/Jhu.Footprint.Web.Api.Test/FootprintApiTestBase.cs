@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Data;
 using System.Data.SqlClient;
-using Jhu.Graywulf.Entities.AccessControl;
+using Jhu.Graywulf.AccessControl;
 using Jhu.Graywulf.Web.Api.V1;
 using Jhu.Graywulf.Web.Services;
 using Jhu.Footprint.Web.Lib;
@@ -37,9 +37,9 @@ namespace Jhu.Footprint.Web.Api.V1
             return client;
         }
 
-        protected Identity CreateTestIdentity()
+        protected Principal CreateTestPrincipal()
         {
-            return FootprintTestBase.CreateTestIdentity();
+            return FootprintTestBase.CreateTestPrincipal();
         }
     }
 }

@@ -19,8 +19,9 @@ namespace Jhu.Footprint.Web.Lib
             "reduced"
         };
 
-        public const string GroupRoleAdmin = "admin";
-        public const string GroupRoleMember = "member";
+        public const string RoleAdmin = "footprint-admin";
+        public const string RoleReader = "footprint-reader";
+        public const string RoleWriter = "footprint-writer";
 
         public static readonly Regex NamePattern = new Regex(@"^[a-zA-Z0-9_\-\.\+]{3,}$", RegexOptions.Compiled );
 
