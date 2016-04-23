@@ -37,15 +37,7 @@ namespace Jhu.Footprint.Web.Api.V1
         {
             return new Lib.Context()
             {
-                Principal = new Graywulf.AccessControl.Principal()
-                {
-                    Identity = new Graywulf.AccessControl.Identity()
-                    {
-                        IsAuthenticated = System.Threading.Thread.CurrentPrincipal.Identity.IsAuthenticated,
-                        Name = System.Threading.Thread.CurrentPrincipal.Identity.Name,
-                    }
-                    // Roles = 
-                }
+                Principal = (Jhu.Graywulf.AccessControl.Principal)System.Threading.Thread.CurrentPrincipal
             };
         }
 
