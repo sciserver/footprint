@@ -21,7 +21,7 @@ namespace Jhu.Footprint.Web.Api.V1
             InitializeDatabase();
         }
 
-        protected Lib.Footprint CreateFootprint(Lib.Context context, string name)
+        protected Lib.Footprint CreateFootprint(Lib.Context context, string name, bool @public)
         {
             int footprintid;
 
@@ -30,6 +30,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 Name = name,
             };
 
+            footprint.SetDefaultPermissions(@public);
             footprintid = (int)footprint.Save();
 
             var region = new Lib.FootprintRegion(footprint)
@@ -52,7 +53,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
             using (var context = CreateContext())
             {
-                CreateFootprint(context, name);
+                CreateFootprint(context, name, true);
             }
 
             using (var session = new RestClientSession())

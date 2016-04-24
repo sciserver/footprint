@@ -5,6 +5,8 @@ using System.Text;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
 using System.ComponentModel;
+using Jhu.Graywulf.AccessControl;
+using Jhu.Graywulf.Entities;
 using Util = Jhu.Graywulf.Web.Api.Util;
 using Lib = Jhu.Footprint.Web.Lib;
 
@@ -14,21 +16,17 @@ namespace Jhu.Footprint.Web.Api.V1
     [Description("A footprint is a collection of regions representing the sky coverage of observations.")]
     public class Footprint
     {
-        [DataMember(Name = "id")]
-        [Description("Footprint Id.")]
-        public int Id { get; set; }
-
-        [DataMember(Name = "url")]
-        [Description("Footprint url.")]
-        public Uri Url { get; set; }
+        [DataMember(Name = "owner")]
+        [Description("Owner of the footprint.")]
+        public string Owner { get; set; }
 
         [DataMember(Name = "name")]
         [Description("Name of the folder containing the footprint.")]
         public string Name { get; set; }
 
-        [DataMember(Name = "owner")]
-        [Description("Owner of the footprint.")]
-        public string Owner { get; set; }
+        [DataMember(Name = "url")]
+        [Description("Footprint url.")]
+        public Uri Url { get; set; }
 
         [IgnoreDataMember]
         public Jhu.Footprint.Web.Lib.FootprintType Type { get; set; }
@@ -54,37 +52,40 @@ namespace Jhu.Footprint.Web.Api.V1
         {
         }
 
-        public static implicit operator Lib.Footprint(Footprint footprint)
+        public Footprint(Lib.Footprint footprint)
         {
+            SetValue(footprint);
+        }
+
+        public Lib.Footprint GetValue(Context context, string owner, string name)
+        {
+            // ID is ignored, owner and name are taken from the URL
+
             var f = new Lib.Footprint()
             {
-                Id = footprint.Id,
-                Name = footprint.Name,
-                Owner = footprint.Owner,
-                Type = footprint.Type,
-                Comments = footprint.Comments
+                Name = name,
+                Owner = owner,
+                Type = Type,
+                Comments = Comments
             };
 
-            // TODO: public/private?
+            f.SetDefaultPermissions(Public);
 
             return f;
         }
 
-        public static implicit operator Footprint(Lib.Footprint footprint)
+        public void SetValue(Lib.Footprint footprint)
         {
-            var f = new Footprint()
-            {
-                Id = footprint.Id,
-                Name = footprint.Name,
-                Owner = footprint.Owner,
-                Type = footprint.Type,
-                Comments = footprint.Comments,
-            };
+            var access = footprint.Permissions.EvaluateAccess(Principal.Guest);
+
+            this.Name = footprint.Name;
+            this.Owner = footprint.Owner;
+            this.Type = footprint.Type;
+            this.Comments = footprint.Comments;
+            this.Public = access.CanRead();
 
             //TODO : host name?
             //this.Url = new Uri("http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + this.User + "/" + this.Name);
-
-            return f;
         }
 
     }

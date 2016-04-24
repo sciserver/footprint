@@ -17,5 +17,10 @@ namespace Jhu.Footprint.Web.Api.V1
         [DataMember(Name = "footprint")]
         [Description("Footprint.")]
         public Footprint Footprint { get; set; }
+
+        public FootprintResponse(Lib.Footprint footprint)
+        {
+            Footprint = new Footprint(footprint);
+        }
     }
 }

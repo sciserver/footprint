@@ -47,18 +47,15 @@ namespace Jhu.Footprint.Web.Api.V1
         {
             using (var context = CreateContext())
             {
-                var f = new Lib.Footprint(context)
+                var footprint = new Lib.Footprint(context)
                 {
                     Owner = owner,
                     Name = name,
                 };
 
-                f.Load();
+                footprint.Load();
 
-                return new FootprintResponse()
-                {
-                    Footprint = f
-                };
+                return new FootprintResponse(footprint);
             }
         }
 
@@ -66,17 +63,10 @@ namespace Jhu.Footprint.Web.Api.V1
         {
             using (var context = CreateContext())
             {
-                var footprint = (Lib.Footprint)request.Footprint;
-
-                footprint.Owner = owner;
-                footprint.Name = name;
-
+                var footprint = request.Footprint.GetValue(context, owner, name);
                 footprint.Save();
 
-                return new FootprintResponse()
-                {
-                    Footprint = footprint
-                };
+                return new FootprintResponse(footprint);
             }
         }
 

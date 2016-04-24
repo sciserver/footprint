@@ -148,6 +148,28 @@ namespace Jhu.Footprint.Web.Lib
 
         #endregion
 
+        public void SetDefaultPermissions(bool @public)
+        {
+            if (Permissions.Owner == null)
+            {
+                Permissions.Owner = Context.Principal.Identity.Name;
+            }
+
+            if (Identity.Compare(Context.Principal.Identity.Name, Owner) != 0)
+            {
+                // Footprint is created under a group account, set appropriate permissions
+                Permissions.Grant(Owner, Lib.Constants.RoleAdmin, DefaultAccess.All);
+                Permissions.Grant(Owner, Lib.Constants.RoleWriter, DefaultAccess.All);
+                Permissions.Grant(Owner, Lib.Constants.RoleReader, DefaultAccess.Read);
+            }
+
+            if (@public)
+            {
+                // Footprint is publicly visible without registration (guest)
+                Permissions.Grant(DefaultIdentity.Guest, DefaultAccess.Read);
+            }
+        }
+
         protected override SqlCommand GetSelectCommand()
         {
             if (id == 0 && Owner != null && Name != null)

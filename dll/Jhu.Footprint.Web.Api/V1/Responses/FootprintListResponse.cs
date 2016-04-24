@@ -24,7 +24,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
         public FootprintListResponse(IEnumerable<Lib.Footprint> footprints)
         {
-            this.Footprints = footprints.Select(f => (Footprint)(f)).ToArray();
+            this.Footprints = footprints.Select(f => new Footprint(f)).ToArray();
         }
     }
 }
