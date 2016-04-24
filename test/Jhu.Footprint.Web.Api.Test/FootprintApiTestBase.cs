@@ -15,6 +15,9 @@ namespace Jhu.Footprint.Web.Api.V1
 {
     public class FootprintApiTestBase: ApiTestBase
     {
+        protected const string TestUser = "test";
+        protected const string OtherUser = "other";
+
         protected static void InitializeDatabase()
         {
             FootprintTestBase.InitializeDatabase();
@@ -25,9 +28,9 @@ namespace Jhu.Footprint.Web.Api.V1
             return FootprintTestBase.CreateContext();
         }
         
-        protected IFootprintService CreateClient(RestClientSession session)
+        protected IFootprintService CreateClient(RestClientSession session, string user)
         {
-            AuthenticateTestUser(session);
+            AuthenticateUser(session, user);
 
             var host = Environment.MachineName;
 

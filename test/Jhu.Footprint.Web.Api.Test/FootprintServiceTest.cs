@@ -15,34 +15,28 @@ namespace Jhu.Footprint.Web.Api.V1
     [TestClass]
     public class FootprintServiceTest : FootprintApiTestBase
     {
+
+
         [ClassInitialize]
         public static void ClassInit(TestContext testContext)
         {
             InitializeDatabase();
         }
 
-        protected Lib.Footprint CreateFootprint(Lib.Context context, string name, bool @public)
+        protected Footprint CreateTestFootprint(string owner, string name, bool @public)
         {
-            int footprintid;
-
-            var footprint = new Lib.Footprint(context)
+            using (var session = new RestClientSession())
             {
-                Name = name,
-            };
-
-            footprint.SetDefaultPermissions(@public);
-            footprintid = (int)footprint.Save();
-
-            var region = new Lib.FootprintRegion(footprint)
-            {
-                Name = name,
-                Type = Lib.RegionType.Region,
-                Region = Spherical.Region.Parse("CIRCLE J2000 10 10 10"),
-            };
-
-            footprint.Save();
-
-            return footprint;
+                var client = CreateClient(session, owner);
+                var req = new FootprintRequest()
+                {
+                    Footprint = new Footprint()
+                    {
+                        Public = @public
+                    }
+                };
+                return client.CreateUserFootprint(owner, name, req).Footprint;
+            }
         }
 
         [TestMethod]
@@ -53,17 +47,31 @@ namespace Jhu.Footprint.Web.Api.V1
 
             using (var session = new RestClientSession())
             {
-                var client = CreateClient(session);
+                var client = CreateClient(session, TestUser);
                 var req = new FootprintRequest()
                 {
                     Footprint = new Footprint()
                 };
-                client.CreateUserFootprint(owner, name, req);
+                var res = client.CreateUserFootprint(owner, name, req);
+
+                Assert.AreEqual(res.Footprint.Owner, owner);
+                Assert.AreEqual(res.Footprint.Name, name);
+                Assert.AreEqual(res.Footprint.Type, req.Footprint.Type);
+                Assert.AreEqual(res.Footprint.Public, req.Footprint.Public);
             }
+        }
+
+        [TestMethod]
+        public void GetUserFootprintTest()
+        {
+            var owner = TestUser;
+            var name = GetTestUniqueName();
+
+            CreateTestFootprint(owner, name, true);
 
             using (var session = new RestClientSession())
             {
-                var client = CreateClient(session);
+                var client = CreateClient(session, TestUser);
                 var footprint = client.GetUserFootprint(owner, name);
 
                 Assert.AreEqual(owner, footprint.Footprint.Owner);
@@ -72,41 +80,16 @@ namespace Jhu.Footprint.Web.Api.V1
         }
 
         [TestMethod]
-        public void GetUserFootprintTest()
-        {
-            var owner = CreateTestPrincipal().Identity.Name;
-            var name = GetTestUniqueName();
-
-            using (var context = CreateContext())
-            {
-                CreateFootprint(context, name, true);
-            }
-
-            using (var session = new RestClientSession())
-            {
-                var client = CreateClient(session);
-                var footprint = client.GetUserFootprint(owner, name);
-
-                Assert.AreEqual(name, footprint.Footprint.Name);
-            }
-        }
-
-        [TestMethod]
         public void AccessPublicUserFootprintTest()
         {
-            var owner = CreateOtherPrincipal().Identity.Name;
+            var owner = OtherUser;
             var name = GetTestUniqueName();
 
-            using (var context = CreateContext())
-            {
-                context.Principal = CreateOtherPrincipal();
-
-                CreateFootprint(context, name, true);
-            }
+            CreateTestFootprint(owner, name, true);
 
             using (var session = new RestClientSession())
             {
-                var client = CreateClient(session);
+                var client = CreateClient(session, TestUser);
                 var footprint = client.GetUserFootprint(owner, name);
 
                 Assert.AreEqual(name, footprint.Footprint.Name);
@@ -116,19 +99,14 @@ namespace Jhu.Footprint.Web.Api.V1
         [TestMethod]
         public void AccessPrivateUserFootprintTest()
         {
-            var owner = CreateTestPrincipal().Identity.Name;
+            var owner = OtherUser;
             var name = GetTestUniqueName();
 
-            using (var context = CreateContext())
-            {
-                context.Principal = CreateOtherPrincipal();
-
-                CreateFootprint(context, name, false);
-            }
+            CreateTestFootprint(owner, name, false);
 
             using (var session = new RestClientSession())
             {
-                var client = CreateClient(session);
+                var client = CreateClient(session, OtherUser);
                 var footprint = client.GetUserFootprint(owner, name);
 
                 Assert.AreEqual(name, footprint.Footprint.Name);
@@ -138,19 +116,14 @@ namespace Jhu.Footprint.Web.Api.V1
         [TestMethod]
         public void DenyGetPrivateFootprintTest()
         {
-            var owner = CreateOtherPrincipal().Identity.Name;
+            var owner = OtherUser;
             var name = GetTestUniqueName();
 
-            using (var context = CreateContext())
-            {
-                context.Principal = CreateOtherPrincipal();
-
-                CreateFootprint(context, name, false);
-            }
+            CreateTestFootprint(owner, name, false);
 
             using (var session = new RestClientSession())
             {
-                var client = CreateClient(session);
+                var client = CreateClient(session, TestUser);
 
                 try
                 {

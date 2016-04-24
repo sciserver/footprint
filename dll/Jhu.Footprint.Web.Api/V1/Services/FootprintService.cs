@@ -66,7 +66,8 @@ namespace Jhu.Footprint.Web.Api.V1
                 var footprint = request.Footprint.GetValue(context, owner, name);
                 footprint.Save();
 
-                return new FootprintResponse(footprint);
+                var res = new FootprintResponse(footprint);
+                return res;
             }
         }
 
