@@ -32,6 +32,7 @@ namespace Jhu.Footprint.Web.Api.V1
         public Jhu.Footprint.Web.Lib.FootprintType Type { get; set; }
 
         [DataMember(Name = "type")]
+        [DefaultValue("None")]
         [Description("Method to combine regions: union, intersection or none.")]
         public string Type_ForXml
         {
@@ -40,6 +41,7 @@ namespace Jhu.Footprint.Web.Api.V1
         }
 
         [DataMember(Name = "comments")]
+        [DefaultValue("")]
         [Description("Comments.")]
         public string Comments { get; set; }
 
@@ -57,16 +59,16 @@ namespace Jhu.Footprint.Web.Api.V1
             SetValue(footprint);
         }
 
-        public Lib.Footprint GetValue(Context context, string owner, string name)
+        public Lib.Footprint GetValue(Lib.Context context, string owner, string name)
         {
             // ID is ignored, owner and name are taken from the URL
 
-            var f = new Lib.Footprint()
+            var f = new Lib.Footprint(context)
             {
                 Name = name,
                 Owner = owner,
                 Type = Type,
-                Comments = Comments
+                Comments = Comments ?? ""
             };
 
             f.SetDefaultPermissions(Public);

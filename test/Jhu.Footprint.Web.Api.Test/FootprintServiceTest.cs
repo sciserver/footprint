@@ -46,6 +46,32 @@ namespace Jhu.Footprint.Web.Api.V1
         }
 
         [TestMethod]
+        public void CreateUserFootprintTest()
+        {
+            var owner = CreateTestPrincipal().Identity.Name;
+            var name = GetTestUniqueName();
+
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session);
+                var req = new FootprintRequest()
+                {
+                    Footprint = new Footprint()
+                };
+                client.CreateUserFootprint(owner, name, req);
+            }
+
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session);
+                var footprint = client.GetUserFootprint(owner, name);
+
+                Assert.AreEqual(owner, footprint.Footprint.Owner);
+                Assert.AreEqual(name, footprint.Footprint.Name);
+            }
+        }
+
+        [TestMethod]
         public void GetUserFootprintTest()
         {
             var owner = CreateTestPrincipal().Identity.Name;
@@ -62,6 +88,78 @@ namespace Jhu.Footprint.Web.Api.V1
                 var footprint = client.GetUserFootprint(owner, name);
 
                 Assert.AreEqual(name, footprint.Footprint.Name);
+            }
+        }
+
+        [TestMethod]
+        public void AccessPublicUserFootprintTest()
+        {
+            var owner = CreateOtherPrincipal().Identity.Name;
+            var name = GetTestUniqueName();
+
+            using (var context = CreateContext())
+            {
+                context.Principal = CreateOtherPrincipal();
+
+                CreateFootprint(context, name, true);
+            }
+
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session);
+                var footprint = client.GetUserFootprint(owner, name);
+
+                Assert.AreEqual(name, footprint.Footprint.Name);
+            }
+        }
+
+        [TestMethod]
+        public void AccessPrivateUserFootprintTest()
+        {
+            var owner = CreateTestPrincipal().Identity.Name;
+            var name = GetTestUniqueName();
+
+            using (var context = CreateContext())
+            {
+                context.Principal = CreateOtherPrincipal();
+
+                CreateFootprint(context, name, false);
+            }
+
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session);
+                var footprint = client.GetUserFootprint(owner, name);
+
+                Assert.AreEqual(name, footprint.Footprint.Name);
+            }
+        }
+
+        [TestMethod]
+        public void DenyGetPrivateFootprintTest()
+        {
+            var owner = CreateOtherPrincipal().Identity.Name;
+            var name = GetTestUniqueName();
+
+            using (var context = CreateContext())
+            {
+                context.Principal = CreateOtherPrincipal();
+
+                CreateFootprint(context, name, false);
+            }
+
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session);
+
+                try
+                {
+                    var footprint = client.GetUserFootprint(owner, name);
+                    Assert.Fail();
+                }
+                catch (Exception)
+                {
+                }
             }
         }
 

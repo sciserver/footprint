@@ -155,7 +155,7 @@ namespace Jhu.Footprint.Web.Lib
                 Permissions.Owner = Context.Principal.Identity.Name;
             }
 
-            if (Identity.Compare(Context.Principal.Identity.Name, Owner) != 0)
+            if (Identity.Compare(Context.Principal.Identity.Name, Permissions.Owner) != 0)
             {
                 // Footprint is created under a group account, set appropriate permissions
                 Permissions.Grant(Owner, Lib.Constants.RoleAdmin, DefaultAccess.All);

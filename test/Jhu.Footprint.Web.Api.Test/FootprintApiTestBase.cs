@@ -41,5 +41,10 @@ namespace Jhu.Footprint.Web.Api.V1
         {
             return FootprintTestBase.CreateTestPrincipal();
         }
+
+        protected Principal CreateOtherPrincipal()
+        {
+            return FootprintTestBase.CreateOtherPrincipal();
+        }
     }
 }
