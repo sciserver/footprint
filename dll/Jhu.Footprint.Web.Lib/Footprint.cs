@@ -216,20 +216,6 @@ WHERE Owner = @Owner
             base.OnValidating(e);
         }
 
-        protected override void OnSaving(Graywulf.Entities.EntityEventArgs e)
-        {
-            // Make sure user can save footprint with specified owner
-
-            if (!Context.Principal.Identity.CompareByName(this.Owner) &&
-                !Context.Principal.IsInRole(this.Owner, Constants.RoleAdmin) &&
-                !Context.Principal.IsInRole(this.Owner, Constants.RoleWriter))
-            {
-                throw Error.AccessDenied();
-            }
-            
-            base.OnSaving(e);
-        }
-
         protected override void OnModifying(Graywulf.Entities.EntityEventArgs e)
         {
             this.dateModified = DateTime.Now;
