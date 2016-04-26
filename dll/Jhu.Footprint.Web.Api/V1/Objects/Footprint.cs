@@ -29,15 +29,15 @@ namespace Jhu.Footprint.Web.Api.V1
         public Uri Url { get; set; }
 
         [IgnoreDataMember]
-        public Jhu.Footprint.Web.Lib.FootprintType Type { get; set; }
+        public Jhu.Footprint.Web.Lib.FootprintType? Type { get; set; }
 
         [DataMember(Name = "type")]
         [DefaultValue("None")]
         [Description("Method to combine regions: union, intersection or none.")]
         public string Type_ForXml
         {
-            get { return Util.EnumFormatter.ToXmlString(Type); }
-            set { Type = Util.EnumFormatter.FromXmlString<Lib.FootprintType>(value); }
+            get { return Util.EnumFormatter.ToNullableXmlString(Type); }
+            set { Type = Util.EnumFormatter.FromNullableXmlString<Lib.FootprintType>(value); }
         }
 
         [DataMember(Name = "comments")]
@@ -46,9 +46,8 @@ namespace Jhu.Footprint.Web.Api.V1
         public string Comments { get; set; }
 
         [DataMember(Name = "public")]
-        [DefaultValue(false)]
         [Description("Visibility of the footprint to the public.")]
-        public bool Public { get; set; }
+        public bool? Public { get; set; }
 
         public Footprint()
         {
@@ -56,27 +55,24 @@ namespace Jhu.Footprint.Web.Api.V1
 
         public Footprint(Lib.Footprint footprint)
         {
-            SetValue(footprint);
+            SetValues(footprint);
         }
 
-        public Lib.Footprint GetValue(Lib.Context context, string owner, string name)
+        public void GetValues(Lib.Footprint footprint)
         {
-            // ID is ignored, owner and name are taken from the URL
-
-            var f = new Lib.Footprint(context)
+            footprint.Type = this.Type ?? Lib.FootprintType.None;
+            footprint.Comments = this.Comments ?? "";
+            
+            // To prevent resetting permission when modifying a footprint,
+            // only set permission when the public field is present
+            // in the request
+            if (!footprint.IsExisting || Public.HasValue)
             {
-                Name = name,
-                Owner = owner,
-                Type = Type,
-                Comments = Comments ?? ""
-            };
-
-            f.SetDefaultPermissions(Public);
-
-            return f;
+                footprint.SetDefaultPermissions(Public ?? false);
+            }
         }
 
-        public void SetValue(Lib.Footprint footprint)
+        public void SetValues(Lib.Footprint footprint)
         {
             var access = footprint.Permissions.EvaluateAccess(Principal.Guest);
 
@@ -85,9 +81,7 @@ namespace Jhu.Footprint.Web.Api.V1
             this.Type = footprint.Type;
             this.Comments = footprint.Comments;
             this.Public = access.CanRead();
-
-            //TODO : host name?
-            //this.Url = new Uri("http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + this.User + "/" + this.Name);
+            this.Url = FootprintService.GetUrl(footprint);
         }
 
     }

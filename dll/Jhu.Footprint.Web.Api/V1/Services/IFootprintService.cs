@@ -36,9 +36,9 @@ namespace Jhu.Footprint.Web.Api.V1
         FootprintResponse CreateUserFootprint(string owner, string name, FootprintRequest request);
 
         [OperationContract]
-        [WebInvoke(Method = HttpMethod.Put, UriTemplate = "/{owner}/{name}")]
+        [WebInvoke(Method = HttpMethod.Patch, UriTemplate = "/{owner}/{name}")]
         [Description("Modify existing footprint.")]
-        void ModifyUserFootprint(string owner, string name, FootprintRequest request);
+        FootprintResponse ModifyUserFootprint(string owner, string name, FootprintRequest request);
 
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Delete, UriTemplate = "/{owner}/{name}")]

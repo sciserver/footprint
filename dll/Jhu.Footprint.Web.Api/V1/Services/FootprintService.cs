@@ -63,22 +63,38 @@ namespace Jhu.Footprint.Web.Api.V1
         {
             using (var context = CreateContext())
             {
-                var footprint = request.Footprint.GetValue(context, owner, name);
+                var footprint = new Lib.Footprint(context)
+                {
+                    Owner = owner,
+                    Name = name
+                };
+                request.Footprint.GetValues(footprint);
                 footprint.Save();
 
-                var res = new FootprintResponse(footprint);
-                return res;
+                return new FootprintResponse(footprint);
             }
         }
 
-        public void ModifyUserFootprint(string owner, string name, FootprintRequest request)
+        public FootprintResponse ModifyUserFootprint(string owner, string name, FootprintRequest request)
         {
-            throw new NotImplementedException();
+            using (var context = CreateContext())
+            {
+                var footprint = new Lib.Footprint(context)
+                {
+                    Owner = owner,
+                    Name = name
+                };
+                footprint.Load();
+                request.Footprint.GetValues(footprint);
+                footprint.Save();
+
+                return new FootprintResponse(footprint);
+            }
         }
 
         public void DeleteUserFootprint(string owner, string name)
         {
-            throw new NotImplementedException();
+            
         }
 
         public FootprintListResponse FindUserFootprints(string owner, string name, int from, int max)
@@ -154,6 +170,12 @@ namespace Jhu.Footprint.Web.Api.V1
         public Stream GetUserFootprintRegionPlot(string userName, string name, string regionName, string projection, float width, float height, string degStyle, bool grid, bool autoZoom, bool autoRotate)
         {
             throw new NotImplementedException();
+        }
+
+        public static Uri GetUrl(Lib.Footprint footprint)
+        {
+            // TODO: where to take machine name from? HttpContext?
+            return new Uri("http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/" + footprint.Owner + "/" + footprint.Name);
         }
 
 #if false
