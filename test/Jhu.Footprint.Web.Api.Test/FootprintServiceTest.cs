@@ -3,6 +3,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Mime;
+using System.ServiceModel;
+using System.ServiceModel.Security;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Lib = Jhu.Footprint.Web.Lib;
 using Jhu.Spherical;
@@ -15,8 +17,6 @@ namespace Jhu.Footprint.Web.Api.V1
     [TestClass]
     public class FootprintServiceTest : FootprintApiTestBase
     {
-
-
         [ClassInitialize]
         public static void ClassInit(TestContext testContext)
         {
@@ -82,7 +82,21 @@ namespace Jhu.Footprint.Web.Api.V1
         }
 
         [TestMethod]
-        public void AccessPublicUserFootprintTest()
+        [ExpectedException(typeof(EndpointNotFoundException))]
+        public void GetNonexistingUserFootprintTest()
+        {
+            var owner = TestUser;
+            var name = GetTestUniqueName();
+
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session, TestUser);
+                var footprint = client.GetUserFootprint(owner, name).Footprint;
+            }
+        }
+
+        [TestMethod]
+        public void GrantGetPublicUserFootprintTest()
         {
             var owner = OtherUser;
             var name = GetTestUniqueName();
@@ -91,7 +105,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
             using (var session = new RestClientSession())
             {
-                var client = CreateClient(session, TestUser);
+                var client = CreateClient(session);
                 var footprint = client.GetUserFootprint(owner, name).Footprint;
 
                 Assert.AreEqual(name, footprint.Name);
@@ -99,7 +113,7 @@ namespace Jhu.Footprint.Web.Api.V1
         }
 
         [TestMethod]
-        public void AccessPrivateUserFootprintTest()
+        public void GrantGetPrivateUserFootprintTest()
         {
             var owner = OtherUser;
             var name = GetTestUniqueName();
@@ -116,7 +130,8 @@ namespace Jhu.Footprint.Web.Api.V1
         }
 
         [TestMethod]
-        public void DenyGetPrivateFootprintTest()
+        [ExpectedException(typeof(MessageSecurityException))]
+        public void DenyGetPrivateUserFootprintTest()
         {
             var owner = OtherUser;
             var name = GetTestUniqueName();
@@ -126,16 +141,26 @@ namespace Jhu.Footprint.Web.Api.V1
             using (var session = new RestClientSession())
             {
                 var client = CreateClient(session, TestUser);
-
-                try
-                {
-                    var footprint = client.GetUserFootprint(owner, name);
-                    Assert.Fail();
-                }
-                catch (Exception)
-                {
-                }
+                var footprint = client.GetUserFootprint(owner, name);
             }
+        }
+
+        [TestMethod]
+        public void GrantGetPrivateGroupFootprintTest()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void GrantGetPublicGroupFootprintTest()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void DenyGetPrivateGroupFootprintTest()
+        {
+            throw new NotImplementedException();
         }
 
         #endregion
@@ -166,6 +191,30 @@ namespace Jhu.Footprint.Web.Api.V1
                 Assert.AreEqual(owner, footprint.Owner);
                 Assert.AreEqual(name, footprint.Name);
             }
+        }
+
+        [TestMethod]
+        public void GrantModifyPrivateUserFootprintTest()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void DenyModifyPrivateUserFootprintTest()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void GrantModifyPrivateGroupFootprintTest()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void DenyModifyPrivateGroupFootprintTest()
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

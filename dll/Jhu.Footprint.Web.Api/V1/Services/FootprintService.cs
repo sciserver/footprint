@@ -94,7 +94,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
         public void DeleteUserFootprint(string owner, string name)
         {
-            
+            throw new NotImplementedException();
         }
 
         public FootprintListResponse FindUserFootprints(string owner, string name, int from, int max)
