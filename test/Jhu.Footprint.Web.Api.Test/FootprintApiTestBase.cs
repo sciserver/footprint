@@ -27,16 +27,23 @@ namespace Jhu.Footprint.Web.Api.V1
         {
             return FootprintTestBase.CreateContext();
         }
-        
+
+        protected IFootprintService CreateClient(RestClientSession session)
+        {
+            return CreateClient(session, null);
+        }
+
         protected IFootprintService CreateClient(RestClientSession session, string user)
         {
-            AuthenticateUser(session, user);
+            if (user != null)
+            {
+                AuthenticateUser(session, user);
+            }
 
             var host = Environment.MachineName;
-
             var uri = new Uri("http://" + host + "/footprint/api/v1/Footprint.svc");
-
             var client = session.CreateClient<IFootprintService>(uri, null);
+
             return client;
         }
 
