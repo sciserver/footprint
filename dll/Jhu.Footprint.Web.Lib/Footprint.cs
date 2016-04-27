@@ -170,6 +170,35 @@ namespace Jhu.Footprint.Web.Lib
             }
         }
 
+        protected override void OnCreating(Graywulf.Entities.EntityEventArgs e)
+        {
+            // If footprint is created under an account different from the user's,
+            // it's assumed to be under a group account so verify role
+
+            if (Context.Principal == null || Context.Principal.Identity == null || !Context.Principal.Identity.IsAuthenticated)
+            {
+                throw Error.AccessDenied();
+            }
+
+            if (Identity.Compare(Context.Principal.Identity.Name, Owner) != 0)
+            {
+                var principal = Context.Principal as Principal;
+
+                if (principal == null)
+                {
+                    throw Error.AccessDenied();
+                }
+
+                if (!principal.IsInRole(Owner, Constants.RoleAdmin) &&
+                    !principal.IsInRole(Owner, Constants.RoleWriter))
+                {
+                    throw Error.AccessDenied();
+                }
+            }
+
+            base.OnCreating(e);
+        }
+
         protected override SqlCommand GetSelectCommand()
         {
             if (id == 0 && Owner != null && Name != null)
@@ -408,14 +437,6 @@ WHERE Owner = @Owner
                 Save();
             }
 
-        }
-
-        public void SetPublic()
-        {
-        }
-
-        public void SetPrivate()
-        {
         }
     }
 }

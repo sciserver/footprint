@@ -102,7 +102,16 @@ namespace Jhu.Footprint.Web.Api.V1
 
         public void DeleteUserFootprint(string owner, string name)
         {
-            throw new NotImplementedException();
+            using (var context = CreateContext())
+            {
+                var footprint = new Lib.Footprint(context)
+                {
+                    Owner = owner,
+                    Name = name
+                };
+                footprint.Load();
+                footprint.Delete();
+            }
         }
 
         public FootprintListResponse FindUserFootprints(string owner, string name, int from, int max)

@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="FootprintApiTestBase.cs" />
     <Compile Include="FootprintServiceSecurityTest.cs" />
+    <Compile Include="FootprintServiceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

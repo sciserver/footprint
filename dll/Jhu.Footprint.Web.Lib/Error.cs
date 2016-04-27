@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Security;
+using Jhu.Graywulf.AccessControl;
 
 namespace Jhu.Footprint.Web.Lib
 {
@@ -71,9 +72,9 @@ namespace Jhu.Footprint.Web.Lib
             return new FootprintException(message);
         }
 
-        public static SecurityException AccessDenied()
+        public static AccessDeniedException AccessDenied()
         {
-            return new SecurityException(ExceptionMessages.AccessDenied);
+            return new AccessDeniedException(ExceptionMessages.AccessDenied);
         }
 
         #endregion

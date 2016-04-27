@@ -58,15 +58,60 @@ namespace Jhu.Footprint.Web.Api.V1
 
             return client;
         }
-
-        protected Principal CreateTestPrincipal()
+        
+        protected Footprint CreateTestFootprint(string user, string owner, string name, bool @public)
         {
-            return FootprintTestBase.CreateTestPrincipal();
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session, user);
+                var req = new FootprintRequest()
+                {
+                    Footprint = new Footprint()
+                    {
+                        Public = @public
+                    }
+                };
+                return client.CreateUserFootprint(owner, name, req).Footprint;
+            }
         }
 
-        protected Principal CreateOtherPrincipal()
+        protected Footprint GetTestFootprint(string user, string owner, string name)
         {
-            return FootprintTestBase.CreateOtherPrincipal();
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session, user);
+                return client.GetUserFootprint(owner, name).Footprint;
+            }
+        }
+
+        protected Footprint ModifyTestFootprint(string user, string owner, string name)
+        {
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session, user);
+                var footprint = client.GetUserFootprint(owner, name).Footprint;
+
+                footprint.Comments = "modified";
+
+                var req = new FootprintRequest()
+                {
+                    Footprint = footprint
+                };
+
+                footprint = client.ModifyUserFootprint(owner, name, req).Footprint;
+                footprint = client.GetUserFootprint(owner, name).Footprint;
+
+                return footprint;
+            }
+        }
+
+        protected void DeleteTestFootprint(string user, string owner, string name)
+        {
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session, user);
+                client.DeleteUserFootprint(owner, name);
+            }
         }
     }
 }
