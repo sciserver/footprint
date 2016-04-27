@@ -35,10 +35,18 @@ namespace Jhu.Footprint.Web.Api.V1
 
         private Lib.Context CreateContext()
         {
-            return new Lib.Context()
+            var context = new Lib.Context();
+
+            if (System.Threading.Thread.CurrentPrincipal is Jhu.Graywulf.AccessControl.Principal)
             {
-                Principal = (Jhu.Graywulf.AccessControl.Principal)System.Threading.Thread.CurrentPrincipal
-            };
+                context.Principal = (Jhu.Graywulf.AccessControl.Principal)System.Threading.Thread.CurrentPrincipal;
+            }
+            else
+            {
+                context.Principal = Jhu.Graywulf.AccessControl.Principal.Guest;
+            }
+
+            return context;
         }
 
         #region Footprint CRUD operations
