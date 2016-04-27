@@ -15,7 +15,7 @@ using Jhu.Graywulf.Web.Services;
 namespace Jhu.Footprint.Web.Api.V1
 {
     [TestClass]
-    public class FootprintServiceTest : FootprintApiTestBase
+    public class FootprintServiceSecurityTest : FootprintApiTestBase
     {
         [ClassInitialize]
         public static void ClassInit(TestContext testContext)
