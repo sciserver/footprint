@@ -23,11 +23,11 @@ namespace Jhu.Footprint.Web.Api.V1
             InitializeDatabase();
         }
 
-        protected Footprint CreateTestFootprint(string owner, string name, bool @public)
+        protected Footprint CreateTestFootprint(string user, string owner, string name, bool @public)
         {
             using (var session = new RestClientSession())
             {
-                var client = CreateClient(session, owner);
+                var client = CreateClient(session, user);
                 var req = new FootprintRequest()
                 {
                     Footprint = new Footprint()
@@ -39,128 +39,135 @@ namespace Jhu.Footprint.Web.Api.V1
             }
         }
 
+        protected Footprint GetTestFootprint(string user, string owner, string name)
+        {
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session, user);
+                return client.GetUserFootprint(owner, name).Footprint;
+            }
+        }
+
         #region Create footprint tests
 
         [TestMethod]
         public void CreateUserFootprintTest()
         {
-            var owner = CreateTestPrincipal().Identity.Name;
             var name = GetTestUniqueName();
 
-            using (var session = new RestClientSession())
-            {
-                var client = CreateClient(session, TestUser);
-                var req = new FootprintRequest()
-                {
-                    Footprint = new Footprint()
-                };
-                var footprint = client.CreateUserFootprint(owner, name, req).Footprint;
+            var footprint = CreateTestFootprint(TestUser, TestUser, name, false);
 
-                Assert.AreEqual(footprint.Owner, owner);
-                Assert.AreEqual(footprint.Name, name);
-                Assert.AreEqual(footprint.Type, Lib.FootprintType.None);
-                Assert.AreEqual(footprint.Public, false);
-            }
+            Assert.AreEqual(footprint.Owner, TestUser);
+            Assert.AreEqual(footprint.Name, name);
+            Assert.AreEqual(footprint.Type, Lib.FootprintType.None);
+            Assert.AreEqual(footprint.Public, false);
         }
+
+        [TestMethod]
+        public void GrantCreateGroupFootprintByAdminTest()
+        {
+            var name = GetTestUniqueName();
+
+            var f1 = CreateTestFootprint(GroupAdminUser, TestGroup, name, true);
+        }
+
+        [TestMethod]
+        public void GrantCreateGroupFootprintByWriterTest()
+        {
+            var name = GetTestUniqueName();
+
+            var f1 = CreateTestFootprint(GroupWriterUser, TestGroup, name, true);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(MessageSecurityException))]
+        public void DenyCreateGroupFootprintByReaderTest()
+        {
+            var name = GetTestUniqueName();
+
+            var f1 = CreateTestFootprint(GroupWriterUser, TestGroup, name, true);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(MessageSecurityException))]
+        public void DenyCreateGroupFootprintByOtherTest()
+        {
+            var name = GetTestUniqueName();
+
+            var f1 = CreateTestFootprint(OtherUser, TestGroup, name, true);
+        }
+
+        #endregion
+        #region Get footprint tests
 
         [TestMethod]
         public void GetUserFootprintTest()
         {
-            var owner = TestUser;
             var name = GetTestUniqueName();
 
-            CreateTestFootprint(owner, name, true);
+            var f1 = CreateTestFootprint(TestUser, TestUser, name, true);
+            var f2 = GetTestFootprint(TestUser, TestUser, name);
 
-            using (var session = new RestClientSession())
-            {
-                var client = CreateClient(session, TestUser);
-                var footprint = client.GetUserFootprint(owner, name).Footprint;
-
-                Assert.AreEqual(owner, footprint.Owner);
-                Assert.AreEqual(name, footprint.Name);
-            }
+            Assert.AreEqual(TestUser, f2.Owner);
+            Assert.AreEqual(name, f2.Name);
         }
 
         [TestMethod]
         [ExpectedException(typeof(EndpointNotFoundException))]
         public void GetNonexistingUserFootprintTest()
         {
-            var owner = TestUser;
             var name = GetTestUniqueName();
 
-            using (var session = new RestClientSession())
-            {
-                var client = CreateClient(session, TestUser);
-                var footprint = client.GetUserFootprint(owner, name).Footprint;
-            }
+            GetTestFootprint(TestUser, TestUser, name);
         }
 
         [TestMethod]
         public void GrantGetPublicUserFootprintTest()
         {
-            var owner = OtherUser;
             var name = GetTestUniqueName();
 
-            CreateTestFootprint(owner, name, true);
+            var f1 = CreateTestFootprint(TestUser, TestUser, name, true);
+            var f2 = GetTestFootprint(OtherUser, TestUser, name);
 
-            using (var session = new RestClientSession())
-            {
-                var client = CreateClient(session);
-                var footprint = client.GetUserFootprint(owner, name).Footprint;
-
-                Assert.AreEqual(name, footprint.Name);
-            }
-        }
-
-        [TestMethod]
-        public void GrantGetPrivateUserFootprintTest()
-        {
-            var owner = OtherUser;
-            var name = GetTestUniqueName();
-
-            CreateTestFootprint(owner, name, false);
-
-            using (var session = new RestClientSession())
-            {
-                var client = CreateClient(session, OtherUser);
-                var footprint = client.GetUserFootprint(owner, name).Footprint;
-
-                Assert.AreEqual(name, footprint.Name);
-            }
+            Assert.AreEqual(f1.Name, f2.Name);
         }
 
         [TestMethod]
         [ExpectedException(typeof(MessageSecurityException))]
         public void DenyGetPrivateUserFootprintTest()
         {
-            var owner = OtherUser;
             var name = GetTestUniqueName();
 
-            CreateTestFootprint(owner, name, false);
-
-            using (var session = new RestClientSession())
-            {
-                var client = CreateClient(session, TestUser);
-                var footprint = client.GetUserFootprint(owner, name);
-            }
+            CreateTestFootprint(TestUser, TestUser, name, false);
+            GetTestFootprint(OtherUser, TestUser, name);
         }
 
         [TestMethod]
         public void GrantGetPrivateGroupFootprintTest()
         {
-            throw new NotImplementedException();
+            var name = GetTestUniqueName();
+
+            var f1 = CreateTestFootprint(GroupWriterUser, TestGroup, name, false);
+            var f2 = GetTestFootprint(GroupReaderUser, TestGroup, name);
         }
 
         [TestMethod]
         public void GrantGetPublicGroupFootprintTest()
         {
-            throw new NotImplementedException();
+            var name = GetTestUniqueName();
+
+            var f1 = CreateTestFootprint(GroupWriterUser, TestGroup, name, true);
+            var f2 = GetTestFootprint(OtherUser, TestGroup, name);
         }
 
         [TestMethod]
+        [ExpectedException(typeof(MessageSecurityException))]
         public void DenyGetPrivateGroupFootprintTest()
         {
-            throw new NotImplementedException();
+            var name = GetTestUniqueName();
+
+            var f1 = CreateTestFootprint(GroupWriterUser, TestGroup, name, false);
+            var f2 = GetTestFootprint(OtherUser, TestGroup, name);
         }
 
         #endregion
@@ -172,7 +179,7 @@ namespace Jhu.Footprint.Web.Api.V1
             var owner = TestUser;
             var name = GetTestUniqueName();
 
-            CreateTestFootprint(owner, name, true);
+            CreateTestFootprint(owner, owner, name, true);
 
             using (var session = new RestClientSession())
             {
