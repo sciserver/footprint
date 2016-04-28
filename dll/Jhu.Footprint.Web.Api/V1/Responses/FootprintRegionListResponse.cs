@@ -21,9 +21,9 @@ namespace Jhu.Footprint.Web.Api.V1
         {
         }
 
-        public FootprintRegionListResponse(IEnumerable<Lib.FootprintRegion> regions, string folderName)
+        public FootprintRegionListResponse(Lib.Footprint footprint, IEnumerable<Lib.FootprintRegion> regions, string folderName)
         {
-            this.Regions = regions.Select(f => new FootprintRegion(f, folderName)).ToArray();
+            this.Regions = regions.Select(r => new FootprintRegion(footprint, r)).ToArray();
         }
     }
 }

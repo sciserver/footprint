@@ -88,20 +88,20 @@ namespace Jhu.Footprint.Web.Lib {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Duplicate footprint folder name:  &apos;{0}&apos;..
-        /// </summary>
-        internal static string DuplicateFootprintFolderName {
-            get {
-                return ResourceManager.GetString("DuplicateFootprintFolderName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Duplicate footprint name: &apos;{0}&apos;..
+        ///   Looks up a localized string similar to Duplicate footprint name:  &apos;{0}&apos;..
         /// </summary>
         internal static string DuplicateFootprintName {
             get {
                 return ResourceManager.GetString("DuplicateFootprintName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duplicate footprint region name: &apos;{0}&apos;..
+        /// </summary>
+        internal static string DuplicateFootprintRegionName {
+            get {
+                return ResourceManager.GetString("DuplicateFootprintRegionName", resourceCulture);
             }
         }
         

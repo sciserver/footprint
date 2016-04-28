@@ -48,10 +48,10 @@ namespace Jhu.Footprint.Web.Lib
         #endregion
 
         #region Footprint Folder Errors
-        public static DuplicateNameException DuplicateFootprintFolderName(string name)
+        public static DuplicateNameException DuplicateFootprintRegionName(string name)
         {
             var message = String.Format(
-                ExceptionMessages.DuplicateFootprintFolderName,
+                ExceptionMessages.DuplicateFootprintRegionName,
                 name);
 
             return new DuplicateNameException(message);

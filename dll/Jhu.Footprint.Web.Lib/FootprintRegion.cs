@@ -94,7 +94,7 @@ namespace Jhu.Footprint.Web.Lib
         }
 
         public FootprintRegion(Footprint footprint)
-            :base(footprint.Context)
+            : base(footprint.Context)
         {
             InitializeMembers();
 
@@ -131,42 +131,8 @@ namespace Jhu.Footprint.Web.Lib
 
         #endregion
 
-        protected override string GetTableQuery()
-        {
-            return @"
-SELECT r.*, f.Owner, f.__acl
-FROM [FootprintRegion] r
-INNER JOIN [Footprint] f
-    ON r.FootprintID = f.ID
-";
-        }
-
-        protected Boolean IsNameDuplicate()
-        {
-            var sql = @"
-SELECT COUNT(*) FROM FootprintRegion
-WHERE ID != @ID
-      AND FootprintID = @FootprintID
-	  AND Name = @Name";
-
-            using (var cmd = Context.CreateCommand(sql))
-            {
-                cmd.Parameters.Add("@ID", SqlDbType.BigInt).Value = this.Id;
-                cmd.Parameters.Add("@FootprintID", SqlDbType.BigInt).Value = this.footprintId;
-                cmd.Parameters.Add("@Name", SqlDbType.NVarChar, 256).Value = this.Name;
-
-                return (int)Context.ExecuteCommandScalar(cmd) > 0;
-            }
-        }
-
         #region Methods
 
-        private AccessCollection EvaluateAccess()
-        {
-            var footprint = new Footprint((Context)Context);
-            footprint.Load(this.footprintId);
-            return footprint.Permissions.EvaluateAccess(Context.Principal);
-        }
 
         protected override void OnValidating(Graywulf.Entities.EntityEventArgs e)
         {
@@ -182,10 +148,17 @@ WHERE ID != @ID
 
             if (IsNameDuplicate())
             {
-                throw Error.DuplicateFootprintFolderName(this.name);
+                throw Error.DuplicateFootprintRegionName(this.name);
             }
 
             base.OnValidating(e);
+        }
+
+        private AccessCollection EvaluateAccess()
+        {
+            var footprint = new Footprint((Context)Context);
+            footprint.Load(this.footprintId);
+            return footprint.Permissions.EvaluateAccess(Context.Principal);
         }
 
         protected override void OnCreating(Graywulf.Entities.EntityEventArgs e)
@@ -207,6 +180,64 @@ WHERE ID != @ID
             EvaluateAccess().EnsureUpdate();
 
             base.OnDeleting(e);
+        }
+
+        protected Boolean IsNameDuplicate()
+        {
+            var sql = @"
+SELECT COUNT(*) FROM FootprintRegion
+WHERE ID != @ID
+      AND FootprintID = @FootprintID
+	  AND Name = @Name";
+
+            using (var cmd = Context.CreateCommand(sql))
+            {
+                cmd.Parameters.Add("@ID", SqlDbType.BigInt).Value = this.Id;
+                cmd.Parameters.Add("@FootprintID", SqlDbType.BigInt).Value = this.footprintId;
+                cmd.Parameters.Add("@Name", SqlDbType.NVarChar, 256).Value = this.Name;
+
+                return (int)Context.ExecuteCommandScalar(cmd) > 0;
+            }
+        }
+
+        protected override string GetTableQuery()
+        {
+            return @"
+SELECT r.*, f.Owner, f.Name AS FootprintName, f.__acl
+FROM [FootprintRegion] r
+INNER JOIN [Footprint] f
+    ON r.FootprintID = f.ID
+";
+        }
+
+        protected override SqlCommand GetSelectCommand()
+        {
+            if (id == 0 && footprintId != 0 && name != null)
+            {
+                var sql = @"
+WITH __e AS
+(
+{0}
+)
+SELECT * 
+FROM __e
+WHERE FootprintID = @FootprintID AND Name = @Name;
+";
+
+                var cmd = new SqlCommand(
+                String.Format(
+                    sql,
+                    GetTableQuery()));
+
+                cmd.Parameters.Add("@FootprintID", SqlDbType.Int).Value = footprintId;
+                cmd.Parameters.Add("@Name", SqlDbType.NVarChar).Value = name;
+
+                return cmd;
+            }
+            else
+            {
+                return base.GetSelectCommand();
+            }
         }
 
         #endregion

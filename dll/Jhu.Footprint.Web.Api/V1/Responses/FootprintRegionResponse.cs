@@ -17,9 +17,9 @@ namespace Jhu.Footprint.Web.Api.V1
         [Description("A region.")]
         public FootprintRegion Region { get; set; }
 
-        public FootprintRegionResponse(FootprintRegion region)
+        public FootprintRegionResponse(Lib.Footprint footprint, Lib.FootprintRegion region)
         {
-            this.Region = region;
+            this.Region = new FootprintRegion(footprint, region);
         }
     }
 }

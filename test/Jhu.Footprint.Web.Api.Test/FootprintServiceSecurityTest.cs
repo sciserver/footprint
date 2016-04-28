@@ -203,7 +203,7 @@ namespace Jhu.Footprint.Web.Api.V1
         // - try to modify group's entity while being the writer of another group
 
         #endregion
-        #region
+        #region Delete footprint tests
 
         [TestMethod]
         public void GrantDeleteUserFootprintTest()
@@ -250,6 +250,57 @@ namespace Jhu.Footprint.Web.Api.V1
 
             var f1 = CreateTestFootprint(GroupAdminUser, TestGroup, name, true);
             DeleteTestFootprint(GroupReaderUser, TestGroup, name);
+        }
+
+        #endregion
+        #region Find footprint tests
+
+        [TestMethod]
+        public void FindPublicUserFootprintTest()
+        {
+            var name = GetTestUniqueName();
+
+            var f1 = CreateTestFootprint(TestUser, TestUser, name, true);
+
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session, OtherUser);
+                var fp = client.FindFootprints(null, name + "%", 0, 0);
+
+                Assert.AreEqual(1, fp.Footprints.Length);
+            }
+        }
+
+        [TestMethod]
+        public void DontFindPrivateUserFootprintTest()
+        {
+            var name = GetTestUniqueName();
+
+            var f1 = CreateTestFootprint(TestUser, TestUser, name, false);
+
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session, OtherUser);
+                var fp = client.FindFootprints(null, name + "%", 0, 0);
+
+                Assert.AreEqual(0, fp.Footprints.Length);
+            }
+        }
+
+        [TestMethod]
+        public void FindPrivateGroupFootprintByReaderTest()
+        {
+            var name = GetTestUniqueName();
+
+            var f1 = CreateTestFootprint(GroupWriterUser, TestGroup, name, false);
+
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session, GroupReaderUser);
+                var fp = client.FindFootprints(null, name + "%", 0, 0);
+
+                Assert.AreEqual(1, fp.Footprints.Length);
+            }
         }
 
         #endregion

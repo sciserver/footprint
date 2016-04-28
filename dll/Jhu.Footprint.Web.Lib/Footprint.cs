@@ -148,6 +148,14 @@ namespace Jhu.Footprint.Web.Lib
 
         #endregion
 
+        public void Load(string owner, string name)
+        {
+            this.Owner = owner;
+            this.name = name;
+
+            Load();
+        }
+
         public void SetDefaultPermissions(bool @public)
         {
             if (Permissions.Owner == null)
@@ -261,7 +269,7 @@ WHERE Owner = @Owner
 
             if (IsNameDuplicate())
             {
-                throw Error.DuplicateFootprintFolderName(this.name);
+                throw Error.DuplicateFootprintName(this.name);
             }
 
             base.OnValidating(e);

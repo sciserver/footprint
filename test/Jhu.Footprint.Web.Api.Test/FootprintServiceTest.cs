@@ -5,12 +5,22 @@ using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Security;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Jhu.Graywulf.AccessControl;
+using Jhu.Graywulf.Web.Api.V1;
+using Jhu.Graywulf.Web.Services;
 
 namespace Jhu.Footprint.Web.Api.V1
 {
     [TestClass]
     public class FootprintServiceTest : FootprintApiTestBase
     {
+        [ClassInitialize]
+        public static void ClassInit(TestContext testContext)
+        {
+            InitializeDatabase();
+        }
+
+        #region Footprint CRUD operation tests
 
         [TestMethod]
         public void GetUserFootprintTest()
@@ -73,6 +83,104 @@ namespace Jhu.Footprint.Web.Api.V1
             var name = GetTestUniqueName();
             DeleteTestFootprint(TestUser, TestUser, name);
         }
+
+        #endregion
+        #region Footprint search tests
+
+        [TestMethod]
+        public void FindUserFootprintTest()
+        {
+            var name = GetTestUniqueName();
+
+            var f1 = CreateTestFootprint(TestUser, TestUser, name + "_1", true);
+            var f2 = CreateTestFootprint(TestUser, TestUser, name + "_2", true);
+
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session, TestUser);
+                var fp = client.FindUserFootprints(TestUser, name + "%", 0, 0);
+
+                Assert.AreEqual(2, fp.Footprints.Length);
+            }
+        }
+
+        [TestMethod]
+        public void FindFootprintTest()
+        {
+            var name = GetTestUniqueName();
+
+            var f1 = CreateTestFootprint(TestUser, TestUser, name + "_1", true);
+            var f2 = CreateTestFootprint(OtherUser, OtherUser, name + "_2", true);
+
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session, TestUser);
+                var fp = client.FindFootprints(null, name + "%", 0, 0);
+
+                Assert.AreEqual(2, fp.Footprints.Length);
+            }
+        }
+
+        #endregion
+        #region Region CRUD operation tests
+
+        [TestMethod]
+        public void GetUserRegionTest()
+        {
+            var name = GetTestUniqueName();
+
+            var f1 = CreateTestFootprint(TestUser, TestUser, name, true);
+            var r1 = CreateTestRegion(TestUser, TestUser, name, name);
+            var r2 = GetTestRegion(TestUser, TestUser, name, name);
+
+            Assert.AreEqual(TestUser, r2.Owner);
+            Assert.AreEqual(name, r2.Name);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(EndpointNotFoundException))]
+        public void GetNonexistingRegionTest()
+        {
+            var name = GetTestUniqueName();
+
+            var f1 = CreateTestFootprint(TestUser, TestUser, name, true);
+            var r1 = GetTestRegion(TestUser, TestUser, name, name);
+        }
+
+        [TestMethod]
+        public void ModifyRegionTest()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(EndpointNotFoundException))]
+        public void ModifyNonexistingRegionTest()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(EndpointNotFoundException))]
+        public void DeleteRegionTest()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(EndpointNotFoundException))]
+        public void DeleteNonexistingRegionTest()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void DeleteFootprintWithRegionsTest()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
 
 #if false
         [TestMethod]

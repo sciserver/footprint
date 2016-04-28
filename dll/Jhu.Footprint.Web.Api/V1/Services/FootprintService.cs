@@ -51,22 +51,6 @@ namespace Jhu.Footprint.Web.Api.V1
 
         #region Footprint CRUD operations
 
-        public FootprintResponse GetUserFootprint(string owner, string name)
-        {
-            using (var context = CreateContext())
-            {
-                var footprint = new Lib.Footprint(context)
-                {
-                    Owner = owner,
-                    Name = name,
-                };
-
-                footprint.Load();
-
-                return new FootprintResponse(footprint);
-            }
-        }
-
         public FootprintResponse CreateUserFootprint(string owner, string name, FootprintRequest request)
         {
             using (var context = CreateContext())
@@ -78,6 +62,22 @@ namespace Jhu.Footprint.Web.Api.V1
                 };
                 request.Footprint.GetValues(footprint);
                 footprint.Save();
+
+                return new FootprintResponse(footprint);
+            }
+        }
+
+        public FootprintResponse GetUserFootprint(string owner, string name)
+        {
+            using (var context = CreateContext())
+            {
+                var footprint = new Lib.Footprint(context)
+                {
+                    Owner = owner,
+                    Name = name,
+                };
+
+                footprint.Load();
 
                 return new FootprintResponse(footprint);
             }
@@ -114,13 +114,22 @@ namespace Jhu.Footprint.Web.Api.V1
             }
         }
 
+        #endregion
+        #region Footprint search operations
+
         public FootprintListResponse FindUserFootprints(string owner, string name, int from, int max)
+        {
+            return FindFootprints(owner, name, from, max);
+        }
+
+        public FootprintListResponse FindFootprints(string owner, string name, int from, int max)
         {
             using (var context = CreateContext())
             {
                 var s = new Lib.FootprintSearch(context)
                 {
-                    Owner = owner
+                    Owner = owner,
+                    Name = name
                 };
 
                 return new FootprintListResponse(s.Find(from, max, null));
@@ -128,15 +137,42 @@ namespace Jhu.Footprint.Web.Api.V1
         }
 
         #endregion
-
-        public FootprintRegionResponse GetUserFootprintRegion(string owner, string name, string regionName)
-        {
-            throw new NotImplementedException();
-        }
+        #region Region CRUD operations
 
         public FootprintRegionResponse CreateUserFootprintRegion(string owner, string name, string regionName, FootprintRegionRequest request)
         {
-            throw new NotImplementedException();
+            using (var context = CreateContext())
+            {
+                var footprint = new Lib.Footprint(context);
+                footprint.Load(owner, name);
+
+                var region = new Lib.FootprintRegion(footprint)
+                {
+                    Name = regionName,
+                };
+                request.Region.GetValues(region);
+                region.Save();
+
+                return new FootprintRegionResponse(footprint, region);
+            }
+        }
+
+        public FootprintRegionResponse GetUserFootprintRegion(string owner, string name, string regionName)
+        {
+            using (var context = CreateContext())
+            {
+                var footprint = new Lib.Footprint(context);
+                
+                footprint.Load(owner, name);
+
+                var region = new Lib.FootprintRegion(footprint);
+
+                region.FootprintId = footprint.Id;
+                region.Name = regionName;
+                region.Load();
+
+                return new FootprintRegionResponse(footprint, region);
+            }
         }
 
         public void ModifyUserFootprintRegion(string owner, string name, string regionName, FootprintRegionRequest request)
@@ -148,6 +184,8 @@ namespace Jhu.Footprint.Web.Api.V1
         {
             throw new NotImplementedException();
         }
+
+        #endregion
 
         public string GetUserFootprintShape(string owner, string name, string operation, double limit)
         {
@@ -192,7 +230,13 @@ namespace Jhu.Footprint.Web.Api.V1
         public static Uri GetUrl(Lib.Footprint footprint)
         {
             // TODO: where to take machine name from? HttpContext?
-            return new Uri("http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/" + footprint.Owner + "/" + footprint.Name);
+            return new Uri("http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users" + footprint.Owner + "/" + footprint.Name);
+        }
+
+        public static Uri GetUrl(Lib.Footprint footprint, Lib.FootprintRegion region)
+        {
+            // TODO: where to take machine name from? HttpContext?
+            return new Uri("http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + footprint.Owner + "/" + footprint.Name + "/" + region.Name);
         }
 
 #if false
