@@ -153,6 +153,8 @@ namespace Jhu.Footprint.Web.Api.V1
                 request.Region.GetValues(region);
                 region.Save();
 
+                // TODO: update region cache
+
                 return new FootprintRegionResponse(footprint, region);
             }
         }
@@ -175,14 +177,45 @@ namespace Jhu.Footprint.Web.Api.V1
             }
         }
 
-        public void ModifyUserFootprintRegion(string owner, string name, string regionName, FootprintRegionRequest request)
+        public FootprintRegionResponse ModifyUserFootprintRegion(string owner, string name, string regionName, FootprintRegionRequest request)
         {
-            throw new NotImplementedException();
+            using (var context = CreateContext())
+            {
+                var footprint = new Lib.Footprint(context);
+
+                footprint.Load(owner, name);
+
+                var region = new Lib.FootprintRegion(footprint);
+
+                region.FootprintId = footprint.Id;
+                region.Name = regionName;
+                region.Load();
+                request.Region.GetValues(region);
+                region.Save();
+
+                // TODO: update region cache
+
+                return new FootprintRegionResponse(footprint, region);
+            }
         }
 
         public void DeleteUserFootprintRegion(string owner, string name, string regionName)
         {
-            throw new NotImplementedException();
+            using (var context = CreateContext())
+            {
+                var footprint = new Lib.Footprint(context);
+
+                footprint.Load(owner, name);
+
+                var region = new Lib.FootprintRegion(footprint);
+
+                region.FootprintId = footprint.Id;
+                region.Name = regionName;
+                region.Load();
+                region.Delete();
+
+                // TODO: update region cache
+            }
         }
 
         #endregion

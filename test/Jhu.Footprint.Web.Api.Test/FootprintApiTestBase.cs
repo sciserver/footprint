@@ -141,5 +141,32 @@ namespace Jhu.Footprint.Web.Api.V1
                 return client.GetUserFootprintRegion(owner, name, regionName).Region;
             }
         }
+
+        protected FootprintRegion ModifyTestRegion(string user, string owner, string name, string regionName)
+        {
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session, user);
+                var region = client.GetUserFootprintRegion(owner, name, regionName).Region;
+
+                region.FillFactor = 0.7;
+                region.RegionString = "CIRCLE J2000 20 20 20";
+
+                var req = new FootprintRegionRequest(region);
+
+                client.ModifyUserFootprintRegion(owner, name, regionName, req);
+
+                return client.GetUserFootprintRegion(owner, name, regionName).Region;
+            }
+        }
+
+        protected void DeleteTestRegion(string user, string owner, string name, string regionName)
+        {
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session, user);
+                client.DeleteUserFootprintRegion(owner, name, regionName);
+            }
+        }
     }
 }

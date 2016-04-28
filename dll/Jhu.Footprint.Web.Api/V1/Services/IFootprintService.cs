@@ -78,7 +78,7 @@ namespace Jhu.Footprint.Web.Api.V1
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Put, UriTemplate = "/users/{owner}/footprints/{name}/regions/{regionName}")]
         [Description("Modify footprint under an existing folder.")]
-        void ModifyUserFootprintRegion(string owner, string name, string regionName, FootprintRegionRequest request);
+        FootprintRegionResponse ModifyUserFootprintRegion(string owner, string name, string regionName, FootprintRegionRequest request);
 
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Delete, UriTemplate = "/users/{owner}/footprints/{name}/regions/{regionName}")]

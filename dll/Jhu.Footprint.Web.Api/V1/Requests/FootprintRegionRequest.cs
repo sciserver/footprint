@@ -19,6 +19,11 @@ namespace Jhu.Footprint.Web.Api.V1
         public FootprintRegionRequest()
         {
         }
+
+        public FootprintRegionRequest(FootprintRegion region)
+        {
+            this.Region = region;
+        }
     }
 
 }
