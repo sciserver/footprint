@@ -60,8 +60,8 @@ namespace Jhu.Footprint.Web.Api.V1
 
         public void GetValues(Lib.Footprint footprint)
         {
-            footprint.Type = this.Type ?? Lib.FootprintType.None;
-            footprint.Comments = this.Comments ?? "";
+            footprint.Type = this.Type ?? footprint.Type;
+            footprint.Comments = this.Comments ?? footprint.Comments;
             
             // To prevent resetting permission when modifying a footprint,
             // only set permission when the public field is present
@@ -76,8 +76,8 @@ namespace Jhu.Footprint.Web.Api.V1
         {
             var access = footprint.Permissions.EvaluateAccess(Principal.Guest);
 
-            this.Name = footprint.Name;
             this.Owner = footprint.Owner;
+            this.Name = footprint.Name;
             this.Type = footprint.Type;
             this.Comments = footprint.Comments;
             this.Public = access.CanRead();
