@@ -34,7 +34,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
             Assert.AreEqual(footprint.Owner, TestUser);
             Assert.AreEqual(footprint.Name, name);
-            Assert.AreEqual(footprint.Type, Lib.FootprintType.None);
+            Assert.AreEqual(footprint.Method, Lib.CombineMethod.None);
             Assert.AreEqual(footprint.Public, false);
         }
 

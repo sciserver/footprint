@@ -24,7 +24,7 @@ namespace Jhu.Footprint.Web.Lib
     }
 
     [Flags]
-    public enum FootprintType : byte
+    public enum CombineMethod : byte
     {
         None = 0,
         Union = 1,
@@ -35,7 +35,7 @@ namespace Jhu.Footprint.Web.Lib
 
     public enum RegionType : byte
     {
-        Region = 0,
-        Footprint = 1
+        Single = 0,
+        Combined = 1
     }
 }

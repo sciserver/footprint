@@ -20,12 +20,12 @@ namespace Jhu.Footprint.Web.Lib
         private int id;
         private string name;
         private int regionId;
-        private FootprintType type;
+        private CombineMethod method;
         private DateTime dateCreated;
         private DateTime dateModified;
         private string comments;
 
-        private FootprintRegion region;
+        private FootprintRegion combinedRegion;
 
         #endregion
         #region Properties
@@ -49,7 +49,7 @@ namespace Jhu.Footprint.Web.Lib
         }
 
         [DbColumn]
-        public int RegionId
+        public int CombinedRegionId
         {
             get { return regionId; }
             set { regionId = value; }
@@ -64,10 +64,10 @@ namespace Jhu.Footprint.Web.Lib
         }
 
         [DbColumn]
-        public FootprintType Type
+        public CombineMethod Method
         {
-            get { return type; }
-            set { type = value; }
+            get { return method; }
+            set { method = value; }
         }
 
         [DbColumn]
@@ -96,8 +96,8 @@ namespace Jhu.Footprint.Web.Lib
 
         public FootprintRegion Region
         {
-            get { return region; }
-            set { region = value; }
+            get { return combinedRegion; }
+            set { combinedRegion = value; }
         }
 
         #endregion
@@ -125,12 +125,12 @@ namespace Jhu.Footprint.Web.Lib
             this.id = 0;
             this.regionId = 0;
             this.name = "";
-            this.type = FootprintType.None;
+            this.method = CombineMethod.None;
             this.dateCreated = DateTime.Now;
             this.dateModified = DateTime.Now;
             this.comments = "";
 
-            this.region = null;
+            this.combinedRegion = null;
         }
 
         private void CopyMembers(Footprint old)
@@ -138,12 +138,12 @@ namespace Jhu.Footprint.Web.Lib
             this.id = old.id;
             this.name = old.name;
             this.regionId = old.regionId;
-            this.type = old.type;
+            this.method = old.method;
             this.dateCreated = old.dateCreated;
             this.dateModified = old.dateModified;
             this.comments = old.comments;
 
-            this.region = new FootprintRegion(old.region);
+            this.combinedRegion = new FootprintRegion(old.combinedRegion);
         }
 
         #endregion
@@ -282,38 +282,9 @@ WHERE Owner = @Owner
             base.OnModifying(e);
         }
 
-        /*
-        private void GetFootprintFolderId()
-        {
-            // TODO: move to search class
-
-            var sql = "fps.spGetFootprintFolderId";
-            using (var cmd = new SqlCommand(sql))
-            {
-                cmd.Connection = Context.Connection;
-                cmd.Transaction = Context.Transaction;
-
-                cmd.CommandType = CommandType.StoredProcedure;
-
-                cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = user;
-                cmd.Parameters.Add("@FolderName", SqlDbType.NVarChar, 256).Value = Name;
-                cmd.Parameters.Add("@FolderId", SqlDbType.BigInt).Direction = ParameterDirection.Output;
-
-                cmd.ExecuteNonQuery();
-
-                if (cmd.Parameters["@FolderId"].Value == DBNull.Value)
-                {
-                    throw Error.CannotFindfootprintFolder(this.user, this.Name);
-                }
-
-                this.Id = (long)cmd.Parameters["@FolderId"].Value;
-            }
-        }
-        */
-
         private void LoadFootprintRegion()
         {
-            region = new FootprintRegion(this)
+            combinedRegion = new FootprintRegion(this)
             {
                 Id = this.regionId,
             };
@@ -321,13 +292,13 @@ WHERE Owner = @Owner
             // if a folderFootprint exists, load it
             if (this.regionId > 0)
             {
-                region.Load();
+                combinedRegion.Load();
             }
         }
 
         private void InitializeFootprintRegion(FootprintRegion f)
         {
-            f.Type = RegionType.Footprint;
+            f.Type = RegionType.Combined;
             f.Name = "footprintRegion";
         }
 
@@ -338,7 +309,7 @@ WHERE Owner = @Owner
         {
             LoadFootprintRegion();
 
-            if (region.Region == null)
+            if (combinedRegion.Region == null)
             {
                 // If this is the first footprint in the folder
                 this.regionId = newFootprint.Id;
@@ -346,29 +317,29 @@ WHERE Owner = @Owner
                 return;
             }
 
-            if (region.Type == RegionType.Region)
+            if (combinedRegion.Type == RegionType.Single)
             {
                 // We only had one region in the folder so far, now need to create
                 // a new region to hold the intersection/union
 
-                region = new FootprintRegion(region);
-                region.Id = 0;
+                combinedRegion = new FootprintRegion(combinedRegion);
+                combinedRegion.Id = 0;
             }
 
-            switch (type)
+            switch (method)
             {
-                case FootprintType.Union:
-                    region.Region.SmartUnion(newFootprint.Region);
+                case CombineMethod.Union:
+                    combinedRegion.Region.SmartUnion(newFootprint.Region);
                     break;
-                case FootprintType.Intersection:
-                    region.Region.SmartIntersect(newFootprint.Region, false);
+                case CombineMethod.Intersection:
+                    combinedRegion.Region.SmartIntersect(newFootprint.Region, false);
                     break;
             }
 
 
-            InitializeFootprintRegion(region);
-            region.Save();
-            regionId = region.Id;
+            InitializeFootprintRegion(combinedRegion);
+            combinedRegion.Save();
+            regionId = combinedRegion.Id;
             Save();
         }
 
@@ -390,13 +361,13 @@ WHERE Owner = @Owner
             if (footprints.Count() <= 1)
             {
                 // delete old folderFootprint if exists
-                if (region != null && region.Type == RegionType.Footprint)
+                if (combinedRegion != null && combinedRegion.Type == RegionType.Combined)
                 {
-                    region.Delete();
+                    combinedRegion.Delete();
                 }
 
                 // (folder)footprintID must be set in DB
-                this.RegionId = footprints.Count() == 1 ? footprints.ElementAt(0).Id : -1;
+                this.CombinedRegionId = footprints.Count() == 1 ? footprints.ElementAt(0).Id : -1;
 
                 Save();
                 return;
@@ -404,13 +375,13 @@ WHERE Owner = @Owner
 
             Spherical.Region r = new Spherical.Region();
 
-            if (region == null || region.Type != RegionType.Footprint)
+            if (combinedRegion == null || combinedRegion.Type != RegionType.Combined)
             {
-                region.Id = 0; // brand new folderFootprint 
+                combinedRegion.Id = 0; // brand new folderFootprint 
             }
 
             // intersection must be started from an all-sky region
-            if (this.type == FootprintType.Intersection)
+            if (this.method == CombineMethod.Intersection)
             {
                 r.Add(new Spherical.Convex(new Spherical.Halfspace(0, 0, 1, false, -1)));
                 r.Simplify();
@@ -420,28 +391,28 @@ WHERE Owner = @Owner
             // update the folderFootprint
             foreach (FootprintRegion f in footprints)
             {
-                switch (this.type)
+                switch (this.method)
                 {
-                    case FootprintType.Union:
+                    case CombineMethod.Union:
                         r.SmartUnion(f.Region);
                         break;
-                    case FootprintType.Intersection:
+                    case CombineMethod.Intersection:
                         r = r.SmartIntersect(f.Region, false);
                         break;
                 }
             }
 
             // save the new folderFootprint if required
-            if (region != null)
+            if (combinedRegion != null)
             {
-                InitializeFootprintRegion(region);
+                InitializeFootprintRegion(combinedRegion);
 
                 r.Simplify();
-                region.Region = r;
+                combinedRegion.Region = r;
 
-                region.Save(); // save the new folderFootprint
+                combinedRegion.Save(); // save the new folderFootprint
 
-                this.regionId = region.Id;
+                this.regionId = combinedRegion.Id;
                 Save();
             }
 

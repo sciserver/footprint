@@ -76,7 +76,7 @@ namespace Jhu.Footprint.Web.Lib.Test
                 var region = new FootprintRegion(footprint)
                 {
                     Name = "FindByFootprintIdTest",
-                    Type = RegionType.Region,
+                    Type = RegionType.Single,
                     Region = Spherical.Region.Parse("CIRCLE J2000 10 10 10")
                 };
 
@@ -112,7 +112,7 @@ namespace Jhu.Footprint.Web.Lib.Test
                 var region = new FootprintRegion(footprint)
                 {
                     Name = "AccessDeniedTest",
-                    Type = RegionType.Region,
+                    Type = RegionType.Single,
                     Region = Spherical.Region.Parse("CIRCLE J2000 10 10 10")
                 };
 

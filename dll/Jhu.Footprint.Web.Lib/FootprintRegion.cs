@@ -118,7 +118,7 @@ namespace Jhu.Footprint.Web.Lib
             this.footprintId = 0;
             this.name = "";
             this.fillFactor = 1.0;
-            this.type = RegionType.Region;
+            this.type = RegionType.Single;
             this.region = null;
             this.thumbnail = null;
         }
@@ -183,6 +183,13 @@ namespace Jhu.Footprint.Web.Lib
             base.OnCreating(e);
         }
 
+        protected override void OnCreated(Graywulf.Entities.EntityEventArgs e)
+        {
+            parent.UpdateRegion(this);
+
+            base.OnCreated(e);
+        }
+
         protected override void OnModifying(Graywulf.Entities.EntityEventArgs e)
         {
             EvaluateAccess().EnsureUpdate();
@@ -190,11 +197,25 @@ namespace Jhu.Footprint.Web.Lib
             base.OnModifying(e);
         }
 
+        protected override void OnModified(Graywulf.Entities.EntityEventArgs e)
+        {
+            parent.RefreshRegion();
+
+            base.OnModified(e);
+        }
+
         protected override void OnDeleting(Graywulf.Entities.EntityEventArgs e)
         {
             EvaluateAccess().EnsureUpdate();
 
             base.OnDeleting(e);
+        }
+
+        protected override void OnDeleted(Graywulf.Entities.EntityEventArgs e)
+        {
+            parent.RefreshRegion();
+            
+            base.OnDeleted(e);
         }
 
         protected Boolean IsNameDuplicate()

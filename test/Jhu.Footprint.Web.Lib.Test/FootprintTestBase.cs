@@ -59,34 +59,32 @@ namespace Jhu.Footprint.Web.Lib
             return context;
         }
 
+        private static void RunScript(string filename)
+        {
+            using (var context = CreateContext())
+            {
+                var script = File.ReadAllText(MapSolutionRelativePath(filename));
+                context.ExecuteScriptNonQuery(script);
+            }
+        }
+
         public static void InitializeDatabase()
         {
-            string script;
-            string bin;
-
 #if DEBUG
-            bin = @"bin\Debug";
+            string bin = @"bin\Debug";
 #else
-                bin = @"bin\Release";
+            string bin = @"bin\Release";
 #endif
 
-            using (var context = CreateContext())
-            {
-                script = File.ReadAllText(MapSolutionRelativePath(bin + @"\Graywulf.Entities.Sql.Drop.sql"));
-                context.ExecuteScriptNonQuery(script);
-            }
+            RunScript(@"footprint\sql\Jhu.Footprint.Logic.Drop.sql");
+            RunScript(@"footprint\sql\Jhu.Footprint.Tables.Drop.sql");
+            RunScript(bin + @"\Graywulf.Entities.Sql.Drop.sql");
+            RunScript(bin + @"\Jhu.Spherical.Sql.Drop.sql");
 
-            using (var context = CreateContext())
-            {
-                script = File.ReadAllText(MapSolutionRelativePath(bin + @"\Graywulf.Entities.Sql.Create.sql"));
-                context.ExecuteScriptNonQuery(script);
-            }
-
-            using (var context = CreateContext())
-            {
-                script = File.ReadAllText(MapProjectRelativePath(@"sql\Jhu.Footprint.Tables.sql"));
-                context.ExecuteScriptNonQuery(script);
-            }
+            RunScript(bin + @"\Jhu.Spherical.Sql.Create.sql");
+            RunScript(bin + @"\Graywulf.Entities.Sql.Create.sql");
+            RunScript(@"footprint\sql\Jhu.Footprint.Tables.Create.sql");
+            RunScript(@"footprint\sql\Jhu.Footprint.Logic.Create.sql");
         }
 
         /*
@@ -113,7 +111,7 @@ namespace Jhu.Footprint.Web.Lib
             var region = new FootprintRegion(footprint)
             {
                 Name = name,
-                Type = RegionType.Region,
+                Type = RegionType.Single,
                 Region = Spherical.Region.Parse("CIRCLE J2000 10 10 10")
             };
 
