@@ -304,5 +304,61 @@ namespace Jhu.Footprint.Web.Api.V1
         }
 
         #endregion
+        #region Manipulate region tests
+
+        [TestMethod]
+        public void GrantManipulateUserRegionTest()
+        {
+            var name = GetTestUniqueName();
+
+            var f1 = CreateTestFootprint(TestUser, TestUser, name, true);
+            var r1 = CreateTestRegion(TestUser, TestUser, name, name);
+            var r2 = ModifyTestRegion(TestUser, TestUser, name, name);
+            DeleteTestRegion(TestUser, TestUser, name, name);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(MessageSecurityException))]
+        public void DenyManipulateUserRegionTest()
+        {
+            var name = GetTestUniqueName();
+
+            var f1 = CreateTestFootprint(TestUser, TestUser, name, true);
+            var r1 = CreateTestRegion(OtherUser, TestUser, name, name);
+        }
+
+        [TestMethod]
+        public void GrantManipulateGroupRegionByAdminTest()
+        {
+            var name = GetTestUniqueName();
+
+            var f1 = CreateTestFootprint(GroupAdminUser, TestGroup, name, true);
+            var r1 = CreateTestRegion(GroupAdminUser, TestGroup, name, name);
+            var r2 = ModifyTestRegion(GroupAdminUser, TestGroup, name, name);
+            DeleteTestRegion(GroupAdminUser, TestGroup, name, name);
+        }
+
+        [TestMethod]
+        public void GrantManipulateGroupRegionByWriterTest()
+        {
+            var name = GetTestUniqueName();
+
+            var f1 = CreateTestFootprint(GroupAdminUser, TestGroup, name, true);
+            var r1 = CreateTestRegion(GroupWriterUser, TestGroup, name, name);
+            var r2 = ModifyTestRegion(GroupWriterUser, TestGroup, name, name);
+            DeleteTestRegion(GroupWriterUser, TestGroup, name, name);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(MessageSecurityException))]
+        public void DenyManipulateGroupRegionByReaderTest()
+        {
+            var name = GetTestUniqueName();
+
+            var f1 = CreateTestFootprint(GroupAdminUser, TestGroup, name, true);
+            var r1 = CreateTestRegion(GroupReaderUser, TestGroup, name, name);
+        }
+
+        #endregion
     }
 }

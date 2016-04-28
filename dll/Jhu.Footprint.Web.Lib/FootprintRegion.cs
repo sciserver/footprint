@@ -19,6 +19,8 @@ namespace Jhu.Footprint.Web.Lib
     {
         #region Member variables
 
+        private Footprint parent;
+
         private int id;
         private int footprintId;
         private string name;
@@ -98,6 +100,7 @@ namespace Jhu.Footprint.Web.Lib
         {
             InitializeMembers();
 
+            this.parent = footprint;
             this.footprintId = footprint.Id;
         }
 
@@ -109,6 +112,8 @@ namespace Jhu.Footprint.Web.Lib
 
         private void InitializeMembers()
         {
+            this.parent = null;
+
             this.id = 0;
             this.footprintId = 0;
             this.name = "";
@@ -120,6 +125,8 @@ namespace Jhu.Footprint.Web.Lib
 
         private void CopyMembers(FootprintRegion old)
         {
+            this.parent = new Footprint(old.parent);
+
             this.id = old.id;
             this.footprintId = old.footprintId;
             this.name = old.name;
@@ -156,9 +163,17 @@ namespace Jhu.Footprint.Web.Lib
 
         private AccessCollection EvaluateAccess()
         {
-            var footprint = new Footprint((Context)Context);
-            footprint.Load(this.footprintId);
-            return footprint.Permissions.EvaluateAccess(Context.Principal);
+            if (parent == null)
+            {
+                parent = new Footprint((Context)Context);
+            }
+
+            if (!parent.IsLoaded)
+            {
+                parent.Load(this.footprintId);
+            }
+
+            return parent.Permissions.EvaluateAccess(Context.Principal);
         }
 
         protected override void OnCreating(Graywulf.Entities.EntityEventArgs e)
