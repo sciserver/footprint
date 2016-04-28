@@ -177,7 +177,12 @@ namespace Jhu.Footprint.Web.Api.V1
         [TestMethod]
         public void DeleteFootprintWithRegionsTest()
         {
-            throw new NotImplementedException();
+            var name = GetTestUniqueName();
+
+            var f1 = CreateTestFootprint(TestUser, TestUser, name, true);
+            var r1 = CreateTestRegion(TestUser, TestUser, name, name);
+
+            DeleteTestFootprint(TestUser, TestUser, name);
         }
 
         #endregion

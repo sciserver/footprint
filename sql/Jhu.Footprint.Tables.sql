@@ -46,6 +46,7 @@ CREATE TABLE [dbo].[FootprintRegion]
 	),
 	CONSTRAINT FK_Footprint_ID FOREIGN KEY (FootprintID) 
 	REFERENCES Footprint (ID)
+	ON DELETE CASCADE
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
  
 GO
