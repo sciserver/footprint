@@ -44,6 +44,8 @@
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Channels" />
     <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -59,10 +61,19 @@
   </Choose>
   <ItemGroup>
     <Compile Include="FootprintApiTestBase.cs" />
+    <Compile Include="FootprintServiceSecurityTest.cs" />
     <Compile Include="FootprintServiceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\graywulf\dll\Jhu.Graywulf.AccessControl\Jhu.Graywulf.AccessControl.csproj">
+      <Project>{da689d40-edcd-433d-8d9b-4e96829f8c6a}</Project>
+      <Name>Jhu.Graywulf.AccessControl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\graywulf\dll\Jhu.Graywulf.Entities\Jhu.Graywulf.Entities.csproj">
+      <Project>{10b184e6-825d-4498-98d5-a42939e4bd2d}</Project>
+      <Name>Jhu.Graywulf.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\graywulf\dll\Jhu.Graywulf.Web\Jhu.Graywulf.Web.csproj">
       <Project>{e9d182cf-746e-4e40-b01c-74a32fb70749}</Project>
       <Name>Jhu.Graywulf.Web</Name>
@@ -74,6 +85,10 @@
     <ProjectReference Include="..\..\..\graywulf\test\Jhu.Graywulf.Web.Test\Jhu.Graywulf.Web.Test.csproj">
       <Project>{3c9ea0e6-dad6-4f6e-bfba-f24cfc8e2a66}</Project>
       <Name>Jhu.Graywulf.Web.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\spherical\src\Jhu.Spherical\Jhu.Spherical.csproj">
+      <Project>{93efa6ad-0c3f-4c7f-b1f7-d697d0ba49f7}</Project>
+      <Name>Jhu.Spherical</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\dll\Jhu.Footprint.Web.Api\Jhu.Footprint.Web.Api.csproj">
       <Project>{24570021-f4c8-4015-a0af-82d4bbbec40d}</Project>

@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Security;
 using System.Web.SessionState;
 using System.Web.Routing;
-using Jhu.Graywulf.Web.Security;
+using Jhu.Graywulf.AccessControl;
 using Jhu.Graywulf.Web;
 using Jhu.Graywulf.Web.UI;
 using Jhu.Graywulf.Registry;

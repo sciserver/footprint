@@ -44,9 +44,8 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Context.cs" />
-    <Compile Include="ContextObject.cs" />
     <Compile Include="CoordinateTransformations.cs" />
-    <Compile Include="Entity.cs" />
+    <Compile Include="DuplicateNameException.cs" />
     <Compile Include="Enum.cs" />
     <Compile Include="EquatorialPoint.cs" />
     <Compile Include="Error.cs" />
@@ -55,18 +54,27 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ExceptionMessages.resx</DependentUpon>
     </Compile>
-    <Compile Include="Footprint.cs" />
+    <Compile Include="Footprint.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="FootprintException.cs" />
-    <Compile Include="FootprintFolder.cs" />
-    <Compile Include="FootprintFolderException.cs" />
-    <Compile Include="FootprintFolderSearch.cs" />
     <Compile Include="FootprintFormatter.cs" />
+    <Compile Include="FootprintRegion.cs" />
+    <Compile Include="FootprintRegionSearch.cs" />
     <Compile Include="FootprintSearch.cs" />
     <Compile Include="GalacticPoint.cs" />
     <Compile Include="Plot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\graywulf\dll\Jhu.Graywulf.AccessControl\Jhu.Graywulf.AccessControl.csproj">
+      <Project>{da689d40-edcd-433d-8d9b-4e96829f8c6a}</Project>
+      <Name>Jhu.Graywulf.AccessControl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\graywulf\dll\Jhu.Graywulf.Entities\Jhu.Graywulf.Entities.csproj">
+      <Project>{10b184e6-825d-4498-98d5-a42939e4bd2d}</Project>
+      <Name>Jhu.Graywulf.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\spherical\src\Jhu.Spherical.Visualizer\Jhu.Spherical.Visualizer.csproj">
       <Project>{1dcd8ac1-dcdd-4941-9e3f-d9ef60a078f9}</Project>
       <Name>Jhu.Spherical.Visualizer</Name>

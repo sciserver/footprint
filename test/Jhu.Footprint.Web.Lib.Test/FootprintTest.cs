@@ -1,7 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Data;
+using System.Data.SqlClient;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Xml.Serialization;
 
 namespace Jhu.Footprint.Web.Lib
 {
@@ -11,141 +12,316 @@ namespace Jhu.Footprint.Web.Lib
         [ClassInitialize]
         public static void ClassInit(TestContext testContext)
         {
-            InitDatabase();
+            InitializeDatabase();
         }
 
         [TestMethod]
-        public void FootprintCreateTest()
+        public void CreateFootprintTest()
         {
-            using (var context = new Context())
+            int id;
+
+            using (var context = CreateContext())
+            {
+                var footprint = new Footprint(context)
+                {
+                    Name = "CreateFootprintTest",
+                };
+
+                id = (int)footprint.Save();
+            }
+
+            using (var context = CreateContext())
             {
                 var footprint = new Footprint(context);
-
-                footprint.Name = "Csik2";
-                context.User = "webtestuser";
-                footprint.Public = 1;
-                footprint.FillFactor = 0.9;
-                footprint.FolderId = 2;
-                footprint.Type = FootprintType.None;
-                footprint.Comment = "Create Test";
-
-                footprint.Save();
-                
+                footprint.Load(id);
             }
         }
-
-        [TestMethod]      
-        [ExpectedException(typeof(FootprintException))]
-        public void FootprintCreateTest2()
-        {
-            using (var context = new Context())
-            {
-                var footprint = new Footprint(context);
-
-                footprint.Name = "Stripe5";
-                footprint.FolderId = 1;
-                footprint.User = "evelin";
-
-                context.User = "evelin";
-                footprint.Comment = "duplicate name test.";
-                footprint.Save();
-            }
-        }
-
 
         [TestMethod]
-        [ExpectedException(typeof(FootprintException))]
-        public void FootprintCreateTest3()
+        [ExpectedException(typeof(DuplicateNameException))]
+        public void DuplicateFootprintNameCreateTest()
         {
-            using (var context = new Context())
+            using (var context = CreateContext())
             {
-                var footprint = new Footprint(context);
+                var footprint = new Footprint(context)
+                {
+                    Name = "DuplicateFootprintNameCreateTest",
+                };
 
-                footprint.Name = "footprint";
-                footprint.FolderId = 1;
+                footprint.Save();
+            }
 
-                context.User = "evelin";
+            using (var context = CreateContext())
+            {
+                var footprint = new Footprint(context)
+                {
+                    Name = "DuplicateFootprintNameCreateTest",
+                };
+
                 footprint.Save();
             }
         }
 
         [TestMethod]
-        public void FootprintModifyTest()
+        public void ModifyFootprintTest()
         {
-            using (var context = new Context())
+            int id;
+
+            using (var context = CreateContext())
+            {
+                var footprint = new Footprint(context)
+                {
+                    Name = "ModifyFootprintTest",
+                };
+
+                id = (int)footprint.Save();
+            }
+
+            using (var context = CreateContext())
             {
                 var footprint = new Footprint(context);
+                footprint.Load(id);
 
-                footprint.Id = 2;
-                context.User = "evelin";
+                footprint.Name = "Rename";
 
-                footprint.Load();
-                var s = @"REGION
-	CONVEX
-	-0.70710678118654746 0.70710678118654757 0 0
-	0 0 1 0
-	0.14356697510519473 0.53579924538156265 -0.83205029433784372 0
-	0.96592582628906831 0.25881904510252085 5.5511151231257839E-17 0
-	CONVEX
-	0 0 1 0
-	0 1 0 0
-	0.33081724288831171 0.25384499855699239 -0.9089129048018717 0
-	0.70710678118654746 -0.70710678118654757 0 0";
-
-                footprint.Region = Jhu.Spherical.Region.Parse(s);
-                footprint.Region.Simplify();
                 footprint.Save();
-                
             }
         }
 
         [TestMethod]
-        [ExpectedException(typeof(FootprintException))]
-        public void FootprintModifyTest2()
+        [ExpectedException(typeof(DuplicateNameException))]
+        public void DuplicateFootprintNameModifyTest()
         {
-            using (var context = new Context())
+            int id;
+
+            using (var context = CreateContext())
+            {
+                var footprint = new Footprint(context)
+                {
+                    Name = "DuplicateFootprintNameModifyTest",
+                };
+
+                id = (int)footprint.Save();
+            }
+
+            using (var context = CreateContext())
+            {
+                var footprint = new Footprint(context)
+                {
+                    Name = "DuplicateFolderNameModifyTest2",
+                };
+
+                id = (int)footprint.Save();
+            }
+
+            using (var context = CreateContext())
             {
                 var footprint = new Footprint(context);
+                footprint.Load(id);
 
-                footprint.Id = 5;
-                context.User = "mike";
-
-                footprint.Load();
-
-                footprint.Name = "South";
+                footprint.Name = "DuplicateFootprintNameModifyTest";
 
                 footprint.Save();
-
             }
         }
 
         [TestMethod]
-        public void FootprintDeleteTest()
+        public void DeleteFootprintTest()
         {
-            using (var context = new Context())
+            int id;
+
+            using (var context = CreateContext())
+            {
+                var footprint = new Footprint(context)
+                {
+                    Name = "DeleteFootprintTest",
+                };
+
+                id = (int)footprint.Save();
+            }
+
+            using (var context = CreateContext())
             {
                 var footprint = new Footprint(context);
-
-                footprint.Id = 6;
-                context.User = "bob";
-
+                footprint.Load(id);
                 footprint.Delete();
             }
         }
 
+        /*
+
         [TestMethod]
-        public void FootprintLoadTest()
+        public void RefreshFolderFootprintTest()
         {
-            // Test loading by ID
+            // Num. of footprints < 2 , dedicated folder footprint
             using (var context = new Context())
             {
-                var footprint = new Footprint(context);
+                var folder = new FootprintFolder(context);
 
-                footprint.Id = 1;
-                context.User = "evelin";
-
-                footprint.Load();
+                folder.Id = 10;
+                context.User = "test";
+                folder.Load();
+                folder.RefreshFolderFootprint();
             }
         }
+
+        [TestMethod]
+        public void RefreshFolderFootprintTest2()
+        {
+            // Num. of footprints < 2 , no dedicated folder footprint
+            using (var context = new Context())
+            {
+                var folder = new FootprintFolder(context);
+
+                folder.Id = 11;
+                context.User = "test";
+                folder.Load();
+                folder.RefreshFolderFootprint();
+            }
+        }
+
+        [TestMethod]
+        public void RefreshFolderFootprintTest3()
+        {
+            // Num. of footprints >= 2, no dedicated folder fp.
+            using (var context = new Context())
+            {
+                var folder = new FootprintFolder(context);
+
+                folder.Id = 12;
+                context.User = "test";
+                folder.Load();
+                folder.RefreshFolderFootprint();
+            }
+        }
+
+        [TestMethod]
+        public void RefreshFolderFootprintTest4()
+        {
+            // Num. of footprints >=2, dedicated folder fp., union
+            using (var context = new Context())
+            {
+                var folder = new FootprintFolder(context);
+
+                folder.Id = 13;
+                context.User = "test";
+                folder.Load();
+                folder.RefreshFolderFootprint();
+            }
+        }
+
+
+        [TestMethod]
+        public void RefreshFolderFootprintTest5()
+        {
+            // Num. of footprints >= 2, dedicated folder fp., intersect.
+            using (var context = new Context())
+            {
+                var folder = new FootprintFolder(context);
+
+                folder.Id = 14;
+                context.User = "test";
+                folder.Load();
+                folder.RefreshFolderFootprint();
+            }
+        }
+
+        [TestMethod]
+        public void UpdateFolderFootprintTest()
+        {
+            // no dedicated footprints, num. of fps > 1, union
+            using (var context = new Context())
+            {
+                var folder = new FootprintFolder(context);
+                var footprint = new Footprint(context);
+                footprint.Id = 19;
+                context.User = "test";
+                footprint.Load();
+
+                folder.Id = 15;
+                context.User = "test";
+                folder.Load();
+                folder.UpdateFolderFootprint(footprint);
+            }
+        }
+
+        [TestMethod]
+        public void UpdateFolderFootprintTest2()
+        {
+
+            //no dedicated folder fp., num of fps >1, intersect
+            using (var context = new Context())
+            {
+                var folder = new FootprintFolder(context);
+                var footprint = new Footprint(context);
+
+                footprint.Id = 22;
+                context.User = "test";
+                footprint.Load();
+
+                folder.Id = 16;
+                context.User = "test";
+                folder.Load();
+                folder.UpdateFolderFootprint(footprint);
+            }
+        }
+        [TestMethod]
+        public void UpdateFolderFootprintTest3()
+        {
+            // no dedicated folder fp., num of fps =1
+            using (var context = new Context())
+            {
+                var folder = new FootprintFolder(context);
+                var footprint = new Footprint(context);
+
+                footprint.Id = 23;
+                context.User = "test";
+                footprint.Load();
+
+                folder.Id = 17;
+                context.User = "test";
+                folder.Load();
+                folder.UpdateFolderFootprint(footprint);
+            }
+        }
+        [TestMethod]
+        public void UpdateFolderFootprintTest4()
+        {
+            // dedicated folder fp., union
+            using (var context = new Context())
+            {
+                var folder = new FootprintFolder(context);
+                var footprint = new Footprint(context);
+
+                footprint.Id = 25;
+                context.User = "test";
+                footprint.Load();
+
+                folder.Id = 18;
+                context.User = "test";
+                folder.Load();
+                folder.UpdateFolderFootprint(footprint);
+            }
+        }
+        [TestMethod]
+        public void UpdateFolderFootprintTest5()
+        {
+            // dedicated folder fp. intersect
+            using (var context = new Context())
+            {
+                var folder = new FootprintFolder(context);
+                var footprint = new Footprint(context);
+
+                footprint.Id = 27;
+                context.User = "test";
+                footprint.Load();
+
+                folder.Id = 19;
+                context.User = "test";
+                folder.Load();
+                folder.UpdateFolderFootprint(footprint);
+            }
+        }
+         * */
     }
 }

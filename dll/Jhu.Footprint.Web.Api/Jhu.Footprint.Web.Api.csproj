@@ -46,16 +46,25 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="V1\Objects\Footprint.cs" />
-    <Compile Include="V1\Objects\FootprintFolder.cs" />
-    <Compile Include="V1\Requests\FootprintFolderRequest.cs" />
+    <Compile Include="V1\Objects\FootprintRegion.cs" />
+    <Compile Include="V1\Requests\FootprintRegionRequest.cs" />
     <Compile Include="V1\Requests\FootprintRequest.cs" />
-    <Compile Include="V1\Responses\FootprintFolderListResponse.cs" />
-    <Compile Include="V1\Responses\FootprintFolderResponse.cs" />
     <Compile Include="V1\Responses\FootprintListResponse.cs" />
+    <Compile Include="V1\Responses\FootprintRegionListResponse.cs" />
+    <Compile Include="V1\Responses\FootprintRegionResponse.cs" />
     <Compile Include="V1\Responses\FootprintResponse.cs" />
     <Compile Include="V1\Services\FootprintService.cs" />
+    <Compile Include="V1\Services\IFootprintService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\graywulf\dll\Jhu.Graywulf.AccessControl\Jhu.Graywulf.AccessControl.csproj">
+      <Project>{da689d40-edcd-433d-8d9b-4e96829f8c6a}</Project>
+      <Name>Jhu.Graywulf.AccessControl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\graywulf\dll\Jhu.Graywulf.Entities\Jhu.Graywulf.Entities.csproj">
+      <Project>{10b184e6-825d-4498-98d5-a42939e4bd2d}</Project>
+      <Name>Jhu.Graywulf.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\graywulf\dll\Jhu.Graywulf.Web.Api\Jhu.Graywulf.Web.Api.csproj">
       <Project>{975ee996-a41b-4c73-8562-e2b2035e8899}</Project>
       <Name>Jhu.Graywulf.Web.Api</Name>

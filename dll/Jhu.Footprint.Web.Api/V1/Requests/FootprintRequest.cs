@@ -20,5 +20,4 @@ namespace Jhu.Footprint.Web.Api.V1
         {
         }
     }
-
 }

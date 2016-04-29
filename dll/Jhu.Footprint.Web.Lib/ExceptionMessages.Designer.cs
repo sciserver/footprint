@@ -61,6 +61,15 @@ namespace Jhu.Footprint.Web.Lib {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Access denied..
+        /// </summary>
+        internal static string AccessDenied {
+            get {
+                return ResourceManager.GetString("AccessDenied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot find the specified footprint: &apos;{0}/{1}/{2}&apos;..
         /// </summary>
         internal static string CannotFindFootprint {
@@ -79,20 +88,29 @@ namespace Jhu.Footprint.Web.Lib {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Duplicate footprint folder name:  &apos;{0}&apos;..
-        /// </summary>
-        internal static string DuplicateFootprintFolderName {
-            get {
-                return ResourceManager.GetString("DuplicateFootprintFolderName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Duplicate footprint name: &apos;{0}&apos;..
+        ///   Looks up a localized string similar to Duplicate footprint name:  &apos;{0}&apos;..
         /// </summary>
         internal static string DuplicateFootprintName {
             get {
                 return ResourceManager.GetString("DuplicateFootprintName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duplicate footprint region name: &apos;{0}&apos;..
+        /// </summary>
+        internal static string DuplicateFootprintRegionName {
+            get {
+                return ResourceManager.GetString("DuplicateFootprintRegionName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid footprint name &apos;{0}&apos;..
+        /// </summary>
+        internal static string FootprintNameInvalid {
+            get {
+                return ResourceManager.GetString("FootprintNameInvalid", resourceCulture);
             }
         }
         

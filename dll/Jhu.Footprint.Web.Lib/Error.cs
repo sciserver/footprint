@@ -2,19 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Security;
+using Jhu.Graywulf.AccessControl;
 
 namespace Jhu.Footprint.Web.Lib
 {
     static class Error
     {
         #region Footprint Errors
-        public static FootprintException DuplicateFootprintName(string name)
+        public static DuplicateNameException DuplicateFootprintName(string name)
         {
             var message = String.Format(
                 ExceptionMessages.DuplicateFootprintName,
                 name);
 
-            return new FootprintException(message);
+            return new DuplicateNameException(message);
         }
 
         public static FootprintException NoFootprintDataToLoad()
@@ -33,36 +35,48 @@ namespace Jhu.Footprint.Web.Lib
 
         public static FootprintException FootprintNameNotAvailable(string name)
         {
-            var message = String.Format(ExceptionMessages.FootprintNameNotAvailable,
-                name);
+            var message = String.Format(ExceptionMessages.FootprintNameNotAvailable, name);
             return new FootprintException(message);
         }
+
+        public static FootprintException FootprintNameInvalid(string name)
+        {
+            var message = String.Format(ExceptionMessages.FootprintNameInvalid, name);
+            return new FootprintException(message);
+        }
+
         #endregion
 
         #region Footprint Folder Errors
-        public static FootprintFolderException DuplicateFootprintFolderName(string name)
+        public static DuplicateNameException DuplicateFootprintRegionName(string name)
         {
             var message = String.Format(
-                ExceptionMessages.DuplicateFootprintFolderName,
+                ExceptionMessages.DuplicateFootprintRegionName,
                 name);
 
-            return new FootprintFolderException(message);
+            return new DuplicateNameException(message);
         }
 
-        public static FootprintFolderException NoFootprintFolderDataToLoad()
+        public static FootprintException NoFootprintFolderDataToLoad()
         {
             var message = ExceptionMessages.NoFootprintFolderDataToLoad;
-            return new FootprintFolderException(message);
+            return new FootprintException(message);
         }
 
-        public static FootprintFolderException CannotFindfootprintFolder(string user, string name)
+        public static FootprintException CannotFindfootprintFolder(string user, string name)
         {
             var message = String.Format(
                 ExceptionMessages.CannotFindFootprintFolder,
                 user, name);
 
-            return new FootprintFolderException(message);
+            return new FootprintException(message);
         }
+
+        public static AccessDeniedException AccessDenied()
+        {
+            return new AccessDeniedException(ExceptionMessages.AccessDenied);
+        }
+
         #endregion
     }
 }

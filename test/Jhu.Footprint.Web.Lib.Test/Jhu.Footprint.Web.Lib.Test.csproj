@@ -57,14 +57,24 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="FootprintRegionTest.cs" />
+    <Compile Include="FootprintRegionSearchTest.cs" />
+    <Compile Include="FootprintSearchTest.cs" />
+    <Compile Include="FootprintTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="FootprintTestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="FootprintFolderTest.cs" />
-    <Compile Include="FootprintTest.cs" />
-    <Compile Include="SearchTest.cs" />
-    <Compile Include="CoordinateTransformationTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\graywulf\dll\Jhu.Graywulf.AccessControl\Jhu.Graywulf.AccessControl.csproj">
+      <Project>{da689d40-edcd-433d-8d9b-4e96829f8c6a}</Project>
+      <Name>Jhu.Graywulf.AccessControl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\graywulf\dll\Jhu.Graywulf.Entities\Jhu.Graywulf.Entities.csproj">
+      <Project>{10b184e6-825d-4498-98d5-a42939e4bd2d}</Project>
+      <Name>Jhu.Graywulf.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\graywulf\test\Jhu.Graywulf.Test\Jhu.Graywulf.Test.csproj">
       <Project>{ea6164ba-b283-46c2-874b-348d6bad41ad}</Project>
       <Name>Jhu.Graywulf.Test</Name>

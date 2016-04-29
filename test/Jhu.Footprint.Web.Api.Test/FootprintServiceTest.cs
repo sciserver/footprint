@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Diagnostics;
-using System.IO;
-using System.Net;
-using System.Net.Mime;
+using System.Text;
+using System.Collections.Generic;
+using System.Linq;
+using System.ServiceModel;
+using System.ServiceModel.Security;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Jhu.Footprint.Web.Lib;
-using Jhu.Footprint.Web.Api.Test;
+using Jhu.Graywulf.AccessControl;
 using Jhu.Graywulf.Web.Api.V1;
 using Jhu.Graywulf.Web.Services;
-
 
 namespace Jhu.Footprint.Web.Api.V1
 {
@@ -18,38 +17,192 @@ namespace Jhu.Footprint.Web.Api.V1
         [ClassInitialize]
         public static void ClassInit(TestContext testContext)
         {
-            InitDatabase();
+            InitializeDatabase();
+        }
+
+        #region Footprint CRUD operation tests
+
+        [TestMethod]
+        public void GetUserFootprintTest()
+        {
+            var name = GetTestUniqueName();
+
+            var f1 = CreateTestFootprint(TestUser, TestUser, name, true);
+            var f2 = GetTestFootprint(TestUser, TestUser, name);
+
+            Assert.AreEqual(TestUser, f2.Owner);
+            Assert.AreEqual(name, f2.Name);
         }
 
         [TestMethod]
-        public void GetUserFootprintFolderListTest()
+        [ExpectedException(typeof(EndpointNotFoundException))]
+        public void GetNonexistingFootprintTest()
         {
+            var name = GetTestUniqueName();
+
+            GetTestFootprint(TestUser, TestUser, name);
+        }
+
+        [TestMethod]
+        public void ModifyFootprintTest()
+        {
+            var name = GetTestUniqueName();
+
+            var f1 = CreateTestFootprint(TestUser, TestUser, name, true);
+            var f2 = ModifyTestFootprint(TestUser, TestUser, name);
+
+            Assert.AreEqual(TestUser, f2.Owner);
+            Assert.AreEqual(name, f2.Name);
+            Assert.AreEqual("modified", f2.Comments);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(EndpointNotFoundException))]
+        public void ModifyNonexistingFootprintTest()
+        {
+            var name = GetTestUniqueName();
+            var f1 = ModifyTestFootprint(TestUser, TestUser, name);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(EndpointNotFoundException))]
+        public void DeleteFootprintTest()
+        {
+            var name = GetTestUniqueName();
+
+            var f1 = CreateTestFootprint(TestUser, TestUser, name, true);
+            DeleteTestFootprint(TestUser, TestUser, name);
+
+            var f2 = GetTestFootprint(TestUser, TestUser, name);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(EndpointNotFoundException))]
+        public void DeleteNonexistingFootprintTest()
+        {
+            var name = GetTestUniqueName();
+            DeleteTestFootprint(TestUser, TestUser, name);
+        }
+
+        #endregion
+        #region Footprint search tests
+
+        [TestMethod]
+        public void FindUserFootprintTest()
+        {
+            var name = GetTestUniqueName();
+
+            var f1 = CreateTestFootprint(TestUser, TestUser, name + "_1", true);
+            var f2 = CreateTestFootprint(TestUser, TestUser, name + "_2", true);
+
             using (var session = new RestClientSession())
             {
-                var client = CreateClient(session);
-                var folders = client.GetUserFootprintFolderList("evelin");
+                var client = CreateClient(session, TestUser);
+                var fp = client.FindUserFootprints(TestUser, name + "%", 0, 0);
+
+                Assert.AreEqual(2, fp.Footprints.Length);
             }
         }
 
         [TestMethod]
-        public void GetUserFootprintFolderTest()
+        public void FindFootprintTest()
         {
+            var name = GetTestUniqueName();
+
+            var f1 = CreateTestFootprint(TestUser, TestUser, name + "_1", true);
+            var f2 = CreateTestFootprint(OtherUser, OtherUser, name + "_2", true);
+
             using (var session = new RestClientSession())
             {
-                var client = CreateClient(session);
-                var folder = client.GetUserFootprintFolder("evelin","SDSS.DR7");
+                var client = CreateClient(session, TestUser);
+                var fp = client.FindFootprints(null, name + "%", 0, 0);
+
+                Assert.AreEqual(2, fp.Footprints.Length);
             }
         }
 
+        #endregion
+        #region Region CRUD operation tests
+
         [TestMethod]
-        public void GetUserFootprintFolderRegionTest()
+        public void GetUserRegionTest()
         {
-            using (var session = new RestClientSession())
-            {
-                var client = CreateClient(session);
-                var folder = client.GetUserFootprintFolderRegion("evelin","SDSS.DR7");
-            }
+            var name = GetTestUniqueName();
+
+            var f1 = CreateTestFootprint(TestUser, TestUser, name, true);
+            var r1 = CreateTestRegion(TestUser, TestUser, name, name);
+            var r2 = GetTestRegion(TestUser, TestUser, name, name);
+
+            Assert.AreEqual(TestUser, r2.Owner);
+            Assert.AreEqual(name, r2.Name);
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(EndpointNotFoundException))]
+        public void GetNonexistingRegionTest()
+        {
+            var name = GetTestUniqueName();
+
+            var f1 = CreateTestFootprint(TestUser, TestUser, name, true);
+            var r1 = GetTestRegion(TestUser, TestUser, name, name);
+        }
+
+        [TestMethod]
+        public void ModifyRegionTest()
+        {
+            var name = GetTestUniqueName();
+
+            var f1 = CreateTestFootprint(TestUser, TestUser, name, true);
+            var r1 = CreateTestRegion(TestUser, TestUser, name, name);
+            var r2 = GetTestRegion(TestUser, TestUser, name, name);
+            var r3 = ModifyTestRegion(TestUser, TestUser, name, name);
+
+            Assert.AreEqual(0.7, r3.FillFactor);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(EndpointNotFoundException))]
+        public void ModifyNonexistingRegionTest()
+        {
+            var name = GetTestUniqueName();
+
+            var r3 = ModifyTestRegion(TestUser, TestUser, name, name);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(EndpointNotFoundException))]
+        public void DeleteRegionTest()
+        {
+            var name = GetTestUniqueName();
+
+            var f1 = CreateTestFootprint(TestUser, TestUser, name, true);
+            var r1 = CreateTestRegion(TestUser, TestUser, name, name);
+            DeleteTestRegion(TestUser, TestUser, name, name);
+            var r3 = GetTestRegion(TestUser, TestUser, name, name);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(EndpointNotFoundException))]
+        public void DeleteNonexistingRegionTest()
+        {
+            var name = GetTestUniqueName();
+            DeleteTestRegion(TestUser, TestUser, name, name);
+        }
+
+        [TestMethod]
+        public void DeleteFootprintWithRegionsTest()
+        {
+            var name = GetTestUniqueName();
+
+            var f1 = CreateTestFootprint(TestUser, TestUser, name, true);
+            var r1 = CreateTestRegion(TestUser, TestUser, name, name);
+
+            DeleteTestFootprint(TestUser, TestUser, name);
+        }
+
+        #endregion
+
+#if false
 
         [TestMethod]
         public void GetUserFootprintFolderRegionOutlineTest()
@@ -69,7 +222,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 var client = CreateClient(session);
                 var folder = client.GetUserFootprintFolderRegionOutlinePoints("evelin", "SDSS.DR7", 0.3);
             }
-        
+
         }
 
         [TestMethod]
@@ -79,7 +232,7 @@ namespace Jhu.Footprint.Web.Api.V1
             {
                 var client = CreateClient(session);
                 var folder = client.GetUserFootprintFolderRegionConvexHull("evelin", "SDSS.DR7");
-            }        
+            }
         }
 
         [TestMethod]
@@ -135,84 +288,6 @@ namespace Jhu.Footprint.Web.Api.V1
         }
 
         [TestMethod]
-        public void CreateUserFootprintFolderTest()
-        {
-            using (var session = new RestClientSession())
-            {
-                var client = CreateClient(session);
-
-                var request = new FootprintFolderRequest();
-                var folder = new Lib.FootprintFolder();
-
-                folder.Comment = "Test Api Create Folder";
-                folder.User = "Evelin";
-                folder.Name = "Test Api";
-                folder.Type = FolderType.Intersection;
-
-                request.FootprintFolder = new V1.FootprintFolder(folder);
-                client.CreateUserFootprintFolder(request.FootprintFolder.User, request.FootprintFolder.Name, request);
-            }
-        }
-
-        [TestMethod]
-        public void ModifyUserFootprintFolderTest()
-        {
-            using (var session = new RestClientSession())
-            {
-                var client = CreateClient(session);
-
-                var folder = new Jhu.Footprint.Web.Lib.FootprintFolder();
-                var request = new FootprintFolderRequest();
-
-                using (var context = new Context())
-                {
-                    folder.Context = context;
-                    folder.Id = 8;
-                    folder.Load();
-                }
-
-                folder.Comment = "Api modification test.";
-
-                request.FootprintFolder = new V1.FootprintFolder(folder);
-
-                client.ModifyUserFootprintFolder(request.FootprintFolder.User, request.FootprintFolder.Name, request);
-            }
-        }
-
-        [TestMethod]
-        public void DeleteUserFootprintFolderTest()
-        {
-            using (var session = new RestClientSession())
-            {
-                var client = CreateClient(session);
-
-                client.DeleteUserFootprintFolder("kate", "COSMOS");
-            }
-        }
-
-        [TestMethod]
-        public void GetUserFootprintTest()
-        {
-            using (var session = new RestClientSession())
-            {
-                var client = CreateClient(session);
-                var footprint = client.GetUserFootprint("evelin", "SDSS.DR7", "Stripe2");
-            }
-        }
-
-        [TestMethod]
-        public void GetUserFootprintRegionTest()
-        {
-            using (var session = new RestClientSession())
-            {
-                var client = CreateClient(session);
-                var footprint = client.GetUserFootprintRegion("evelin","SDSS.DR7","Stripe2");
-            }
-        }
-
-
-
-        [TestMethod]
         public void GetUserFootprintRegionOutlineTest()
         {
             using (var session = new RestClientSession())
@@ -228,8 +303,8 @@ namespace Jhu.Footprint.Web.Api.V1
             using (var session = new RestClientSession())
             {
                 var client = CreateClient(session);
-                var footprint = client.GetUserFootprintRegionOutlinePoints("evelin", "SDSS.DR7", "Stripe2",0.9);
-            }            
+                var footprint = client.GetUserFootprintRegionOutlinePoints("evelin", "SDSS.DR7", "Stripe2", 0.9);
+            }
         }
 
         [TestMethod]
@@ -296,68 +371,6 @@ namespace Jhu.Footprint.Web.Api.V1
                 var footprint = client.GetUserFootprintPlot("evelin", "SDSS.DR7", "Stripe5", "Equirectangular", 0f, 0f, "", true, true, true);
             }
         }
-
-
-
-        [TestMethod]
-        public void CreatUserFootprintTest()
-        {
-            using (var session = new RestClientSession())
-            {
-                var client = CreateClient(session);
-                var request = new FootprintRequest();
-
-
-                var footprint = new Lib.Footprint();
-                footprint.Comment = "Test Api Create Footprint";
-                footprint.User = "Evelin";
-                footprint.Name = "Test api";
-                footprint.FolderId = 1;
-
-                request.Footprint = new V1.Footprint(footprint,"SDSS.DR7");
-
-                client.CreateUserFootprint(request.Footprint.User, "SDSS.DR7", request.Footprint.Name, request);
-
-            }
-        }
-
-        [TestMethod]
-        public void ModifyUserFootprintTest()
-        {
-            using (var session = new RestClientSession())
-            {
-                var client = CreateClient(session);
-
-                var footprint = new Jhu.Footprint.Web.Lib.Footprint();
-                var request = new FootprintRequest();
-
-                using (var context = new Context())
-                {
-                    footprint.Context = context;
-                    footprint.Id = 4;
-                    footprint.Load();
-                }
-
-                footprint.Comment = "Api modification test.";
-
-                request.Footprint = new V1.Footprint(footprint,"2MASS");
-
-                client.ModifyUserFootprint("mike", "2MASS", "South", request);
-            }
-
-        }
-
-        [TestMethod]
-        public void DeleteUserFootprintTest()
-        {
-            using (var session = new RestClientSession())
-            {
-                var client = CreateClient(session);
-
-                client.DeleteUserFootprint("evelin", "SDSS.DR7", "ApiDelete");
-            }
-        }
-
-
+#endif
     }
 }

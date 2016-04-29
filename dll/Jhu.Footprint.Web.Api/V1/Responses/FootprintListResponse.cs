@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Runtime.Serialization;
 using System.ComponentModel;
 using System.ServiceModel;
+using Lib = Jhu.Footprint.Web.Lib;
 
 namespace Jhu.Footprint.Web.Api.V1
 {
@@ -21,9 +22,9 @@ namespace Jhu.Footprint.Web.Api.V1
         {
         }
 
-        public FootprintListResponse(IEnumerable<Lib.Footprint> footprints, string folderName)
+        public FootprintListResponse(IEnumerable<Lib.Footprint> footprints)
         {
-            this.Footprints = footprints.Select(f => new Footprint(f, folderName)).ToArray();
+            this.Footprints = footprints.Select(f => new Footprint(f)).ToArray();
         }
     }
 }

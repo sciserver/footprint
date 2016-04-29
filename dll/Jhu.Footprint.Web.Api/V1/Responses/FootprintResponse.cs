@@ -7,6 +7,7 @@ using System.Runtime.Serialization;
 using System.ComponentModel;
 using System.ServiceModel;
 
+
 namespace Jhu.Footprint.Web.Api.V1
 {
     [DataContract(Name = "footprint")]
@@ -14,12 +15,12 @@ namespace Jhu.Footprint.Web.Api.V1
     public class FootprintResponse
     {
         [DataMember(Name = "footprint")]
-        [Description("A footprint.")]
+        [Description("Footprint.")]
         public Footprint Footprint { get; set; }
 
-        public FootprintResponse(Footprint footprint)
+        public FootprintResponse(Lib.Footprint footprint)
         {
-            this.Footprint = footprint;
+            Footprint = new Footprint(footprint);
         }
     }
 }

@@ -9,51 +9,8 @@ using System.Configuration;
 
 namespace Jhu.Footprint.Web.Lib
 {
-    public class Context : IDisposable
+    public class Context : Jhu.Graywulf.Entities.Context, IDisposable
     {
-        private string connectionString;
-        private SqlConnection connection;
-        private SqlTransaction transaction;
-        private string user;
-
-        public string ConnectionString
-        {
-            get { return connectionString; }
-            set { connectionString = value; }
-        }
-
-        public SqlConnection Connection
-        {
-            get
-            {
-                if (connection == null)
-                {
-                    OpenConnection();
-                }
-
-                return connection;
-            }
-        }
-
-        public SqlTransaction Transaction
-        {
-            get
-            {
-                if (transaction == null)
-                {
-                    BeginTransaction();
-                }
-
-                return transaction;
-            }
-        }
-
-        public string User
-        {
-            get { return user; }
-            set { user = value;  }
-        }
-
         public Context()
         {
             InitializeMembers();
@@ -61,84 +18,7 @@ namespace Jhu.Footprint.Web.Lib
 
         private void InitializeMembers()
         {
-            
-            this.connectionString = ConfigurationManager.ConnectionStrings["Jhu.Footprint"].ConnectionString;
-            this.connection = null;
-            this.transaction = null;
-            this.user = "";
+            this.ConnectionString = ConfigurationManager.ConnectionStrings["Jhu.Footprint"].ConnectionString;
         }
-
-        public void Dispose()
-        {
-            if (transaction != null)
-            {
-                CommitTransaction();
-            }
-
-            if (connection != null)
-            {
-                CloseConnection();
-            }
-        }
-
-        public void OpenConnection()
-        {
-            if (connection != null)
-            {
-                throw new InvalidOperationException("Connection is already open.");
-            }
-
-            connection = new SqlConnection(connectionString);
-            connection.Open();
-        }
-
-        private void CloseConnection()
-        {
-            if (connection == null)
-            {
-                throw new InvalidOperationException("Connection is not open.");
-            }
-
-            connection.Close();
-        }
-
-        private void BeginTransaction()
-        {
-            if (connection == null)
-            {
-                throw new InvalidOperationException("Connection is not open.");
-            }
-
-            if (transaction != null)
-            {
-                throw new InvalidOperationException("There's already a transaction.");
-            }
-
-            transaction = connection.BeginTransaction();
-        }
-
-        private void CommitTransaction()
-        {
-            if (transaction == null)
-            {
-                throw new InvalidOperationException("There's no transaction.");
-            }
-
-            transaction.Commit();
-            transaction = null;
-        }
-
-        private void RollbackTransaction()
-        {
-            if (transaction == null)
-            {
-                throw new InvalidOperationException("There's no transaction.");
-            }
-
-            transaction.Rollback();
-            transaction = null;
-        }
-
-
     }
 }

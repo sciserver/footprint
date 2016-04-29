@@ -3,107 +3,106 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Serialization;
-using Jhu.Spherical;
 using System.Data;
 using System.Data.SqlClient;
-using System.Data.SqlTypes;
-using System.IO;
+using System.Xml.Serialization;
+using Jhu.Graywulf.Entities.Mapping;
+using Jhu.Graywulf.AccessControl;
+using Jhu.Spherical;
 
 namespace Jhu.Footprint.Web.Lib
 {
-    public class Footprint : Entity
+    [DbTable]
+    public class Footprint : Jhu.Graywulf.Entities.SecurableEntity
     {
         #region Member variables
 
-        private long id;
+        private int id;
         private string name;
-        private string user;
-        private byte @public;                // public flag, >0 when visible to the public
+        private int regionId;
+        private CombinationMethod combinationMethod;
         private DateTime dateCreated;
-        private Region region;
-        private double fillFactor;
-        private FootprintType type;
-        private long folderId;
-        private string comment;
-        #endregion
+        private DateTime dateModified;
+        private string comments;
 
+        private FootprintRegion combinedRegion;
+
+        #endregion
         #region Properties
+
         /// <summary>
         /// Returns or sets the database ID of the region. Set this before loading or
         /// modifying. If set to 0, Save() will create a new record in the database.
         /// </summary>
-        public long Id
+        [DbColumn(Binding = DbColumnBinding.Key)]
+        public int Id
         {
             get { return id; }
             set { id = value; }
         }
 
+        [DbColumn]
         public string Name
         {
             get { return name; }
             set { name = value; }
         }
 
-        /// <summary>
-        /// Returns or sets the user ID. Set this before doing any database operation
-        /// since it determines the security context for the stored procedures.
-        /// </summary>
+        [DbColumn]
+        public int CombinedRegionId
+        {
+            get { return regionId; }
+            set { regionId = value; }
+        }
 
+        [DbColumn]
         [XmlIgnore]
-        public string User
+        public string Owner
         {
-            get { return user; }
-            set { user = value; }
+            get { return Permissions.Owner; }
+            set { Permissions.Owner = value; }
         }
 
-        /// <summary>
-        /// Returns or sets the public flag of the region. Set
-        /// </summary>
-        public byte Public
+        [DbColumn]
+        public CombinationMethod CombinationMethod
         {
-            get { return @public; }
-            set { @public = value; }
+            get { return combinationMethod; }
+            set { combinationMethod = value; }
         }
 
+        [DbColumn]
         public DateTime DateCreated
         {
             get { return dateCreated; }
-            private set { dateCreated = value; }
+            protected set { dateCreated = value; }
         }
 
-        public long FolderId
+        [DbColumn]
+        public DateTime DateModified
         {
-            get { return folderId; }
-            set { folderId = value; }
+            get { return dateModified; }
+            protected set { dateCreated = value; }
         }
 
-        public Region Region
+        [DbColumn]
+        public string Comments
         {
-            get { return region; }
-            set { region = value; }
+            get { return comments; }
+            set
+            {
+                comments = value;
+            }
         }
 
-        public double FillFactor
+        public FootprintRegion CombinedRegion
         {
-            get { return fillFactor; }
-            set { fillFactor = value; }
+            get { return combinedRegion; }
+            set { combinedRegion = value; }
         }
 
-        public FootprintType Type
-        {
-            get { return type; }
-            set { type = value; }
-        }
-
-        public string Comment
-        {
-            get { return comment; }
-            set { comment = value; }
-        }
         #endregion
+        #region Contsructors and Initializers
 
-        #region Constructors & Initializer
         public Footprint()
         {
             InitializeMembers();
@@ -124,253 +123,216 @@ namespace Jhu.Footprint.Web.Lib
         private void InitializeMembers()
         {
             this.id = 0;
+            this.regionId = 0;
             this.name = "";
-            this.user = "";
-            this.@public = 0;
+            this.combinationMethod = CombinationMethod.None;
             this.dateCreated = DateTime.Now;
-            this.region = null;
-            this.fillFactor = 0;
-            this.type = FootprintType.None;
-            this.folderId = 0;
-            this.comment = "";
+            this.dateModified = DateTime.Now;
+            this.comments = "";
+
+            this.combinedRegion = null;
         }
 
         private void CopyMembers(Footprint old)
         {
             this.id = old.id;
             this.name = old.name;
-            this.user = old.user;
-            this.@public = old.@public;
+            this.regionId = old.regionId;
+            this.combinationMethod = old.combinationMethod;
             this.dateCreated = old.dateCreated;
-            this.region = new Region(old.region);
-            this.fillFactor = old.fillFactor;
-            this.type = old.type;
-            this.folderId = old.folderId;
-            this.comment = old.comment;
+            this.dateModified = old.dateModified;
+            this.comments = old.comments;
+
+            this.combinedRegion = new FootprintRegion(old.combinedRegion);
         }
 
         #endregion
 
-        #region SQL - get commands
-        protected override System.Data.SqlClient.SqlCommand GetCreateCommand()
+        public void Load(string owner, string name)
         {
-            string sql = "fps.spCreateFootprint";
-            var cmd = new SqlCommand(sql);
+            this.Owner = owner;
+            this.name = name;
 
-            cmd.CommandType = CommandType.StoredProcedure;
-
-            AppendCreateModifyParameters(cmd);
-
-            cmd.Parameters.Add("@NewID", SqlDbType.BigInt).Direction = ParameterDirection.Output;
-            cmd.Parameters.Add("RETVAL", SqlDbType.Int).Direction = ParameterDirection.ReturnValue;
-            return cmd;
+            Load();
         }
 
-        protected override System.Data.SqlClient.SqlCommand GetModifyCommand()
+        public void SetDefaultPermissions(bool @public)
         {
-
-            string sql = "fps.spModifyFootprint";
-            var cmd = new SqlCommand(sql);
-
-            cmd.CommandType = CommandType.StoredProcedure;
-
-            cmd.Parameters.Add("@FootprintId", SqlDbType.BigInt).Value = id;
-            AppendCreateModifyParameters(cmd);
-
-            cmd.Parameters.Add("RETVAL", SqlDbType.Int).Direction = ParameterDirection.ReturnValue;
-            return cmd;
-        }
-
-        protected override System.Data.SqlClient.SqlCommand GetDeleteCommand()
-        {
-
-            string sql = "fps.spDeleteFootprint";
-            var cmd = new SqlCommand(sql);
-
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-
-            cmd.Parameters.Add("@FootprintId", SqlDbType.BigInt).Value = id;
-            cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = Context.User;
-
-            cmd.Parameters.Add("RETVAL", SqlDbType.Int).Direction = ParameterDirection.ReturnValue;
-            return cmd;
-        }
-
-        protected override SqlCommand GetLoadCommand()
-        {
-
-            var sql = "fps.spGetFootprint";
-            var cmd = new SqlCommand(sql);
-
-            cmd.CommandType = CommandType.StoredProcedure;
-
-            cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = Context.User;
-            cmd.Parameters.Add("@FootprintId", SqlDbType.BigInt).Value = id;
-
-            return cmd;
-        }
-
-        private void AppendCreateModifyParameters(SqlCommand cmd)
-        {
-            cmd.Parameters.Add("@Name", SqlDbType.NVarChar, 256).Value = name;
-            cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = Context.User;
-            cmd.Parameters.Add("@Public", SqlDbType.TinyInt).Value = @public;
-            cmd.Parameters.Add("@FillFactor", SqlDbType.Float).Value = fillFactor;
-            cmd.Parameters.Add("@FootprintType", SqlDbType.TinyInt).Value = type;
-            cmd.Parameters.Add("@FolderId", SqlDbType.BigInt).Value = folderId;
-            cmd.Parameters.Add("@Comment", SqlDbType.NVarChar, -1).Value = comment;
-
-            SqlBytes bytes;
-            using (var ms = new MemoryStream())
+            if (Permissions.Owner == null)
             {
-                using (var w = new Spherical.IO.RegionWriter(ms))
+                Permissions.Owner = Context.Principal.Identity.Name;
+            }
+
+            if (Identity.Compare(Context.Principal.Identity.Name, Permissions.Owner) != 0)
+            {
+                // Footprint is created under a group account, set appropriate permissions
+                Permissions.Grant(Owner, Lib.Constants.RoleAdmin, DefaultAccess.All);
+                Permissions.Grant(Owner, Lib.Constants.RoleWriter, DefaultAccess.All);
+                Permissions.Grant(Owner, Lib.Constants.RoleReader, DefaultAccess.Read);
+            }
+
+            if (@public)
+            {
+                // Footprint is publicly visible without registration (guest)
+                Permissions.Grant(DefaultIdentity.Guest, DefaultAccess.Read);
+            }
+        }
+
+        protected override void OnCreating(Graywulf.Entities.EntityEventArgs e)
+        {
+            // If footprint is created under an account different from the user's,
+            // it's assumed to be under a group account so verify role
+
+            if (Context.Principal == null || Context.Principal.Identity == null || !Context.Principal.Identity.IsAuthenticated)
+            {
+                throw Error.AccessDenied();
+            }
+
+            if (Identity.Compare(Context.Principal.Identity.Name, Owner) != 0)
+            {
+                var principal = Context.Principal as Principal;
+
+                if (principal == null)
                 {
-                    if (this.region != null)
-                    {
-                        w.Write(this.region);
-                    }
+                    throw Error.AccessDenied();
                 }
-                bytes = new SqlBytes(ms.ToArray());
+
+                if (!principal.IsInRole(Owner, Constants.RoleAdmin) &&
+                    !principal.IsInRole(Owner, Constants.RoleWriter))
+                {
+                    throw Error.AccessDenied();
+                }
             }
 
-            cmd.Parameters.Add("@RegionBinary", SqlDbType.VarBinary, -1).Value = bytes;
+            base.OnCreating(e);
         }
 
-        public override void LoadFromDataReader(SqlDataReader dr)
+        protected override SqlCommand GetSelectCommand()
         {
-            if (dr == null || !dr.HasRows)
+            if (id == 0 && Owner != null && Name != null)
             {
-                throw Error.NoFootprintDataToLoad();
-            }
+                var sql = @"
+WITH __e AS
+(
+{0}
+)
+SELECT * 
+FROM __e
+WHERE Owner = @Owner AND Name = @Name;
+";
 
-            this.id = (long)dr["FootprintID"];
-            this.name = (string)dr["Name"];
-            this.user = (string)dr["User"];
-            this.@public = (byte)dr["Public"];
-            this.dateCreated = (DateTime)dr["DateCreated"];
-            this.fillFactor = (double)dr["FillFactor"];
-            this.type = (FootprintType)Enum.ToObject(typeof(FootprintType), dr["FootprintType"]);
-            this.folderId = (long)dr["FolderID"];
-            this.comment = (string)dr["Comment"];
+                var cmd = new SqlCommand(
+                String.Format(
+                    sql,
+                    GetTableQuery()));
 
-            var o = dr.GetOrdinal("RegionBinary");
-            if (!dr.IsDBNull(o))
-            {
-                var bytes = dr.GetSqlBytes(o);
-                this.region = bytes.IsNull ? null : Jhu.Spherical.Region.FromSqlBytes(bytes);
+                cmd.Parameters.Add("@Owner", SqlDbType.NVarChar).Value = Owner;
+                cmd.Parameters.Add("@Name", SqlDbType.NVarChar).Value = Name;
+
+                return cmd;
             }
             else
             {
-                this.region = null;
+                return base.GetSelectCommand();
+            }
+        }
+        
+        protected Boolean IsNameDuplicate()
+        {
+            var sql = @"
+SELECT COUNT(*) FROM [Footprint]
+WHERE Owner = @Owner
+      AND ID != @ID
+      AND Name = @Name";
+
+            using (var cmd = Context.CreateCommand(sql))
+            {
+                cmd.Parameters.Add("@Owner", SqlDbType.NVarChar, 250).Value = this.Owner;
+                cmd.Parameters.Add("@ID", SqlDbType.BigInt).Value = this.Id;
+                cmd.Parameters.Add("@Name", SqlDbType.NVarChar, 256).Value = this.Name;
+
+                return (int)Context.ExecuteCommandScalar(cmd) > 0;
             }
         }
 
-        protected override SqlCommand GetIsNameDuplicateCommand()
+        protected override void OnValidating(Graywulf.Entities.EntityEventArgs e)
         {
-            var sql = "fps.spIsDuplicateFootprintName";
-            var cmd = new SqlCommand(sql);
-            cmd.CommandType = CommandType.StoredProcedure;
+            if (Constants.RestictedNames.Contains(this.name))
+            {
+                throw Error.FootprintNameNotAvailable(this.name);
+            }
 
-            cmd.Parameters.Add("@User", SqlDbType.NVarChar, 250).Value = this.user;
-            cmd.Parameters.Add("@FootprintId", SqlDbType.BigInt).Value = this.id;
-            cmd.Parameters.Add("@folderId", SqlDbType.BigInt).Value = this.folderId;
-            cmd.Parameters.Add("@FootprintName", SqlDbType.NVarChar, 256).Value = this.name;
-
-            cmd.Parameters.Add("@Match", SqlDbType.Int).Direction = ParameterDirection.Output;
-
-            return cmd;
-        }
-        #endregion
-
-        #region Methods
-        public override void Save()
-        {
-            EnsureNameNotRestricted();
+            if (!Constants.NamePattern.Match(this.name).Success)
+            {
+                throw Error.FootprintNameInvalid(this.name);
+            }
 
             if (IsNameDuplicate())
             {
                 throw Error.DuplicateFootprintName(this.name);
             }
 
+            base.OnValidating(e);
+        }
 
-            if (this.id == 0)
+        protected override void OnModifying(Graywulf.Entities.EntityEventArgs e)
+        {
+            this.dateModified = DateTime.Now;
+            
+            base.OnModifying(e);
+        }
+
+        private void LoadFootprintRegion()
+        {
+            combinedRegion = new FootprintRegion(this)
             {
-                Create();
-            }
-            else
+                Id = this.regionId,
+            };
+
+            // if a folderFootprint exists, load it
+            if (this.regionId > 0)
             {
-                Modify();
+                combinedRegion.Load();
             }
         }
 
-        private void EnsureNameNotRestricted()
+        private void InitializeFootprintRegion(FootprintRegion f)
         {
-            if (Constants.RestictedNames.Contains(this.name))
-            {
-                throw Error.FootprintNameNotAvailable(this.name);
-            }
+            f.Type = RegionType.Combined;
+            f.Name = "footprintRegion";
         }
 
-        private void Create()
+        /// <summary>
+        /// Updates region cache if a new region is linked to the RegionGroup
+        /// </summary>
+        public void UpdateCombinedRegion(FootprintRegion region)
         {
-
-            using (var cmd = GetCreateCommand())
+            if (combinationMethod != CombinationMethod.None)
             {
-                cmd.Connection = Context.Connection;
-                cmd.Transaction = Context.Transaction;
-
-                cmd.ExecuteNonQuery();
-
-                int retval = (int)cmd.Parameters["RETVAL"].Value;
-
-                if (retval == 0)
+                using (var cmd = Context.CreateStoredProcedureCommand("fps.spUpdateCombinedRegion"))
                 {
-                    throw new Exception("Cannot create Footprint.");
-                }
-                else
-                {
-                    this.id = (long)cmd.Parameters["@NewID"].Value;
-                }
-            }
+                    cmd.Parameters.Add("@FootprintID", SqlDbType.BigInt).Value = this.Id;
+                    cmd.Parameters.Add("@RegionID", SqlDbType.BigInt).Value = region.Id;
 
-        }
-
-        private void Modify()
-        {
-            using (var cmd = GetModifyCommand())
-            {
-                cmd.Connection = Context.Connection;
-                cmd.Transaction = Context.Transaction;
-
-                cmd.ExecuteNonQuery();
-
-                int retval = (int)cmd.Parameters["RETVAL"].Value;
-
-                if (retval == 0)
-                {
-                    throw new Exception("Cannot update Footprint");
-                }
-
-            }
-        }
-
-        public void Delete()
-        {
-            using (var cmd = GetDeleteCommand())
-            {
-                cmd.Connection = Context.Connection;
-                cmd.Transaction = Context.Transaction;
-
-                cmd.ExecuteNonQuery();
-
-                int retval = (int)cmd.Parameters["RETVAL"].Value;
-
-                if (retval == 0)
-                {
-                    throw new Exception("Cannot delete Footprint.");
+                    Context.ExecuteCommandNonQuery(cmd);
                 }
             }
         }
-        #endregion
+
+        /// <summary>
+        /// Refrehes the region cache completely after a region delete
+        /// </summary>
+        public void RefreshCombinedRegion()
+        {
+            if (combinationMethod != CombinationMethod.None)
+            {
+                using (var cmd = Context.CreateStoredProcedureCommand("fps.spRefreshCombinedRegion"))
+                {
+                    cmd.Parameters.Add("@FootprintID", SqlDbType.BigInt).Value = this.Id;
+
+                    Context.ExecuteCommandNonQuery(cmd);
+                }
+            }
+        }
     }
 }

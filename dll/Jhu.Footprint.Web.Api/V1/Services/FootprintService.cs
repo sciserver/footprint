@@ -13,173 +13,8 @@ using System.Security.Permissions;
 using Jhu.Graywulf.Web.Services;
 using Lib = Jhu.Footprint.Web.Lib;
 
-
 namespace Jhu.Footprint.Web.Api.V1
 {
-    [ServiceContract]
-    [Description("TODO")]
-    public interface IFootprintService
-    {
-        [OperationContract]
-        [WebInvoke(UriTemplate = "*", Method = "OPTIONS")]
-        void HandleHttpOptionsRequest();
-
-        #region FootprintFolder Operation Contracts
-        [OperationContract]
-        [WebGet(UriTemplate = "/users/{userName}")]
-        [Description("Returns the list of all user created folders.")]
-        FootprintFolderListResponse GetUserFootprintFolderList(string userName);
-
-        [OperationContract]
-        [WebGet(UriTemplate = "/users/{userName}/{folderName}/")]
-        [Description("Returns the details of an existing folder and the list of the footprints in it.")]
-        FootprintFolderResponse GetUserFootprintFolder(string userName, string folderName);
-
-        [OperationContract]
-        [WebGet(UriTemplate = "/users/{userName}/{folderName}/footprint")]
-        [Description("Returns the footprint of a folder")]
-        string GetUserFootprintFolderRegion(string userName, string folderName);
-
-        [OperationContract]
-        [WebGet(UriTemplate = "/users/{userName}/{folderName}/footprint/outline")]
-        [Description("Returns the outline of a folder footprint.")]
-        string GetUserFootprintFolderRegionOutline(string userName, string folderName);
-
-        [OperationContract]
-        [WebGet(UriTemplate = "/users/{userName}/{folderName}/footprint/outline/points?res={resolution}")]
-        [Description("Returns the points of the outline of a footprint.")]
-        IEnumerable<Lib.EquatorialPoint> GetUserFootprintFolderRegionOutlinePoints(string userName, string folderName, double resolution);
-
-        [OperationContract]
-        [WebGet(UriTemplate = "/users/{userName}/{folderName}/footprint/outline/reduced?limit={limit}")]
-        [Description("Returns the reduced outline of a folder footprint.")]
-        string GetUserFootprintFolderRegionReducedOutline(string userName, string folderName, double limit);
-
-        [OperationContract]
-        [WebGet(UriTemplate = "/users/{userName}/{folderName}/footprint/outline/points/reduced?res={resolution}&limit={limit}")]
-        [Description("Returns the points of the reduced outline of a footprint.")]
-        IEnumerable<Lib.EquatorialPoint> GetUserFootprintFolderRegionReducedOutlinePoints(string userName, string folderName, double resolution, double limit);
-
-        [OperationContract]
-        [WebGet(UriTemplate = "/users/{userName}/{folderName}/footprint/convexhull")]
-        [Description("Returns the convex hull of a folder footprint.")]
-        string GetUserFootprintFolderRegionConvexHull(string userName, string folderName);
-
-
-        [OperationContract]
-        [WebGet(UriTemplate = "/users/{userName}/{folderName}/footprint/convexhull/outline")]
-        [Description("Returns the outline of the convex hull of a folder footprint.")]
-        string GetUserFootprintFolderRegionConvexHullOutline(string userName, string folderName);
-
-        [OperationContract]
-        [WebGet(UriTemplate = "/users/{userName}/{folderName}/footprint/convexhull/outline/points?res={resolution}")]
-        [Description("Returns the points of the outline of the convex hull of a folder footprint.")]
-        IEnumerable<Lib.EquatorialPoint> GetUserFootprintFolderRegionConvexHullOutlinePoints(string userName, string folderName, double resolution);
-
-        [OperationContract]
-        [WebGet(UriTemplate = "/users/{userName}/{folderName}/plot?proj={projection}&width={width}&height={height}&degStyle={degStyle}&grid={grid}&autoZoom={autoZoom}&autoRotate={autoRotate}")]
-        [Description(@"Plot Footprint. There are several keywords to costumize a plot:
-            proj -- set projection. Available values: Aitoff, Equirectangular, HammerAitoff (deafult), Mollweide, Orthographic, Stereographic
-            width -- set width of plot.
-            height -- set height of plot.
-            degStyle -- set the grid and label style. Available values: hms - hexagecimal, dms (default) - degree.
-            grid -- turn grid on/off. Values = true, false (default)
-            autoZoom -- turn auto zoom on/off. Values = true, false (default)
-            autoRotate -- turn auto rotate on/off. Values = true, false (default)")]
-        Stream GetUserFootprintFolderPlot(string userName, string folderName, string projection, float width, float height, string degStyle, bool grid, bool autoZoom, bool autoRotate);
-
-        [OperationContract]
-        [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/users/{userName}/{folderName}")]
-        [Description("Create new footprint folder.")]
-        void CreateUserFootprintFolder(string userName, string folderName, FootprintFolderRequest request);
-
-        [OperationContract]
-        [WebInvoke(Method = HttpMethod.Put, UriTemplate = "/users/{userName}/{folderName}")]
-        [Description("Modify existing footprint folder.")]
-        void ModifyUserFootprintFolder(string userName, string folderName, FootprintFolderRequest request);
-
-        [OperationContract]
-        [WebInvoke(Method = HttpMethod.Delete, UriTemplate = "/users/{userName}/{folderName}")]
-        [Description("Delete footprint folder.")]
-        void DeleteUserFootprintFolder(string userName, string folderName);
-        #endregion
-
-        #region Footprint Operation Contracts
-        [OperationContract]
-        [WebGet(UriTemplate = "/users/{userName}/{folderName}/{footprintName}")]
-        [Description("Returns the details of a footprint under an existing folder.")]
-        FootprintResponse GetUserFootprint(string userName, string folderName, string footprintName);
-
-
-        [OperationContract]
-        [WebGet(UriTemplate = "/users/{userName}/{folderName}/{footprintName}/footprint")]
-        [Description("Return the footprint of a footprint.")]
-        string GetUserFootprintRegion(string userName, string folderName, string footprintName);
-
-        [OperationContract]
-        [WebGet(UriTemplate = "/users/{userName}/{folderName}/{footprintName}/footprint/outline")]
-        [Description("Return the outline of a footprint.")]
-        string GetUserFootprintRegionOutline(string userName, string folderName, string footprintName);
-
-        [OperationContract]
-        [WebGet(UriTemplate = "/users/{userName}/{folderName}/{footprintName}/footprint/outline/points?res={resolution}")]
-        [Description("Return the points of the outline of a footprint.")]
-        IEnumerable<Lib.EquatorialPoint> GetUserFootprintRegionOutlinePoints(string userName, string folderName, string footprintName, double resolution);
-
-        [OperationContract]
-        [WebGet(UriTemplate = "/users/{userName}/{folderName}/{footprintName}/footprint/outline/reduced?limit={limit}")]
-        [Description("Returns the reduced outline of a folder footprint.")]
-        string GetUserFootprintRegionReducedOutline(string userName, string folderName, string footprintName, double limit);
-
-        [OperationContract]
-        [WebGet(UriTemplate = "/users/{userName}/{folderName}/{footprintName}/footprint/outline/points/reduced?res={resolution}&limit={limit}")]
-        [Description("Returns the points of the reduced outline of a footprint.")]
-        IEnumerable<Lib.EquatorialPoint> GetUserFootprintRegionReducedOutlinePoints(string userName, string folderName, string footprintName, double resolution, double limit);
-
-        [OperationContract]
-        [WebGet(UriTemplate = "/users/{userName}/{folderName}/{footprintName}/footprint/convexhull")]
-        [Description("Return the convex hull of the footprint.")]
-        string GetUserFootprintRegionConvexHull(string userName, string folderName, string footprintName);
-
-        [OperationContract]
-        [WebGet(UriTemplate = "/users/{userName}/{folderName}/{footprintName}/footprint/convexhull/outline")]
-        [Description("Return the outline of the convex hull of the footprint.")]
-        string GetUserFootprintRegionConvexHullOutline(string userName, string folderName, string footprintName);
-
-        [OperationContract]
-        [WebGet(UriTemplate = "/users/{userName}/{folderName}/{footprintName}/footprint/convexhull/outline/points?res={resolution}")]
-        [Description("Return the points of the outline of the convex hull of the footprint.")]
-        IEnumerable<Lib.EquatorialPoint> GetUserFootprintRegionConvexHullOutlinePoints(string userName, string folderName, string footprintName, double resolution);
-
-        [OperationContract]
-        [WebGet(UriTemplate = "/users/{userName}/{folderName}/{footprintName}/plot?proj={projection}&width={width}&height={height}&degStyle={degStyle}&grid={grid}&autoZoom={autoZoom}&autoRotate={autoRotate}")]
-        [Description(@"Plot Footprint. There are several keywords to costumize a plot:
-            proj -- set projection. Available values: Aitoff, Equirectangular, HammerAitoff (deafult), Mollweide, Orthographic, Stereographic
-            width -- set width of plot.
-            height -- set height of plot.
-            degStyle -- set the grid and label style. Available values: hms - hexagecimal, dms (default) - degree.
-            grid -- turn grid on/off. Values = true, false (default)
-            autoZoom -- turn auto zoom on/off. Values = true, false (default)
-            autoRotate -- turn auto rotate on/off. Values = true, false (default)")]
-        Stream GetUserFootprintPlot(string userName, string folderName, string footprintName, string projection, float width, float height, string degStyle, bool grid, bool autoZoom, bool autoRotate);
-
-        [OperationContract]
-        [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/users/{userName}/{folderName}/{footprintName}")]
-        [Description("Create new footprint under an existing folder.")]
-        void CreateUserFootprint(string userName, string folderName, string footprintName, FootprintRequest request);
-
-        [OperationContract]
-        [WebInvoke(Method = HttpMethod.Put, UriTemplate = "/users/{userName}/{folderName}/{footprintName}")]
-        [Description("Modify footprint under an existing folder.")]
-        void ModifyUserFootprint(string userName, string folderName, string footprintName, FootprintRequest request);
-
-        [OperationContract]
-        [WebInvoke(Method = HttpMethod.Delete, UriTemplate = "/users/{userName}/{folderName}/{footprintName}")]
-        [Description("Delete footprint under an existing folder.")]
-        void DeleteUserFootprint(string userName, string folderName, string footprintName);
-        #endregion
-    }
-
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall)]
     [RestServiceBehavior]
@@ -197,6 +32,247 @@ namespace Jhu.Footprint.Web.Api.V1
         }
 
         #endregion
+
+        private Lib.Context CreateContext()
+        {
+            var context = new Lib.Context();
+
+            if (System.Threading.Thread.CurrentPrincipal is Jhu.Graywulf.AccessControl.Principal)
+            {
+                context.Principal = (Jhu.Graywulf.AccessControl.Principal)System.Threading.Thread.CurrentPrincipal;
+            }
+            else
+            {
+                context.Principal = Jhu.Graywulf.AccessControl.Principal.Guest;
+            }
+
+            return context;
+        }
+
+        #region Footprint CRUD operations
+
+        public FootprintResponse CreateUserFootprint(string owner, string name, FootprintRequest request)
+        {
+            using (var context = CreateContext())
+            {
+                var footprint = new Lib.Footprint(context)
+                {
+                    Owner = owner,
+                    Name = name
+                };
+                request.Footprint.GetValues(footprint);
+                footprint.Save();
+
+                return new FootprintResponse(footprint);
+            }
+        }
+
+        public FootprintResponse GetUserFootprint(string owner, string name)
+        {
+            using (var context = CreateContext())
+            {
+                var footprint = new Lib.Footprint(context)
+                {
+                    Owner = owner,
+                    Name = name,
+                };
+
+                footprint.Load();
+
+                return new FootprintResponse(footprint);
+            }
+        }
+
+        public FootprintResponse ModifyUserFootprint(string owner, string name, FootprintRequest request)
+        {
+            using (var context = CreateContext())
+            {
+                var footprint = new Lib.Footprint(context)
+                {
+                    Owner = owner,
+                    Name = name
+                };
+                footprint.Load();
+                request.Footprint.GetValues(footprint);
+                footprint.Save();
+
+                return new FootprintResponse(footprint);
+            }
+        }
+
+        public void DeleteUserFootprint(string owner, string name)
+        {
+            using (var context = CreateContext())
+            {
+                var footprint = new Lib.Footprint(context)
+                {
+                    Owner = owner,
+                    Name = name
+                };
+                footprint.Load();
+                footprint.Delete();
+            }
+        }
+
+        #endregion
+        #region Footprint search operations
+
+        public FootprintListResponse FindUserFootprints(string owner, string name, int from, int max)
+        {
+            return FindFootprints(owner, name, from, max);
+        }
+
+        public FootprintListResponse FindFootprints(string owner, string name, int from, int max)
+        {
+            using (var context = CreateContext())
+            {
+                var s = new Lib.FootprintSearch(context)
+                {
+                    Owner = owner,
+                    Name = name
+                };
+
+                return new FootprintListResponse(s.Find(from, max, null));
+            }
+        }
+
+        #endregion
+        #region Region CRUD operations
+
+        public FootprintRegionResponse CreateUserFootprintRegion(string owner, string name, string regionName, FootprintRegionRequest request)
+        {
+            using (var context = CreateContext())
+            {
+                var footprint = new Lib.Footprint(context);
+                footprint.Load(owner, name);
+
+                var region = new Lib.FootprintRegion(footprint)
+                {
+                    Name = regionName,
+                };
+                request.Region.GetValues(region);
+                region.Save();
+
+                // TODO: update region cache
+
+                return new FootprintRegionResponse(footprint, region);
+            }
+        }
+
+        public FootprintRegionResponse GetUserFootprintRegion(string owner, string name, string regionName)
+        {
+            using (var context = CreateContext())
+            {
+                var footprint = new Lib.Footprint(context);
+                
+                footprint.Load(owner, name);
+
+                var region = new Lib.FootprintRegion(footprint);
+
+                region.FootprintId = footprint.Id;
+                region.Name = regionName;
+                region.Load();
+
+                return new FootprintRegionResponse(footprint, region);
+            }
+        }
+
+        public FootprintRegionResponse ModifyUserFootprintRegion(string owner, string name, string regionName, FootprintRegionRequest request)
+        {
+            using (var context = CreateContext())
+            {
+                var footprint = new Lib.Footprint(context);
+
+                footprint.Load(owner, name);
+
+                var region = new Lib.FootprintRegion(footprint);
+
+                region.FootprintId = footprint.Id;
+                region.Name = regionName;
+                region.Load();
+                request.Region.GetValues(region);
+                region.Save();
+
+                // TODO: update region cache
+
+                return new FootprintRegionResponse(footprint, region);
+            }
+        }
+
+        public void DeleteUserFootprintRegion(string owner, string name, string regionName)
+        {
+            using (var context = CreateContext())
+            {
+                var footprint = new Lib.Footprint(context);
+
+                footprint.Load(owner, name);
+
+                var region = new Lib.FootprintRegion(footprint);
+
+                region.FootprintId = footprint.Id;
+                region.Name = regionName;
+                region.Load();
+                region.Delete();
+
+                // TODO: update region cache
+            }
+        }
+
+        #endregion
+
+        public string GetUserFootprintShape(string owner, string name, string operation, double limit)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetUserFootprintOutline(string owner, string name, string operation, double limit)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Lib.EquatorialPoint> GetUserFootprintOutlinePoints(string owner, string name, string operation, double limit, double resolution)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Stream GetUserFootprintPlot(string owner, string name, string projection, float width, float height, string degStyle, bool grid, bool autoZoom, bool autoRotate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetUserFootprintRegionShape(string owner, string name, string regionName, string operation, double limit)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetUserFootprintRegionOutline(string owner, string name, string regionName, string operation, double limit)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Lib.EquatorialPoint> GetUserFootprintRegionOutlinePoints(string owner, string name, string regionName, string operation, double limit, double resolution)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Stream GetUserFootprintRegionPlot(string userName, string name, string regionName, string projection, float width, float height, string degStyle, bool grid, bool autoZoom, bool autoRotate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Uri GetUrl(Lib.Footprint footprint)
+        {
+            // TODO: where to take machine name from? HttpContext?
+            return new Uri("http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users" + footprint.Owner + "/" + footprint.Name);
+        }
+
+        public static Uri GetUrl(Lib.Footprint footprint, Lib.FootprintRegion region)
+        {
+            // TODO: where to take machine name from? HttpContext?
+            return new Uri("http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + footprint.Owner + "/" + footprint.Name + "/" + region.Name);
+        }
+
+#if false
 
         #region Private Methods
         private Lib.Footprint GetFootprint(string userName, string folderName, string footprintName)
@@ -231,7 +307,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 context.User = userName;
 
                 Lib.FootprintFolder folder = new Lib.FootprintFolder(context);
-                folder.User = userName;
+                folder.Owner = userName;
                 folder.Name = folderName;
                 folder.Id = -1;
                 folder.Load();
@@ -296,7 +372,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
         #region FootprintFolder Methods
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
-        public FootprintFolderListResponse GetUserFootprintFolderList(string userName)
+        public FootprintListResponse GetUserFootprintFolderList(string userName)
         {
             IEnumerable<Lib.FootprintFolder> folders;
 
@@ -308,13 +384,13 @@ namespace Jhu.Footprint.Web.Api.V1
                 folders = search.Find();
             }
 
-            var r = new FootprintFolderListResponse(folders);
+            var r = new FootprintListResponse(folders);
             return r;
         }
 
 
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
-        public FootprintFolderResponse GetUserFootprintFolder(string userName, string folderName)
+        public FootprintResponse GetUserFootprintFolder(string userName, string folderName)
         {
             Lib.FootprintFolder folder;
             IEnumerable<Lib.Footprint> footprints;
@@ -325,20 +401,20 @@ namespace Jhu.Footprint.Web.Api.V1
 
                 // load footprint folder info
                 folder = new Lib.FootprintFolder(context);
-                folder.User = userName;
+                folder.Owner = userName;
                 folder.Name = folderName;
                 folder.Id = -1;
                 folder.Load();
 
                 //get footprints from folder
-                var search = new Lib.FootprintSearch(context) { User = folder.User, FolderId = folder.Id };
+                var search = new Lib.FootprintSearch(context) { User = folder.Owner, FolderId = folder.Id };
                 footprints = search.GetFootprintsByFolderId();
             }
 
-            var f = new FootprintFolder(folder);
+            var f = new Footprint(folder);
 
-            var list = footprints.Select(fp => new Footprint(fp, folderName).Url).ToArray();
-            var r = new FootprintFolderResponse(f, list);
+            var list = footprints.Select(fp => new FootprintRegion(fp, folderName).Url).ToArray();
+            var r = new FootprintResponse(f, list);
             return r;
 
         }
@@ -348,7 +424,7 @@ namespace Jhu.Footprint.Web.Api.V1
         public string GetUserFootprintFolderRegion(string userName, string folderName)
         {
             var footprint = GetFolderFootprint(userName, folderName);
-            var f = new Footprint(footprint, folderName);
+            var f = new FootprintRegion(footprint, folderName);
             return f.RegionString;
         }
 
@@ -420,7 +496,7 @@ namespace Jhu.Footprint.Web.Api.V1
         }
 
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
-        public void CreateUserFootprintFolder(string userName, string folderName, FootprintFolderRequest request)
+        public void CreateUserFootprintFolder(string userName, string folderName, FootprintRequest request)
         {
             using (var context = new Jhu.Footprint.Web.Lib.Context())
             {
@@ -431,7 +507,7 @@ namespace Jhu.Footprint.Web.Api.V1
         }
 
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
-        public void ModifyUserFootprintFolder(string userName, string folderName, FootprintFolderRequest request)
+        public void ModifyUserFootprintFolder(string userName, string folderName, FootprintRequest request)
         {
             using (var context = new Jhu.Footprint.Web.Lib.Context())
             {
@@ -455,7 +531,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
                 var folder = new Jhu.Footprint.Web.Lib.FootprintFolder(context);
                 folder.Name = folderName;
-                folder.User = userName;
+                folder.Owner = userName;
                 folder.Id = -1;
                 folder.Delete();
             }
@@ -464,11 +540,11 @@ namespace Jhu.Footprint.Web.Api.V1
 
         #region Footprint Methods
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
-        public FootprintResponse GetUserFootprint(string userName, string folderName, string footprintName)
+        public FootprintRegionResponse GetUserFootprint(string userName, string folderName, string footprintName)
         {
             var footprint = GetFootprint(userName, folderName, footprintName);
-            var f = new Footprint(footprint, folderName);
-            var r = new FootprintResponse(f);
+            var f = new FootprintRegion(footprint, folderName);
+            var r = new FootprintRegionResponse(f);
             return r;
         }
 
@@ -550,25 +626,25 @@ namespace Jhu.Footprint.Web.Api.V1
         #region Create, modify, delete footprint
 
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
-        public void CreateUserFootprint(string userName, string folderName, string footprintName, FootprintRequest request)
+        public void CreateUserFootprint(string userName, string folderName, string footprintName, FootprintRegionRequest request)
         {
             using (var context = new Lib.Context())
             {
-                var footprint = request.Footprint.GetValue();
+                var footprint = request.Region.GetValue();
                 footprint.Context = context;
                 footprint.Save();
             }
         }
 
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
-        public void ModifyUserFootprint(string userName, string folderName, string footprintName, FootprintRequest request)
+        public void ModifyUserFootprint(string userName, string folderName, string footprintName, FootprintRegionRequest request)
         {
             using (var context = new Lib.Context())
             {
                 // TODO : REAL AUTHENTICATION
                 context.User = userName;
 
-                var footprint = request.Footprint.GetValue();
+                var footprint = request.Region.GetValue();
                 footprint.Context = context;
                 footprint.Save();
             }
@@ -597,5 +673,7 @@ namespace Jhu.Footprint.Web.Api.V1
         #endregion
 
         #endregion
+
+#endif
     }
 }

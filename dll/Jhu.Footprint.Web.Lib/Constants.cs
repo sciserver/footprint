@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Jhu.Footprint.Web.Lib
 {
@@ -12,10 +13,17 @@ namespace Jhu.Footprint.Web.Lib
             "plot",
             "convexhull",
             "footprint",
+            "region",
             "points",
             "outline",
             "reduced"
         };
+
+        public const string RoleAdmin = "footprint-admin";
+        public const string RoleReader = "footprint-reader";
+        public const string RoleWriter = "footprint-writer";
+
+        public static readonly Regex NamePattern = new Regex(@"^[a-zA-Z0-9_\-\.\+]{3,}$", RegexOptions.Compiled );
 
         /*
          *   North galactic pole and zeropoint of l are from : astropy-1.0.6-np110py34_0 package

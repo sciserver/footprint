@@ -29,7 +29,7 @@ namespace Jhu.Footprint.Web.UI
             //return new Jhu.Footprint.Web.Lib.Search();
             //RegistryUser.Name
 
-            var search = new Jhu.Footprint.Web.Lib.FootprintFolderSearch(FootprintContext)
+            var search = new Jhu.Footprint.Web.Lib.FootprintSearch(FootprintContext)
             {
                 SearchMethod = Lib.FootprintSearchMethod.Name,
                 User = RegistryUser.Name,
