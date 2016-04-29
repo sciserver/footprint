@@ -9,7 +9,7 @@ using Jhu.Graywulf.AccessControl;
 
 namespace Jhu.Footprint.Web.Lib
 {
-    public class FootprintTestBase
+    public class FootprintTestBase : Jhu.Graywulf.Test.TestClassBase
     {
         protected const string TestUser = "test";
         protected const string OtherUser = "other";
@@ -99,15 +99,27 @@ namespace Jhu.Footprint.Web.Lib
             }
         }*/
 
-        protected FootprintRegion CreateRegion(Context context, string name)
+        protected Footprint CreateTestFootprint(Context context, string name)
+        {
+            return CreateTestFootprint(context, name, CombinationMethod.None);
+        }
+
+        protected Footprint CreateTestFootprint(Context context, string name, CombinationMethod combinationMethod)
         {
             var footprint = new Footprint(context)
             {
                 Name = name,
+                CombinationMethod = combinationMethod,
+                Comments = name + " test",
             };
 
             footprint.Save();
 
+            return footprint;
+        }
+
+        protected FootprintRegion CreateTestRegion(Footprint footprint, string name)
+        {
             var region = new FootprintRegion(footprint)
             {
                 Name = name,
@@ -116,6 +128,14 @@ namespace Jhu.Footprint.Web.Lib
             };
 
             region.Save();
+
+            return region;
+        }
+
+        protected FootprintRegion CreateTestFootprintAndRegion(Context context, string name)
+        {
+            var footprint = CreateTestFootprint(context, name);
+            var region = CreateTestRegion(footprint, name);
 
             return region;
         }

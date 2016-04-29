@@ -21,7 +21,7 @@ namespace Jhu.Footprint.Web.Lib.Test
             using (var context = CreateContext())
             {
                 context.Principal = CreateTestPrincipal();
-                CreateRegion(context, "FindRegionByOwnerTest");
+                CreateTestFootprintAndRegion(context, "FindRegionByOwnerTest");
             }
 
             using (var context = CreateContext())
@@ -42,7 +42,7 @@ namespace Jhu.Footprint.Web.Lib.Test
             using (var context = CreateContext())
             {
                 context.Principal = CreateTestPrincipal();
-                CreateRegion(context, "FindRegionByNameTest");
+                CreateTestFootprintAndRegion(context, "FindRegionByNameTest");
             }
 
             using (var context = CreateContext())

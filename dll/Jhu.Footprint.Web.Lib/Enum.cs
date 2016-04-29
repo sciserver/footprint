@@ -24,7 +24,7 @@ namespace Jhu.Footprint.Web.Lib
     }
 
     [Flags]
-    public enum CombineMethod : byte
+    public enum CombinationMethod : byte
     {
         None = 0,
         Union = 1,

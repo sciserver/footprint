@@ -56,12 +56,16 @@ namespace Jhu.Footprint.Web.Lib.Test
         [TestMethod]
         public void FindFootprintByNameTest()
         {
+            var name = GetTestUniqueName();
+
             using (var context = CreateContext())
             {
+                CreateTestFootprint(context, name);
+
                 var search = new FootprintSearch(context)
                 {
                     Owner = context.Principal.Identity.Name,
-                    Name = "FootprintSearch%"
+                    Name = name + "%"
                 };
 
                 Assert.AreEqual(1, search.Count());

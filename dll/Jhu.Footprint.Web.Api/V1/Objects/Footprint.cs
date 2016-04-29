@@ -29,15 +29,15 @@ namespace Jhu.Footprint.Web.Api.V1
         public Uri Url { get; set; }
 
         [IgnoreDataMember]
-        public Jhu.Footprint.Web.Lib.CombineMethod? Method { get; set; }
+        public Jhu.Footprint.Web.Lib.CombinationMethod? CombinationMethod { get; set; }
 
-        [DataMember(Name = "method")]
+        [DataMember(Name = "combinationMethod")]
         [DefaultValue("None")]
-        [Description("Method to combine regions: union, intersection or none.")]
-        public string Method_ForXml
+        [Description("Method to combine regions: none, union or intersection.")]
+        public string CombinationMethod_ForXml
         {
-            get { return Util.EnumFormatter.ToNullableXmlString(Method); }
-            set { Method = Util.EnumFormatter.FromNullableXmlString<Lib.CombineMethod>(value); }
+            get { return Util.EnumFormatter.ToNullableXmlString(CombinationMethod); }
+            set { CombinationMethod = Util.EnumFormatter.FromNullableXmlString<Lib.CombinationMethod>(value); }
         }
 
         [DataMember(Name = "comments")]
@@ -77,7 +77,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
             this.Owner = footprint.Owner;
             this.Name = footprint.Name;
-            this.Method = footprint.Method;
+            this.CombinationMethod = footprint.CombinationMethod;
             this.Comments = footprint.Comments;
             this.Public = access.CanRead();
             this.Url = FootprintService.GetUrl(footprint);

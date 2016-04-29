@@ -185,7 +185,7 @@ namespace Jhu.Footprint.Web.Lib
 
         protected override void OnCreated(Graywulf.Entities.EntityEventArgs e)
         {
-            parent.UpdateRegion(this);
+            parent.UpdateCombinedRegion(this);
 
             base.OnCreated(e);
         }
@@ -199,7 +199,7 @@ namespace Jhu.Footprint.Web.Lib
 
         protected override void OnModified(Graywulf.Entities.EntityEventArgs e)
         {
-            parent.RefreshRegion();
+            parent.RefreshCombinedRegion();
 
             base.OnModified(e);
         }
@@ -213,7 +213,7 @@ namespace Jhu.Footprint.Web.Lib
 
         protected override void OnDeleted(Graywulf.Entities.EntityEventArgs e)
         {
-            parent.RefreshRegion();
+            parent.RefreshCombinedRegion();
             
             base.OnDeleted(e);
         }

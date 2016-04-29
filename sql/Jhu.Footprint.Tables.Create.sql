@@ -12,7 +12,7 @@ CREATE TABLE [dbo].[Footprint]
 	[Name] [nvarchar](256) NOT NULL,
 	[Owner] [nvarchar](250) NOT NULL,
 	[CombinedRegionID] [int] NOT NULL,
-	[Method] [tinyint] NOT NULL,
+	[CombinationMethod] [tinyint] NOT NULL,
 	[DateCreated] [datetime] NOT NULL,
 	[DateModified] [datetime] NOT NULL,
 	[Comments] [nvarchar](max) NOT NULL,
@@ -20,10 +20,10 @@ CREATE TABLE [dbo].[Footprint]
 	CONSTRAINT [PK_Footprint] PRIMARY KEY CLUSTERED
 	(
 		[ID] ASC
-	)
+	),
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
-CREATE INDEX IX_Footprint_Name ON [dbo].[Footprint]
+CREATE UNIQUE INDEX IX_Footprint_Name ON [dbo].[Footprint]
 (
 	[Owner],
 	[Name]
@@ -48,6 +48,12 @@ CREATE TABLE [dbo].[FootprintRegion]
 	REFERENCES Footprint (ID)
 	ON DELETE CASCADE
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+CREATE UNIQUE INDEX IX_FootprintRegion_Name ON [dbo].[FootprintRegion]
+(
+	[FootprintID],
+	[Name]
+)
  
 GO
 
