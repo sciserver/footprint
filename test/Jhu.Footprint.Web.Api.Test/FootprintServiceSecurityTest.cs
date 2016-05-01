@@ -255,6 +255,7 @@ namespace Jhu.Footprint.Web.Api.V1
         #endregion
         #region Find footprint tests
 
+        /*
         [TestMethod]
         public void FindPublicUserFootprintTest()
         {
@@ -302,6 +303,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 Assert.AreEqual(1, fp.Footprints.Length);
             }
         }
+         * */
 
         #endregion
         #region Manipulate region tests

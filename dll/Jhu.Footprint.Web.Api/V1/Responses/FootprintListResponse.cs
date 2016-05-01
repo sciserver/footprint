@@ -6,17 +6,18 @@ using System.Threading.Tasks;
 using System.Runtime.Serialization;
 using System.ComponentModel;
 using System.ServiceModel;
+using Jhu.Graywulf.Web.Services;
 using Lib = Jhu.Footprint.Web.Lib;
 
 namespace Jhu.Footprint.Web.Api.V1
 {
     [DataContract(Name = "footprintList")]
     [Description("Represents a list of footprints.")]
-    public class FootprintListResponse
+    public class FootprintListResponse //: StreamingListResponse<Footprint>
     {
         [DataMember(Name = "footprints")]
         [Description("List of footprints.")]
-        public Footprint[] Footprints { get; set; }
+        public IEnumerable<Footprint> Footprints { get; set; }
 
         public FootprintListResponse()
         {
@@ -24,7 +25,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
         public FootprintListResponse(IEnumerable<Lib.Footprint> footprints)
         {
-            this.Footprints = footprints.Select(f => new Footprint(f)).ToArray();
+            this.Footprints = footprints.Select(f => new Footprint(f));
         }
     }
 }

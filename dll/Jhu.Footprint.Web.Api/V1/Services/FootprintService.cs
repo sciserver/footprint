@@ -35,6 +35,11 @@ namespace Jhu.Footprint.Web.Api.V1
 
         private Lib.Context CreateContext()
         {
+            return CreateContext(false);
+        }
+
+        private Lib.Context CreateContext(bool autoDispose)
+        {
             var context = new Lib.Context();
 
             if (System.Threading.Thread.CurrentPrincipal is Jhu.Graywulf.AccessControl.Principal)
@@ -117,23 +122,33 @@ namespace Jhu.Footprint.Web.Api.V1
         #endregion
         #region Footprint search operations
 
-        public FootprintListResponse FindUserFootprints(string owner, string name, int from, int max)
+        public IEnumerable<Footprint> FindUserFootprints(string owner, string name, int from, int max)
         {
-            return FindFootprints(owner, name, from, max);
+            var context = CreateContext(true);
+            var s = new Lib.FootprintSearch(context)
+            {
+                Owner = owner,
+                Name = name
+            };
+
+            var results = s.Find(from, max, null);
+            return results.Select(f => new Footprint(f));
         }
 
         public FootprintListResponse FindFootprints(string owner, string name, int from, int max)
         {
-            using (var context = CreateContext())
+            var context = CreateContext(true);
+            var s = new Lib.FootprintSearch(context)
             {
-                var s = new Lib.FootprintSearch(context)
-                {
-                    Owner = owner,
-                    Name = name
-                };
+                Owner = owner,
+                Name = name
+            };
 
-                return new FootprintListResponse(s.Find(from, max, null));
-            }
+            var results = s.Find(from, max, null);
+            return new FootprintListResponse()
+            {
+                Footprints = results.Select(f => new Footprint(f))
+            };
         }
 
         #endregion
@@ -164,7 +179,7 @@ namespace Jhu.Footprint.Web.Api.V1
             using (var context = CreateContext())
             {
                 var footprint = new Lib.Footprint(context);
-                
+
                 footprint.Load(owner, name);
 
                 var region = new Lib.FootprintRegion(footprint);

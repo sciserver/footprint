@@ -10,8 +10,8 @@ using Lib = Jhu.Footprint.Web.Lib;
 
 namespace Jhu.Footprint.Web.Api.V1
 {
-    [DataContract(Name = "region")]
-    [Description("Represents a celestial region.")]
+    [DataContract(Name = "footprintRegion")]
+    [Description("Represents a celestial region belonging to a footprint.")]
     public class FootprintRegion
     {
         [DataMember(Name = "owner")]

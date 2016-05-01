@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="Jhu.Footprint.Web.Api.V1.EditorService" Factory="System.ServiceModel.Activation.WebServiceHostFactory"  %>
