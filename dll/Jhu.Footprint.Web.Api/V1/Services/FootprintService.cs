@@ -40,7 +40,10 @@ namespace Jhu.Footprint.Web.Api.V1
 
         private Lib.Context CreateContext(bool autoDispose)
         {
-            var context = new Lib.Context();
+            var context = new Lib.Context()
+            {
+                AutoDispose = autoDispose
+            };
 
             if (System.Threading.Thread.CurrentPrincipal is Jhu.Graywulf.AccessControl.Principal)
             {

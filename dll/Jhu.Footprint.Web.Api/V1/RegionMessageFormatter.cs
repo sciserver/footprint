@@ -10,7 +10,7 @@ using Jhu.Graywulf.Web.Services;
 
 namespace Jhu.Footprint.Web.Api.V1
 {
-    public class RegionMessageFormatter : GraywulfMessageFormatter, IDispatchMessageFormatter
+    public class RegionMessageFormatter : GraywulfMessageFormatter, IDispatchMessageFormatter, IClientMessageFormatter
     {
         public const string MimeTypeText = "text/plain";
         public const string MimeTypeStc = "text/xml";
@@ -72,8 +72,16 @@ namespace Jhu.Footprint.Web.Api.V1
                 writer.Flush();
                 System.Threading.Thread.Sleep(3000);
             }
+        }
 
+        public override Message SerializeRequest(MessageVersion messageVersion, object[] parameters)
+        {
+            throw new NotImplementedException();
+        }
 
+        public override object DeserializeReply(Message message, object[] parameters)
+        {
+            throw new NotImplementedException();
         }
     }
 }

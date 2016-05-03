@@ -87,7 +87,6 @@ namespace Jhu.Footprint.Web.Api.V1
         #endregion
         #region Footprint search tests
 
-        /*
         [TestMethod]
         public void FindUserFootprintTest()
         {
@@ -101,7 +100,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 var client = CreateClient(session, TestUser);
                 var fp = client.FindUserFootprints(TestUser, name + "%", 0, 0);
 
-                Assert.AreEqual(2, fp.Footprints.Length);
+                Assert.AreEqual(2, fp.Footprints.Count());
             }
         }
 
@@ -118,9 +117,23 @@ namespace Jhu.Footprint.Web.Api.V1
                 var client = CreateClient(session, TestUser);
                 var fp = client.FindFootprints(null, name + "%", 0, 0);
 
-                Assert.AreEqual(2, fp.Footprints.Length);
+                Assert.AreEqual(2, fp.Footprints.Count());
             }
-        }*/
+        }
+
+        [TestMethod]
+        public void FindNoFootprintTest()
+        {
+            var name = GetTestUniqueName();
+
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session, TestUser);
+                var fp = client.FindFootprints(null, name + "%", 0, 0);
+
+                Assert.AreEqual(0, fp.Footprints.Count());
+            }
+        }
 
         #endregion
         #region Region CRUD operation tests
