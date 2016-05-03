@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="V1\Objects\Links.cs" />
     <Compile Include="V1\RegionMessageFormatter.cs" />
     <Compile Include="V1\Objects\Footprint.cs" />
     <Compile Include="V1\Objects\FootprintRegion.cs" />

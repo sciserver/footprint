@@ -13,19 +13,18 @@ namespace Jhu.Footprint.Web.Api.V1
 {
     [DataContract(Name = "footprintList")]
     [Description("Represents a list of footprints.")]
-    public class FootprintListResponse //: StreamingListResponse<Footprint>
+    public class FootprintListResponse
     {
+        [DataMember(Name = "links", EmitDefaultValue = false)]
+        [DefaultValue(null)]
+        public Links Links { get; set; }
+
         [DataMember(Name = "footprints")]
         [Description("List of footprints.")]
         public IEnumerable<Footprint> Footprints { get; set; }
 
         public FootprintListResponse()
         {
-        }
-
-        public FootprintListResponse(IEnumerable<Lib.Footprint> footprints)
-        {
-            this.Footprints = footprints.Select(f => new Footprint(f));
         }
     }
 }

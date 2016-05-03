@@ -52,7 +52,7 @@ namespace Jhu.Footprint.Web.Api.V1
         [OperationContract]
         [WebGet(UriTemplate = "/users/{owner}/footprints?name={name}&from={from}&max={max}", BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Returns the list of footprints of the user.")]
-        IEnumerable<Footprint> FindUserFootprints(string owner, string name, int from, int max);
+        FootprintListResponse FindUserFootprints(string owner, string name, int from, int max);
 
         // TODO: expose additional search criteria
         [OperationContract]

@@ -122,17 +122,9 @@ namespace Jhu.Footprint.Web.Api.V1
         #endregion
         #region Footprint search operations
 
-        public IEnumerable<Footprint> FindUserFootprints(string owner, string name, int from, int max)
+        public FootprintListResponse FindUserFootprints(string owner, string name, int from, int max)
         {
-            var context = CreateContext(true);
-            var s = new Lib.FootprintSearch(context)
-            {
-                Owner = owner,
-                Name = name
-            };
-
-            var results = s.Find(from, max, null);
-            return results.Select(f => new Footprint(f));
+            return FindFootprints(owner, name, from, max);
         }
 
         public FootprintListResponse FindFootprints(string owner, string name, int from, int max)
@@ -147,7 +139,11 @@ namespace Jhu.Footprint.Web.Api.V1
             var results = s.Find(from, max, null);
             return new FootprintListResponse()
             {
-                Footprints = results.Select(f => new Footprint(f))
+                Links = new Links()
+                {
+                    Self = FootprintService.GetUrl("test")
+                },
+                Footprints = results.Select(f => new Footprint(f)),
             };
         }
 
@@ -273,6 +269,12 @@ namespace Jhu.Footprint.Web.Api.V1
         public Stream GetUserFootprintRegionPlot(string userName, string name, string regionName, string projection, float width, float height, string degStyle, bool grid, bool autoZoom, bool autoRotate)
         {
             throw new NotImplementedException();
+        }
+
+        public static Uri GetUrl(string relativeUri)
+        {
+            // TODO: where to take machine name from? HttpContext?
+            return new Uri("http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc" + relativeUri);
         }
 
         public static Uri GetUrl(Lib.Footprint footprint)
