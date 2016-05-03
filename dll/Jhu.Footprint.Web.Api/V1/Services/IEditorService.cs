@@ -23,7 +23,8 @@ namespace Jhu.Footprint.Web.Api.V1
         void New();
 
         [OperationContract]
-        [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/new")]
+        [DynamicFormat(typeof(RegionMessageFormatter))]
+        [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/new", BodyStyle = WebMessageBodyStyle.Bare)]
         void NewRegion(Spherical.Region region);
 
         /*
@@ -54,7 +55,7 @@ namespace Jhu.Footprint.Web.Api.V1
         */
 
         [OperationContract]
-        [DynamicResponseFormat(typeof(RegionMessageFormatter))]
+        [DynamicFormat(typeof(RegionMessageFormatter))]
         [WebGet(UriTemplate = "/region", BodyStyle = WebMessageBodyStyle.Bare)]
         Spherical.Region GetRegion();
 

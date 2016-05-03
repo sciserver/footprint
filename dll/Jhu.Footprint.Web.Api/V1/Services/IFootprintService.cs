@@ -57,7 +57,7 @@ namespace Jhu.Footprint.Web.Api.V1
         // TODO: expose additional search criteria
         [OperationContract]
         [StreamingListFormat]
-        [WebGet(UriTemplate = "/footprints?owner={owner}&name={name}&from={from}&max={max}")]
+        [WebGet(UriTemplate = "/footprints?owner={owner}&name={name}&from={from}&max={max}", BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Returns the list of footprints of the user.")]
         FootprintListResponse FindFootprints(string owner, string name, int from, int max);
 

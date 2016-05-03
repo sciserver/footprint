@@ -6,6 +6,8 @@ using System.ServiceModel.Dispatcher;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Web;
 using System.IO;
+using System.Xml;
+using System.Xml.Serialization;
 using Jhu.Graywulf.Web.Services;
 
 namespace Jhu.Footprint.Web.Api.V1
@@ -26,7 +28,48 @@ namespace Jhu.Footprint.Web.Api.V1
             };
         }
 
+        #region Writer
+
         public override void DeserializeRequest(Message message, object[] parameters)
+        {
+            var body = message.GetReaderAtBodyContents();
+            byte[] raw = body.ReadContentAsBase64();
+
+            using (var ms = new MemoryStream(raw))
+            {
+                switch (MimeType)
+                {
+                    case RegionMessageFormatter.MimeTypeText:
+                        parameters[parameters.Length - 1] = ReadAsText(ms);
+                        break;
+                    case RegionMessageFormatter.MimeTypeBinary:
+                        parameters[parameters.Length - 1] = ReadAsBinary(ms);
+                        break;
+                    default:
+                        throw new NotImplementedException();
+                }
+            }
+        }
+
+        private Spherical.Region ReadAsText(Stream stream)
+        {
+            using (var reader = new StreamReader(stream, System.Text.Encoding.ASCII))
+            {
+                // TODO: modify to read from stream
+                var text = reader.ReadToEnd();
+                return Spherical.Region.Parse(text);
+            }
+        }
+
+        private Spherical.Region ReadAsBinary(Stream stream)
+        {
+            using (var r = new Spherical.IO.RegionReader(stream))
+            {
+                return r.ReadRegion();
+            }
+        }
+
+        private Spherical.Region ReadAsStc(Stream stream)
         {
             throw new NotImplementedException();
         }
@@ -34,9 +77,6 @@ namespace Jhu.Footprint.Web.Api.V1
         public override Message SerializeReply(MessageVersion messageVersion, object[] parameters, object result)
         {
             var region = (Spherical.Region)result;
-            //var writer = new RegionMessageWriter(region, MimeType);
-
-            //return WebOperationContext.Current.CreateStreamResponse(writer, MimeType);
 
             var message = WebOperationContext.Current.CreateStreamResponse(s => { OnWriteBodyContents(s, region); }, MimeType);
 
@@ -50,10 +90,13 @@ namespace Jhu.Footprint.Web.Api.V1
                 switch (MimeType)
                 {
                     case RegionMessageFormatter.MimeTypeText:
-                        WriteAsTest(stream);
+                        WriteAsTest(stream, region);
+                        break;
+                    case RegionMessageFormatter.MimeTypeBinary:
+                        WriteAsBinary(stream, region);
                         break;
                     case RegionMessageFormatter.MimeTypeStc:
-                    case RegionMessageFormatter.MimeTypeBinary:
+                        WriteAsStc(stream, region);
                         break;
                     default:
                         throw new NotImplementedException();
@@ -61,18 +104,33 @@ namespace Jhu.Footprint.Web.Api.V1
             }
         }
 
-        private void WriteAsTest(Stream stream)
+        private void WriteAsTest(Stream stream, Spherical.Region region)
         {
-            var writer = new StreamWriter(stream, System.Text.Encoding.ASCII);
-            //region.ToString(writer, "    ", 0);
-
-            for (int i = 0; i < 5; i++)
+            using (var writer = new StreamWriter(stream, System.Text.Encoding.ASCII))
             {
-                writer.WriteLine("Hello world.");
-                writer.Flush();
-                System.Threading.Thread.Sleep(3000);
+                region.ToString(writer, "    ", 0);
             }
         }
+
+        private void WriteAsBinary(Stream stream, Spherical.Region region)
+        {
+            using (var writer = new Spherical.IO.RegionWriter(stream))
+            {
+                writer.Write(region);
+                writer.Flush();
+            }
+        }
+
+        private void WriteAsStc(Stream stream, Spherical.Region region)
+        {
+            var stc = STC.Adapter.FromRegion(region);
+            var s = new XmlSerializer(stc.GetType());
+            s.Serialize(stream, region);
+            stream.Flush();
+        }
+
+        #endregion
+        #region Reader
 
         public override Message SerializeRequest(MessageVersion messageVersion, object[] parameters)
         {
@@ -83,5 +141,7 @@ namespace Jhu.Footprint.Web.Api.V1
         {
             throw new NotImplementedException();
         }
+
+        #endregion
     }
 }
