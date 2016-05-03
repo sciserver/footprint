@@ -10,6 +10,7 @@ using System.ServiceModel.Activation;
 using System.ServiceModel.Web;
 using System.ServiceModel.Security;
 using System.Security.Permissions;
+using System.Web;
 using Jhu.Graywulf.Web.Services;
 using Lib = Jhu.Footprint.Web.Lib;
 
@@ -32,6 +33,7 @@ namespace Jhu.Footprint.Web.Api.V1
         }
 
         #endregion
+        #region Context creators
 
         private Lib.Context CreateContext()
         {
@@ -57,6 +59,7 @@ namespace Jhu.Footprint.Web.Api.V1
             return context;
         }
 
+        #endregion
         #region Footprint CRUD operations
 
         public FootprintResponse CreateUserFootprint(string owner, string name, FootprintRequest request)
@@ -127,11 +130,6 @@ namespace Jhu.Footprint.Web.Api.V1
 
         public FootprintListResponse FindUserFootprints(string owner, string name, int from, int max)
         {
-            return FindFootprints(owner, name, from, max);
-        }
-
-        public FootprintListResponse FindFootprints(string owner, string name, int from, int max)
-        {
             var context = CreateContext(true);
             var s = new Lib.FootprintSearch(context)
             {
@@ -144,7 +142,27 @@ namespace Jhu.Footprint.Web.Api.V1
             {
                 Links = new Links()
                 {
-                    Self = FootprintService.GetUrl("test")
+                    Self = GetCurrentUrl()
+                },
+                Footprints = results.Select(f => new Footprint(f)),
+            };
+        }
+
+        public FootprintListResponse FindFootprints(string owner, string name, int from, int max)
+        {
+            var context = CreateContext(true);
+            var s = new Lib.FootprintSearch(context)
+            {
+                Owner = owner == null ? null : "%" + owner + "%",
+                Name = name == null ? null : "%" + name + "%"
+            };
+
+            var results = s.Find(from, max, null);
+            return new FootprintListResponse()
+            {
+                Links = new Links()
+                {
+                    Self = GetCurrentUrl()
                 },
                 Footprints = results.Select(f => new Footprint(f)),
             };
@@ -274,23 +292,32 @@ namespace Jhu.Footprint.Web.Api.V1
             throw new NotImplementedException();
         }
 
-        public static Uri GetUrl(string relativeUri)
+        #region URI constructors
+
+        private static Uri GetBaseUrl(string relativeUri)
         {
             // TODO: where to take machine name from? HttpContext?
             return new Uri("http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc" + relativeUri);
         }
 
+        private static Uri GetCurrentUrl()
+        {
+            return GetBaseUrl(HttpContext.Current.Request.Url.PathAndQuery);
+        }
+
         public static Uri GetUrl(Lib.Footprint footprint)
         {
             // TODO: where to take machine name from? HttpContext?
-            return new Uri("http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users" + footprint.Owner + "/" + footprint.Name);
+            return GetBaseUrl("/users" + footprint.Owner + "/" + footprint.Name);
         }
 
         public static Uri GetUrl(Lib.Footprint footprint, Lib.FootprintRegion region)
         {
             // TODO: where to take machine name from? HttpContext?
-            return new Uri("http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + footprint.Owner + "/" + footprint.Name + "/" + region.Name);
+            return GetBaseUrl("/footprint/api/v1/Footprint.svc/users/" + footprint.Owner + "/" + footprint.Name + "/" + region.Name);
         }
+
+        #endregion
 
 #if false
 
