@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using System.ServiceModel;
+using System.ServiceModel.Channels;
 using System.ServiceModel.Activation;
 using System.ServiceModel.Web;
 using System.ServiceModel.Security;
@@ -19,13 +20,16 @@ namespace Jhu.Footprint.Web.Api.V1
     public interface IEditorService
     {
         [OperationContract]
+        [WebInvoke(UriTemplate = "*", Method = "OPTIONS")]
+        void HandleHttpOptionsRequest();
+
+        [OperationContract]
         [WebGet(UriTemplate = "/new")]
         void New();
 
         [OperationContract]
-        [DynamicFormat(typeof(RegionMessageFormatter))]
         [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/new", BodyStyle = WebMessageBodyStyle.Bare)]
-        void NewRegion(Spherical.Region region);
+        void NewRegion(Stream stream);
 
         /*
         [WebGet(UriTemplate = "/load")]
@@ -55,7 +59,7 @@ namespace Jhu.Footprint.Web.Api.V1
         */
 
         [OperationContract]
-        [DynamicFormat(typeof(RegionMessageFormatter))]
+        [RegionFormatter]
         [WebGet(UriTemplate = "/region", BodyStyle = WebMessageBodyStyle.Bare)]
         Spherical.Region GetRegion();
 
