@@ -337,8 +337,9 @@ namespace Jhu.Footprint.Web.Api.V1
 
             var f = new FootprintFolder(folder);
 
-            var list = footprints.Select(fp => new Footprint(fp, folderName).Url).ToArray();
-            var r = new FootprintFolderResponse(f, list);
+            var uriList = footprints.Select(fp => new Footprint(fp, folderName).Url).ToArray();
+            var nameList = footprints.Select(fp => new Footprint(fp, folderName).Name).ToArray();
+            var r = new FootprintFolderResponse(f, uriList, nameList);
             return r;
 
         }

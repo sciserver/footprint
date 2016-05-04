@@ -18,14 +18,19 @@ namespace Jhu.Footprint.Web.Api.V1
         [Description("Footprint folder.")]
         public FootprintFolder FootprintFolder { get; set; }
 
-        [DataMember(Name = "footprintList")]
+        [DataMember(Name = "footprintNameList")]
         [Description("List of fooptrint in folder.")]
-        public Uri[] FootprintList { get; set; }
+        public string[] FootprintNameList { get; set; }
 
-        public FootprintFolderResponse(FootprintFolder folder, Uri[] footprintList)
+        [DataMember(Name = "footprintUriList")]
+        [Description("List of fooptrint in folder.")]
+        public Uri[] FootprintUriList { get; set; }
+
+        public FootprintFolderResponse(FootprintFolder folder, Uri[] footprintUriList, string[] footprintNameList)
         {
             this.FootprintFolder = folder;
-            this.FootprintList = footprintList;
+            this.FootprintUriList = footprintUriList;
+            this.FootprintNameList = footprintNameList;
         }
     }
 }
