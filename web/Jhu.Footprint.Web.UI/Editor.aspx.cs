@@ -21,8 +21,8 @@ namespace Jhu.Footprint.Web.UI
 
         public void InitCanvas()
         {
-            PlotCanvas.Width = 10 * 96;
-            PlotCanvas.Height = 7 * 96;
+            //PlotCanvas.Width = 10 * 96;
+            //PlotCanvas.Height = 7 * 96;
         }
 
         public void GetPlot()

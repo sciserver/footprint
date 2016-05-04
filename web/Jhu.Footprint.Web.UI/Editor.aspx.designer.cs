@@ -13,12 +13,12 @@ namespace Jhu.Footprint.Web.UI {
     public partial class Editor {
         
         /// <summary>
-        /// PlotCanvas control.
+        /// UpdateModal control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Image PlotCanvas;
+        protected global::System.Web.UI.UpdatePanel UpdateModal;
     }
 }
