@@ -94,7 +94,7 @@ namespace Jhu.Footprint.Web.Api.V1
         IEnumerable<Lib.EquatorialPoint> GetOutlinePoints(string operation, double resolution);
 
         [OperationContract]
-        [WebGet(UriTemplate = "/plot?op={operation}&proj={projection}&sys={sys}&ra={ra}&dec={dec}&width={width}&width={heigth}&theme={colorTheme}", BodyStyle = WebMessageBodyStyle.Bare)]
+        [WebGet(UriTemplate = "/plot?op={operation}&proj={projection}&sys={sys}&ra={ra}&dec={dec}&b={b}&l={l}&width={width}&height={height}&theme={colorTheme}", BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Plots a footprint.")]
         Stream PlotUserFootprintRegion(
             string operation,
