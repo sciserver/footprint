@@ -23,54 +23,96 @@ namespace Jhu.Footprint.Web.Api.V1
         [WebInvoke(UriTemplate = "*", Method = "OPTIONS")]
         void HandleHttpOptionsRequest();
 
+        #region Basic region operations
+
         [OperationContract]
-        [WebGet(UriTemplate = "/new")]
-        void New();
+        [WebGet(UriTemplate = "/reset")]
+        [Description("Reset editor to an empty region")]
+        void Reset();
 
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/new", BodyStyle = WebMessageBodyStyle.Bare)]
-        void NewRegion(Stream stream);
-
-        /*
-        [WebGet(UriTemplate = "/load")]
-        void Load(string owner, string footprintName);
-
-        [WebGet(UriTemplate = "/load")]
-        void Load(string owner, string footprintName, string regionName);
-
-        [WebGet(UriTemplate = "/save")]
-        void Load(string owner, string footprintName, string regionName);
+        [Description("Upload a new region")]
+        void New(Stream stream);
 
         [OperationContract]
-        [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/union")]
-        void Union();
+        [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/union", BodyStyle = WebMessageBodyStyle.Bare)]
+        [Description("Union edited region with the posted one.")]
+        void Union(Stream stream);
 
         [OperationContract]
-        [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/intersect")]
-        void Intersect();
+        [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/intersect", BodyStyle = WebMessageBodyStyle.Bare)]
+        [Description("Intersect edited region with the posted one.")]
+        void Intersect(Stream stream);
 
         [OperationContract]
-        [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/subtract")]
-        void Subtract();
+        [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/subtract", BodyStyle = WebMessageBodyStyle.Bare)]
+        [Description("Subtract posted region from the edited one")]
+        void Subtract(Stream stream);
 
+        [OperationContract]
         [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/grow")]
+        [Description("Grow edited region.")]
         void Grow(double arcmin);
 
-        */
+        [OperationContract]
+        [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/chull")]
+        [Description("Union edited footprint with the posted one.")]
+        void CHull();
+
+        #endregion
+        #region Region load and save
+
+        [OperationContract]
+        [WebGet(UriTemplate = "/load?owner={owner}&name={name}&region={regionName}")]
+        [Description("Load a region from the database")]
+        void Load(string owner, string name, string regionName);
+
+        [OperationContract]
+        [WebGet(UriTemplate = "/save?owner={owner}&name={name}&region={regionName}")]
+        [Description("Save a region to the database")]
+        void Save(string owner, string name, string regionName);
+
+        #endregion
 
         [OperationContract]
         [RegionFormatter]
-        [WebGet(UriTemplate = "/region", BodyStyle = WebMessageBodyStyle.Bare)]
-        Spherical.Region GetRegion();
+        [WebGet(UriTemplate = "/shape?op={operation}", BodyStyle = WebMessageBodyStyle.Bare)]
+        [Description("Returns the region.")]
+        Spherical.Region GetShape(string operation);
 
-        /*
-        [WebGet(UriTemplate = "/outline")]
-        Stream GetOutline();
+        [OperationContract]
+        [OutlineFormatter]
+        [WebGet(UriTemplate = "/outline?op={operation}", BodyStyle = WebMessageBodyStyle.Bare)]
+        [Description("Returns the outline of the region.")]
+        Spherical.Outline GetOutline(string operation);
 
-        [WebGet(UriTemplate = "/plot")]
-        Stream Plot();
+        [OperationContract]
+        [TestJsonXmlFormat]
+        [WebGet(UriTemplate = "/points?op={operation}&res={resolution}")]
+        [Description("Returns the points of the outline of the region.")]
+        IEnumerable<Lib.EquatorialPoint> GetOutlinePoints(string operation, double resolution);
 
-        */
+        [OperationContract]
+        [WebGet(UriTemplate = "/plot?op={operation}&proj={projection}&sys={sys}&ra={ra}&dec={dec}&width={width}&width={heigth}&theme={colorTheme}", BodyStyle = WebMessageBodyStyle.Bare)]
+        [Description("Plots a footprint.")]
+        Stream PlotUserFootprintRegion(
+            string operation,
+            string projection,
+            string sys,
+            string ra,
+            string dec,
+            string b,
+            string l,
+            float width,
+            float height,
+            string colorTheme);
 
+        [OperationContract]
+        [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/plot?op={operation}")]
+        [Description("Plots a footprint.")]
+        Stream PlotUserFootprintRegionAdvanced(string operation, Plot plot);
+
+        // TODO: add HTM cover
     }
 }

@@ -47,7 +47,10 @@ namespace Jhu.Footprint.Web.Api.V1
             }
         }
 
-        public void New()
+
+#if false
+        // TODO: delete
+        public void Reset()
         {
             SessionRegion = new Spherical.Region();
         }
@@ -60,6 +63,80 @@ namespace Jhu.Footprint.Web.Api.V1
         public Spherical.Region GetRegion()
         {
             return SessionRegion;
+        }
+#endif
+
+
+
+
+        public void Reset()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void New(Stream stream)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Union(Stream stream)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Intersect(Stream stream)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Subtract(Stream stream)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Grow(double arcmin)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CHull()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Load(string owner, string name, string regionName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Save(string owner, string name, string regionName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Spherical.Region GetShape(string operation)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Spherical.Outline GetOutline(string operation)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Lib.EquatorialPoint> GetOutlinePoints(string operation, double resolution)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Stream PlotUserFootprintRegion(string operation, string projection, string sys, string ra, string dec, string b, string l, float width, float height, string colorTheme)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Stream PlotUserFootprintRegionAdvanced(string operation, Plot plot)
+        {
+            throw new NotImplementedException();
         }
     }
 }

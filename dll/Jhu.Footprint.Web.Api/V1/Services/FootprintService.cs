@@ -62,22 +62,6 @@ namespace Jhu.Footprint.Web.Api.V1
         #endregion
         #region Footprint CRUD operations
 
-        public FootprintResponse CreateUserFootprint(string owner, string name, FootprintRequest request)
-        {
-            using (var context = CreateContext())
-            {
-                var footprint = new Lib.Footprint(context)
-                {
-                    Owner = owner,
-                    Name = name
-                };
-                request.Footprint.GetValues(footprint);
-                footprint.Save();
-
-                return new FootprintResponse(footprint);
-            }
-        }
-
         public FootprintResponse GetUserFootprint(string owner, string name)
         {
             using (var context = CreateContext())
@@ -89,6 +73,22 @@ namespace Jhu.Footprint.Web.Api.V1
                 };
 
                 footprint.Load();
+
+                return new FootprintResponse(footprint);
+            }
+        }
+
+        public FootprintResponse CreateUserFootprint(string owner, string name, FootprintRequest request)
+        {
+            using (var context = CreateContext())
+            {
+                var footprint = new Lib.Footprint(context)
+                {
+                    Owner = owner,
+                    Name = name
+                };
+                request.Footprint.GetValues(footprint);
+                footprint.Save();
 
                 return new FootprintResponse(footprint);
             }
@@ -169,7 +169,25 @@ namespace Jhu.Footprint.Web.Api.V1
         }
 
         #endregion
-        #region Region CRUD operations
+        #region Footprint region CRUD operations
+
+        public FootprintRegionResponse GetUserFootprintRegion(string owner, string name, string regionName)
+        {
+            using (var context = CreateContext())
+            {
+                var footprint = new Lib.Footprint(context);
+
+                footprint.Load(owner, name);
+
+                var region = new Lib.FootprintRegion(footprint);
+
+                region.FootprintId = footprint.Id;
+                region.Name = regionName;
+                region.Load();
+
+                return new FootprintRegionResponse(footprint, region);
+            }
+        }
 
         public FootprintRegionResponse CreateUserFootprintRegion(string owner, string name, string regionName, FootprintRegionRequest request)
         {
@@ -186,24 +204,6 @@ namespace Jhu.Footprint.Web.Api.V1
                 region.Save();
 
                 // TODO: update region cache
-
-                return new FootprintRegionResponse(footprint, region);
-            }
-        }
-
-        public FootprintRegionResponse GetUserFootprintRegion(string owner, string name, string regionName)
-        {
-            using (var context = CreateContext())
-            {
-                var footprint = new Lib.Footprint(context);
-
-                footprint.Load(owner, name);
-
-                var region = new Lib.FootprintRegion(footprint);
-
-                region.FootprintId = footprint.Id;
-                region.Name = regionName;
-                region.Load();
 
                 return new FootprintRegionResponse(footprint, region);
             }
@@ -251,6 +251,7 @@ namespace Jhu.Footprint.Web.Api.V1
         }
 
         #endregion
+        #region Footprint combined region get and plot
 
         public string GetUserFootprintShape(string owner, string name, string operation, double limit)
         {
@@ -287,11 +288,60 @@ namespace Jhu.Footprint.Web.Api.V1
             throw new NotImplementedException();
         }
 
-        public Stream GetUserFootprintRegionPlot(string userName, string name, string regionName, string projection, float width, float height, string degStyle, bool grid, bool autoZoom, bool autoRotate)
+        public Stream PlotUserFootprint(string owner, string name, string operation, string projection, string sys, string ra, string dec, string b, string l, float width, float height, string colorTheme)
         {
             throw new NotImplementedException();
         }
 
+        public Stream PlotUserFootprintAdvanced(Plot plot)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+        #region Individual region get and plot
+
+        public Spherical.Region GetUserFootprintShape(string owner, string name, string operation)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Spherical.Outline GetUserFootprintOutline(string owner, string name, string operation)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Lib.EquatorialPoint> GetUserFootprintOutlinePoints(string owner, string name, string operation, double resolution)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Spherical.Region GetUserFootprintRegionShape(string owner, string name, string regionName, string operation)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Spherical.Outline GetUserFootprintRegionOutline(string owner, string name, string regionName, string operation)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Lib.EquatorialPoint> GetUserFootprintRegionOutlinePoints(string owner, string name, string regionName, string operation, double resolution)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Stream PlotUserFootprintRegion(string owner, string name, string regionName, string operation, string projection, string sys, string ra, string dec, string b, string l, float width, float height, string colorTheme)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Stream PlotUserFootprintRegionAdvanced(string owner, string name, string regionName, string operation, Plot plot)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
         #region URI constructors
 
         private static Uri GetBaseUrl(string relativeUri)
@@ -318,6 +368,11 @@ namespace Jhu.Footprint.Web.Api.V1
         }
 
         #endregion
+    }
+}
+
+        
+        
 
 #if false
 
@@ -669,7 +724,7 @@ namespace Jhu.Footprint.Web.Api.V1
             return ms;
         }
 
-
+        #endregion
         #region Create, modify, delete footprint
 
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
@@ -717,10 +772,8 @@ namespace Jhu.Footprint.Web.Api.V1
                 footprint.Delete();
             }
         }
-        #endregion
-
-        #endregion
-
-#endif
+#endregion
     }
 }
+
+#endif

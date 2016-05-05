@@ -86,65 +86,95 @@ namespace Jhu.Footprint.Web.Api.V1
         [Description("Delete footprint under an existing folder.")]
         void DeleteUserFootprintRegion(string owner, string name, string regionName);
 
+        // TODO: add HTM cover
+
         #endregion
-        #region Footprint region and outline retrieval
+        #region Footprint combined region get and plot
 
         [OperationContract]
-        [WebGet(UriTemplate = "/users/{owner}/footprints/{name}/region?op={operation}&limit={limit}")]
-        [Description("Returns a footprint.")]
-        string GetUserFootprintShape(string owner, string name, string operation, double limit);
+        [RegionFormatter]
+        [WebGet(UriTemplate = "/users/{owner}/footprints/{name}/shape?op={operation}", BodyStyle = WebMessageBodyStyle.Bare)]
+        [Description("Returns the shape description of a footprint.")]
+        Spherical.Region GetUserFootprintShape(string owner, string name, string operation);
 
         [OperationContract]
-        [WebGet(UriTemplate = "/users/{owner}/footprints/{name}/outline?op={operation}&limit={limit}")]
+        [OutlineFormatter]
+        [WebGet(UriTemplate = "/users/{owner}/footprints/{name}/outline?op={operation}", BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Returns the outline a footprint.")]
-        string GetUserFootprintOutline(string owner, string name, string operation, double limit);
+        Spherical.Outline GetUserFootprintOutline(string owner, string name, string operation);
 
         [OperationContract]
-        [WebGet(UriTemplate = "/users/{owner}/footprints/{name}/points?op={operation}&limit={limit}&res={resolution}")]
+        [TestJsonXmlFormat]
+        [WebGet(UriTemplate = "/users/{owner}/footprints/{name}/outline/points?op={operation}&res={resolution}")]
         [Description("Returns the points of the outline of a footprint.")]
-        IEnumerable<Lib.EquatorialPoint> GetUserFootprintOutlinePoints(string owner, string name, string operation, double limit, double resolution);
+        IEnumerable<Lib.EquatorialPoint> GetUserFootprintOutlinePoints(string owner, string name, string operation, double resolution);
 
         [OperationContract]
-        [WebGet(UriTemplate = "/users/{owner}/footprints/{name}/plot?proj={projection}&width={width}&height={height}&degStyle={degStyle}&grid={grid}&autoZoom={autoZoom}&autoRotate={autoRotate}")]
-        [Description(@"Plot Footprint. There are several keywords to costumize a plot:
-            proj -- set projection. Available values: Aitoff, Equirectangular, HammerAitoff (deafult), Mollweide, Orthographic, Stereographic
-            width -- set width of plot.
-            height -- set height of plot.
-            degStyle -- set the grid and label style. Available values: hms - hexagecimal, dms (default) - degree.
-            grid -- turn grid on/off. Values = true, false (default)
-            autoZoom -- turn auto zoom on/off. Values = true, false (default)
-            autoRotate -- turn auto rotate on/off. Values = true, false (default)")]
-        Stream GetUserFootprintPlot(string owner, string name, string projection, float width, float height, string degStyle, bool grid, bool autoZoom, bool autoRotate);
+        [WebGet(UriTemplate = "/users/{owner}/footprints/{name}/plot?op={operation}&proj={projection}&sys={sys}&ra={ra}&dec={dec}&width={width}&width={heigth}&theme={colorTheme}", BodyStyle = WebMessageBodyStyle.Bare)]
+        [Description("Returns the points of the outline of a footprint.")]
+        Stream PlotUserFootprint(
+            string owner,
+            string name,
+            string operation,
+            string projection,
+            string sys,
+            string ra,
+            string dec,
+            string b,
+            string l,
+            float width,
+            float height,
+            string colorTheme);
+
+        [OperationContract]
+        [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/users/{owner}/footprints/{name}/plot?op={operation}")]
+        Stream PlotUserFootprintAdvanced(Plot plot);
 
         #endregion
-        #region Footprint Operation Contracts
+        #region Individual region get and plot
 
         [OperationContract]
-        [WebGet(UriTemplate = "/users/{owner}/footprints/{name}/{regionName}/region?op={operation}&limit={limit}")]
-        [Description("Returns a region.")]
-        string GetUserFootprintRegionShape(string owner, string name, string regionName, string operation, double limit);
+        [RegionFormatter]
+        [WebGet(UriTemplate = "/users/{owner}/footprints/{name}/regions/{regionName}/regions/{regionName}/shape?op={operation}", BodyStyle = WebMessageBodyStyle.Bare)]
+        [Description("Returns the shape description of a footprint.")]
+        Spherical.Region GetUserFootprintRegionShape(string owner, string name, string regionName, string operation);
 
         [OperationContract]
-        [WebGet(UriTemplate = "/users/{owner}/footprints/{name}/{regionName}/outline?op={operation}&limit={limit}")]
-        [Description("Returns the outline a region.")]
-        string GetUserFootprintRegionOutline(string owner, string name, string regionName, string operation, double limit);
+        [OutlineFormatter]
+        [WebGet(UriTemplate = "/users/{owner}/footprints/{name}/regions/{regionName}/outline?op={operation}", BodyStyle = WebMessageBodyStyle.Bare)]
+        [Description("Returns the outline a footprint.")]
+        Spherical.Outline GetUserFootprintRegionOutline(string owner, string name, string regionName, string operation);
 
         [OperationContract]
-        [WebGet(UriTemplate = "/users/{owner}/footprints/{name}/{regionName}/points?op={operation}&limit={limit}&res={resolution}")]
-        [Description("Returns the points of the outline of a region.")]
-        IEnumerable<Lib.EquatorialPoint> GetUserFootprintRegionOutlinePoints(string owner, string name, string regionName, string operation, double limit, double resolution);
+        [TestJsonXmlFormat]
+        [WebGet(UriTemplate = "/users/{owner}/footprints/{name}/regions/{regionName}/outline/points?op={operation}&res={resolution}")]
+        [Description("Returns the points of the outline of a footprint.")]
+        IEnumerable<Lib.EquatorialPoint> GetUserFootprintRegionOutlinePoints(string owner, string name, string regionName, string operation, double resolution);
 
         [OperationContract]
-        [WebGet(UriTemplate = "/users/{owner}/footprints/{name}/{regionName}/plot?proj={projection}&width={width}&height={height}&degStyle={degStyle}&grid={grid}&autoZoom={autoZoom}&autoRotate={autoRotate}")]
-        [Description(@"Plot Footprint. There are several keywords to costumize a plot:
-            proj -- set projection. Available values: Aitoff, Equirectangular, HammerAitoff (deafult), Mollweide, Orthographic, Stereographic
-            width -- set width of plot.
-            height -- set height of plot.
-            degStyle -- set the grid and label style. Available values: hms - hexagecimal, dms (default) - degree.
-            grid -- turn grid on/off. Values = true, false (default)
-            autoZoom -- turn auto zoom on/off. Values = true, false (default)
-            autoRotate -- turn auto rotate on/off. Values = true, false (default)")]
-        Stream GetUserFootprintRegionPlot(string owner, string name, string regionName, string projection, float width, float height, string degStyle, bool grid, bool autoZoom, bool autoRotate);
+        [WebGet(UriTemplate = "/users/{owner}/footprints/{name}/regions/{regionName}/plot?op={operation}&proj={projection}&sys={sys}&ra={ra}&dec={dec}&width={width}&width={heigth}&theme={colorTheme}", BodyStyle = WebMessageBodyStyle.Bare)]
+        [Description("Plots a footprint.")]
+        Stream PlotUserFootprintRegion(
+            string owner,
+            string name,
+            string regionName,
+            string operation,
+            string projection,
+            string sys,
+            string ra,
+            string dec,
+            string b,
+            string l,
+            float width,
+            float height,
+            string colorTheme);
+
+        [OperationContract]
+        [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/users/{owner}/footprints/{name}/regions/{regionName}/plot?op={operation}")]
+        [Description("Plots a footprint.")]
+        Stream PlotUserFootprintRegionAdvanced(string owner, string name, string regionName, string operation, Plot plot);
+
+        // TODO: add HTM cover
 
         #endregion
     }
