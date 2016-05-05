@@ -47,41 +47,20 @@ namespace Jhu.Footprint.Web.Api.V1
             }
         }
 
-
-#if false
-        // TODO: delete
         public void Reset()
         {
             SessionRegion = new Spherical.Region();
         }
 
-        public void NewRegion(Stream stream)
+        public void New(Stream stream)
         {
             SessionRegion = new RegionAdapter().ReadFromStream(stream);
         }
 
-        public Spherical.Region GetRegion()
-        {
-            return SessionRegion;
-        }
-#endif
-
-
-
-
-        public void Reset()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void New(Stream stream)
-        {
-            throw new NotImplementedException();
-        }
-
         public void Union(Stream stream)
         {
-            throw new NotImplementedException();
+            var r = new RegionAdapter().ReadFromStream(stream);
+            SessionRegion.SmartUnion(r);
         }
 
         public void Intersect(Stream stream)
@@ -116,7 +95,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
         public Spherical.Region GetShape(string operation)
         {
-            throw new NotImplementedException();
+            return SessionRegion;
         }
 
         public Spherical.Outline GetOutline(string operation)
