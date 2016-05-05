@@ -110,7 +110,7 @@ namespace Jhu.Footprint.Web.Api.V1
         IEnumerable<Lib.EquatorialPoint> GetUserFootprintOutlinePoints(string owner, string name, string operation, double resolution);
 
         [OperationContract]
-        [WebGet(UriTemplate = "/users/{owner}/footprints/{name}/plot?op={operation}&proj={projection}&sys={sys}&ra={ra}&dec={dec}&width={width}&width={heigth}&theme={colorTheme}", BodyStyle = WebMessageBodyStyle.Bare)]
+        [WebGet(UriTemplate = "/users/{owner}/footprints/{name}/plot?op={operation}&proj={projection}&sys={sys}&ra={ra}&dec={dec}&b={b}&l={l}&width={width}&height={height}&theme={colorTheme}", BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Returns the points of the outline of a footprint.")]
         Stream PlotUserFootprint(
             string owner,
@@ -128,14 +128,14 @@ namespace Jhu.Footprint.Web.Api.V1
 
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/users/{owner}/footprints/{name}/plot?op={operation}")]
-        Stream PlotUserFootprintAdvanced(Plot plot);
+        Stream PlotUserFootprintAdvanced(string owner, string name, string operation, Plot plot);
 
         #endregion
         #region Individual region get and plot
 
         [OperationContract]
         [RegionFormatter]
-        [WebGet(UriTemplate = "/users/{owner}/footprints/{name}/regions/{regionName}/regions/{regionName}/shape?op={operation}", BodyStyle = WebMessageBodyStyle.Bare)]
+        [WebGet(UriTemplate = "/users/{owner}/footprints/{name}/regions/{regionName}/shape?op={operation}", BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Returns the shape description of a footprint.")]
         Spherical.Region GetUserFootprintRegionShape(string owner, string name, string regionName, string operation);
 
@@ -152,7 +152,7 @@ namespace Jhu.Footprint.Web.Api.V1
         IEnumerable<Lib.EquatorialPoint> GetUserFootprintRegionOutlinePoints(string owner, string name, string regionName, string operation, double resolution);
 
         [OperationContract]
-        [WebGet(UriTemplate = "/users/{owner}/footprints/{name}/regions/{regionName}/plot?op={operation}&proj={projection}&sys={sys}&ra={ra}&dec={dec}&width={width}&width={heigth}&theme={colorTheme}", BodyStyle = WebMessageBodyStyle.Bare)]
+        [WebGet(UriTemplate = "/users/{owner}/footprints/{name}/regions/{regionName}/plot?op={operation}&proj={projection}&sys={sys}&ra={ra}&dec={dec}&b={b}&l={l}&width={width}&height={height}&theme={colorTheme}", BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Plots a footprint.")]
         Stream PlotUserFootprintRegion(
             string owner,

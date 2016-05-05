@@ -293,7 +293,7 @@ namespace Jhu.Footprint.Web.Api.V1
             throw new NotImplementedException();
         }
 
-        public Stream PlotUserFootprintAdvanced(Plot plot)
+        public Stream PlotUserFootprintAdvanced(string owner, string name, string operation, Plot plot)
         {
             throw new NotImplementedException();
         }
