@@ -65,17 +65,19 @@ namespace Jhu.Footprint.Web.Api.V1
 
         public void Intersect(Stream stream)
         {
-            throw new NotImplementedException();
+            var r = new RegionAdapter().ReadFromStream(stream);
+            SessionRegion.SmartIntersect(r,false);
         }
 
         public void Subtract(Stream stream)
         {
-            throw new NotImplementedException();
+            var r = new RegionAdapter().ReadFromStream(stream);
+            SessionRegion.SmartDifference(r);
         }
 
         public void Grow(double arcmin)
         {
-            throw new NotImplementedException();
+            SessionRegion.Grow(arcmin);
         }
 
         public void CHull()
@@ -100,12 +102,12 @@ namespace Jhu.Footprint.Web.Api.V1
 
         public Spherical.Outline GetOutline(string operation)
         {
-            throw new NotImplementedException();
+            return SessionRegion.Outline;
         }
 
         public IEnumerable<Lib.EquatorialPoint> GetOutlinePoints(string operation, double resolution)
         {
-            throw new NotImplementedException();
+            return Lib.FootprintFormatter.InterpolateOutlinePoints(SessionRegion.Outline, resolution);
         }
 
         public Stream PlotUserFootprintRegion(string operation, string projection, string sys, string ra, string dec, string b, string l, float width, float height, string colorTheme)
