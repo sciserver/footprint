@@ -37,6 +37,8 @@ namespace Jhu.Footprint.Web.Lib
                 };
 
                 footprint.Save();
+                region.Save();
+                region.SaveRegion();
             }
         }
 
@@ -96,7 +98,7 @@ namespace Jhu.Footprint.Web.Lib
             }
         }
 
-        private void UpdateCombinedRegionHelper(string name, CombinationMethod method)
+        private void UpdateCombinedRegionHelper2(string name, CombinationMethod method)
         {
             using (var context = CreateContext())
             {
@@ -117,21 +119,58 @@ namespace Jhu.Footprint.Web.Lib
             }
         }
 
-        [TestMethod]
-        public void UpdateCombinedUnionRegionTest()
+        private void UpdateCombinedRegionHelper3(string name, CombinationMethod method)
         {
-            var name = GetTestUniqueName();
-            UpdateCombinedRegionHelper(name, CombinationMethod.Union);
+            using (var context = CreateContext())
+            {
+                var footprint = CreateTestFootprint(context, name, method);
+                var r1 = CreateTestRegion(footprint, name + "_1");
+
+                // reload and see if combined region is correct
+                footprint.Load();
+                Assert.AreEqual(r1.Id, footprint.CombinedRegionId);
+
+                var r2 = CreateTestRegion(footprint, name + "_2");
+                var r3 = CreateTestRegion(footprint, name + "_3");
+
+                // reload and see if combined region is correct
+                footprint.Load();
+                Assert.AreNotEqual(0, footprint.CombinedRegionId);
+                Assert.AreNotEqual(r1.Id, footprint.CombinedRegionId);
+                Assert.AreNotEqual(r2.Id, footprint.CombinedRegionId);
+                Assert.AreNotEqual(r3.Id, footprint.CombinedRegionId);
+            }
         }
 
         [TestMethod]
-        public void UpdateCombinedIntersectRegionTest()
+        public void UpdateCombinedUnionRegion2Test()
         {
             var name = GetTestUniqueName();
-            UpdateCombinedRegionHelper(name, CombinationMethod.Intersection);
+            UpdateCombinedRegionHelper2(name, CombinationMethod.Union);
         }
 
-        private void RefreshCombinedRegionHelper(string name, CombinationMethod method)
+        [TestMethod]
+        public void UpdateCombinedIntersectRegion2Test()
+        {
+            var name = GetTestUniqueName();
+            UpdateCombinedRegionHelper2(name, CombinationMethod.Intersection);
+        }
+
+        [TestMethod]
+        public void UpdateCombinedUnionRegion3Test()
+        {
+            var name = GetTestUniqueName();
+            UpdateCombinedRegionHelper3(name, CombinationMethod.Union);
+        }
+
+        [TestMethod]
+        public void UpdateCombinedIntersectRegion3Test()
+        {
+            var name = GetTestUniqueName();
+            UpdateCombinedRegionHelper3(name, CombinationMethod.Intersection);
+        }
+
+        private void RefreshCombinedRegionHelper2(string name, CombinationMethod method)
         {
             using (var context = CreateContext())
             {
@@ -156,18 +195,58 @@ namespace Jhu.Footprint.Web.Lib
             }
         }
 
-        [TestMethod]
-        public void RefreshCombinedUnionRegionTest()
+        private void RefreshCombinedRegionHelper3(string name, CombinationMethod method)
         {
-            var name = GetTestUniqueName();
-            RefreshCombinedRegionHelper(name, CombinationMethod.Union);
+            using (var context = CreateContext())
+            {
+                var footprint = CreateTestFootprint(context, name, method);
+                var r1 = CreateTestRegion(footprint, name + "_1");
+                var r2 = CreateTestRegion(footprint, name + "_2");
+                var r3 = CreateTestRegion(footprint, name + "_3");
+
+                // reload and see if combined region is correct
+                footprint.Load();
+                Assert.AreNotEqual(0, footprint.CombinedRegionId);
+                Assert.AreNotEqual(r1.Id, footprint.CombinedRegionId);
+                Assert.AreNotEqual(r2.Id, footprint.CombinedRegionId);
+
+                // Now delete first region, this will force a reload
+
+                r1.Delete();
+
+                // reload and see if combined region is correct
+                footprint.Load();
+
+                // TODO: separate tests for union and intersect
+            }
         }
 
         [TestMethod]
-        public void RefreshCombinedIntersectionRegionTest()
+        public void RefreshCombinedUnionRegion2Test()
         {
             var name = GetTestUniqueName();
-            RefreshCombinedRegionHelper(name, CombinationMethod.Intersection);
+            RefreshCombinedRegionHelper2(name, CombinationMethod.Union);
+        }
+
+        [TestMethod]
+        public void RefreshCombinedIntersectionRegion2Test()
+        {
+            var name = GetTestUniqueName();
+            RefreshCombinedRegionHelper2(name, CombinationMethod.Intersection);
+        }
+
+        [TestMethod]
+        public void RefreshCombinedUnionRegion3Test()
+        {
+            var name = GetTestUniqueName();
+            RefreshCombinedRegionHelper3(name, CombinationMethod.Union);
+        }
+
+        [TestMethod]
+        public void RefreshCombinedIntersectionRegion3Test()
+        {
+            var name = GetTestUniqueName();
+            RefreshCombinedRegionHelper3(name, CombinationMethod.Intersection);
         }
     }
 }

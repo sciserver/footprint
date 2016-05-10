@@ -32,7 +32,7 @@ namespace Jhu.Footprint.Web.Lib
         #endregion
         #region Properties
 
-        [DbColumn(Binding = DbColumnBinding.Key)]
+        [DbKey]
         public int Id
         {
             get { return id; }
@@ -73,14 +73,14 @@ namespace Jhu.Footprint.Web.Lib
             set { region = value; }
         }
 
-        [DbColumn(Name = "Region")]
+        [DbColumn(Name = "Region", Binding = DbColumnBinding.Auxiliary)]
         public byte[] RegionBinary
         {
             get { return region.ToSqlBytes().Value; }
             set { region = Region.FromSqlBytes(new SqlBytes(value)); }
         }
 
-        [DbColumn]
+        [DbColumn(Binding = DbColumnBinding.Auxiliary)]
         public byte[] Thumbnail
         {
             get { return thumbnail; }
@@ -183,25 +183,11 @@ namespace Jhu.Footprint.Web.Lib
             base.OnCreating(e);
         }
 
-        protected override void OnCreated(Graywulf.Entities.EntityEventArgs e)
-        {
-            parent.UpdateCombinedRegion(this);
-
-            base.OnCreated(e);
-        }
-
         protected override void OnModifying(Graywulf.Entities.EntityEventArgs e)
         {
             EvaluateAccess().EnsureUpdate();
 
             base.OnModifying(e);
-        }
-
-        protected override void OnModified(Graywulf.Entities.EntityEventArgs e)
-        {
-            parent.RefreshCombinedRegion();
-
-            base.OnModified(e);
         }
 
         protected override void OnDeleting(Graywulf.Entities.EntityEventArgs e)
@@ -214,7 +200,7 @@ namespace Jhu.Footprint.Web.Lib
         protected override void OnDeleted(Graywulf.Entities.EntityEventArgs e)
         {
             parent.RefreshCombinedRegion();
-            
+
             base.OnDeleted(e);
         }
 
@@ -274,6 +260,52 @@ WHERE FootprintID = @FootprintID AND Name = @Name;
             {
                 return base.GetSelectCommand();
             }
+        }
+
+        public void LoadRegion()
+        {
+            EvaluateAccess().EnsureRead();
+
+            var sql = @"
+SELECT region
+FROM [FootprintRegion] r
+WHERE r.ID = @ID
+";
+
+            using (var cmd = Context.CreateCommand(sql))
+            {
+                cmd.Parameters.Add("@ID", SqlDbType.Int).Value = this.id;
+
+                using (var dr = Context.ExecuteCommandReader(cmd))
+                {
+                    dr.Read();
+
+                    this.region = Spherical.Region.FromSqlBytes(dr.GetSqlBytes(0));
+                }
+            }
+        }
+
+        public void SaveRegion()
+        {
+            EvaluateAccess().EnsureUpdate();
+
+            var sql = "[fps].[spSaveRegion]";
+
+            using (var cmd = Context.CreateStoredProcedureCommand(sql))
+            {
+                cmd.Parameters.Add("@RegionID", SqlDbType.Int).Value = id;
+                cmd.Parameters.Add("@region", SqlDbType.VarBinary).Value = region == null ? (object)DBNull.Value : region.ToSqlBytes();
+
+                Context.ExecuteCommandNonQuery(cmd);
+            }
+        }
+
+        public void LoadThumbnail()
+        {
+        }
+
+        public void RefreshThumbnail()
+        {
         }
 
         #endregion

@@ -34,7 +34,7 @@ namespace Jhu.Footprint.Web.Lib
         /// Returns or sets the database ID of the region. Set this before loading or
         /// modifying. If set to 0, Save() will create a new record in the database.
         /// </summary>
-        [DbColumn(Binding = DbColumnBinding.Key)]
+        [DbKey]
         public int Id
         {
             get { return id; }
