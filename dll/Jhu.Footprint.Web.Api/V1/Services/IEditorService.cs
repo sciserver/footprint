@@ -57,7 +57,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/chull")]
-        [Description("Union edited footprint with the posted one.")]
+        [Description("Compute the convex hull of the region.")]
         void CHull();
 
         #endregion
