@@ -72,7 +72,8 @@ namespace Jhu.Footprint.Web.Api.V1
         public void Subtract(Stream stream)
         {
             var r = new RegionAdapter().ReadFromStream(stream);
-            SessionRegion.SmartDifference(r);
+            SessionRegion.Difference(r);
+            // TODO
         }
 
         public void Grow(double arcmin)
@@ -82,7 +83,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
         public void CHull()
         {
-            throw new NotImplementedException();
+            SessionRegion.Outline.GetConvexHull();
         }
 
         public void Load(string owner, string name, string regionName)
