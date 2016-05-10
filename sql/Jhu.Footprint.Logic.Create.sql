@@ -30,6 +30,9 @@ AS
 	FROM FootprintRegion r
 	WHERE r.ID = @RegionID;
 
+	-- Generate HTM
+	EXEC [fps].[spComputeHtmCover] @RegionID
+
 	IF @type = 0 BEGIN
 		IF @existing = 0 BEGIN
 			-- Update
@@ -114,6 +117,9 @@ AS
 
 			SET @combinedRegionID = @@IDENTITY
 
+			-- Generate HTM
+			EXEC [fps].[spComputeHtmCover] @combinedRegionID
+
 			UPDATE Footprint
 			SET CombinedRegionID = @combinedRegionID
 		END ELSE BEGIN
@@ -135,10 +141,10 @@ AS
 				WHERE ID = @combinedRegionID
 			END ELSE THROW 51000, 'Invalid combination method.', 1;
 
+			-- Generate HTM
+			EXEC [fps].[spComputeHtmCover] @combinedRegionID
 		END
 	END
-
-	-- TODO: recompute HTM index
 
 GO
 
@@ -169,12 +175,6 @@ AS
 		DELETE FootprintRegion
 		WHERE FootprintID = @FootprintID
 		      AND Type = 1
-
-		DELETE FootprintRegion
-		WHERE FootprintID = @FootprintID
-		      AND Type = 1
-
-		-- TODO: delete HTM
 
 		UPDATE Footprint
 		SET CombinedRegionID = 0
@@ -251,7 +251,28 @@ AS
 
 		END
 
-		-- TODO: Add HTM indexing
+		-- Generate HTM
+		EXEC [fps].[spComputeHtmCover] @combinedRegionID
 	END
+
+GO
+
+CREATE PROC [fps].[spComputeHtmCover]
+	@RegionID int
+AS
+	DECLARE @region varbinary(max)
+
+	SELECT @region = region
+	FROM FootprintRegion
+	WHERE ID = @RegionID
+
+	DELETE FootprintRegionHTM
+	WHERE RegionID = @RegionID
+
+	INSERT FootprintRegionHTM
+		(RegionID, HtmIDStart, HtmIDEnd, Partial)
+	SELECT
+		@RegionID, HtmIDStart, HtmIDEnd, Partial
+	FROM htm.Cover(@region)
 
 GO

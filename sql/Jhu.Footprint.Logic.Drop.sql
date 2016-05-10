@@ -1,3 +1,9 @@
+IF OBJECT_ID('[fps].[spComputeHtmCover]') IS NOT NULL
+DROP PROC [fps].[spComputeHtmCover]
+
+GO
+
+
 IF OBJECT_ID('[fps].[spSaveRegion]') IS NOT NULL
 DROP PROC [fps].[spSaveRegion]
 
