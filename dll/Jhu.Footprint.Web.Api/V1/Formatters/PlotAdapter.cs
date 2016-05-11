@@ -12,6 +12,7 @@ using System.ServiceModel.Channels;
 using System.Drawing;
 using System.Drawing.Imaging;
 using Jhu.Graywulf.Web.Services;
+using Jhu.Spherical.Visualizer;
 
 namespace Jhu.Footprint.Web.Api.V1
 {
@@ -21,7 +22,13 @@ namespace Jhu.Footprint.Web.Api.V1
         {
             return new string[]
             {
-                Constants.MimeTypeText,
+                Constants.MimeTypeJpeg,
+                Constants.MimeTypePng,
+                Constants.MimeTypeGif,
+                Constants.MimeTypeBmp,
+                Constants.MimeTypePdf,
+                Constants.MimeTypeEps,
+                Constants.MimeTypeEmf,
             };
         }
 

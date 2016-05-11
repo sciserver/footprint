@@ -111,14 +111,25 @@ namespace Jhu.Footprint.Web.Api.V1
             return Lib.FootprintFormatter.InterpolateOutlinePoints(SessionRegion.Outline, resolution);
         }
 
-        public Stream PlotUserFootprintRegion(string operation, string projection, string sys, string ra, string dec, string b, string l, float width, float height, string colorTheme)
+        public Spherical.Visualizer.Plot PlotUserFootprintRegion(string operation, string projection, string sys, string ra, string dec, string b, string l, float width, float height, string colorTheme)
         {
-            throw new NotImplementedException();
+            var plot = Lib.FootprintPlot.GetDefaultPlot(new[] { SessionRegion });
+
+            // TODO: change this part to use all parameters
+            // Size is different for vector graphics!
+            plot.Width = Math.Max(width, 640);
+            plot.Height = Math.Max(height, 480);
+
+            return plot;
         }
 
-        public Stream PlotUserFootprintRegionAdvanced(string operation, Plot plot)
+        public Spherical.Visualizer.Plot PlotUserFootprintRegionAdvanced(string operation, Plot plotParameters)
         {
-            throw new NotImplementedException();
+            var plot = Lib.FootprintPlot.GetDefaultPlot(new [] { SessionRegion });
+
+            plotParameters.GetValues(plot);
+
+            return plot;
         }
     }
 }
