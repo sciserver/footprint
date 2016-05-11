@@ -26,7 +26,7 @@ $(document).ready(function () {
     $("body").on("click", "#LoadFootprintButton", function () {
         var footprint = $("#FootprintSelect option:selected").text();
         var folder = $("#FolderSelect option:selected").text();
-        plotUrl = createUrl(baseUrl, [userName, folder, footprint,"plot?"]);
+        plotUrl = createUrl(baseUrl, [userName, folder, footprint, "plot?"]);
 
         $("#PlotCanvas").attr("src", plotUrl);
         $("#LoadModal").modal("hide");
@@ -37,7 +37,6 @@ $(document).ready(function () {
     $("body").on("click", "#LaunchGrowModalButton", function () {
         $("#GrowModal").modal({ backdrop: "static" });
     });
-
     // <-- Grow Modal
 
     // --> Add Region Modal
@@ -45,6 +44,29 @@ $(document).ready(function () {
         $("#AddRegionModal").modal({ backdrop: "static" });
     });
 
+    $("body").on("change", "#AdditionTypeSelector input:radio", function () {
+        $("#RegionTypeSelector").removeClass("hidden");
+
+    })
+
+    $("body").on("change", "#RegionTypeSelector input:radio", function () {
+        selectedButton = $("#RegionTypeSelector input:radio:checked").val();
+                $(".AddRegionForms").addClass("hidden");
+        switch (selectedButton) {
+            case "circle":
+                $("#CircleRegionForm").removeClass("hidden");
+                break;
+            case "polygon":
+                $("#PolygonRegionForm").removeClass("hidden");
+                break;
+            case "costum":
+                $("#CostumRegionForm").removeClass("hidden");
+                break;
+            default:
+                break;
+        }
+
+    });
     // <-- Add Region Modal
 
     // Centering modals
@@ -52,6 +74,8 @@ $(document).ready(function () {
         centerModals($(this));
     });
     $(window).on('resize', centerModals);
+
+
 });
 
 // Reset Select options
@@ -59,7 +83,7 @@ function ResetSelectList(selectId) {
     $(selectId).empty()
         .append("<option>Please select...</option>");
     $(selectId + " option:selected").attr('disabled', 'disabled');
-   
+
 }
 
 // GET Footprint folder list of User
@@ -101,7 +125,7 @@ function centerModals($element) {
 
 function createUrl(baseUrl, sourcePathParts) {
     var finalUrl = baseUrl;
-    $.each(sourcePathParts, function(i,part){
+    $.each(sourcePathParts, function (i, part) {
         finalUrl += "/" + part;
     });
     return finalUrl;

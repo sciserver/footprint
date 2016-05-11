@@ -31,8 +31,9 @@ namespace Jhu.Footprint.Web.UI
 
             var search = new Jhu.Footprint.Web.Lib.FootprintSearch(FootprintContext)
             {
-                SearchMethod = Lib.FootprintSearchMethod.Name,
-                User = RegistryUser.Name,
+                // TODO: not working with the new version
+                //SearchMethod = Lib.FootprintSearchMethod.Name,
+                //User = RegistryUser.Name,
                 Name = name.Text,
             };
 

@@ -59,28 +59,69 @@
                                 <h4 class="modal-title">Add Region</h4>
                             </div>
                             <div class="modal-body">
-                                <div class="btn-group span12" data-toggle="buttons">
-                                    <label class="btn btn-primary active">
-                                        <input type="radio" name="options" value="new" checked="checked">
-                                        New
-                                    </label>
-                                    <label class="btn btn-primary">
-                                        <input type="radio" name="options" value="union">
-                                        Union
-                                    </label>
-                                    <label class="btn btn-primary">
-                                        <input type="radio" name="options" value="intersect">
-                                        Intersect
-                                    </label>
+                                <div id="AdditionTypeSelector" class="text-center">
+                                    <h3 class="FormLabel">Select addition type:</h3>
+                                    <div class="btn-group" data-toggle="buttons">
+                                        <label class="btn btn-primary">
+                                            <input type="radio" name="options" value="new">
+                                            New
+                                        </label>
+                                        <label class="btn btn-primary">
+                                            <input type="radio" name="options" value="union">
+                                            Union
+                                        </label>
+                                        <label class="btn btn-primary">
+                                            <input type="radio" name="options" value="intersect">
+                                            Intersect
+                                        </label>
+                                    </div>
                                 </div>
 
-                                <div id="CircleRegionInput" class="hidden">
-                                    circle
+                                <hr />
+
+                                <div id="RegionTypeSelector" class="text-center hidden">
+                                    <h3 class="FormLabel">Select region type:</h3>
+                                    <div class="btn-group" data-toggle="buttons">
+                                        <label class="btn btn-primary active">
+                                            <input type="radio" name="options" value="circle" checked="checked">
+                                            Circle
+                                        </label>
+                                        <label class="btn btn-primary">
+                                            <input type="radio" name="options" value="polygon">
+                                            Polygon
+                                        </label>
+                                        <label class="btn btn-primary">
+                                            <input type="radio" name="options" value="costum">
+                                            Costum
+                                        </label>
+                                    </div>
+                                <hr />
                                 </div>
-                                <div id="PolygonRegionInput" class="hidden">
-                                    poly
+
+
+                                <div id="CircleRegionForm" class="AddRegionForms hidden">
+                                    <div class="form-inline">
+                                        <label for="CircleRA" class="FormLabel">Center:</label>
+                                        <input id="CircleRA"type="text" class="form-control" placeholder="12:00:00.00" data-toogle="tooltip" title="Right Ascension"/>                                    
+                                        <input id="CricleDec" type="text" class="form-control" placeholder="00:00:00.00" data-toogle="tooltip" title="Declination"/>
+                                    </div>
+                                    <div class="form-inline">
+                                        <label for="CircleRaidus" class="FormLabel">Radius:</label>
+                                        <input id="CircleRadius" type="text" class="form-control" placeholder="120" data-toogle="tooltip" title="Arcmin"/>                                          
+                                    </div>
                                 </div>
-                                <div id="CostumRegionInput" class="hidden">
+                                <div id="PolygonRegionForm" class="AddRegionForms hidden">
+                                    <div class="form-inline">
+                                        <label for="PolygonPoints" class="FormLabel">Radius:</label>
+                                        <textarea rows="8" id="PolygonPoints" class="form-control col-lg" data-toogle="tooltip" title="Specify one polygon point in each line. Use sexagesimal or decimal format.">
+                                            12:00:00.00,   00:00:00.00
+                                            12:00:00.00,   10:00:00.00
+                                            11:00:00.00,   10:00:00.00
+                                            11:00:00.00,   00:00:00.00
+                                        </textarea>
+                                    </div>
+                                </div>
+                                <div id="CostumRegionForm" class="AddRegionForms hidden">
                                     costum
                                 </div>
 
