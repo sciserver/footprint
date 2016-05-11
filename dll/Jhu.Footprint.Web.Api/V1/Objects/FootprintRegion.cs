@@ -67,7 +67,6 @@ namespace Jhu.Footprint.Web.Api.V1
             this.FootprintName = footprint.Name;
             this.Name = region.Name;
             this.FillFactor = region.FillFactor;
-            this.RegionString = region.Region.ToString();
             this.Url = FootprintService.GetUrl(footprint, region);
         }
     }
