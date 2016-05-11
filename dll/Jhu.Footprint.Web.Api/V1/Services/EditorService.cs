@@ -83,7 +83,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
         public void CHull()
         {
-            SessionRegion.Outline.GetConvexHull();
+            SessionRegion = SessionRegion.Outline.GetConvexHull();
         }
 
         public void Load(string owner, string name, string regionName)
