@@ -79,5 +79,11 @@ namespace Jhu.Footprint.Web.Api.V1
 
         [DataMember(Name = "outlineVisible")]
         public bool? OutlineVisible { get; set; }
+
+        public void GetValues(Spherical.Visualizer.Plot plot)
+        {
+            plot.Width = Width ?? plot.Width;
+            plot.Height = Height ?? plot.Height;
+        }
     }
 }

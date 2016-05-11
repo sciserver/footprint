@@ -94,9 +94,10 @@ namespace Jhu.Footprint.Web.Api.V1
         IEnumerable<Lib.EquatorialPoint> GetOutlinePoints(string operation, double resolution);
 
         [OperationContract]
+        [PlotFormatter]
         [WebGet(UriTemplate = "/plot?op={operation}&proj={projection}&sys={sys}&ra={ra}&dec={dec}&b={b}&l={l}&width={width}&height={height}&theme={colorTheme}", BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Plots a footprint.")]
-        Stream PlotUserFootprintRegion(
+        Spherical.Visualizer.Plot PlotUserFootprintRegion(
             string operation,
             string projection,
             string sys,
@@ -109,9 +110,10 @@ namespace Jhu.Footprint.Web.Api.V1
             string colorTheme);
 
         [OperationContract]
+        [PlotFormatter]
         [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/plot?op={operation}")]
         [Description("Plots a footprint.")]
-        Stream PlotUserFootprintRegionAdvanced(string operation, Plot plot);
+        Spherical.Visualizer.Plot PlotUserFootprintRegionAdvanced(string operation, Plot plot);
 
         // TODO: add HTM cover
     }

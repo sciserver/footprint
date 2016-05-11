@@ -61,6 +61,7 @@
     </Compile>
     <Compile Include="FootprintException.cs" />
     <Compile Include="FootprintFormatter.cs" />
+    <Compile Include="FootprintPlot.cs" />
     <Compile Include="FootprintRegion.cs" />
     <Compile Include="FootprintRegionSearch.cs" />
     <Compile Include="FootprintSearch.cs" />

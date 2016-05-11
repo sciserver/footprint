@@ -128,6 +128,7 @@ namespace Jhu.Footprint.Web.Lib
             };
 
             region.Save();
+            region.SaveRegion();
 
             return region;
         }
