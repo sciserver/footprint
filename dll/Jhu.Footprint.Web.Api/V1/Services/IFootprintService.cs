@@ -26,22 +26,22 @@ namespace Jhu.Footprint.Web.Api.V1
         #region Footprint CRUD operations
 
         [OperationContract]
-        [WebGet(UriTemplate = "/users/{owner}/footprints/{name}/")]
+        [WebGet(UriTemplate = Urls.UserFootprint)]
         [Description("Returns the header information of a footprint.")]
         FootprintResponse GetUserFootprint(string owner, string name);
 
         [OperationContract]
-        [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/users/{owner}/footprints/{name}")]
+        [WebInvoke(Method = HttpMethod.Post, UriTemplate = Urls.UserFootprint)]
         [Description("Create new footprint.")]
         FootprintResponse CreateUserFootprint(string owner, string name, FootprintRequest request);
 
         [OperationContract]
-        [WebInvoke(Method = HttpMethod.Patch, UriTemplate = "/users/{owner}/footprints/{name}")]
+        [WebInvoke(Method = HttpMethod.Patch, UriTemplate = Urls.UserFootprint)]
         [Description("Modify existing footprint.")]
         FootprintResponse ModifyUserFootprint(string owner, string name, FootprintRequest request);
 
         [OperationContract]
-        [WebInvoke(Method = HttpMethod.Delete, UriTemplate = "/users/{owner}/footprints/{name}")]
+        [WebInvoke(Method = HttpMethod.Delete, UriTemplate = Urls.UserFootprint)]
         [Description("Delete footprint.")]
         void DeleteUserFootprint(string owner, string name);
 
@@ -50,14 +50,14 @@ namespace Jhu.Footprint.Web.Api.V1
 
         // TODO: expose additional search criteria
         [OperationContract]
-        [WebGet(UriTemplate = "/users/{owner}/footprints?name={name}&from={from}&max={max}", BodyStyle = WebMessageBodyStyle.Bare)]
+        [WebGet(UriTemplate = Urls.UserFootprints + "?" + Urls.FootprintSearchParams, BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Returns the list of footprints of the user.")]
         FootprintListResponse FindUserFootprints(string owner, string name, int from, int max);
 
         // TODO: expose additional search criteria
         [OperationContract]
         [StreamingListFormat]
-        [WebGet(UriTemplate = "/footprints?owner={owner}&name={name}&from={from}&max={max}", BodyStyle = WebMessageBodyStyle.Bare)]
+        [WebGet(UriTemplate = Urls.AllFootprints + "?" + Urls.OwnerSearchParam + "&" + Urls.FootprintSearchParams, BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Returns the list of footprints of the user.")]
         FootprintListResponse FindFootprints(string owner, string name, int from, int max);
 
@@ -67,23 +67,23 @@ namespace Jhu.Footprint.Web.Api.V1
         #region Footprint region CRUD operations
 
         [OperationContract]
-        [WebGet(UriTemplate = "/users/{owner}/footprints/{name}/regions/{regionName}")]
+        [WebGet(UriTemplate = Urls.UserFootprintRegion)]
         [Description("Returns the header information of a region.")]
         FootprintRegionResponse GetUserFootprintRegion(string owner, string name, string regionName);
 
         [OperationContract]
-        [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/users/{owner}/footprints/{name}/regions/{regionName}")]
-        [Description("Create new footprint under an existing folder.")]
+        [WebInvoke(Method = HttpMethod.Post, UriTemplate = Urls.UserFootprintRegion)]
+        [Description("Create new region under an existing footprint.")]
         FootprintRegionResponse CreateUserFootprintRegion(string owner, string name, string regionName, FootprintRegionRequest request);
 
         [OperationContract]
-        [WebInvoke(Method = HttpMethod.Put, UriTemplate = "/users/{owner}/footprints/{name}/regions/{regionName}")]
-        [Description("Modify footprint under an existing folder.")]
+        [WebInvoke(Method = HttpMethod.Put, UriTemplate = Urls.UserFootprintRegion)]
+        [Description("Modify a region under an existing footprint.")]
         FootprintRegionResponse ModifyUserFootprintRegion(string owner, string name, string regionName, FootprintRegionRequest request);
 
         [OperationContract]
-        [WebInvoke(Method = HttpMethod.Delete, UriTemplate = "/users/{owner}/footprints/{name}/regions/{regionName}")]
-        [Description("Delete footprint under an existing folder.")]
+        [WebInvoke(Method = HttpMethod.Delete, UriTemplate = Urls.UserFootprintRegion)]
+        [Description("Delete a region under an existing footprint.")]
         void DeleteUserFootprintRegion(string owner, string name, string regionName);
 
         // TODO: add HTM cover
@@ -93,24 +93,24 @@ namespace Jhu.Footprint.Web.Api.V1
 
         [OperationContract]
         [RegionFormatter]
-        [WebGet(UriTemplate = "/users/{owner}/footprints/{name}/shape?op={operation}", BodyStyle = WebMessageBodyStyle.Bare)]
+        [WebGet(UriTemplate = Urls.UserFootprint + Urls.Shape, BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Returns the shape description of a footprint.")]
         Spherical.Region GetUserFootprintShape(string owner, string name, string operation);
 
         [OperationContract]
         [OutlineFormatter]
-        [WebGet(UriTemplate = "/users/{owner}/footprints/{name}/outline?op={operation}", BodyStyle = WebMessageBodyStyle.Bare)]
+        [WebGet(UriTemplate = Urls.UserFootprint + Urls.Outline, BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Returns the outline a footprint.")]
         Spherical.Outline GetUserFootprintOutline(string owner, string name, string operation);
 
         [OperationContract]
         [TestJsonXmlFormat]
-        [WebGet(UriTemplate = "/users/{owner}/footprints/{name}/outline/points?op={operation}&res={resolution}")]
+        [WebGet(UriTemplate = Urls.UserFootprint + Urls.OutlinePoints)]
         [Description("Returns the points of the outline of a footprint.")]
         IEnumerable<Lib.EquatorialPoint> GetUserFootprintOutlinePoints(string owner, string name, string operation, double resolution);
 
         [OperationContract]
-        [WebGet(UriTemplate = "/users/{owner}/footprints/{name}/plot?op={operation}&proj={projection}&sys={sys}&ra={ra}&dec={dec}&b={b}&l={l}&width={width}&height={height}&theme={colorTheme}", BodyStyle = WebMessageBodyStyle.Bare)]
+        [WebGet(UriTemplate = Urls.UserFootprint + Urls.Plot, BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Returns the points of the outline of a footprint.")]
         Stream PlotUserFootprint(
             string owner,
@@ -127,7 +127,7 @@ namespace Jhu.Footprint.Web.Api.V1
             string colorTheme);
 
         [OperationContract]
-        [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/users/{owner}/footprints/{name}/plot?op={operation}")]
+        [WebInvoke(Method = HttpMethod.Post, UriTemplate = Urls.UserFootprint + Urls.PlotAdvanced)]
         Stream PlotUserFootprintAdvanced(string owner, string name, string operation, Plot plot);
 
         #endregion
@@ -135,24 +135,24 @@ namespace Jhu.Footprint.Web.Api.V1
 
         [OperationContract]
         [RegionFormatter]
-        [WebGet(UriTemplate = "/users/{owner}/footprints/{name}/regions/{regionName}/shape?op={operation}", BodyStyle = WebMessageBodyStyle.Bare)]
+        [WebGet(UriTemplate = Urls.UserFootprintRegion + Urls.Shape, BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Returns the shape description of a footprint.")]
         Spherical.Region GetUserFootprintRegionShape(string owner, string name, string regionName, string operation);
 
         [OperationContract]
         [OutlineFormatter]
-        [WebGet(UriTemplate = "/users/{owner}/footprints/{name}/regions/{regionName}/outline?op={operation}", BodyStyle = WebMessageBodyStyle.Bare)]
+        [WebGet(UriTemplate = Urls.UserFootprintRegion + Urls.Outline, BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Returns the outline a footprint.")]
         Spherical.Outline GetUserFootprintRegionOutline(string owner, string name, string regionName, string operation);
 
         [OperationContract]
         [TestJsonXmlFormat]
-        [WebGet(UriTemplate = "/users/{owner}/footprints/{name}/regions/{regionName}/outline/points?op={operation}&res={resolution}")]
+        [WebGet(UriTemplate = Urls.UserFootprintRegion + Urls.OutlinePoints)]
         [Description("Returns the points of the outline of a footprint.")]
         IEnumerable<Lib.EquatorialPoint> GetUserFootprintRegionOutlinePoints(string owner, string name, string regionName, string operation, double resolution);
 
         [OperationContract]
-        [WebGet(UriTemplate = "/users/{owner}/footprints/{name}/regions/{regionName}/plot?op={operation}&proj={projection}&sys={sys}&ra={ra}&dec={dec}&b={b}&l={l}&width={width}&height={height}&theme={colorTheme}", BodyStyle = WebMessageBodyStyle.Bare)]
+        [WebGet(UriTemplate = Urls.UserFootprintRegion + Urls.Plot, BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Plots a footprint.")]
         Stream PlotUserFootprintRegion(
             string owner,
@@ -170,7 +170,7 @@ namespace Jhu.Footprint.Web.Api.V1
             string colorTheme);
 
         [OperationContract]
-        [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/users/{owner}/footprints/{name}/regions/{regionName}/plot?op={operation}")]
+        [WebInvoke(Method = HttpMethod.Post, UriTemplate = Urls.UserFootprintRegion + Urls.PlotAdvanced)]
         [Description("Plots a footprint.")]
         Stream PlotUserFootprintRegionAdvanced(string owner, string name, string regionName, string operation, Plot plot);
 

@@ -77,25 +77,25 @@ namespace Jhu.Footprint.Web.Api.V1
 
         [OperationContract]
         [RegionFormatter]
-        [WebGet(UriTemplate = "/shape?op={operation}", BodyStyle = WebMessageBodyStyle.Bare)]
+        [WebGet(UriTemplate = Urls.Shape, BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Returns the region.")]
         Spherical.Region GetShape(string operation);
 
         [OperationContract]
         [OutlineFormatter]
-        [WebGet(UriTemplate = "/outline?op={operation}", BodyStyle = WebMessageBodyStyle.Bare)]
+        [WebGet(UriTemplate = Urls.Outline, BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Returns the outline of the region.")]
         Spherical.Outline GetOutline(string operation);
 
         [OperationContract]
         [TestJsonXmlFormat]
-        [WebGet(UriTemplate = "/points?op={operation}&res={resolution}")]
+        [WebGet(UriTemplate = Urls.OutlinePoints)]
         [Description("Returns the points of the outline of the region.")]
         IEnumerable<Lib.EquatorialPoint> GetOutlinePoints(string operation, double resolution);
 
         [OperationContract]
         [PlotFormatter]
-        [WebGet(UriTemplate = "/plot?op={operation}&proj={projection}&sys={sys}&ra={ra}&dec={dec}&b={b}&l={l}&width={width}&height={height}&theme={colorTheme}", BodyStyle = WebMessageBodyStyle.Bare)]
+        [WebGet(UriTemplate = Urls.Plot, BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Plots a footprint.")]
         Spherical.Visualizer.Plot PlotUserFootprintRegion(
             string operation,
@@ -111,7 +111,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
         [OperationContract]
         [PlotFormatter]
-        [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/plot?op={operation}")]
+        [WebInvoke(Method = HttpMethod.Post, UriTemplate = Urls.PlotAdvanced)]
         [Description("Plots a footprint.")]
         Spherical.Visualizer.Plot PlotUserFootprintRegionAdvanced(string operation, Plot plot);
 
