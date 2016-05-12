@@ -14,6 +14,7 @@
         </div>
         <div class="col-md-2" id="editorMainButtonGroup">
             <div class="">
+                <button type="button" class="btn btn-lg btn-primary btn-block" id="test">TEST</button>
                 <button type="button" class="btn btn-lg btn-default btn-block" id="LaunchAddRegionModalButton">Add region</button>
                 <button type="button" class="btn btn-lg btn-default btn-block" id="LaunchLoadModalButton">Load footprint</button>
                 <button type="button" class="btn btn-lg btn-default btn-block" id="LaunchGrowModalButton">Grow</button>

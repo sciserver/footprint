@@ -6,6 +6,26 @@ $(document).ready(function () {
     var baseUrl = "http://localhost/footprint/api/v1/Footprint.svc/users";
     var requestedUrl = "";
 
+    $("body").on("click","#test",function() {
+        /*
+        $.ajax({
+            url: "http://localhost/footprint/api/v1/editor.svc/reset",
+            type: "GET",
+            dataType: "xml",
+            success: function (data, textStatus, request) {
+                alert(data); //This prints the response with the header.
+
+            },
+            error: function () {
+                alert('fail');
+            }
+        });
+        */
+        $.get("http://localhost/footprint/api/v1/editor.svc/reset", function(data, status){
+            alert("Data: " + data + "\nStatus: " + status);
+        });
+    });
+
     // --> Load Modal
     $("body").on("click", "#LaunchLoadModalButton", function () {
         $("#LoadModal").modal({ backdrop: "static" });
