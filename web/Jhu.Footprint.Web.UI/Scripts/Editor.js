@@ -1,32 +1,19 @@
-﻿
+﻿// Declaration of the services' urls
+// TODO: maybe should be done in a more proper way?
+footprintSvcUrl = "";
+editorSvcUrl = "http://localhost/footprint/api/v1/editor.svc";
+
+// Setup cookie
+$(document).one('ready', function () {
+    $.ajax({
+        url: editorSvcUrl + "/reset",
+        type: "GET"
+    })
+});
+
 $(document).ready(function () {
-
-    // TODO: userName +/ baseUrl declaration in a more proper way
-    var userName = "test";
-    var baseUrl = "http://localhost/footprint/api/v1/Footprint.svc/users";
-    var requestedUrl = "";
-
-    $("body").on("click","#test",function() {
-        /*
-        $.ajax({
-            url: "http://localhost/footprint/api/v1/editor.svc/reset",
-            type: "GET",
-            dataType: "xml",
-            success: function (data, textStatus, request) {
-                alert(data); //This prints the response with the header.
-
-            },
-            error: function () {
-                alert('fail');
-            }
-        });
-        */
-        $.get("http://localhost/footprint/api/v1/editor.svc/reset", function(data, status){
-            alert("Data: " + data + "\nStatus: " + status);
-        });
-    });
-
-    // --> Load Modal
+    // -------------> LOAD MODAL
+    /*
     $("body").on("click", "#LaunchLoadModalButton", function () {
         $("#LoadModal").modal({ backdrop: "static" });
         LoadFootprintFolderList(baseUrl + "/" + userName);
@@ -51,27 +38,18 @@ $(document).ready(function () {
         $("#PlotCanvas").attr("src", plotUrl);
         $("#LoadModal").modal("hide");
     });
-    // <--  Load Modal
+    */
+    // <------------ LOAD MODAL
 
-    // --> Grow Modal
-    $("body").on("click", "#LaunchGrowModalButton", function () {
-        $("#GrowModal").modal({ backdrop: "static" });
-    });
-    // <-- Grow Modal
+    // ------------> GROW MODAL
+    // <------------ GROW MODAL
 
-    // --> Add Region Modal
-    $("body").on("click", "#LaunchAddRegionModalButton", function () {
-        $("#AddRegionModal").modal({ backdrop: "static" });
-    });
+    // -------------> ADD REGION MODAL
 
-    $("body").on("change", "#AdditionTypeSelector input:radio", function () {
-        $("#RegionTypeSelector").removeClass("hidden");
-
-    })
-
+    // Show the associeted input form with the selected region type
     $("body").on("change", "#RegionTypeSelector input:radio", function () {
         selectedButton = $("#RegionTypeSelector input:radio:checked").val();
-                $(".AddRegionForms").addClass("hidden");
+        $(".AddRegionForms").addClass("hidden");
         switch (selectedButton) {
             case "circle":
                 $("#CircleRegionForm").removeClass("hidden");
@@ -87,6 +65,21 @@ $(document).ready(function () {
         }
 
     });
+
+    // Submit the form and create the recquired region
+    $("body").on("click", "#AddRegionButton", function () {
+        var selectedAdditionType = $("#AdditionTypeSelector input:radio:checked").val();
+        var selectedRegionType = $("#RegionTypeSelector input:radio:checked").val();
+
+        // TODO: real region string creator, now it's only in test phase.
+        var regionString = createRegionString(selectedRegionType);
+
+        console.log(regionString)
+        addRegion(selectedAdditionType, regionString);
+        getShape();
+
+        $(".modal").modal("hide");
+    })
     // <-- Add Region Modal
 
     // Centering modals
@@ -99,6 +92,7 @@ $(document).ready(function () {
 });
 
 // Reset Select options
+/*
 function ResetSelectList(selectId) {
     $(selectId).empty()
         .append("<option>Please select...</option>");
@@ -126,6 +120,9 @@ function LoadFootprintList(serviceUrl) {
     });
 }
 
+
+*/
+
 // Centering modals
 function centerModals($element) {
     var $modals;
@@ -149,4 +146,63 @@ function createUrl(baseUrl, sourcePathParts) {
         finalUrl += "/" + part;
     });
     return finalUrl;
+}
+
+
+// Create region strings
+function createRegionString(type) {
+    var regionStrings = []; 
+
+    switch (type) {
+        case "circle":
+            regionStrings.push("CIRCLE J2000", $("#CircleRA").val(), $("#CircleDec").val(), $("#CircleRadius").val());
+            break;
+        case "polygon": 
+            var re = /,\s+|\s\s+/g;
+            var points = $("#PolygonPoints").val().replace(re," ");
+            regionStrings.push("POLY J2000",points);
+            break;
+        case "costum":
+            break;            
+    }
+
+    return regionStrings.join(" ");
+}
+
+
+// Building region creating ajax call
+function addRegion(type, dataString) {
+    var methodUrl = createUrl(editorSvcUrl, { type });
+
+    $.ajax({
+        url: methodUrl,
+        type: "POST",
+        contentType: "text/plain",
+        data: dataString
+    });
+}
+
+function growRegion(radius) {
+    var methodUrl = editorSvcUrl + "/grow";
+
+    $.ajax({
+        url: methodUrl,
+        type: "POST",
+        contentType: "text/plain",
+        data: radius
+    });
+}
+
+// getShape
+function getShape() {
+    var methodUrl = editorSvcUrl + "/shape";
+    $.ajax({
+        url: methodUrl,
+        type: "GET",
+        headers: { Accept: "text/plain" },
+        success: function (data, status, xhr) {
+            // TODO: plot region
+            $("#RegionStringTest").append(data);
+        }
+    });
 }
