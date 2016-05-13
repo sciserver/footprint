@@ -73,7 +73,6 @@ namespace Jhu.Footprint.Web.Api.V1
         {
             var r = new RegionAdapter().ReadFromStream(stream);
             SessionRegion.Difference(r);
-            // TODO
         }
 
         public void Grow(double arcmin)
