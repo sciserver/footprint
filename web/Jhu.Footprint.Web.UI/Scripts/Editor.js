@@ -12,6 +12,10 @@ $(document).one('ready', function () {
 });
 
 $(document).ready(function () {
+    
+
+
+
     // -------------> LOAD MODAL
     /*
     $("body").on("click", "#LaunchLoadModalButton", function () {
@@ -153,13 +157,30 @@ function createUrl(baseUrl, sourcePathParts) {
 function createRegionString(type) {
     var regionStrings = []; 
 
+    // TODO: converting values from hmsdms to degree
+
     switch (type) {
         case "circle":
-            regionStrings.push("CIRCLE J2000", $("#CircleRA").val(), $("#CircleDec").val(), $("#CircleRadius").val());
+            var ra = hms_to_degree($("#CircleRA").val());
+            var dec = dms_to_degree($("#CircleDec").val())
+            var radius = $("#CircleRadius").val();
+            regionStrings.push("CIRCLE J2000", ra , dec, radius);
             break;
-        case "polygon": 
+        case "polygon":
+            /*
             var re = /,\s+|\s\s+/g;
             var points = $("#PolygonPoints").val().replace(re," ");
+            */
+            var pointPairs = $("#PolygonPoints").val().trim().split(/\n/);
+            console.log(pointPairs);
+            var points = ""
+            $.each(pointPairs, function (n,pair) {
+                console.log(pair);
+                pair = pair.split(",");
+                ra = hms_to_deg(pair[0]);
+                dec = dms_to_deg(pair[1]);
+                points = [points, ra, dec].join(" ");
+            })
             regionStrings.push("POLY J2000",points);
             break;
         case "costum":
