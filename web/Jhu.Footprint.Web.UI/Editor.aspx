@@ -7,9 +7,9 @@
             <asp:UpdatePanel runat="server">
                 <ContentTemplate>
                     <div class="col-md-10">
-                        <%--<asp:Image ID="PlotCanvas" runat="server" CssClass="img-responsive" />--%>
-                        <%--<img id="PlotCanvas" class="img-responsive" height="" width="" src="#" />--%>
-                        <div id="RegionStringTest"></div>
+                        <%--<spherical:PlotCanvas ID="PlotCanvas" runat="server" CssClass="img-responsive" />--%>
+                        <img id="PlotCanvas" src="http://localhost/footprint/api/v1/editor.svc/plot" class="img-responsive" height="" width="" src="#" />
+                        <%--<div id="RegionStringTest"></div>--%>
                         </div>
 
                 </ContentTemplate>

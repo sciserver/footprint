@@ -80,7 +80,8 @@ $(document).ready(function () {
 
         console.log(regionString)
         addRegion(selectedAdditionType, regionString);
-        getShape();
+
+        // TODO: update image + it's not wokring with chrome.
 
         $(".modal").modal("hide");
     })
@@ -161,8 +162,8 @@ function createRegionString(type) {
 
     switch (type) {
         case "circle":
-            var ra = hms_to_degree($("#CircleRA").val());
-            var dec = dms_to_degree($("#CircleDec").val())
+            var ra = hms_to_deg($("#CircleRA").val());
+            var dec = dms_to_deg($("#CircleDec").val());
             var radius = $("#CircleRadius").val();
             regionStrings.push("CIRCLE J2000", ra , dec, radius);
             break;
@@ -172,10 +173,8 @@ function createRegionString(type) {
             var points = $("#PolygonPoints").val().replace(re," ");
             */
             var pointPairs = $("#PolygonPoints").val().trim().split(/\n/);
-            console.log(pointPairs);
             var points = ""
             $.each(pointPairs, function (n,pair) {
-                console.log(pair);
                 pair = pair.split(",");
                 ra = hms_to_deg(pair[0]);
                 dec = dms_to_deg(pair[1]);

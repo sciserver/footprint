@@ -369,6 +369,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <EmbeddedResource Include="Scripts\Editor.js" />
+    <Content Include="Scripts\Coordinates.js" />
     <Content Include="Search.aspx" />
     <Content Include="Templates\ActivationEmail.xml" />
     <Content Include="Templates\ErrorFeedbackEmail.xml" />
