@@ -4,25 +4,23 @@
 
     <div class="container">
         <div class="row">
-            <asp:UpdatePanel runat="server">
-                <ContentTemplate>
-                    <div class="col-md-10">
-                        <%--<spherical:PlotCanvas ID="PlotCanvas" runat="server" CssClass="img-responsive" />--%>
-                        <img id="PlotCanvas" src="http://localhost/footprint/api/v1/editor.svc/plot" class="img-responsive" height="" width="" src="#" />
+            <div class="col-sm-10">
+                <asp:UpdatePanel runat="server">
+                    <ContentTemplate>
+                        <img id="PlotCanvas" src="http://localhost/footprint/api/v1/editor.svc/plot" class="img-responsive" />
                         <%--<div id="RegionStringTest"></div>--%>
-                        </div>
+                    </ContentTemplate>
+                </asp:UpdatePanel>
+            </div>
+            <div class="col-sm-2" id="editorMainButtonGroup">
+                <div class="">
+                    <button type="button" class="btn btn-lg btn-default btn-block" data-toggle="modal" data-target="#AddRegionModal">Add region</button>
+                    <button type="button" class="btn btn-lg btn-default btn-block" data-toggle="modal" data-target="LoadModal">Load footprint</button>
+                    <button type="button" class="btn btn-lg btn-default btn-block" data-toggle="modal" data-target="#GrowModal">Grow</button>
+                    <button type="button" class="btn btn-lg btn-success btn-block disabled">Save</button>
+                    <button type="button" class="btn btn-lg btn-success btn-block">Download</button>
 
-                </ContentTemplate>
-            </asp:UpdatePanel>
-        </div>
-        <div class="col-md-2" id="editorMainButtonGroup">
-            <div class="">
-                <button type="button" class="btn btn-lg btn-default btn-block" data-toggle="modal" data-target="#AddRegionModal">Add region</button>
-                <button type="button" class="btn btn-lg btn-default btn-block" data-toggle="modal" data-target="LoadModal">Load footprint</button>
-                <button type="button" class="btn btn-lg btn-default btn-block" data-toggle="modal" data-target="#GrowModal">Grow</button>
-                <button type="button" class="btn btn-lg btn-success btn-block disabled">Save</button>
-                <button type="button" class="btn btn-lg btn-success btn-block">Download</button>
-
+                </div>
             </div>
         </div>
 
@@ -41,7 +39,7 @@
                             <div class="modal-body">
                                 <div class="form-inline">
                                     <label for="RadiusInput" class="control-label">Radius (arcmin): </label>
-                                    <input type="text" class="form-control" id="RadiusInput" placeholder="10"></input>
+                                    <input type="text" class="form-control" id="RadiusInput" placeholder="10" />
                                     <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" title="Use negative value to reduce. Valid range: -120 .. 120 arcmin"></span>
                                 </div>
                             </div>
@@ -101,19 +99,19 @@
                                             Costum
                                         </label>
                                     </div>
-                                <hr />
+                                    <hr />
                                 </div>
 
 
                                 <div id="CircleRegionForm" class="AddRegionForms hidden">
                                     <div class="form-inline">
                                         <label for="CircleRA" class="FormLabel">Center:</label>
-                                        <input id="CircleRA" type="text" class="form-control" placeholder="12:00:00.00" data-toogle="tooltip" title="Right Ascension"/>                                    
-                                        <input id="CircleDec" type="text" class="form-control" placeholder="00:00:00.00" data-toogle="tooltip" title="Declination"/>
+                                        <input id="CircleRA" type="text" class="form-control" placeholder="12:00:00.00" data-toogle="tooltip" title="Right Ascension" />
+                                        <input id="CircleDec" type="text" class="form-control" placeholder="00:00:00.00" data-toogle="tooltip" title="Declination" />
                                     </div>
                                     <div class="form-inline">
                                         <label for="CircleRaidus" class="FormLabel">Radius:</label>
-                                        <input id="CircleRadius" type="text" class="form-control" placeholder="120" data-toogle="tooltip" title="Arcmin"/>                                          
+                                        <input id="CircleRadius" type="text" class="form-control" placeholder="120" data-toogle="tooltip" title="Arcmin" />
                                     </div>
                                 </div>
                                 <div id="PolygonRegionForm" class="AddRegionForms text-center hidden">

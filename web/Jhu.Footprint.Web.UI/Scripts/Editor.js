@@ -3,6 +3,7 @@
 footprintSvcUrl = "";
 editorSvcUrl = "http://localhost/footprint/api/v1/editor.svc";
 
+
 // Setup cookie
 $(document).one('ready', function () {
     $.ajax({
@@ -12,9 +13,6 @@ $(document).one('ready', function () {
 });
 
 $(document).ready(function () {
-    
-
-
 
     // -------------> LOAD MODAL
     /*
@@ -52,7 +50,7 @@ $(document).ready(function () {
 
     // Show the associeted input form with the selected region type
     $("body").on("change", "#RegionTypeSelector input:radio", function () {
-        selectedButton = $("#RegionTypeSelector input:radio:checked").val();
+        var selectedButton = $("#RegionTypeSelector input:radio:checked").val();
         $(".AddRegionForms").addClass("hidden");
         switch (selectedButton) {
             case "circle":
@@ -78,10 +76,11 @@ $(document).ready(function () {
         // TODO: real region string creator, now it's only in test phase.
         var regionString = createRegionString(selectedRegionType);
 
-        console.log(regionString)
+        console.info(regionString)
         addRegion(selectedAdditionType, regionString);
 
-        // TODO: update image + it's not wokring with chrome.
+        // TODO: update image + figure is not showing in Chrome
+        refreshCanvas();
 
         $(".modal").modal("hide");
     })
@@ -156,34 +155,28 @@ function createUrl(baseUrl, sourcePathParts) {
 
 // Create region strings
 function createRegionString(type) {
-    var regionStrings = []; 
-
-    // TODO: converting values from hmsdms to degree
+    var regionStrings = [];
 
     switch (type) {
         case "circle":
             var ra = hms_to_deg($("#CircleRA").val());
             var dec = dms_to_deg($("#CircleDec").val());
             var radius = $("#CircleRadius").val();
-            regionStrings.push("CIRCLE J2000", ra , dec, radius);
+            regionStrings.push("CIRCLE J2000", ra, dec, radius);
             break;
         case "polygon":
-            /*
-            var re = /,\s+|\s\s+/g;
-            var points = $("#PolygonPoints").val().replace(re," ");
-            */
             var pointPairs = $("#PolygonPoints").val().trim().split(/\n/);
             var points = ""
-            $.each(pointPairs, function (n,pair) {
+            $.each(pointPairs, function (n, pair) {
                 pair = pair.split(",");
                 ra = hms_to_deg(pair[0]);
                 dec = dms_to_deg(pair[1]);
                 points = [points, ra, dec].join(" ");
             })
-            regionStrings.push("POLY J2000",points);
+            regionStrings.push("POLY J2000", points);
             break;
         case "costum":
-            break;            
+            break;
     }
 
     return regionStrings.join(" ");
@@ -192,8 +185,9 @@ function createRegionString(type) {
 
 // Building region creating ajax call
 function addRegion(type, dataString) {
-    var methodUrl = createUrl(editorSvcUrl, { type });
+    var methodUrl = createUrl(editorSvcUrl, [type]);
 
+    console.info(methodUrl);
     $.ajax({
         url: methodUrl,
         type: "POST",
@@ -219,10 +213,13 @@ function getShape() {
     $.ajax({
         url: methodUrl,
         type: "GET",
-        headers: { Accept: "text/plain" },
-        success: function (data, status, xhr) {
-            // TODO: plot region
-            $("#RegionStringTest").append(data);
-        }
+        headers: { Accept: "text/plain" }
     });
+}
+
+// refresh PlotCanvas
+function refreshCanvas() {
+    var d = new Date();
+    console.info(createUrl(editorSvcUrl, ["plot?ts="]));
+    $("#PlotCanvas").attr("src", createUrl(editorSvcUrl, ["plot?ts="]) + d.getTime());
 }
