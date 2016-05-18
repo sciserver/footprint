@@ -95,9 +95,10 @@ namespace Jhu.Footprint.Web.Api.V1
 
         [OperationContract]
         [PlotFormatter]
-        [WebGet(UriTemplate = "/plot?op={operation}&proj={projection}&sys={sys}&ra={ra}&dec={dec}&b={b}&l={l}&width={width}&height={height}&theme={colorTheme}", BodyStyle = WebMessageBodyStyle.Bare)]
+        [WebGet(UriTemplate = "/plot?ts={timestamp}&op={operation}&proj={projection}&sys={sys}&ra={ra}&dec={dec}&b={b}&l={l}&width={width}&height={height}&theme={colorTheme}", BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Plots a footprint.")]
         Spherical.Visualizer.Plot PlotUserFootprintRegion(
+            string timestamp,
             string operation,
             string projection,
             string sys,
