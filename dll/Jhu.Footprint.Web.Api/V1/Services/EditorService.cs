@@ -1,15 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.ComponentModel;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
-using System.ServiceModel.Web;
-using System.ServiceModel.Security;
-using System.Security.Permissions;
 using System.Web;
 using System.Web.SessionState;
 using Jhu.Graywulf.Web.Services;
@@ -19,7 +12,7 @@ namespace Jhu.Footprint.Web.Api.V1
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Required)]
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession)]
     [RestServiceBehavior]
-    public class EditorService : RestServiceBase, IEditorService
+    public class EditorService : ServiceBase, IEditorService
     {
         private const string SessionKeyEditorRegion = "Jhu.Footprint.Web.Api.SessionRegion";
 
@@ -55,35 +48,42 @@ namespace Jhu.Footprint.Web.Api.V1
         public void New(Stream stream)
         {
             SessionRegion = new RegionAdapter().ReadFromStream(stream);
+            SessionRegion.Simplify();
         }
 
         public void Union(Stream stream)
         {
             var r = new RegionAdapter().ReadFromStream(stream);
+            r.Simplify();
             SessionRegion.SmartUnion(r);
+            SessionRegion.Simplify();
         }
 
         public void Intersect(Stream stream)
         {
             var r = new RegionAdapter().ReadFromStream(stream);
-            SessionRegion.SmartIntersect(r,false);
+            r.Simplify();
+            SessionRegion.SmartIntersect(r,true);
+            SessionRegion.Simplify();
         }
 
         public void Subtract(Stream stream)
         {
             var r = new RegionAdapter().ReadFromStream(stream);
+            r.Simplify();
             SessionRegion.Difference(r);
-            // TODO
+            SessionRegion.Simplify();
         }
 
         public void Grow(double arcmin)
         {
             SessionRegion.Grow(arcmin);
+            SessionRegion.Simplify();
         }
 
         public void CHull()
         {
-            SessionRegion.Outline.GetConvexHull();
+            SessionRegion = SessionRegion.Outline.GetConvexHull();
         }
 
         public void Load(string owner, string name, string regionName)
@@ -93,7 +93,19 @@ namespace Jhu.Footprint.Web.Api.V1
 
         public void Save(string owner, string name, string regionName)
         {
-            throw new NotImplementedException();
+            using (var context = CreateContext())
+            {
+                var footprint = new Lib.Footprint(context);
+                footprint.Load(owner, name);
+
+                var region = new Lib.FootprintRegion(footprint);
+                region.Load(regionName);
+
+                // Parse region from posted data
+                region.Region = SessionRegion;
+
+                region.SaveRegion();
+            }
         }
 
         public Spherical.Region GetShape(string operation)
@@ -111,7 +123,7 @@ namespace Jhu.Footprint.Web.Api.V1
             return Lib.FootprintFormatter.InterpolateOutlinePoints(SessionRegion.Outline, resolution);
         }
 
-        public Spherical.Visualizer.Plot PlotUserFootprintRegion(string operation, string projection, string sys, string ra, string dec, string b, string l, float width, float height, string colorTheme)
+        public Spherical.Visualizer.Plot PlotUserFootprintRegion(string timestamp, string operation, string projection, string sys, string ra, string dec, string b, string l, float width, float height, string colorTheme)
         {
             var plot = Lib.FootprintPlot.GetDefaultPlot(new[] { SessionRegion });
 

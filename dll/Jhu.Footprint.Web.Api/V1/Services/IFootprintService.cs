@@ -131,7 +131,12 @@ namespace Jhu.Footprint.Web.Api.V1
         Stream PlotUserFootprintAdvanced(string owner, string name, string operation, Plot plot);
 
         #endregion
-        #region Individual region get and plot
+        #region Individual region set, get and plot
+
+        [OperationContract]
+        [WebInvoke(Method = HttpMethod.Post, UriTemplate = Urls.UserFootprintRegionShape, BodyStyle = WebMessageBodyStyle.Bare)]
+        [Description("Upload region shape binary or other representation")]
+        void SetUserFootprintRegionShape(string owner, string name, string regionName, Stream stream);
 
         [OperationContract]
         [RegionFormatter]

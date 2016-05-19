@@ -140,6 +140,11 @@ namespace Jhu.Footprint.Web.Lib
 
         #region Methods
 
+        public void Load(string regionName)
+        {
+            this.name = regionName;
+            Load();
+        }
 
         protected override void OnValidating(Graywulf.Entities.EntityEventArgs e)
         {

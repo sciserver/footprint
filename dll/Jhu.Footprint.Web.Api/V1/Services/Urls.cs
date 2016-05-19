@@ -12,6 +12,7 @@ namespace Jhu.Footprint.Web.Api.V1
         public const string UserFootprints = "/users/{owner}/footprints";
         public const string UserFootprint = UserFootprints + "/{name}";
         public const string UserFootprintRegion = UserFootprint + "/regions/{regionName}";
+        public const string UserFootprintRegionShape = UserFootprint + "/regions/{regionName}/shape";
 
         public const string OwnerSearchParam = "owner={owner}";
         public const string FootprintSearchParams = "name={name}&from={from}&max={max}";

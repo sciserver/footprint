@@ -19,7 +19,7 @@ namespace Jhu.Footprint.Web.Api.V1
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall)]
     [RestServiceBehavior]
-    public class FootprintService : RestServiceBase, IFootprintService
+    public class FootprintService : ServiceBase, IFootprintService
     {
         #region Constructors and initializers
 
@@ -30,33 +30,6 @@ namespace Jhu.Footprint.Web.Api.V1
 
         private void InitializeMembers()
         {
-        }
-
-        #endregion
-        #region Context creators
-
-        private Lib.Context CreateContext()
-        {
-            return CreateContext(false);
-        }
-
-        private Lib.Context CreateContext(bool autoDispose)
-        {
-            var context = new Lib.Context()
-            {
-                AutoDispose = autoDispose
-            };
-
-            if (System.Threading.Thread.CurrentPrincipal is Jhu.Graywulf.AccessControl.Principal)
-            {
-                context.Principal = (Jhu.Graywulf.AccessControl.Principal)System.Threading.Thread.CurrentPrincipal;
-            }
-            else
-            {
-                context.Principal = Jhu.Graywulf.AccessControl.Principal.Guest;
-            }
-
-            return context;
         }
 
         #endregion
@@ -203,8 +176,6 @@ namespace Jhu.Footprint.Web.Api.V1
                 request.Region.GetValues(region);
                 region.Save();
 
-                // TODO: update region cache
-
                 return new FootprintRegionResponse(footprint, region);
             }
         }
@@ -218,14 +189,9 @@ namespace Jhu.Footprint.Web.Api.V1
                 footprint.Load(owner, name);
 
                 var region = new Lib.FootprintRegion(footprint);
-
-                region.FootprintId = footprint.Id;
-                region.Name = regionName;
-                region.Load();
+                region.Load(regionName);
                 request.Region.GetValues(region);
                 region.Save();
-
-                // TODO: update region cache
 
                 return new FootprintRegionResponse(footprint, region);
             }
@@ -245,8 +211,6 @@ namespace Jhu.Footprint.Web.Api.V1
                 region.Name = regionName;
                 region.Load();
                 region.Delete();
-
-                // TODO: update region cache
             }
         }
 
@@ -301,6 +265,24 @@ namespace Jhu.Footprint.Web.Api.V1
         #endregion
         #region Individual region get and plot
 
+        public void SetUserFootprintRegionShape(string owner, string name, string regionName, Stream stream)
+        {
+            using (var context = CreateContext())
+            {
+                var footprint = new Lib.Footprint(context);
+
+                footprint.Load(owner, name);
+
+                var region = new Lib.FootprintRegion(footprint);
+                region.Load(regionName);
+
+                // Parse region from posted data
+                region.Region = new RegionAdapter().ReadFromStream(stream);
+
+                region.SaveRegion();
+            }
+        }
+
         public Spherical.Region GetUserFootprintShape(string owner, string name, string operation)
         {
             throw new NotImplementedException();
@@ -315,7 +297,7 @@ namespace Jhu.Footprint.Web.Api.V1
         {
             throw new NotImplementedException();
         }
-
+        
         public Spherical.Region GetUserFootprintRegionShape(string owner, string name, string regionName, string operation)
         {
             throw new NotImplementedException();
