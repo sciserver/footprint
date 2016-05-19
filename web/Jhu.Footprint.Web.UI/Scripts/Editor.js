@@ -44,6 +44,7 @@ $(document).ready(function () {
     */
     // <------------ LOAD MODAL
 
+
     // ------------> GROW MODAL
     $("body").on("click", "#GrowButton", function () {
         var radius = $("#GrowRadius").val();
@@ -57,7 +58,6 @@ $(document).ready(function () {
 
     // Show the associeted input form with the selected region type
     $("body").on("change", "#RegionTypeSelector input:radio", function () {
-        alert("hello");
         var selectedButton = $("#RegionTypeSelector input:radio:checked").val();
         $(".AddRegionForms").addClass("hidden");
         switch (selectedButton) {
