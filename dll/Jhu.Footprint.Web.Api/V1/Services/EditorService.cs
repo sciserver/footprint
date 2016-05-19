@@ -123,7 +123,7 @@ namespace Jhu.Footprint.Web.Api.V1
             return Lib.FootprintFormatter.InterpolateOutlinePoints(SessionRegion.Outline, resolution);
         }
 
-        public Spherical.Visualizer.Plot PlotUserFootprintRegion(string timestamp, string operation, string projection, string sys, string ra, string dec, string b, string l, float width, float height, string colorTheme)
+        public Spherical.Visualizer.Plot PlotUserFootprintRegion(string operation, string projection, string sys, string ra, string dec, string b, string l, float width, float height, string colorTheme)
         {
             var plot = Lib.FootprintPlot.GetDefaultPlot(new[] { SessionRegion });
 

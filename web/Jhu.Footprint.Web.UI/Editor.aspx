@@ -15,7 +15,7 @@
             <div class="col-sm-2" id="editorMainButtonGroup">
                 <div class="">
                     <button type="button" class="btn btn-lg btn-default btn-block" data-toggle="modal" data-target="#AddRegionModal">Add region</button>
-                    <button type="button" class="btn btn-lg btn-default btn-block" data-toggle="modal" data-target="LoadModal">Load footprint</button>
+                    <button type="button" class="btn btn-lg btn-default btn-block" data-toggle="modal" data-target="#LoadModal">Load footprint</button>
                     <button type="button" class="btn btn-lg btn-default btn-block" data-toggle="modal" data-target="#GrowModal">Grow</button>
                     <button type="button" class="btn btn-lg btn-success btn-block disabled">Save</button>
                     <button type="button" class="btn btn-lg btn-success btn-block">Download</button>
@@ -38,8 +38,8 @@
                             </div>
                             <div class="modal-body">
                                 <div class="form-inline">
-                                    <label for="RadiusInput" class="control-label">Radius (arcmin): </label>
-                                    <input type="text" class="form-control" id="RadiusInput" placeholder="10" />
+                                    <label for="GrowRadius" class="control-label">Radius (arcmin): </label>
+                                    <input type="text" class="form-control" id="GrowRadius" placeholder="10" />
                                     <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" title="Use negative value to reduce. Valid range: -120 .. 120 arcmin"></span>
                                 </div>
                             </div>
@@ -86,8 +86,8 @@
                                 <div id="RegionTypeSelector" class="text-center">
                                     <h3 class="FormLabel">Select region type:</h3>
                                     <div class="btn-group" data-toggle="buttons">
-                                        <label class="btn btn-primary">
-                                            <input type="radio" name="RegionTypeSelector" value="circle">
+                                        <label class="btn btn-primary active">
+                                            <input type="radio" name="RegionTypeSelector" value="circle" checked="checked">
                                             Circle
                                         </label>
                                         <label class="btn btn-primary">
@@ -103,7 +103,7 @@
                                 </div>
 
 
-                                <div id="CircleRegionForm" class="AddRegionForms hidden">
+                                <div id="CircleRegionForm" class="AddRegionForms">
                                     <div class="form-inline">
                                         <label for="CircleRA" class="FormLabel">Center:</label>
                                         <input id="CircleRA" type="text" class="form-control" placeholder="12:00:00.00" data-toogle="tooltip" title="Right Ascension" />

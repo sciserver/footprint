@@ -8,7 +8,8 @@ editorSvcUrl = "http://localhost/footprint/api/v1/editor.svc";
 $(document).one('ready', function () {
     $.ajax({
         url: editorSvcUrl + "/reset",
-        type: "GET"
+        type: "GET",
+        mimeType: 'text/html'
     })
 });
 
@@ -44,12 +45,19 @@ $(document).ready(function () {
     // <------------ LOAD MODAL
 
     // ------------> GROW MODAL
+    $("body").on("click", "#GrowButton", function () {
+        var radius = $("#GrowRadius").val();
+        growRegion(radius);
+        refreshCanvas();
+        $(".modal").modal("hide");
+    });
     // <------------ GROW MODAL
 
     // -------------> ADD REGION MODAL
 
     // Show the associeted input form with the selected region type
     $("body").on("change", "#RegionTypeSelector input:radio", function () {
+        alert("hello");
         var selectedButton = $("#RegionTypeSelector input:radio:checked").val();
         $(".AddRegionForms").addClass("hidden");
         switch (selectedButton) {
@@ -73,13 +81,12 @@ $(document).ready(function () {
         var selectedAdditionType = $("#AdditionTypeSelector input:radio:checked").val();
         var selectedRegionType = $("#RegionTypeSelector input:radio:checked").val();
 
-        // TODO: real region string creator, now it's only in test phase.
         var regionString = createRegionString(selectedRegionType);
 
         console.info(regionString)
         addRegion(selectedAdditionType, regionString);
 
-        // TODO: update image + figure is not showing in Chrome
+        // TODO: figure is not showing in Chrome
         refreshCanvas();
 
         $(".modal").modal("hide");
@@ -191,19 +198,20 @@ function addRegion(type, dataString) {
     $.ajax({
         url: methodUrl,
         type: "POST",
+        mimeType: 'text/html',
         contentType: "text/plain",
         data: dataString
     });
 }
 
 function growRegion(radius) {
-    var methodUrl = editorSvcUrl + "/grow";
+    var methodUrl = editorSvcUrl + "/grow?r=" + radius;
 
     $.ajax({
         url: methodUrl,
         type: "POST",
-        contentType: "text/plain",
-        data: radius
+        mimeType: 'text/html',
+        contentType: "text/plain"
     });
 }
 
@@ -223,3 +231,5 @@ function refreshCanvas() {
     console.info(createUrl(editorSvcUrl, ["plot?ts="]));
     $("#PlotCanvas").attr("src", createUrl(editorSvcUrl, ["plot?ts="]) + d.getTime());
 }
+
+// List Footprints
