@@ -51,7 +51,7 @@ namespace Jhu.Footprint.Web.Api.V1
         void Subtract(Stream stream);
 
         [OperationContract]
-        [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/grow")]
+        [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/grow?r={arcmin}")]
         [Description("Grow edited region.")]
         void Grow(double arcmin);
 
