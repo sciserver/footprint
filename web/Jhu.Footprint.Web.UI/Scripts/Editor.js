@@ -14,7 +14,6 @@ $(document).one('ready', function () {
 });
 
 $(document).ready(function () {
-
     // -------------> LOAD MODAL
     /*
     $("body").on("click", "#LaunchLoadModalButton", function () {
@@ -151,11 +150,21 @@ function centerModals($element) {
     });
 }
 
-function createUrl(baseUrl, sourcePathParts) {
+// Create service urls
+
+function createUrl(baseUrl, pathParts, optQueryParts) {
     var finalUrl = baseUrl;
-    $.each(sourcePathParts, function (i, part) {
+    $.each(pathParts, function (i, part) {
         finalUrl += "/" + part;
     });
+
+    if (typeof optQueryParts != "undefined") {
+        finalUrl += "?";
+        $.each(optQueryParts, function (key, value) {
+            finalUrl += "&" + key + "=" + value;
+        });
+    }
+    console.info(finalUrl);
     return finalUrl;
 }
 
@@ -194,7 +203,6 @@ function createRegionString(type) {
 function addRegion(type, dataString) {
     var methodUrl = createUrl(editorSvcUrl, [type]);
 
-    console.info(methodUrl);
     $.ajax({
         url: methodUrl,
         type: "POST",
@@ -204,6 +212,7 @@ function addRegion(type, dataString) {
     });
 }
 
+// grow region
 function growRegion(radius) {
     var methodUrl = editorSvcUrl + "/grow?r=" + radius;
 
@@ -215,7 +224,7 @@ function growRegion(radius) {
     });
 }
 
-// getShape
+// get the shape of region
 function getShape() {
     var methodUrl = editorSvcUrl + "/shape";
     $.ajax({
@@ -228,8 +237,21 @@ function getShape() {
 // refresh PlotCanvas
 function refreshCanvas() {
     var d = new Date();
-    console.info(createUrl(editorSvcUrl, ["plot?ts="]));
     $("#PlotCanvas").attr("src", createUrl(editorSvcUrl, ["plot?ts="]) + d.getTime());
 }
 
-// List Footprints
+// Save region
+
+function saveRegion(user, footprintName, regionName) {
+    var dict = {
+        owner: user,
+        name: footprintName,
+        region: regionName
+    }
+    var methodUrl = editorSvcUrl + "/save?";
+    $.ajax({
+        url: methodUrl,
+        type: "POST",
+        headers: { Accept: "text/plain" }
+    });
+}

@@ -7,18 +7,21 @@
             <div class="col-sm-10">
                 <asp:UpdatePanel runat="server">
                     <ContentTemplate>
-                        <img id="PlotCanvas" src="http://localhost/footprint/api/v1/editor.svc/plot" class="img-responsive" />
-                        <%--<div id="RegionStringTest"></div>--%>
+                        <div id="PlotCanvasContainer">
+                            <img id="PlotCanvas" src="http://localhost/footprint/api/v1/editor.svc/plot" class="img-responsive" />
+                            <button type="button" class="btn btn-sm" id="refreshCanvas"><span class="glyphicon glyphicon-refresh"></span></button>
+                            <%--<div id="RegionStringTest"></div>--%>
+                        </div>
                     </ContentTemplate>
                 </asp:UpdatePanel>
             </div>
             <div class="col-sm-2" id="editorMainButtonGroup">
                 <div class="">
                     <button type="button" class="btn btn-lg btn-default btn-block" data-toggle="modal" data-target="#AddRegionModal">Add region</button>
-                    <button type="button" class="btn btn-lg btn-default btn-block" data-toggle="modal" data-target="#LoadModal">Load footprint</button>
+                    <button type="button" class="btn btn-lg btn-default btn-block disabled" disabled="disabled" data-toggle="modal" data-target="#LoadModal">Load footprint</button>
                     <button type="button" class="btn btn-lg btn-default btn-block" data-toggle="modal" data-target="#GrowModal">Grow</button>
                     <button type="button" class="btn btn-lg btn-success btn-block" data-toggle="modal" data-target="#SaveModal">Save</button>
-                    <button type="button" class="btn btn-lg btn-success btn-block">Download</button>
+                    <button type="button" class="btn btn-lg btn-success btn-block disabled" disabled="disabled">Download</button>
 
                 </div>
             </div>
@@ -181,11 +184,14 @@
                             <div class="modal-body">
                                 <div class="form-group">
                                     <label for="SaveUserInput" class="control-label">User/Group: </label>
-                                    <input id="SaveUserInput" class="form-control" />
-                                    <label for="SaveUserFootprintName" class="control-label">Footprint Name: </label>
-                                    <input id="SaveUserFootprintName" class="form-control" />
-                                    <label for="SaveUserRegionName" class="control-label">Region Name: </label>
-                                    <input id="SaveUserRegionName" class="form-control" />
+                                    <input id="SaveUserInput" class="form-control" placeholder="Enter user or group name." />
+                                    <label for="SaveUserFootprintName" class="control-label">Footprint: </label>
+                                    <input id="SaveUserFootprintName" class="form-control" placeholder="Enter footprint name." />
+                                    <label for="SaveUserRegionName" class="control-label">Region: </label>
+                                    <input id="SaveUserRegionName" class="form-control" placeholder="Enter region name." />
+                                    <hr />
+                                    <label for="SaveFillFactorInput" class="control-label">Fill factor:</label>
+                                    <input id="SaveFillFactorInput" class="form-control" />
                                 </div>
                             </div>
                             <div class="modal-footer">
