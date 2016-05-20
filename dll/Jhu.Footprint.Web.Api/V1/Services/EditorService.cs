@@ -129,8 +129,8 @@ namespace Jhu.Footprint.Web.Api.V1
 
             // TODO: change this part to use all parameters
             // Size is different for vector graphics!
-            plot.Width = Math.Max(width, 640);
-            plot.Height = Math.Max(height, 480);
+            plot.Width = Math.Max(width, 1080);
+            plot.Height = Math.Max(height, 600);
 
             return plot;
         }
