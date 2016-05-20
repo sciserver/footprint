@@ -10,6 +10,7 @@
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" type="text/javascript"></script>
     
     <script src="Scripts/Editor.js" type="text/javascript"></script>
+    <script src="Scripts/Coordinates.js" type="text/javascript"></script>
     <asp:ContentPlaceHolder runat="server" ID="head" />
 </asp:Content>
 <asp:Content runat="server" ContentPlaceHolderID="userStatus">
