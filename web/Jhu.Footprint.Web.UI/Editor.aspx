@@ -17,7 +17,7 @@
                     <button type="button" class="btn btn-lg btn-default btn-block" data-toggle="modal" data-target="#AddRegionModal">Add region</button>
                     <button type="button" class="btn btn-lg btn-default btn-block" data-toggle="modal" data-target="#LoadModal">Load footprint</button>
                     <button type="button" class="btn btn-lg btn-default btn-block" data-toggle="modal" data-target="#GrowModal">Grow</button>
-                    <button type="button" class="btn btn-lg btn-success btn-block disabled">Save</button>
+                    <button type="button" class="btn btn-lg btn-success btn-block" data-toggle="modal" data-target="#SaveModal">Save</button>
                     <button type="button" class="btn btn-lg btn-success btn-block">Download</button>
 
                 </div>
@@ -162,7 +162,7 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-success" id="LoadFootprintButton">Load</button>
+                                    <button type="button" class="btn btn-success" id="LoadRegionButton">Load</button>
                                     <button type="button" class="btn btn-danger " data-dismiss="modal">Cancel</button>
                                 </div>
                             </div>
@@ -171,7 +171,29 @@
                 </div>
 
 
-                <div id="SaveModal">
+                <div id="SaveModal" class="modal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                                <h4 class="modal-title">Save Region</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="SaveUserInput" class="control-label">User/Group: </label>
+                                    <input id="SaveUserInput" class="form-control" />
+                                    <label for="SaveUserFootprintName" class="control-label">Footprint Name: </label>
+                                    <input id="SaveUserFootprintName" class="form-control" />
+                                    <label for="SaveUserRegionName" class="control-label">Region Name: </label>
+                                    <input id="SaveUserRegionName" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-success" id="SaveRegionButton">Save</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div id="DownloadModal">
