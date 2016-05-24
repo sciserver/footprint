@@ -13,6 +13,10 @@ web/Jhu.Footprint.Web.UI/Scripts/CodeMirror/*
 web/Jhu.Footprint.Web.UI/Scripts/SyntaxHighlighter/*
 web/Jhu.Footprint.Web.UI/Templates/*
 
+**/Scripts
+**/fonts
+**/Content
+
 # User-specific files
 *.suo
 *.user
