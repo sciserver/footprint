@@ -14,6 +14,9 @@ $(document).one('ready', function () {
 });
 
 $(document).ready(function () {
+    $("body").on("click","#refreshCanvasButton",function() {
+        refreshCanvas();
+    })
     // -------------> LOAD MODAL
     /*
     $("body").on("click", "#LaunchLoadModalButton", function () {
@@ -237,7 +240,7 @@ function getShape() {
 // refresh PlotCanvas
 function refreshCanvas() {
     var d = new Date();
-    $("#PlotCanvas").attr("src", createUrl(editorSvcUrl, ["plot?ts="]) + d.getTime());
+    $("#PlotCanvas").attr("src", createUrl(editorSvcUrl, ["plot?ts="+ d.getTime()]));
 }
 
 // Save region

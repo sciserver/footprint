@@ -9,7 +9,7 @@
                     <ContentTemplate>
                         <div id="PlotCanvasContainer">
                             <img id="PlotCanvas" src="http://localhost/footprint/api/v1/editor.svc/plot" class="img-responsive" />
-                            <button type="button" class="btn btn-sm" id="refreshCanvas"><span class="glyphicon glyphicon-refresh"></span></button>
+                            <button type="button" class="btn btn-sm" id="refreshCanvasButton"><span class="glyphicon glyphicon-refresh"></span></button>
                             <%--<div id="RegionStringTest"></div>--%>
                         </div>
                     </ContentTemplate>
