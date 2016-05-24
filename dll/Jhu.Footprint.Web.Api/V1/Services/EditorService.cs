@@ -88,7 +88,16 @@ namespace Jhu.Footprint.Web.Api.V1
 
         public void Load(string owner, string name, string regionName)
         {
-            throw new NotImplementedException();
+            using (var context = CreateContext())
+            {
+                var footprint = new Lib.Footprint(context);
+                footprint.Load(owner, name);
+
+                var region = new Lib.FootprintRegion(footprint);
+                region.Load(regionName);
+                
+                SessionRegion = region.Region;
+            }
         }
 
         public void Save(string owner, string name, string regionName)
