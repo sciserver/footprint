@@ -3,6 +3,7 @@
 
 <%@ Register Src="~/Controls/Menu.ascx" TagPrefix="jfwuc" TagName="Menu" %>
 <%@ Register Src="~/Controls/Footer.ascx" TagPrefix="jfwuc" TagName="Footer" %>
+
 <asp:Content runat="server" ContentPlaceHolderID="head">
     <asp:ContentPlaceHolder runat="server" ID="head" />
 </asp:Content>

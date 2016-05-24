@@ -97,13 +97,20 @@
     <Content Include="App_Themes\Basic\Icons\user.png" />
     <Content Include="App_Themes\Basic\Icons\userstatus.png" />
     <Content Include="App_Themes\Basic\Icons\welcome.png" />
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
     <Content Include="Controls\Footer.ascx" />
     <Content Include="Controls\Menu.ascx" />
     <Content Include="Default.aspx" />
     <Content Include="Docs\Default.aspx" />
+    <Content Include="Editor.js" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Plot\FootprintPlot.aspx" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\CodeMirror\addon\comment\comment.js" />
     <Content Include="Scripts\CodeMirror\addon\comment\continuecomment.js" />
     <Content Include="Scripts\CodeMirror\addon\dialog\dialog.css" />
@@ -368,8 +375,14 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
-    <EmbeddedResource Include="Scripts\Editor.js" />
     <Content Include="Scripts\Coordinates.js" />
+    <Content Include="Content\bootstrap.min.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\bootstrap-theme.min.css.map" />
+    <Content Include="Content\bootstrap-theme.css.map" />
+    <None Include="Scripts\jquery-2.2.3.intellisense.js" />
+    <Content Include="Scripts\jquery-2.2.3.js" />
+    <Content Include="Scripts\jquery-2.2.3.min.js" />
     <Content Include="Search.aspx" />
     <Content Include="Templates\ActivationEmail.xml" />
     <Content Include="Templates\ErrorFeedbackEmail.xml" />
@@ -526,8 +539,9 @@
   <ItemGroup>
     <Content Include="Docs\Web.config" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Content\" />
+    <Content Include="Scripts\jquery-2.2.3.min.map" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

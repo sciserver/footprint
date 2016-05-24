@@ -88,7 +88,16 @@ namespace Jhu.Footprint.Web.Api.V1
 
         public void Load(string owner, string name, string regionName)
         {
-            throw new NotImplementedException();
+            using (var context = CreateContext())
+            {
+                var footprint = new Lib.Footprint(context);
+                footprint.Load(owner, name);
+
+                var region = new Lib.FootprintRegion(footprint);
+                region.Load(regionName);
+                
+                SessionRegion = region.Region;
+            }
         }
 
         public void Save(string owner, string name, string regionName)
@@ -123,14 +132,14 @@ namespace Jhu.Footprint.Web.Api.V1
             return Lib.FootprintFormatter.InterpolateOutlinePoints(SessionRegion.Outline, resolution);
         }
 
-        public Spherical.Visualizer.Plot PlotUserFootprintRegion(string timestamp, string operation, string projection, string sys, string ra, string dec, string b, string l, float width, float height, string colorTheme)
+        public Spherical.Visualizer.Plot PlotUserFootprintRegion(string operation, string projection, string sys, string ra, string dec, string b, string l, float width, float height, string colorTheme)
         {
             var plot = Lib.FootprintPlot.GetDefaultPlot(new[] { SessionRegion });
 
             // TODO: change this part to use all parameters
             // Size is different for vector graphics!
-            plot.Width = Math.Max(width, 640);
-            plot.Height = Math.Max(height, 480);
+            plot.Width = Math.Max(width, 1080);
+            plot.Height = Math.Max(height, 600);
 
             return plot;
         }

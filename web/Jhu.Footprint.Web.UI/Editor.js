@@ -3,17 +3,19 @@
 footprintSvcUrl = "";
 editorSvcUrl = "http://localhost/footprint/api/v1/editor.svc";
 
-
 // Setup cookie
 $(document).one('ready', function () {
     $.ajax({
         url: editorSvcUrl + "/reset",
-        type: "GET"
+        type: "GET",
+        mimeType: 'text/html'
     })
 });
 
 $(document).ready(function () {
-
+    $("body").on("click","#refreshCanvasButton",function() {
+        refreshCanvas();
+    })
     // -------------> LOAD MODAL
     /*
     $("body").on("click", "#LaunchLoadModalButton", function () {
@@ -43,7 +45,14 @@ $(document).ready(function () {
     */
     // <------------ LOAD MODAL
 
+
     // ------------> GROW MODAL
+    $("body").on("click", "#GrowButton", function () {
+        var radius = $("#GrowRadius").val();
+        growRegion(radius);
+        refreshCanvas();
+        $(".modal").modal("hide");
+    });
     // <------------ GROW MODAL
 
     // -------------> ADD REGION MODAL
@@ -73,13 +82,12 @@ $(document).ready(function () {
         var selectedAdditionType = $("#AdditionTypeSelector input:radio:checked").val();
         var selectedRegionType = $("#RegionTypeSelector input:radio:checked").val();
 
-        // TODO: real region string creator, now it's only in test phase.
         var regionString = createRegionString(selectedRegionType);
 
         console.info(regionString)
         addRegion(selectedAdditionType, regionString);
 
-        // TODO: update image + figure is not showing in Chrome
+        // TODO: figure is not showing in Chrome
         refreshCanvas();
 
         $(".modal").modal("hide");
@@ -144,11 +152,21 @@ function centerModals($element) {
     });
 }
 
-function createUrl(baseUrl, sourcePathParts) {
+// Create service urls
+
+function createUrl(baseUrl, pathParts, optQueryParts) {
     var finalUrl = baseUrl;
-    $.each(sourcePathParts, function (i, part) {
+    $.each(pathParts, function (i, part) {
         finalUrl += "/" + part;
     });
+
+    if (typeof optQueryParts != "undefined") {
+        finalUrl += "?";
+        $.each(optQueryParts, function (key, value) {
+            finalUrl += "&" + key + "=" + value;
+        });
+    }
+    console.info(finalUrl);
     return finalUrl;
 }
 
@@ -187,27 +205,28 @@ function createRegionString(type) {
 function addRegion(type, dataString) {
     var methodUrl = createUrl(editorSvcUrl, [type]);
 
-    console.info(methodUrl);
     $.ajax({
         url: methodUrl,
         type: "POST",
+        mimeType: 'text/html',
         contentType: "text/plain",
         data: dataString
     });
 }
 
+// grow region
 function growRegion(radius) {
-    var methodUrl = editorSvcUrl + "/grow";
+    var methodUrl = editorSvcUrl + "/grow?r=" + radius;
 
     $.ajax({
         url: methodUrl,
         type: "POST",
-        contentType: "text/plain",
-        data: radius
+        mimeType: 'text/html',
+        contentType: "text/plain"
     });
 }
 
-// getShape
+// get the shape of region
 function getShape() {
     var methodUrl = editorSvcUrl + "/shape";
     $.ajax({
@@ -220,6 +239,21 @@ function getShape() {
 // refresh PlotCanvas
 function refreshCanvas() {
     var d = new Date();
-    console.info(createUrl(editorSvcUrl, ["plot?ts="]));
-    $("#PlotCanvas").attr("src", createUrl(editorSvcUrl, ["plot?ts="]) + d.getTime());
+    $("#PlotCanvas").attr("src", createUrl(editorSvcUrl, ["plot?ts="+ d.getTime()]));
+}
+
+// Save region
+
+function saveRegion(user, footprintName, regionName) {
+    var dict = {
+        owner: user,
+        name: footprintName,
+        region: regionName
+    }
+    var methodUrl = editorSvcUrl + "/save?";
+    $.ajax({
+        url: methodUrl,
+        type: "POST",
+        headers: { Accept: "text/plain" }
+    });
 }

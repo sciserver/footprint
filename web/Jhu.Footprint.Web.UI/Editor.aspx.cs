@@ -3,12 +3,13 @@ using Jhu.Spherical.Visualizer;
 
 namespace Jhu.Footprint.Web.UI
 {
-    public partial class Editor : System.Web.UI.Page
+    public partial class Editor : CustomPageBase
     {
         public static string GetUrl()
         {
             return "~/Editor.aspx";
         }
+
         protected void Page_Load(object sender, EventArgs e)
         {
         }

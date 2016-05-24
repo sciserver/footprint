@@ -1,24 +1,32 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/UI.master" AutoEventWireup="true" CodeBehind="Editor.aspx.cs" Inherits="Jhu.Footprint.Web.UI.Editor" %>
 
 <asp:Content ID="Editor" ContentPlaceHolderID="middle" runat="server">
-
+    <asp:ScriptManagerProxy runat="server">
+        <Scripts>
+            <asp:ScriptReference Path="Scripts/astro.js" />
+            <asp:ScriptReference Path="Editor.js" />
+        </Scripts>
+    </asp:ScriptManagerProxy>
     <div class="container">
         <div class="row">
             <div class="col-sm-10">
                 <asp:UpdatePanel runat="server">
                     <ContentTemplate>
-                        <img id="PlotCanvas" src="http://localhost/footprint/api/v1/editor.svc/plot" class="img-responsive" />
-                        <%--<div id="RegionStringTest"></div>--%>
+                        <div id="PlotCanvasContainer">
+                            <img id="PlotCanvas" src="http://localhost/footprint/api/v1/editor.svc/plot" class="img-responsive" />
+                            <button type="button" class="btn btn-sm" id="refreshCanvasButton"><span class="glyphicon glyphicon-refresh"></span></button>
+                            <%--<div id="RegionStringTest"></div>--%>
+                        </div>
                     </ContentTemplate>
                 </asp:UpdatePanel>
             </div>
             <div class="col-sm-2" id="editorMainButtonGroup">
                 <div class="">
                     <button type="button" class="btn btn-lg btn-default btn-block" data-toggle="modal" data-target="#AddRegionModal">Add region</button>
-                    <button type="button" class="btn btn-lg btn-default btn-block" data-toggle="modal" data-target="LoadModal">Load footprint</button>
+                    <button type="button" class="btn btn-lg btn-default btn-block disabled" disabled="disabled" data-toggle="modal" data-target="#LoadModal">Load footprint</button>
                     <button type="button" class="btn btn-lg btn-default btn-block" data-toggle="modal" data-target="#GrowModal">Grow</button>
-                    <button type="button" class="btn btn-lg btn-success btn-block disabled">Save</button>
-                    <button type="button" class="btn btn-lg btn-success btn-block">Download</button>
+                    <button type="button" class="btn btn-lg btn-success btn-block" data-toggle="modal" data-target="#SaveModal">Save</button>
+                    <button type="button" class="btn btn-lg btn-success btn-block disabled" disabled="disabled">Download</button>
 
                 </div>
             </div>
@@ -38,8 +46,8 @@
                             </div>
                             <div class="modal-body">
                                 <div class="form-inline">
-                                    <label for="RadiusInput" class="control-label">Radius (arcmin): </label>
-                                    <input type="text" class="form-control" id="RadiusInput" placeholder="10" />
+                                    <label for="GrowRadius" class="control-label">Radius (arcmin): </label>
+                                    <input type="text" class="form-control" id="GrowRadius" placeholder="10" />
                                     <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" title="Use negative value to reduce. Valid range: -120 .. 120 arcmin"></span>
                                 </div>
                             </div>
@@ -86,8 +94,8 @@
                                 <div id="RegionTypeSelector" class="text-center">
                                     <h3 class="FormLabel">Select region type:</h3>
                                     <div class="btn-group" data-toggle="buttons">
-                                        <label class="btn btn-primary">
-                                            <input type="radio" name="RegionTypeSelector" value="circle">
+                                        <label class="btn btn-primary active">
+                                            <input type="radio" name="RegionTypeSelector" value="circle" checked="checked">
                                             Circle
                                         </label>
                                         <label class="btn btn-primary">
@@ -103,7 +111,7 @@
                                 </div>
 
 
-                                <div id="CircleRegionForm" class="AddRegionForms hidden">
+                                <div id="CircleRegionForm" class="AddRegionForms">
                                     <div class="form-inline">
                                         <label for="CircleRA" class="FormLabel">Center:</label>
                                         <input id="CircleRA" type="text" class="form-control" placeholder="12:00:00.00" data-toogle="tooltip" title="Right Ascension" />
@@ -162,7 +170,7 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-success" id="LoadFootprintButton">Load</button>
+                                    <button type="button" class="btn btn-success" id="LoadRegionButton">Load</button>
                                     <button type="button" class="btn btn-danger " data-dismiss="modal">Cancel</button>
                                 </div>
                             </div>
@@ -171,7 +179,32 @@
                 </div>
 
 
-                <div id="SaveModal">
+                <div id="SaveModal" class="modal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                                <h4 class="modal-title">Save Region</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="SaveUserInput" class="control-label">User/Group: </label>
+                                    <input id="SaveUserInput" class="form-control" placeholder="Enter user or group name." />
+                                    <label for="SaveUserFootprintName" class="control-label">Footprint: </label>
+                                    <input id="SaveUserFootprintName" class="form-control" placeholder="Enter footprint name." />
+                                    <label for="SaveUserRegionName" class="control-label">Region: </label>
+                                    <input id="SaveUserRegionName" class="form-control" placeholder="Enter region name." />
+                                    <hr />
+                                    <label for="SaveFillFactorInput" class="control-label">Fill factor:</label>
+                                    <input id="SaveFillFactorInput" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-success" id="SaveRegionButton">Save</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div id="DownloadModal">
