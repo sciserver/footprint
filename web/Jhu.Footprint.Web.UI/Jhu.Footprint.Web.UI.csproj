@@ -97,20 +97,22 @@
     <Content Include="App_Themes\Basic\Icons\user.png" />
     <Content Include="App_Themes\Basic\Icons\userstatus.png" />
     <Content Include="App_Themes\Basic\Icons\welcome.png" />
-    <Content Include="Content\bootstrap-theme.css" />
-    <Content Include="Content\bootstrap-theme.min.css" />
-    <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\bootstrap.min.css" />
     <Content Include="Controls\Footer.ascx" />
     <Content Include="Controls\Menu.ascx" />
     <Content Include="Default.aspx" />
     <Content Include="Docs\Default.aspx" />
     <Content Include="Editor.js" />
-    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Plot\FootprintPlot.aspx" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\astro.js" />
+    <Content Include="Scripts\Bootstrap\css\bootstrap-theme.css" />
+    <Content Include="Scripts\Bootstrap\css\bootstrap-theme.min.css" />
+    <Content Include="Scripts\Bootstrap\css\bootstrap.css" />
+    <Content Include="Scripts\Bootstrap\css\bootstrap.min.css" />
+    <Content Include="Scripts\Bootstrap\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Scripts\Bootstrap\js\bootstrap.js" />
+    <Content Include="Scripts\Bootstrap\js\bootstrap.min.js" />
+    <Content Include="Scripts\Bootstrap\js\npm.js" />
     <Content Include="Scripts\CodeMirror\addon\comment\comment.js" />
     <Content Include="Scripts\CodeMirror\addon\comment\continuecomment.js" />
     <Content Include="Scripts\CodeMirror\addon\dialog\dialog.css" />
@@ -371,18 +373,8 @@
     <Content Include="Scripts\CodeMirror\theme\vibrant-ink.css" />
     <Content Include="Scripts\CodeMirror\theme\xq-dark.css" />
     <Content Include="Scripts\CodeMirror\theme\xq-light.css" />
-    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Scripts\Coordinates.js" />
-    <Content Include="Content\bootstrap.min.css.map" />
-    <Content Include="Content\bootstrap.css.map" />
-    <Content Include="Content\bootstrap-theme.min.css.map" />
-    <Content Include="Content\bootstrap-theme.css.map" />
-    <None Include="Scripts\jquery-2.2.3.intellisense.js" />
-    <Content Include="Scripts\jquery-2.2.3.js" />
-    <Content Include="Scripts\jquery-2.2.3.min.js" />
+    <Content Include="Scripts\jQuery\jquery-2.2.4.js" />
+    <Content Include="Scripts\jQuery\jquery-2.2.4.min.js" />
     <Content Include="Search.aspx" />
     <Content Include="Templates\ActivationEmail.xml" />
     <Content Include="Templates\ErrorFeedbackEmail.xml" />
@@ -539,9 +531,32 @@
   <ItemGroup>
     <Content Include="Docs\Web.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Content Include="Scripts\jquery-2.2.3.min.map" />
+    <Content Include="Scripts\jQuery\jquery-2.2.4.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Scripts\Bootstrap\fonts\glyphicons-halflings-regular.woff2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Scripts\Bootstrap\fonts\glyphicons-halflings-regular.woff" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Scripts\Bootstrap\fonts\glyphicons-halflings-regular.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Scripts\Bootstrap\fonts\glyphicons-halflings-regular.eot" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Scripts\Bootstrap\css\bootstrap.min.css.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Scripts\Bootstrap\css\bootstrap.css.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Scripts\Bootstrap\css\bootstrap-theme.min.css.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Scripts\Bootstrap\css\bootstrap-theme.css.map" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -584,9 +599,19 @@ mklink /D $(ProjectDir)Templates $(SolutionDir)graywulf\web\Jhu.Graywulf.Web.Sha
 
 REM Create symlinks to directories under packages
 
+REM Create symlinks to directories under packages
+
+IF EXIST $(ProjectDir)Scripts\jQuery rmdir $(ProjectDir)Scripts\jQuery /s /q
+mklink /D $(ProjectDir)Scripts\jQuery $(SolutionDir)packages\jQuery.NuGet.2.2.4\content\Scripts\jQuery
+
+IF EXIST $(ProjectDir)Scripts\Bootstrap rmdir $(ProjectDir)Scripts\Bootstrap /s /q
+mklink /D $(ProjectDir)Scripts\Bootstrap $(SolutionDir)packages\Bootstrap.NuGet.3.3.6\content\Scripts\Bootstrap
+
 IF EXIST $(ProjectDir)Scripts\CodeMirror rmdir $(ProjectDir)Scripts\CodeMirror /s /q
 mklink /D $(ProjectDir)Scripts\CodeMirror $(SolutionDir)packages\CodeMirror.NuGet.3.20.01\content\Scripts\CodeMirror
-</PreBuildEvent>
+
+IF EXIST $(ProjectDir)Scripts\SyntaxHighlighter rmdir $(ProjectDir)Scripts\SyntaxHighlighter /s /q
+mklink /D $(ProjectDir)Scripts\SyntaxHighlighter $(SolutionDir)packages\SyntaxHighlighter.NuGet.3.0.83.01\content\Scripts\SyntaxHighlighter</PreBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
