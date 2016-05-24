@@ -69,6 +69,7 @@
     <Compile Include="V1\Responses\FootprintRegionListResponse.cs" />
     <Compile Include="V1\Responses\FootprintRegionResponse.cs" />
     <Compile Include="V1\Responses\FootprintResponse.cs" />
+    <Compile Include="V1\Services\ServiceBase.cs" />
     <Compile Include="V1\Services\Urls.cs" />
     <Compile Include="V1\Services\EditorService.cs" />
     <Compile Include="V1\Services\FootprintService.cs" />
