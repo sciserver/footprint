@@ -2,6 +2,7 @@
 // TODO: maybe should be done in a more proper way?
 footprintSvcUrl = "";
 editorSvcUrl = "http://localhost/footprint/api/v1/editor.svc";
+authSvcUrl = "http://localhost/auth/api/v1/auth.svc"
 
 // Setup cookie
 $(document).one('ready', function () {
@@ -16,44 +17,6 @@ $(document).ready(function () {
     $("body").on("click","#refreshCanvasButton",function() {
         refreshCanvas();
     })
-    // -------------> LOAD MODAL
-    /*
-    $("body").on("click", "#LaunchLoadModalButton", function () {
-        $("#LoadModal").modal({ backdrop: "static" });
-        LoadFootprintFolderList(baseUrl + "/" + userName);
-    });
-
-    $("body").on("change", "#FolderSelect", function () {
-        ResetSelectList("#FootprintSelect");
-        var folderName = $("#FolderSelect option:selected").html();
-        LoadFootprintList(baseUrl + "/" + userName + "/" + folderName);
-    });
-
-    $("body").on("hidden.bs.modal", "#LoadModal", function () {
-        ResetSelectList("#FolderSelect");
-        ResetSelectList("#FootprintSelect");
-    });
-
-    $("body").on("click", "#LoadFootprintButton", function () {
-        var footprint = $("#FootprintSelect option:selected").text();
-        var folder = $("#FolderSelect option:selected").text();
-        plotUrl = createUrl(baseUrl, [userName, folder, footprint, "plot?"]);
-
-        $("#PlotCanvas").attr("src", plotUrl);
-        $("#LoadModal").modal("hide");
-    });
-    */
-    // <------------ LOAD MODAL
-
-
-    // ------------> GROW MODAL
-    $("body").on("click", "#GrowButton", function () {
-        var radius = $("#GrowRadius").val();
-        growRegion(radius);
-        refreshCanvas();
-        $(".modal").modal("hide");
-    });
-    // <------------ GROW MODAL
 
     // -------------> ADD REGION MODAL
 
@@ -92,7 +55,56 @@ $(document).ready(function () {
 
         $(".modal").modal("hide");
     })
-    // <-- Add Region Modal
+    // <------------- ADD REGION MODAL
+
+    // -------------> LOAD MODAL
+    /*
+    $("body").on("click", "#LaunchLoadModalButton", function () {
+        $("#LoadModal").modal({ backdrop: "static" });
+        LoadFootprintFolderList(baseUrl + "/" + userName);
+    });
+
+    $("body").on("change", "#FolderSelect", function () {
+        ResetSelectList("#FootprintSelect");
+        var folderName = $("#FolderSelect option:selected").html();
+        LoadFootprintList(baseUrl + "/" + userName + "/" + folderName);
+    });
+
+    $("body").on("hidden.bs.modal", "#LoadModal", function () {
+        ResetSelectList("#FolderSelect");
+        ResetSelectList("#FootprintSelect");
+    });
+
+    $("body").on("click", "#LoadFootprintButton", function () {
+        var footprint = $("#FootprintSelect option:selected").text();
+        var folder = $("#FolderSelect option:selected").text();
+        plotUrl = createUrl(baseUrl, [userName, folder, footprint, "plot?"]);
+        
+        $("#LoadModal").modal("hide");
+    });
+    */
+    // <------------ LOAD MODAL
+
+
+    // ------------> GROW MODAL
+    $("body").on("click", "#GrowButton", function () {
+        var radius = $("#GrowRadius").val();
+        growRegion(radius);
+        refreshCanvas();
+        $(".modal").modal("hide");
+    });
+    // <------------ GROW MODAL
+
+    // ------------> SAVE MODAL
+    $("body").on("show.bs.modal", "#SaveModal", function () {
+        setOwner();
+    });
+
+    $("body").on("click", "#SaveRegionButton", function () {
+        saveRegion();
+        $("#SaveModal").modal("hide");
+    });
+    // <------------ SAVE MODAL
 
     // Centering modals
     $("body").on('show.bs.modal', ".modal", function () {
@@ -163,7 +175,7 @@ function createUrl(baseUrl, pathParts, optQueryParts) {
     if (typeof optQueryParts != "undefined") {
         finalUrl += "?";
         $.each(optQueryParts, function (key, value) {
-            finalUrl += "&" + key + "=" + value;
+            finalUrl +=  key + "=" + value + "&";
         });
     }
     console.info(finalUrl);
@@ -244,16 +256,31 @@ function refreshCanvas() {
 
 // Save region
 
-function saveRegion(user, footprintName, regionName) {
-    var dict = {
-        owner: user,
-        name: footprintName,
-        region: regionName
+function saveRegion() {
+    var params = {
+        owner: $("#SaveUserInput").val(),
+        name: $("#SaveUserFootprintName").val(),
+        region: $("#SaveUserRegionName").val()
     }
-    var methodUrl = editorSvcUrl + "/save?";
+    var methodUrl = createUrl(editorSvcUrl, ["save"],params);
     $.ajax({
         url: methodUrl,
         type: "POST",
         headers: { Accept: "text/plain" }
+    });
+}
+
+function setOwner() {
+    var methodUrl = createUrl(authSvcUrl, ["owner"])
+    var owner = "";
+    $.ajax({
+        url: methodUrl,
+        type: "GET",
+        mimeType: 'text/html',
+        contentType: "text/plain",
+        success: function (data) {
+            var owner = $(data).find("name").text();
+            $("#SaveUserInput").val(owner);
+        }
     });
 }

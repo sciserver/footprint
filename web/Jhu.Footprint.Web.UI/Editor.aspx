@@ -189,14 +189,14 @@
                             <div class="modal-body">
                                 <div class="form-group">
                                     <label for="SaveUserInput" class="control-label">User/Group: </label>
-                                    <input id="SaveUserInput" class="form-control" placeholder="Enter user or group name." />
+                                    <input id="SaveUserInput" class="form-control" disabled="disabled"/>
                                     <label for="SaveUserFootprintName" class="control-label">Footprint: </label>
                                     <input id="SaveUserFootprintName" class="form-control" placeholder="Enter footprint name." />
                                     <label for="SaveUserRegionName" class="control-label">Region: </label>
                                     <input id="SaveUserRegionName" class="form-control" placeholder="Enter region name." />
                                     <hr />
                                     <label for="SaveFillFactorInput" class="control-label">Fill factor:</label>
-                                    <input id="SaveFillFactorInput" class="form-control" />
+                                    <input id="SaveFillFactorInput" class="form-control" disabled="disabled"/>
                                 </div>
                             </div>
                             <div class="modal-footer">

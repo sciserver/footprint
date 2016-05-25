@@ -69,7 +69,7 @@ namespace Jhu.Footprint.Web.Api.V1
         void Load(string owner, string name, string regionName);
 
         [OperationContract]
-        [WebGet(UriTemplate = "/save?owner={owner}&name={name}&region={regionName}")]
+        [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/save?owner={owner}&name={name}&region={regionName}")]
         [Description("Save a region to the database")]
         void Save(string owner, string name, string regionName);
 
