@@ -156,6 +156,14 @@ namespace Jhu.Footprint.Web.Lib
             Load();
         }
 
+        public bool CheckExists(string owner, string name)
+        {
+            this.Owner = owner;
+            this.name = name;
+
+            return CheckExists();
+        }
+
         public void SetDefaultPermissions(bool @public)
         {
             if (Permissions.Owner == null)

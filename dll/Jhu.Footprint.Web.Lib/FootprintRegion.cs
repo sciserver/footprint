@@ -146,6 +146,12 @@ namespace Jhu.Footprint.Web.Lib
             Load();
         }
 
+        public bool CheckExists(string regionName)
+        {
+            this.name = regionName;
+            return CheckExists();
+        }
+
         protected override void OnValidating(Graywulf.Entities.EntityEventArgs e)
         {
             if (Constants.RestictedNames.Contains(this.name))
