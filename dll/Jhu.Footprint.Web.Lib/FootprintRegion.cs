@@ -140,14 +140,16 @@ namespace Jhu.Footprint.Web.Lib
 
         #region Methods
 
-        public void Load(string regionName)
+        public void Load(int footprintId, string regionName)
         {
+            this.footprintId = footprintId;
             this.name = regionName;
             Load();
         }
 
-        public bool CheckExists(string regionName)
+        public bool CheckExists(int footprintId, string regionName)
         {
+            this.footprintId = footprintId;
             this.name = regionName;
             return CheckExists();
         }
@@ -270,6 +272,36 @@ WHERE FootprintID = @FootprintID AND Name = @Name;
             else
             {
                 return base.GetSelectCommand();
+            }
+        }
+
+        protected override SqlCommand GetCheckExistsCommand()
+        {
+            if (id == 0 && footprintId != 0 && name != null)
+            {
+                var sql = @"
+WITH __e AS
+(
+{0}
+)
+SELECT ISNULL(COUNT(*), 0)
+FROM __e
+WHERE FootprintID = @FootprintID AND Name = @Name;
+";
+
+                var cmd = new SqlCommand(
+                String.Format(
+                    sql,
+                    GetTableQuery()));
+
+                cmd.Parameters.Add("@FootprintId", SqlDbType.NVarChar).Value = footprintId;
+                cmd.Parameters.Add("@Name", SqlDbType.NVarChar).Value = name;
+
+                return cmd;
+            }
+            else
+            {
+                return base.GetCheckExistsCommand();
             }
         }
 

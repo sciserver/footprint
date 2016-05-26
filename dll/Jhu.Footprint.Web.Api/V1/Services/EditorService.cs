@@ -63,7 +63,7 @@ namespace Jhu.Footprint.Web.Api.V1
         {
             var r = new RegionAdapter().ReadFromStream(stream);
             r.Simplify();
-            SessionRegion.SmartIntersect(r,true);
+            SessionRegion.SmartIntersect(r, true);
             SessionRegion.Simplify();
         }
 
@@ -95,7 +95,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
                 var region = new Lib.FootprintRegion(footprint);
                 region.Load(regionName);
-                
+
                 SessionRegion = region.Region;
             }
         }
@@ -105,10 +105,30 @@ namespace Jhu.Footprint.Web.Api.V1
             using (var context = CreateContext())
             {
                 var footprint = new Lib.Footprint(context);
-                footprint.Load(owner, name);
+                if (footprint.CheckExists(owner, name))
+                {
+                    footprint.Load(owner, name);
+                }
+                else
+                {
+                    footprint.Owner = owner;
+                    footprint.Name = name;
+                    
+                    footprint.CombinationMethod = Lib.CombinationMethod.Intersection;
+                    footprint.Save();
+                }
 
                 var region = new Lib.FootprintRegion(footprint);
-                region.Load(regionName);
+                if (region.CheckExists(footprint.Id, regionName))
+                {
+                    region.Load(footprint.Id, regionName);
+                }
+                else
+                {
+                    //region.FootprintId = footprint.Id;
+                    region.Name = regionName;
+                    region.Save();
+                }
 
                 // Parse region from posted data
                 region.Region = SessionRegion;
@@ -146,7 +166,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
         public Spherical.Visualizer.Plot PlotUserFootprintRegionAdvanced(string operation, Plot plotParameters)
         {
-            var plot = Lib.FootprintPlot.GetDefaultPlot(new [] { SessionRegion });
+            var plot = Lib.FootprintPlot.GetDefaultPlot(new[] { SessionRegion });
 
             plotParameters.GetValues(plot);
 
