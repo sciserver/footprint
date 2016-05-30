@@ -295,7 +295,7 @@ function loadRegion() {
 }
 
 function setOwner() {
-    var methodUrl = createUrl(authSvcUrl, ["owner"])
+    var methodUrl = createUrl(authSvcUrl, ["me"])
     var owner = "";
     $.ajax({
         url: methodUrl,
