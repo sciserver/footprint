@@ -94,7 +94,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 footprint.Load(owner, name);
 
                 var region = new Lib.FootprintRegion(footprint);
-                region.Load(regionName);
+                region.Load(footprint.Id, regionName);
 
                 SessionRegion = region.Region;
             }
