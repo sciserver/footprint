@@ -4,20 +4,29 @@ footprintSvcUrl = "";
 editorSvcUrl = "http://localhost/footprint/api/v1/editor.svc";
 authSvcUrl = "http://localhost/auth/api/v1/auth.svc"
 
-// Setup cookie
+
 $(document).one('ready', function () {
-    $.ajax({
-        url: editorSvcUrl + "/reset",
-        type: "GET",
-        mimeType: 'text/html'
-    })
+    // Setup cookie
+    setCookies();
+
+    // Setup owner 
+    setOwner();
 });
 
 $(document).ready(function () {
-    $("body").on("click","#refreshCanvasButton",function() {
+
+    // refresh Canvas with button
+    $("body").on("click", "#refreshCanvasButton", function () {
         refreshCanvas();
     })
 
+    // Centering modals
+    $("body").on('show.bs.modal', ".modal", function () {
+        centerModals($(this));
+    });
+    $(window).on('resize', centerModals);
+
+    // -------------> MODALS :
     // -------------> ADD REGION MODAL
 
     // Show the associeted input form with the selected region type
@@ -55,7 +64,6 @@ $(document).ready(function () {
 
         $(".modal").modal("hide");
     })
-    // <------------- ADD REGION MODAL
 
     // -------------> LOAD MODAL
     /*
@@ -83,7 +91,6 @@ $(document).ready(function () {
         $("#LoadModal").modal("hide");
     });
     */
-    // <------------ LOAD MODAL
 
 
     // ------------> GROW MODAL
@@ -93,30 +100,17 @@ $(document).ready(function () {
         refreshCanvas();
         $(".modal").modal("hide");
     });
-    // <------------ GROW MODAL
 
     // ------------> SAVE MODAL
-    $("body").on("show.bs.modal", "#SaveModal", function () {
-        setOwner();
-    });
 
     $("body").on("click", "#SaveRegionButton", function () {
         saveRegion();
         $("#SaveModal").modal("hide");
     });
-    // <------------ SAVE MODAL
-
-    // Centering modals
-    $("body").on('show.bs.modal', ".modal", function () {
-        centerModals($(this));
-    });
-    $(window).on('resize', centerModals);
-
-
 });
 
-// Reset Select options
 /*
+// Reset Select options
 function ResetSelectList(selectId) {
     $(selectId).empty()
         .append("<option>Please select...</option>");
@@ -175,7 +169,7 @@ function createUrl(baseUrl, pathParts, optQueryParts) {
     if (typeof optQueryParts != "undefined") {
         finalUrl += "?";
         $.each(optQueryParts, function (key, value) {
-            finalUrl +=  key + "=" + value + "&";
+            finalUrl += key + "=" + value + "&";
         });
     }
     console.info(finalUrl);
@@ -210,6 +204,22 @@ function createRegionString(type) {
     }
 
     return regionStrings.join(" ");
+}
+
+// refresh PlotCanvas
+function refreshCanvas() {
+    var d = new Date();
+    $("#PlotCanvas").attr("src", createUrl(editorSvcUrl, ["plot?ts=" + d.getTime()]));
+}
+
+// SERVICE CALLS
+// Setup Cookies
+function setCookies() {
+    $.ajax({
+        url: createUrl(editorSvcUrl, ["reset"]),
+        type: "GET",
+        mimeType: 'text/html'
+    });
 }
 
 
@@ -248,24 +258,38 @@ function getShape() {
     });
 }
 
-// refresh PlotCanvas
-function refreshCanvas() {
-    var d = new Date();
-    $("#PlotCanvas").attr("src", createUrl(editorSvcUrl, ["plot?ts="+ d.getTime()]));
-}
-
 // Save region
-
 function saveRegion() {
     var params = {
         owner: $("#SaveUserInput").val(),
         name: $("#SaveUserFootprintName").val(),
         region: $("#SaveUserRegionName").val()
-    }
-    var methodUrl = createUrl(editorSvcUrl, ["save"],params);
+    };
+
+    var methodUrl = createUrl(editorSvcUrl, ["save"], params);
     $.ajax({
         url: methodUrl,
         type: "POST",
+        mimeType: 'text/html',
+        contentType: "text/plain"
+    });
+}
+
+
+// Load region /test only at the moment!/
+function loadRegion() {
+    var params = {
+        owner: "ebanyai",
+        name: "webTest",
+        region: "saveTest01"
+    };
+    var methodUrl = createUrl(editorSvcUrl, ["load"], params);
+
+    $.ajax({
+        url: methodUrl,
+        type: "GET",
+        mimeType: 'text/html',
+        contentType: "text/plain",
         headers: { Accept: "text/plain" }
     });
 }
@@ -284,3 +308,4 @@ function setOwner() {
         }
     });
 }
+// <----- SERVICE CALLS
