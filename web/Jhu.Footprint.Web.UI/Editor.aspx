@@ -23,7 +23,7 @@
             <div class="col-sm-2" id="editorMainButtonGroup">
                 <div class="">
                     <button type="button" class="btn btn-lg btn-default btn-block" data-toggle="modal" data-target="#AddRegionModal">Add region</button>
-                    <button type="button" class="btn btn-lg btn-default btn-block disabled" disabled="disabled" data-toggle="modal" data-target="#LoadModal">Load footprint</button>
+                    <button type="button" class="btn btn-lg btn-default btn-block" data-toggle="modal" data-target="#LoadModal">Load footprint</button>
                     <button type="button" class="btn btn-lg btn-default btn-block" data-toggle="modal" data-target="#GrowModal">Grow</button>
                     <button type="button" class="btn btn-lg btn-success btn-block" data-toggle="modal" data-target="#SaveModal">Save</button>
                     <button type="button" class="btn btn-lg btn-success btn-block disabled" disabled="disabled">Download</button>

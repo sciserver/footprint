@@ -1,19 +1,20 @@
 ﻿// Declaration of the services' urls
 // TODO: maybe should be done in a more proper way?
-footprintSvcUrl = "";
-editorSvcUrl = "http://localhost/footprint/api/v1/editor.svc";
-authSvcUrl = "http://localhost/auth/api/v1/auth.svc"
-
+var footprintSvcUrl = "http://localhost/footprint/api/v1/footprint.svc";
+var editorSvcUrl = "http://localhost/footprint/api/v1/editor.svc";
+var authSvcUrl = "http://localhost/auth/api/v1/auth.svc";
 
 $(document).one('ready', function () {
     // Setup cookie
     setCookies();
 
-    // Setup owner 
+    // Set owner
+    // TODO: include group
     setOwner();
 });
 
 $(document).ready(function () {
+
 
     // refresh Canvas with button
     $("body").on("click", "#refreshCanvasButton", function () {
@@ -66,12 +67,12 @@ $(document).ready(function () {
     })
 
     // -------------> LOAD MODAL
-    /*
+
     $("body").on("click", "#LaunchLoadModalButton", function () {
-        $("#LoadModal").modal({ backdrop: "static" });
-        LoadFootprintFolderList(baseUrl + "/" + userName);
+        setFootprintFolderList();
     });
 
+    /*
     $("body").on("change", "#FolderSelect", function () {
         ResetSelectList("#FootprintSelect");
         var folderName = $("#FolderSelect option:selected").html();
@@ -116,16 +117,6 @@ function ResetSelectList(selectId) {
         .append("<option>Please select...</option>");
     $(selectId + " option:selected").attr('disabled', 'disabled');
 
-}
-
-// GET Footprint folder list of User
-function LoadFootprintFolderList(serviceUrl) {
-
-    $.get(serviceUrl, function (data, status) {
-        $(data).find("footprintfolder").each(function () {
-            $("#FolderSelect").append($('<option>').append($(this).find("name").text()));
-        })
-    });
 }
 
 // GET selected folder and the footprints within
@@ -295,17 +286,29 @@ function loadRegion() {
 }
 
 function setOwner() {
-    var methodUrl = createUrl(authSvcUrl, ["me"])
+    var methodUrl = createUrl(authSvcUrl, ["me"]);
     var owner = "";
-    $.ajax({
+    var request = $.ajax({
         url: methodUrl,
         type: "GET",
         mimeType: 'text/html',
         contentType: "text/plain",
         success: function (data) {
-            var owner = $(data).find("name").text();
+            owner = $(data).find("name").text();
             $("#SaveUserInput").val(owner);
         }
+    });
+
+}
+
+
+// GET Footprint folder list of User
+function setFootprintFolderList() {
+    var serviceUrl = createUrl(footprintService, ["footprints"])
+    $.get(serviceUrl, function (data, status) {
+        $(data).find("footprintfolder").each(function () {
+            $("#FolderSelect").append($('<option>').append($(this).find("name").text()));
+        })
     });
 }
 // <----- SERVICE CALLS
