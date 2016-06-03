@@ -63,6 +63,12 @@ namespace Jhu.Footprint.Web.Api.V1
 
         // TODO: implement detailed search with POST
 
+
+        [OperationContract]
+        [WebGet(UriTemplate = Urls.UserFootprintRegions + "?" + Urls.RegionSearchParams, BodyStyle = WebMessageBodyStyle.Bare)]
+        [Description("Returns the list of the regions of a footprint.")]
+        FootprintRegionListResponse FindUserFootprintRegions(string owner, string name, string regionName, int from, int max);
+
         #endregion
         #region Footprint region CRUD operations
 

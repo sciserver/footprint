@@ -141,6 +141,31 @@ namespace Jhu.Footprint.Web.Api.V1
             };
         }
 
+        public FootprintRegionListResponse FindUserFootprintRegions(string owner, string footprintName, string name, int from, int max) {
+            var context = CreateContext(true);
+            var s = new Lib.FootprintRegionSearch(context)
+            {
+                Owner = owner,
+                FootprintName = footprintName,
+                Name = name == null ? null : "%" + name + "%"
+            };
+
+
+            var results = s.Find(from, max, null);
+
+            var f = new Lib.Footprint(context)
+            {
+                Owner = owner,
+                Name = footprintName,
+            };
+
+            f.Load();
+
+            return new FootprintRegionListResponse()
+            {
+                Regions = results.Where(r => r.FootprintId == f.Id ).Select(r => new FootprintRegion(f, r))
+            };
+        }
         #endregion
         #region Footprint region CRUD operations
 
