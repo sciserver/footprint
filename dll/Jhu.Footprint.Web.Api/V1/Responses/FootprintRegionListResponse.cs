@@ -15,15 +15,10 @@ namespace Jhu.Footprint.Web.Api.V1
     {
         [DataMember(Name = "regions")]
         [Description("List of regions.")]
-        public FootprintRegion[] Regions { get; set; }
+        public  IEnumerable<FootprintRegion> Regions { get; set; }
 
         public FootprintRegionListResponse()
         {
-        }
-
-        public FootprintRegionListResponse(Lib.Footprint footprint, IEnumerable<Lib.FootprintRegion> regions, string folderName)
-        {
-            this.Regions = regions.Select(r => new FootprintRegion(footprint, r)).ToArray();
         }
     }
 }
