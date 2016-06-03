@@ -68,15 +68,13 @@ $(document).ready(function () {
 
     // -------------> LOAD MODAL
 
-    $("body").on("click", "#LaunchLoadModalButton", function () {
-        setFootprintFolderList();
+    $("body").on("show.bs.modal", "#LoadModal", function () {
+        setFootprintList();
     });
 
-    /*
-    $("body").on("change", "#FolderSelect", function () {
-        ResetSelectList("#FootprintSelect");
-        var folderName = $("#FolderSelect option:selected").html();
-        LoadFootprintList(baseUrl + "/" + userName + "/" + folderName);
+    $("body").on("change", "#FootprintSelect", function () {
+        ResetSelectList("#RegionSelect");
+        setRegionList();
     });
 
     $("body").on("hidden.bs.modal", "#LoadModal", function () {
@@ -84,14 +82,12 @@ $(document).ready(function () {
         ResetSelectList("#FootprintSelect");
     });
 
-    $("body").on("click", "#LoadFootprintButton", function () {
-        var footprint = $("#FootprintSelect option:selected").text();
-        var folder = $("#FolderSelect option:selected").text();
-        plotUrl = createUrl(baseUrl, [userName, folder, footprint, "plot?"]);
+    $("body").on("click", "#LoadRegionButton", function () {
+        loadRegion();
+        refreshCanvas();
         
         $("#LoadModal").modal("hide");
     });
-    */
 
 
     // ------------> GROW MODAL
@@ -110,24 +106,13 @@ $(document).ready(function () {
     });
 });
 
-/*
 // Reset Select options
 function ResetSelectList(selectId) {
     $(selectId).empty()
         .append("<option>Please select...</option>");
     $(selectId + " option:selected").attr('disabled', 'disabled');
-
 }
-
-// GET selected folder and the footprints within
-function LoadFootprintList(serviceUrl) {
-    $.get(serviceUrl, function (data, status) {
-        var nameList = $(data).find("footprintNameList");
-        nameList.find("string").each(function () {
-            $("#FootprintSelect").append($("<option>").append($(this).text()));
-        })
-    });
-}
+/*
 
 
 */
@@ -270,9 +255,9 @@ function saveRegion() {
 // Load region /test only at the moment!/
 function loadRegion() {
     var params = {
-        owner: "ebanyai",
-        name: "webTest",
-        region: "saveTest01"
+        owner: $("#SaveUserInput").val(),
+        name: $("#FootprintSelect option:selected").text(),
+        region: $("#RegionSelect option:selected").text()
     };
     var methodUrl = createUrl(editorSvcUrl, ["load"], params);
 
@@ -302,12 +287,25 @@ function setOwner() {
 }
 
 
-// GET Footprint folder list of User
-function setFootprintFolderList() {
-    var serviceUrl = createUrl(footprintService, ["footprints"])
+// set Footprint list of User
+function setFootprintList() {
+    var serviceUrl = createUrl(footprintSvcUrl, ["footprints"])
     $.get(serviceUrl, function (data, status) {
-        $(data).find("footprintfolder").each(function () {
-            $("#FolderSelect").append($('<option>').append($(this).find("name").text()));
+        $(data).find("footprint").each(function () {
+            $("#FootprintSelect").append($('<option>').append($(this).find("name").text()));
+        })
+    });
+}
+
+
+// GET selected folder and the footprints within
+function setRegionList() {
+    var owner = $("#SaveUserInput").val();
+    var footprint = $("#FootprintSelect option:selected").text();
+    var serviceUrl = createUrl(footprintSvcUrl, ["users", owner, "footprints", footprint, "regions"])
+    $.get(serviceUrl, function (data, status) {
+        var nameList = $(data).find("name").each(function () {
+            $("#RegionSelect").append($("<option>").append($(this).text()));
         })
     });
 }

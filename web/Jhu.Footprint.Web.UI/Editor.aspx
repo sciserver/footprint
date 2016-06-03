@@ -156,15 +156,15 @@
                             <div class="modal-body">
                                 <div class="form-inline">
                                     <div class="form-group">
-                                        <label for="FolderSelect" class="control-label">Folder: </label>
-                                        <select id="FolderSelect" class="form-control ">
+                                        <label for="FootprintSelect" class="control-label">Folder: </label>
+                                        <select id="FootprintSelect" class="form-control ">
                                             <option selected="selected" disabled="disabled">Please select...</option>
                                         </select>
                                     </div>
 
                                     <div class="form-group ">
-                                        <label for="FootprintSelect" class="control-label">Footprint:  </label>
-                                        <select id="FootprintSelect" class="form-control">
+                                        <label for="RegionSelect" class="control-label">Footprint:  </label>
+                                        <select id="RegionSelect" class="form-control">
                                             <option disabled="disabled">Please select...</option>
                                         </select>
                                     </div>
