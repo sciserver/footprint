@@ -118,7 +118,7 @@ namespace Jhu.Footprint.Web.Api.V1
         [OperationContract]
         [WebGet(UriTemplate = Urls.UserFootprint + Urls.Plot, BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Returns the points of the outline of a footprint.")]
-        Stream PlotUserFootprint(
+        Spherical.Visualizer.Plot PlotUserFootprint(
             string owner,
             string name,
             string operation,
@@ -134,7 +134,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Post, UriTemplate = Urls.UserFootprint + Urls.PlotAdvanced)]
-        Stream PlotUserFootprintAdvanced(string owner, string name, string operation, Plot plot);
+        Spherical.Visualizer.Plot PlotUserFootprintAdvanced(string owner, string name, string operation, Plot plotParameters);
 
         #endregion
         #region Individual region set, get and plot
@@ -165,7 +165,7 @@ namespace Jhu.Footprint.Web.Api.V1
         [OperationContract]
         [WebGet(UriTemplate = Urls.UserFootprintRegion + Urls.Plot, BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Plots a footprint.")]
-        Stream PlotUserFootprintRegion(
+        Spherical.Visualizer.Plot PlotUserFootprintRegion(
             string owner,
             string name,
             string regionName,
@@ -183,7 +183,7 @@ namespace Jhu.Footprint.Web.Api.V1
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Post, UriTemplate = Urls.UserFootprintRegion + Urls.PlotAdvanced)]
         [Description("Plots a footprint.")]
-        Stream PlotUserFootprintRegionAdvanced(string owner, string name, string regionName, string operation, Plot plot);
+        Spherical.Visualizer.Plot PlotUserFootprintRegionAdvanced(string owner, string name, string regionName, string operation, Plot plotParameters);
 
         // TODO: add HTM cover
 

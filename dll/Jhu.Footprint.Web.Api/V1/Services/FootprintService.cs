@@ -2,17 +2,10 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.ComponentModel;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
-using System.ServiceModel.Web;
-using System.ServiceModel.Security;
-using System.Security.Permissions;
 using System.Web;
 using Jhu.Graywulf.Web.Services;
-using Lib = Jhu.Footprint.Web.Lib;
 
 namespace Jhu.Footprint.Web.Api.V1
 {
@@ -141,7 +134,8 @@ namespace Jhu.Footprint.Web.Api.V1
             };
         }
 
-        public FootprintRegionListResponse FindUserFootprintRegions(string owner, string footprintName, string name, int from, int max) {
+        public FootprintRegionListResponse FindUserFootprintRegions(string owner, string footprintName, string name, int from, int max)
+        {
             var context = CreateContext(true);
             var s = new Lib.FootprintRegionSearch(context)
             {
@@ -163,7 +157,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
             return new FootprintRegionListResponse()
             {
-                Regions = results.Where(r => r.FootprintId == f.Id ).Select(r => new FootprintRegion(f, r))
+                Regions = results.Where(r => r.FootprintId == f.Id).Select(r => new FootprintRegion(f, r))
             };
         }
         #endregion
@@ -242,49 +236,75 @@ namespace Jhu.Footprint.Web.Api.V1
         #endregion
         #region Footprint combined region get and plot
 
-        public string GetUserFootprintShape(string owner, string name, string operation, double limit)
+        public Spherical.Region GetUserFootprintShape(string owner, string name, string operation)
         {
-            throw new NotImplementedException();
+            using (var context = CreateContext())
+            {
+                var footprint = new Lib.Footprint(context);
+
+                footprint.Load(owner, name);
+
+                return footprint.CombinedRegion.Region;
+            }
         }
 
-        public string GetUserFootprintOutline(string owner, string name, string operation, double limit)
+        public Spherical.Outline GetUserFootprintOutline(string owner, string name, string operation)
         {
-            throw new NotImplementedException();
+            using (var context = CreateContext())
+            {
+                var footprint = new Lib.Footprint(context);
+
+                footprint.Load(owner, name);
+
+                return footprint.CombinedRegion.Region.Outline;
+            }
         }
 
-        public IEnumerable<Lib.EquatorialPoint> GetUserFootprintOutlinePoints(string owner, string name, string operation, double limit, double resolution)
+        public IEnumerable<Lib.EquatorialPoint> GetUserFootprintOutlinePoints(string owner, string name, string operation, double resolution)
         {
-            throw new NotImplementedException();
+            using (var context = CreateContext())
+            {
+                var footprint = new Lib.Footprint(context);
+
+                footprint.Load(owner, name);
+
+                return Lib.FootprintFormatter.InterpolateOutlinePoints(footprint.CombinedRegion.Region.Outline, resolution);
+            }
         }
 
-        public Stream GetUserFootprintPlot(string owner, string name, string projection, float width, float height, string degStyle, bool grid, bool autoZoom, bool autoRotate)
+        public Spherical.Visualizer.Plot PlotUserFootprint(string owner, string name, string operation, string projection, string sys, string ra, string dec, string b, string l, float width, float height, string colorTheme)
         {
-            throw new NotImplementedException();
+            using (var context = CreateContext())
+            {
+                var footprint = new Lib.Footprint(context);
+
+                footprint.Load(owner, name);
+
+                var plot = Lib.FootprintPlot.GetDefaultPlot(new[] { footprint.CombinedRegion.Region });
+
+                // TODO: change this part to use all parameters
+                // Size is different for vector graphics!
+                plot.Width = Math.Max(width, 1080);
+                plot.Height = Math.Max(height, 600);
+
+                return plot;
+            }
         }
 
-        public string GetUserFootprintRegionShape(string owner, string name, string regionName, string operation, double limit)
+        public Spherical.Visualizer.Plot PlotUserFootprintAdvanced(string owner, string name, string operation, Plot plotParameters)
         {
-            throw new NotImplementedException();
-        }
+            using (var context = CreateContext())
+            {
+                var footprint = new Lib.Footprint(context);
 
-        public string GetUserFootprintRegionOutline(string owner, string name, string regionName, string operation, double limit)
-        {
-            throw new NotImplementedException();
-        }
+                footprint.Load(owner, name);
 
-        public IEnumerable<Lib.EquatorialPoint> GetUserFootprintRegionOutlinePoints(string owner, string name, string regionName, string operation, double limit, double resolution)
-        {
-            throw new NotImplementedException();
-        }
+                var plot = Lib.FootprintPlot.GetDefaultPlot(new[] { footprint.CombinedRegion.Region });
 
-        public Stream PlotUserFootprint(string owner, string name, string operation, string projection, string sys, string ra, string dec, string b, string l, float width, float height, string colorTheme)
-        {
-            throw new NotImplementedException();
-        }
+                plotParameters.GetValues(plot);
 
-        public Stream PlotUserFootprintAdvanced(string owner, string name, string operation, Plot plot)
-        {
-            throw new NotImplementedException();
+                return plot;
+            }
         }
 
         #endregion
@@ -308,44 +328,86 @@ namespace Jhu.Footprint.Web.Api.V1
             }
         }
 
-        public Spherical.Region GetUserFootprintShape(string owner, string name, string operation)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Spherical.Outline GetUserFootprintOutline(string owner, string name, string operation)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<Lib.EquatorialPoint> GetUserFootprintOutlinePoints(string owner, string name, string operation, double resolution)
-        {
-            throw new NotImplementedException();
-        }
-        
         public Spherical.Region GetUserFootprintRegionShape(string owner, string name, string regionName, string operation)
         {
-            throw new NotImplementedException();
+            using (var context = CreateContext())
+            {
+                var footprint = new Lib.Footprint(context);
+                footprint.Load(owner, name);
+
+                var region = new Lib.FootprintRegion(footprint);
+                region.Load(regionName);
+
+                return region.Region;
+            }
+
         }
 
         public Spherical.Outline GetUserFootprintRegionOutline(string owner, string name, string regionName, string operation)
         {
-            throw new NotImplementedException();
+            using (var context = CreateContext())
+            {
+                var footprint = new Lib.Footprint(context);
+                footprint.Load(owner, name);
+
+                var region = new Lib.FootprintRegion(footprint);
+                region.Load(regionName);
+
+                return region.Region.Outline;
+            }
         }
 
         public IEnumerable<Lib.EquatorialPoint> GetUserFootprintRegionOutlinePoints(string owner, string name, string regionName, string operation, double resolution)
         {
-            throw new NotImplementedException();
+            using (var context = CreateContext())
+            {
+                var footprint = new Lib.Footprint(context);
+                footprint.Load(owner, name);
+
+                var region = new Lib.FootprintRegion(footprint);
+                region.Load(regionName);
+
+                return Lib.FootprintFormatter.InterpolateOutlinePoints(region.Region.Outline, resolution);
+            }
         }
 
-        public Stream PlotUserFootprintRegion(string owner, string name, string regionName, string operation, string projection, string sys, string ra, string dec, string b, string l, float width, float height, string colorTheme)
+        public Spherical.Visualizer.Plot PlotUserFootprintRegion(string owner, string name, string regionName, string operation, string projection, string sys, string ra, string dec, string b, string l, float width, float height, string colorTheme)
         {
-            throw new NotImplementedException();
+            using (var context = CreateContext())
+            {
+                var footprint = new Lib.Footprint(context);
+                footprint.Load(owner, name);
+
+                var region = new Lib.FootprintRegion(footprint);
+                region.Load(regionName);
+
+                var plot = Lib.FootprintPlot.GetDefaultPlot(new[] { region.Region });
+
+                // TODO: change this part to use all parameters
+                // Size is different for vector graphics!
+                plot.Width = Math.Max(width, 1080);
+                plot.Height = Math.Max(height, 600);
+
+                return plot;
+            }
         }
 
-        public Stream PlotUserFootprintRegionAdvanced(string owner, string name, string regionName, string operation, Plot plot)
+        public Spherical.Visualizer.Plot PlotUserFootprintRegionAdvanced(string owner, string name, string regionName, string operation, Plot plotParameters)
         {
-            throw new NotImplementedException();
+            using (var context = CreateContext())
+            {
+                var footprint = new Lib.Footprint(context);
+                footprint.Load(owner, name);
+
+                var region = new Lib.FootprintRegion(footprint);
+                region.Load(regionName);
+
+                var plot = Lib.FootprintPlot.GetDefaultPlot(new[] { region.Region });
+
+                plotParameters.GetValues(plot);
+
+                return plot;
+            }
         }
 
         #endregion
@@ -378,12 +440,12 @@ namespace Jhu.Footprint.Web.Api.V1
     }
 }
 
-        
-        
+
+
 
 #if false
 
-        #region Private Methods
+#region Private Methods
         private Lib.Footprint GetFootprint(string userName, string folderName, string footprintName)
         {
             using (var context = new Lib.Context())
@@ -477,9 +539,9 @@ namespace Jhu.Footprint.Web.Api.V1
         }
 
 
-        #endregion
+#endregion
 
-        #region FootprintFolder Methods
+#region FootprintFolder Methods
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
         public FootprintListResponse GetUserFootprintFolderList(string userName)
         {
@@ -645,9 +707,9 @@ namespace Jhu.Footprint.Web.Api.V1
                 folder.Delete();
             }
         }
-        #endregion
+#endregion
 
-        #region Footprint Methods
+#region Footprint Methods
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
         public FootprintRegionResponse GetUserFootprint(string userName, string folderName, string footprintName)
         {
@@ -731,8 +793,8 @@ namespace Jhu.Footprint.Web.Api.V1
             return ms;
         }
 
-        #endregion
-        #region Create, modify, delete footprint
+#endregion
+#region Create, modify, delete footprint
 
         [PrincipalPermission(SecurityAction.Assert, Authenticated = true)]
         public void CreateUserFootprint(string userName, string folderName, string footprintName, FootprintRegionRequest request)
