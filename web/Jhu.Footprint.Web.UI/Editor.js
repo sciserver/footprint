@@ -69,6 +69,8 @@ $(document).ready(function () {
     // -------------> LOAD MODAL
 
     $("body").on("show.bs.modal", "#LoadModal", function () {
+        ResetSelectList("#RegionSelect");
+        ResetSelectList("#FootprintSelect");
         setFootprintList();
     });
 
@@ -76,12 +78,7 @@ $(document).ready(function () {
         ResetSelectList("#RegionSelect");
         setRegionList();
     });
-
-    $("body").on("hidden.bs.modal", "#LoadModal", function () {
-        ResetSelectList("#FolderSelect");
-        ResetSelectList("#FootprintSelect");
-    });
-
+    
     $("body").on("click", "#LoadRegionButton", function () {
         loadRegion();
         refreshCanvas();
