@@ -140,16 +140,14 @@ namespace Jhu.Footprint.Web.Lib
 
         #region Methods
 
-        public void Load(int footprintId, string regionName)
+        public void Load(string regionName)
         {
-            this.footprintId = footprintId;
             this.name = regionName;
             Load();
         }
 
-        public bool CheckExists(int footprintId, string regionName)
+        public bool CheckExists(string regionName)
         {
-            this.footprintId = footprintId;
             this.name = regionName;
             return CheckExists();
         }
