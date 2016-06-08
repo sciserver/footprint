@@ -168,5 +168,15 @@ namespace Jhu.Footprint.Web.Api.V1
                 client.DeleteUserFootprintRegion(owner, name, regionName);
             }
         }
+
+        protected Spherical.Region GetTestRegionShape(string user, string owner, string name, string regionName)
+        {
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session, user);
+                var region = client.GetUserFootprintRegionShape(owner, name, regionName);
+                return region;
+            }
+        }
     }
 }

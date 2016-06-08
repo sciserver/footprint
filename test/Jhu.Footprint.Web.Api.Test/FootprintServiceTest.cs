@@ -215,6 +215,32 @@ namespace Jhu.Footprint.Web.Api.V1
         }
 
         #endregion
+        #region Footprint combined region get and plot test
+        #endregion
+        #region Individual region get and plot
+
+        [TestMethod]
+        public void SetUserFootprintRegionShapeTest()
+        {
+            var name = GetTestUniqueName();
+
+            // TODO: implement
+        }
+
+        [TestMethod]
+        public void GetUserFootprinRegionShapeTest()
+        {
+            var name = GetTestUniqueName();
+
+            var f1 = CreateTestFootprint(TestUser, TestUser, name, true);
+            var r1 = CreateTestRegion(TestUser, TestUser, name, name).RegionString;
+
+            var r2 = GetTestRegionShape(TestUser,TestUser, name, name).ToString();
+
+            Assert.AreEqual(r1, r2);                
+        }
+        #endregion
+
 
 #if false
 
