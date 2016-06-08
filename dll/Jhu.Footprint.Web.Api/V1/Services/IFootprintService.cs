@@ -98,7 +98,7 @@ namespace Jhu.Footprint.Web.Api.V1
         #region Footprint combined region get and plot
 
         [OperationContract]
-        //[RegionFormatter]
+        [RegionFormatter]
         [WebGet(UriTemplate = Urls.UserFootprint + Urls.Shape, BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Returns the shape description of a footprint.")]
         Spherical.Region GetUserFootprintShape(string owner, string name);
