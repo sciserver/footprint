@@ -137,7 +137,7 @@ namespace Jhu.Footprint.Web.Api.V1
             }
         }
 
-        public Spherical.Region GetShape(string operation)
+        public Spherical.Region GetShape()
         {
             return SessionRegion;
         }

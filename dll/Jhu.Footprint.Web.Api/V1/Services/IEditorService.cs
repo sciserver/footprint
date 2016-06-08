@@ -79,7 +79,7 @@ namespace Jhu.Footprint.Web.Api.V1
         [RegionFormatter]
         [WebGet(UriTemplate = Urls.Shape, BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Returns the region.")]
-        Spherical.Region GetShape(string operation);
+        Spherical.Region GetShape();
 
         [OperationContract]
         [OutlineFormatter]

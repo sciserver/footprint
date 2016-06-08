@@ -13,16 +13,15 @@ namespace Jhu.Footprint.Web.Api.V1
         public const string UserFootprint = UserFootprints + "/{name}";
         public const string UserFootprintRegions = UserFootprint + "/regions";
         public const string UserFootprintRegion = UserFootprintRegions + "/{regionName}";
-        public const string UserFootprintRegionShape = UserFootprint + "/regions/{regionName}/shape";
 
         public const string OwnerSearchParam = "owner={owner}";
         public const string FootprintSearchParams = "name={name}&from={from}&max={max}";
         public const string RegionSearchParams = "regionName={regionName}&from={from}&max={max}";
 
-        public const string Shape = "/shape?op={operation}";
+        public const string Shape = "/shape";
         public const string Outline = "/outline?op={operation}";
         public const string OutlinePoints = "/outline/points?op={operation}&res={resolution}";
         public const string Plot = "/plot?op={operation}&proj={projection}&sys={sys}&ra={ra}&dec={dec}&b={b}&l={l}&width={width}&height={height}&theme={colorTheme}";
-        public const string PlotAdvanced = "/plot?op={operation}";
+        public const string PlotAdvanced = "/plot/adv?op={operation}";
     }
 }

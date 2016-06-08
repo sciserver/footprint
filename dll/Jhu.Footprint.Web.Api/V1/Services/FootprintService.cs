@@ -236,7 +236,7 @@ namespace Jhu.Footprint.Web.Api.V1
         #endregion
         #region Footprint combined region get and plot
 
-        public Spherical.Region GetUserFootprintShape(string owner, string name, string operation)
+        public Spherical.Region GetUserFootprintShape(string owner, string name)
         {
             using (var context = CreateContext())
             {
@@ -328,7 +328,7 @@ namespace Jhu.Footprint.Web.Api.V1
             }
         }
 
-        public Spherical.Region GetUserFootprintRegionShape(string owner, string name, string regionName, string operation)
+        public Spherical.Region GetUserFootprintRegionShape(string owner, string name, string regionName)
         {
             using (var context = CreateContext())
             {

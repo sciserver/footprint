@@ -98,10 +98,10 @@ namespace Jhu.Footprint.Web.Api.V1
         #region Footprint combined region get and plot
 
         [OperationContract]
-        [RegionFormatter]
+        //[RegionFormatter]
         [WebGet(UriTemplate = Urls.UserFootprint + Urls.Shape, BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Returns the shape description of a footprint.")]
-        Spherical.Region GetUserFootprintShape(string owner, string name, string operation);
+        Spherical.Region GetUserFootprintShape(string owner, string name);
 
         [OperationContract]
         [OutlineFormatter]
@@ -140,7 +140,7 @@ namespace Jhu.Footprint.Web.Api.V1
         #region Individual region set, get and plot
 
         [OperationContract]
-        [WebInvoke(Method = HttpMethod.Post, UriTemplate = Urls.UserFootprintRegionShape, BodyStyle = WebMessageBodyStyle.Bare)]
+        [WebInvoke(Method = HttpMethod.Post, UriTemplate = Urls.UserFootprintRegion + Urls.Shape, BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Upload region shape binary or other representation")]
         void SetUserFootprintRegionShape(string owner, string name, string regionName, Stream stream);
 
@@ -148,7 +148,7 @@ namespace Jhu.Footprint.Web.Api.V1
         [RegionFormatter]
         [WebGet(UriTemplate = Urls.UserFootprintRegion + Urls.Shape, BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Returns the shape description of a footprint.")]
-        Spherical.Region GetUserFootprintRegionShape(string owner, string name, string regionName, string operation);
+        Spherical.Region GetUserFootprintRegionShape(string owner, string name, string regionName);
 
         [OperationContract]
         [OutlineFormatter]
