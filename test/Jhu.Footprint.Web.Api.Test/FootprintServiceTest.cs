@@ -216,6 +216,16 @@ namespace Jhu.Footprint.Web.Api.V1
 
         #endregion
         #region Footprint combined region get and plot test
+        [TestMethod]
+        public void GetUserFootprintShape()
+        {
+            var name = GetTestUniqueName();
+
+            var f1 = CreateTestFootprint(TestUser, TestUser, name, true);
+            var r1 = CreateTestRegion(TestUser, TestUser, name, name);
+
+            var r2 = GetTestFootprintShape(TestUser, TestUser, name);
+        }
         #endregion
         #region Individual region get and plot
 
@@ -413,7 +423,6 @@ namespace Jhu.Footprint.Web.Api.V1
             }
 
         }
-#endif
 
         [TestMethod]
         public void GetUserFootprintPlotTest()
@@ -428,5 +437,6 @@ namespace Jhu.Footprint.Web.Api.V1
                 var buffer = session.MakeWebRequest("http://localhost/footprint.....");
             }
         }
+#endif
     }
 }

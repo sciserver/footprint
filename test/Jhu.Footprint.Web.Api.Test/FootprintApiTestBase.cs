@@ -114,6 +114,15 @@ namespace Jhu.Footprint.Web.Api.V1
             }
         }
 
+        protected Spherical.Region GetTestFootprintShape(string user, string owner, string name)
+        {
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session, user);
+                return client.GetUserFootprintShape(owner, name);
+            }
+        }
+
         protected FootprintRegion CreateTestRegion(string user, string owner, string name, string regionName)
         {
             using (var session = new RestClientSession())
@@ -184,7 +193,7 @@ namespace Jhu.Footprint.Web.Api.V1
             using (var session = new RestClientSession())
             {
                 var client = CreateClient(session, user);
-                var outline = client.GetUserFootprintOutline(owner, name, regionName);
+                var outline = client.GetUserFootprintRegionOutline(owner, name, regionName);
                 return outline;
             }
         }
