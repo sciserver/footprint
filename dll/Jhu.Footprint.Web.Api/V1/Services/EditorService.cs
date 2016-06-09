@@ -45,9 +45,9 @@ namespace Jhu.Footprint.Web.Api.V1
             SessionRegion = new Spherical.Region();
         }
 
-        public void New(Stream stream)
+        public void New(Spherical.Region region)
         {
-            SessionRegion = new RegionAdapter().ReadFromStream(stream);
+            SessionRegion = region;
             SessionRegion.Simplify();
         }
 

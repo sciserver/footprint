@@ -33,7 +33,8 @@ namespace Jhu.Footprint.Web.Api.V1
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/new", BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Upload a new region")]
-        void New(Stream stream);
+        [RegionFormatter]
+        void New(Spherical.Region stream);
 
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/union", BodyStyle = WebMessageBodyStyle.Bare)]
