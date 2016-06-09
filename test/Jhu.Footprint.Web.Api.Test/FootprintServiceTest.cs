@@ -238,6 +238,19 @@ namespace Jhu.Footprint.Web.Api.V1
 
             Assert.IsTrue(r2.Area > 0);
         }
+
+        [TestMethod]
+        public void GetUserFootprintRegionOutlineTest()
+        {
+            var name = GetTestUniqueName();
+
+            var f1 = CreateTestFootprint(TestUser, TestUser, name, true);
+            var r1 = CreateTestRegion(TestUser, TestUser, name, name);
+            var o1 = GetTestRegionOutline(TestUser,TestUser,name,name);
+
+            Assert.IsTrue(o1.PatchList.Count > 0);
+
+        }
         #endregion
 
 

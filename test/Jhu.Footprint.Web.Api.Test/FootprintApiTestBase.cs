@@ -178,5 +178,15 @@ namespace Jhu.Footprint.Web.Api.V1
                 return region;
             }
         }
+
+        protected Spherical.Outline GetTestRegionOutline(string user, string owner, string name, string regionName)
+        {
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session, user);
+                var outline = client.GetUserFootprintOutline(owner, name, regionName);
+                return outline;
+            }
+        }
     }
 }
