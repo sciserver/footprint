@@ -400,16 +400,20 @@ namespace Jhu.Footprint.Web.Api.V1
             }
 
         }
+#endif
 
         [TestMethod]
         public void GetUserFootprintPlotTest()
         {
+            var name = GetTestUniqueName();
+
+            var f1 = CreateTestFootprint(TestUser, TestUser, name, true);
+            var r1 = CreateTestRegion(TestUser, TestUser, name, name);
+
             using (var session = new RestClientSession())
             {
-                var client = CreateClient(session);
-                var footprint = client.GetUserFootprintPlot("evelin", "SDSS.DR7", "Stripe5", "Equirectangular", 0f, 0f, "", true, true, true);
+                var buffer = session.MakeWebRequest("http://localhost/footprint.....");
             }
         }
-#endif
     }
 }
