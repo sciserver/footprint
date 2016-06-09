@@ -107,7 +107,7 @@ namespace Jhu.Footprint.Web.Api.V1
         [OutlineFormatter]
         [WebGet(UriTemplate = Urls.UserFootprint + Urls.Outline, BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Returns the outline a footprint.")]
-        Spherical.Outline GetUserFootprintOutline(string owner, string name, string operation);
+        Spherical.Outline GetUserFootprintOutline(string owner, string name);
 
         [OperationContract]
         [TestJsonXmlFormat]
@@ -154,7 +154,7 @@ namespace Jhu.Footprint.Web.Api.V1
         [OutlineFormatter]
         [WebGet(UriTemplate = Urls.UserFootprintRegion + Urls.Outline, BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Returns the outline a footprint.")]
-        Spherical.Outline GetUserFootprintRegionOutline(string owner, string name, string regionName, string operation);
+        Spherical.Outline GetUserFootprintRegionOutline(string owner, string name, string regionName);
 
         [OperationContract]
         [TestJsonXmlFormat]

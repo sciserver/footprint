@@ -31,25 +31,28 @@ namespace Jhu.Footprint.Web.Api.V1
         void Reset();
 
         [OperationContract]
+        [RegionFormatter]
         [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/new", BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Upload a new region")]
-        [RegionFormatter]
-        void New(Spherical.Region stream);
+        void New(Spherical.Region region);
 
         [OperationContract]
+        [RegionFormatter]
         [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/union", BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Union edited region with the posted one.")]
-        void Union(Stream stream);
+        void Union(Spherical.Region region);
 
         [OperationContract]
+        [RegionFormatter]
         [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/intersect", BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Intersect edited region with the posted one.")]
-        void Intersect(Stream stream);
+        void Intersect(Spherical.Region region);
 
         [OperationContract]
+        [RegionFormatter]
         [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/subtract", BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Subtract posted region from the edited one")]
-        void Subtract(Stream stream);
+        void Subtract(Spherical.Region region);
 
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/grow?r={arcmin}")]
@@ -86,7 +89,7 @@ namespace Jhu.Footprint.Web.Api.V1
         [OutlineFormatter]
         [WebGet(UriTemplate = Urls.Outline, BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Returns the outline of the region.")]
-        Spherical.Outline GetOutline(string operation);
+        Spherical.Outline GetOutline();
 
         [OperationContract]
         [TestJsonXmlFormat]

@@ -244,12 +244,13 @@ namespace Jhu.Footprint.Web.Api.V1
                 var footprint = new Lib.Footprint(context);
 
                 footprint.Load(owner, name);
+                footprint.CombinedRegion.LoadRegion();
 
                 return footprint.CombinedRegion.Region;
             }
         }
 
-        public Spherical.Outline GetUserFootprintOutline(string owner, string name, string operation)
+        public Spherical.Outline GetUserFootprintOutline(string owner, string name)
         {
             using (var context = CreateContext())
             {
@@ -345,7 +346,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
         }
 
-        public Spherical.Outline GetUserFootprintRegionOutline(string owner, string name, string regionName, string operation)
+        public Spherical.Outline GetUserFootprintRegionOutline(string owner, string name, string regionName)
         {
             using (var context = CreateContext())
             {

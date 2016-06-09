@@ -19,7 +19,7 @@ namespace Jhu.Footprint.Web.Api.V1
         public const string RegionSearchParams = "regionName={regionName}&from={from}&max={max}";
 
         public const string Shape = "/shape";
-        public const string Outline = "/outline?op={operation}";
+        public const string Outline = "/outline";
         public const string OutlinePoints = "/outline/points?op={operation}&res={resolution}";
         public const string Plot = "/plot?op={operation}&proj={projection}&sys={sys}&ra={ra}&dec={dec}&b={b}&l={l}&width={width}&height={height}&theme={colorTheme}";
         public const string PlotAdvanced = "/plot/adv?op={operation}";

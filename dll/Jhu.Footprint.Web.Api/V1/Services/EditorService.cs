@@ -51,27 +51,24 @@ namespace Jhu.Footprint.Web.Api.V1
             SessionRegion.Simplify();
         }
 
-        public void Union(Stream stream)
+        public void Union(Spherical.Region region)
         {
-            var r = new RegionAdapter().ReadFromStream(stream);
-            r.Simplify();
-            SessionRegion.SmartUnion(r);
+            region.Simplify();
+            SessionRegion.SmartUnion(region);
             SessionRegion.Simplify();
         }
 
-        public void Intersect(Stream stream)
+        public void Intersect(Spherical.Region region)
         {
-            var r = new RegionAdapter().ReadFromStream(stream);
-            r.Simplify();
-            SessionRegion.SmartIntersect(r, true);
+            region.Simplify();
+            SessionRegion.SmartIntersect(region, true);
             SessionRegion.Simplify();
         }
 
-        public void Subtract(Stream stream)
+        public void Subtract(Spherical.Region region)
         {
-            var r = new RegionAdapter().ReadFromStream(stream);
-            r.Simplify();
-            SessionRegion.Difference(r);
+            region.Simplify();
+            SessionRegion.Difference(region);
             SessionRegion.Simplify();
         }
 
@@ -142,7 +139,7 @@ namespace Jhu.Footprint.Web.Api.V1
             return SessionRegion;
         }
 
-        public Spherical.Outline GetOutline(string operation)
+        public Spherical.Outline GetOutline()
         {
             return SessionRegion.Outline;
         }
