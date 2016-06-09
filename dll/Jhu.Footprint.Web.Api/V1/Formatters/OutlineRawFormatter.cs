@@ -14,6 +14,16 @@ namespace Jhu.Footprint.Web.Api.V1
 {
     public class OutlineFormatter : StreamingRawFormatter<Spherical.Outline>, IDispatchMessageFormatter, IClientMessageFormatter
     {
+        public OutlineFormatter(IDispatchMessageFormatter dispatchMessageFormatter)
+            :base(dispatchMessageFormatter)
+        {
+        }
+
+        public OutlineFormatter(IClientMessageFormatter clientMessageFormatter)
+            :base(clientMessageFormatter)
+        {
+        }
+
         protected override StreamingRawAdapter<Spherical.Outline> CreateAdapter()
         {
             return new OutlineAdapter();

@@ -233,11 +233,10 @@ namespace Jhu.Footprint.Web.Api.V1
             var name = GetTestUniqueName();
 
             var f1 = CreateTestFootprint(TestUser, TestUser, name, true);
-            var r1 = CreateTestRegion(TestUser, TestUser, name, name).RegionString;
+            var r1 = CreateTestRegion(TestUser, TestUser, name, name);
+            var r2 = GetTestRegionShape(TestUser,TestUser, name, name);
 
-            var r2 = GetTestRegionShape(TestUser,TestUser, name, name).ToString();
-
-            Assert.AreEqual(r1, r2);                
+            Assert.IsTrue(r2.Area > 0);
         }
         #endregion
 

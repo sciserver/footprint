@@ -4,19 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Jhu.Graywulf.Web.Services;
+using System.ServiceModel.Dispatcher;
 
 namespace Jhu.Footprint.Web.Api.V1
 {
     public class OutlineFormatterAttribute : StreamingRawFormatAttribute
     {
-        protected override System.ServiceModel.Dispatcher.IDispatchMessageFormatter CreateDispatchFormatter()
+        protected override StreamingRawFormatterBase CreateDispatchFormatter(IDispatchMessageFormatter formatter)
         {
-            return new OutlineFormatter();
+            return new OutlineFormatter(formatter);
         }
 
-        protected override System.ServiceModel.Dispatcher.IClientMessageFormatter CreateClientFormatter()
+        protected override StreamingRawFormatterBase CreateClientFormatter(IClientMessageFormatter formatter)
         {
-            return new OutlineFormatter();
+            return new OutlineFormatter(formatter);
         }
     }
 }

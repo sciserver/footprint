@@ -194,6 +194,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 };
                 request.Region.GetValues(region);
                 region.Save();
+                region.SaveRegion();
 
                 return new FootprintRegionResponse(footprint, region);
             }
@@ -337,6 +338,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
                 var region = new Lib.FootprintRegion(footprint);
                 region.Load(regionName);
+                region.LoadRegion();
 
                 return region.Region;
             }

@@ -41,7 +41,7 @@ namespace Jhu.Footprint.Web.Api.V1
                     return ReadAsStc(stream);
                 default:
                     throw new NotImplementedException();
-            }            
+            }
         }
 
         private Spherical.Region ReadAsText(Stream stream)
@@ -50,7 +50,10 @@ namespace Jhu.Footprint.Web.Api.V1
             {
                 // TODO: modify to read from stream
                 var text = reader.ReadToEnd();
-                return Spherical.Region.Parse(text);
+                var region = Spherical.Region.Parse(text);
+                region.Simplify();
+
+                return region;
             }
         }
 
@@ -72,20 +75,23 @@ namespace Jhu.Footprint.Web.Api.V1
 
         protected override void OnSerializeResponse(Stream stream, string contentType, Spherical.Region value)
         {
-            switch (contentType)
+            if (value != null)
             {
-                case Constants.MimeTypeText:
-                    WriteAsText(stream, value);
-                    break;
-                case Constants.MimeTypeBinary:
-                    WriteAsBinary(stream, value);
-                    break;
-                case MimeTypeStc:
-                    WriteAsStc(stream, value);
-                    break;
-                default:
-                    throw new NotImplementedException();
-            }   
+                switch (contentType)
+                {
+                    case Constants.MimeTypeText:
+                        WriteAsText(stream, value);
+                        break;
+                    case Constants.MimeTypeBinary:
+                        WriteAsBinary(stream, value);
+                        break;
+                    case MimeTypeStc:
+                        WriteAsStc(stream, value);
+                        break;
+                    default:
+                        throw new NotImplementedException();
+                }
+            }
         }
 
         private static void WriteAsText(Stream stream, Spherical.Region region)

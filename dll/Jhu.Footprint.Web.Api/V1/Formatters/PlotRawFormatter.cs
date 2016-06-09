@@ -14,6 +14,16 @@ namespace Jhu.Footprint.Web.Api.V1
 {
     public class PlotRawFormatter : StreamingRawFormatter<Spherical.Visualizer.Plot>, IDispatchMessageFormatter, IClientMessageFormatter
     {
+        public PlotRawFormatter(IDispatchMessageFormatter formatter)
+            : base(formatter)
+        {
+        }
+
+        public PlotRawFormatter(IClientMessageFormatter formatter)
+            : base(formatter)
+        {
+        }
+
         protected override StreamingRawAdapter<Spherical.Visualizer.Plot> CreateAdapter()
         {
             return new PlotAdapter();

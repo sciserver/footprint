@@ -35,13 +35,16 @@ namespace Jhu.Footprint.Web.Api.V1
 
         protected override void OnSerializeResponse(Stream stream, string contentType, Spherical.Outline value)
         {
-            switch (contentType)
+            if (value != null)
             {
-                case Constants.MimeTypeText:
-                    WriteAsText(stream, value);
-                    break;
-                default:
-                    throw new NotImplementedException();
+                switch (contentType)
+                {
+                    case Constants.MimeTypeText:
+                        WriteAsText(stream, value);
+                        break;
+                    default:
+                        throw new NotImplementedException();
+                }
             }   
         }
 
