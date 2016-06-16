@@ -217,7 +217,7 @@ namespace Jhu.Footprint.Web.Api.V1
         #endregion
         #region Footprint combined region get and plot test
         [TestMethod]
-        public void GetUserFootprintShape()
+        public void GetUserFootprintShapeTest()
         {
             var name = GetTestUniqueName();
 
