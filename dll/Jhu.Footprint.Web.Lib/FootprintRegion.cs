@@ -69,7 +69,12 @@ namespace Jhu.Footprint.Web.Lib
 
         public Region Region
         {
-            get { return region; }
+            get {
+                if (region == null)
+                {
+                    LoadRegion();
+                }
+                return region; }
             set { region = value; }
         }
 
@@ -303,7 +308,7 @@ WHERE FootprintID = @FootprintID AND Name = @Name;
             }
         }
 
-        public void LoadRegion()
+        private void LoadRegion()
         {
             EvaluateAccess().EnsureRead();
 

@@ -96,7 +96,13 @@ namespace Jhu.Footprint.Web.Lib
 
         public FootprintRegion CombinedRegion
         {
-            get { return combinedRegion; }
+            get {
+                if (combinedRegion == null)
+                {
+                    LoadFootprintRegion();
+                }
+                return combinedRegion;
+            }
             set { combinedRegion = value; }
         }
 
