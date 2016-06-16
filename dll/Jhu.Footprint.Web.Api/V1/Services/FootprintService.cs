@@ -244,9 +244,8 @@ namespace Jhu.Footprint.Web.Api.V1
                 var footprint = new Lib.Footprint(context);
 
                 footprint.Load(owner, name);
-                footprint.CombinedRegion.LoadRegion();
 
-                return footprint.CombinedRegion.Region;
+                return footprint.CombinedRegion.Region ;
             }
         }
 
@@ -339,7 +338,6 @@ namespace Jhu.Footprint.Web.Api.V1
 
                 var region = new Lib.FootprintRegion(footprint);
                 region.Load(regionName);
-                region.LoadRegion();
 
                 return region.Region;
             }
