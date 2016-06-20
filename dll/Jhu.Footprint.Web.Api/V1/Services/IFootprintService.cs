@@ -113,7 +113,7 @@ namespace Jhu.Footprint.Web.Api.V1
         [TestJsonXmlFormat]
         [WebGet(UriTemplate = Urls.UserFootprint + Urls.OutlinePoints)]
         [Description("Returns the points of the outline of a footprint.")]
-        IEnumerable<Lib.EquatorialPoint> GetUserFootprintOutlinePoints(string owner, string name, string operation, double resolution);
+        IEnumerable<Lib.EquatorialPoint> GetUserFootprintOutlinePoints(string owner, string name, double resolution);
 
         [OperationContract]
         [WebGet(UriTemplate = Urls.UserFootprint + Urls.Plot, BodyStyle = WebMessageBodyStyle.Bare)]
@@ -160,7 +160,7 @@ namespace Jhu.Footprint.Web.Api.V1
         [TestJsonXmlFormat]
         [WebGet(UriTemplate = Urls.UserFootprintRegion + Urls.OutlinePoints)]
         [Description("Returns the points of the outline of a footprint.")]
-        IEnumerable<Lib.EquatorialPoint> GetUserFootprintRegionOutlinePoints(string owner, string name, string regionName, string operation, double resolution);
+        IEnumerable<Lib.EquatorialPoint> GetUserFootprintRegionOutlinePoints(string owner, string name, string regionName, double resolution);
 
         [OperationContract]
         [WebGet(UriTemplate = Urls.UserFootprintRegion + Urls.Plot, BodyStyle = WebMessageBodyStyle.Bare)]

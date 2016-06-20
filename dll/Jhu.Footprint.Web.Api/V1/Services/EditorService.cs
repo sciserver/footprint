@@ -144,7 +144,7 @@ namespace Jhu.Footprint.Web.Api.V1
             return SessionRegion.Outline;
         }
 
-        public IEnumerable<Lib.EquatorialPoint> GetOutlinePoints(string operation, double resolution)
+        public IEnumerable<Lib.EquatorialPoint> GetOutlinePoints(double resolution)
         {
             return Lib.FootprintFormatter.InterpolateOutlinePoints(SessionRegion.Outline, resolution);
         }

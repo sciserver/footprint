@@ -261,7 +261,7 @@ namespace Jhu.Footprint.Web.Api.V1
             }
         }
 
-        public IEnumerable<Lib.EquatorialPoint> GetUserFootprintOutlinePoints(string owner, string name, string operation, double resolution)
+        public IEnumerable<Lib.EquatorialPoint> GetUserFootprintOutlinePoints(string owner, string name, double resolution)
         {
             using (var context = CreateContext())
             {
@@ -358,7 +358,7 @@ namespace Jhu.Footprint.Web.Api.V1
             }
         }
 
-        public IEnumerable<Lib.EquatorialPoint> GetUserFootprintRegionOutlinePoints(string owner, string name, string regionName, string operation, double resolution)
+        public IEnumerable<Lib.EquatorialPoint> GetUserFootprintRegionOutlinePoints(string owner, string name, string regionName, double resolution)
         {
             using (var context = CreateContext())
             {

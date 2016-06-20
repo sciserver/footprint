@@ -95,7 +95,7 @@ namespace Jhu.Footprint.Web.Api.V1
         [TestJsonXmlFormat]
         [WebGet(UriTemplate = Urls.OutlinePoints)]
         [Description("Returns the points of the outline of the region.")]
-        IEnumerable<Lib.EquatorialPoint> GetOutlinePoints(string operation, double resolution);
+        IEnumerable<Lib.EquatorialPoint> GetOutlinePoints(double resolution);
 
         [OperationContract]
         [PlotFormatter]
