@@ -1,11 +1,4 @@
 ﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Data;
-using System.Data.SqlClient;
-using Jhu.Graywulf.AccessControl;
 using Jhu.Graywulf.Web.Api.V1;
 using Jhu.Graywulf.Web.Services;
 using Jhu.Footprint.Web.Lib;
@@ -13,7 +6,7 @@ using Jhu.Footprint.Web.Api.V1;
 
 namespace Jhu.Footprint.Web.Api.V1
 {
-    public class FootprintApiTestBase: ApiTestBase
+    public class FootprintApiTestBase : ApiTestBase
     {
         /*
          * Test prerequisites in Graywulf Registry:
@@ -58,7 +51,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
             return client;
         }
-        
+
         protected Footprint CreateTestFootprint(string user, string owner, string name, bool @public)
         {
             using (var session = new RestClientSession())
@@ -123,6 +116,46 @@ namespace Jhu.Footprint.Web.Api.V1
             }
         }
 
+        protected byte[] GetTestFootprintOutline(string user, string owner, string name)
+        {
+            using (var session = new RestClientSession())
+            {
+                var url = "http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + owner + "/footprints/" + name + "/outline";
+                return session.MakeWebRequest(url);
+            }
+        }
+
+        protected byte[] GetTestFootprintOutlinePoints(string user, string owner, string name, double resolution)
+        {
+            using (var session = new RestClientSession())
+            {
+                var url = "http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + owner + "/footprints/" + name + "/outline/points";
+
+                return session.MakeWebRequest(url);
+            }
+        }
+
+        protected byte[] PlotTestFootprint(string user, string owner, string name)
+        {
+            using (var session = new RestClientSession())
+            {
+                var url = "http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + owner + "/footprints/" + name + "/plot";
+
+                return session.MakeWebRequest(url);
+            }
+        }
+
+        protected byte[] PlotTestFootprintAdvanced(string user, string owner, string name)
+        {
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session, user);
+                var url = "http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + owner + "/footprints/" + name + "/plot/adv";
+
+                return session.MakeWebRequest(url);
+            }
+        }
+
         protected FootprintRegion CreateTestRegion(string user, string owner, string name, string regionName)
         {
             using (var session = new RestClientSession())
@@ -137,7 +170,7 @@ namespace Jhu.Footprint.Web.Api.V1
                         FillFactor = 0.8,
                     }
                 };
-               
+
                 return client.CreateUserFootprintRegion(owner, name, regionName, req).Region;
             }
         }
@@ -188,14 +221,44 @@ namespace Jhu.Footprint.Web.Api.V1
             }
         }
 
-        protected Spherical.Outline GetTestRegionOutline(string user, string owner, string name, string regionName)
+        protected byte[] GetTestRegionOutline(string user, string owner, string name, string regionName)
         {
             using (var session = new RestClientSession())
             {
-                var client = CreateClient(session, user);
-                var outline = client.GetUserFootprintRegionOutline(owner, name, regionName);
-                return outline;
+                var url = "http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + owner + "/footprints/" + name + "/regions/" + regionName + "/outline";
+                return session.MakeWebRequest(url);
             }
         }
+
+        protected byte[] GetTestRegionOutlinePoints(string user, string owner, string name, string regionName, double resolution)
+        {
+            using (var session = new RestClientSession())
+            {
+                var url = "http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + owner + "/footprints/" + name + "/regions/" + regionName + "/outline/points";
+
+                return session.MakeWebRequest(url);
+            }
+        }
+
+        protected byte[] PlotTestRegion(string user, string owner, string name, string regionName)
+        {
+            using (var session = new RestClientSession())
+            {
+                var url = "http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + owner + "/footprints/" + name + "/regions/" + regionName + "/plot";
+
+                return session.MakeWebRequest(url);
+            }
+        }
+
+        protected byte[] PlotTestRegionAdvanced(string user, string owner, string name, string regionName)
+        {
+            using (var session = new RestClientSession())
+            {
+                var url = "http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + owner + "/footprints/" + name + "/regions/" + regionName + "/plot/adv";
+
+                return session.MakeWebRequest(url);
+            }
+        }
+
     }
 }

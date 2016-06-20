@@ -226,6 +226,57 @@ namespace Jhu.Footprint.Web.Api.V1
 
             var r2 = GetTestFootprintShape(TestUser, TestUser, name);
         }
+
+        [TestMethod]
+        public void GetUserFootprintOutlineTest()
+        {
+            var name = GetTestUniqueName();
+
+            var f1 = CreateTestFootprint(TestUser, TestUser, name, true);
+            var r1 = CreateTestRegion(TestUser, TestUser, name, name);
+            var o1 = GetTestFootprintOutline(TestUser, TestUser, name);
+
+            Assert.IsTrue(o1 != null && o1.Length > 0);
+        }
+
+        [TestMethod]
+        public void GetUserFootprintOutlinePointsTest()
+        {
+            var name = GetTestUniqueName();
+
+            var f1 = CreateTestFootprint(TestUser, TestUser, name, true);
+            var r1 = CreateTestRegion(TestUser, TestUser, name, name);
+
+            var p1 = GetTestFootprintOutlinePoints(TestUser, TestUser, name, 0.1);
+            Assert.IsTrue(p1 != null && p1.Length > 0);
+        }
+
+        [TestMethod]
+        public void PlotUserFootprintTest()
+        {
+            var name = GetTestUniqueName();
+
+            var f1 = CreateTestFootprint(TestUser, TestUser, name, true);
+            var r1 = CreateTestRegion(TestUser, TestUser, name, name);
+
+            var p1 = PlotTestFootprint(TestUser, TestUser, name);
+
+            Assert.IsTrue(p1 != null && p1.Length > 0);
+        }
+
+        [TestMethod]
+        public void PlotUserFootprintAdvancedTest()
+        {
+            var name = GetTestUniqueName();
+
+            var f1 = CreateTestFootprint(TestUser, TestUser, name, true);
+            var r1 = CreateTestRegion(TestUser, TestUser, name, name);
+
+            var p1 = PlotTestFootprint(TestUser, TestUser, name);
+
+            Assert.IsTrue(p1 != null && p1.Length > 0);
+        }
+
         #endregion
         #region Individual region get and plot
 
@@ -258,8 +309,45 @@ namespace Jhu.Footprint.Web.Api.V1
             var r1 = CreateTestRegion(TestUser, TestUser, name, name);
             var o1 = GetTestRegionOutline(TestUser,TestUser,name,name);
 
-            Assert.IsTrue(o1.PatchList.Count > 0);
+            Assert.IsTrue(o1 != null && o1.Length > 0);
+        }
 
+        [TestMethod]
+        public void GetUserFootprintRegionOutlinePointsTest()
+        {
+            var name = GetTestUniqueName();
+
+            var f1 = CreateTestFootprint(TestUser, TestUser, name, true);
+            var r1 = CreateTestRegion(TestUser, TestUser, name, name);
+
+            var p1 = GetTestRegionOutlinePoints(TestUser, TestUser, name, name, 0.1);
+            Assert.IsTrue(p1 != null && p1.Length > 0);
+        }
+
+        [TestMethod]
+        public void PlotUserFootprintRegionTest()
+        {
+            var name = GetTestUniqueName();
+
+            var f1 = CreateTestFootprint(TestUser, TestUser, name, true);
+            var r1 = CreateTestRegion(TestUser, TestUser, name, name);
+
+            var p1 = PlotTestRegion(TestUser, TestUser, name, name);
+
+            Assert.IsTrue(p1 != null && p1.Length > 0);
+        }
+
+        [TestMethod]
+        public void PlotUserFootprintRegionAdvancedTest()
+        {
+            var name = GetTestUniqueName();
+
+            var f1 = CreateTestFootprint(TestUser, TestUser, name, true);
+            var r1 = CreateTestRegion(TestUser, TestUser, name, name);
+
+            var p1 = PlotTestRegionAdvanced(TestUser, TestUser, name, name);
+
+            Assert.IsTrue(p1 != null && p1.Length > 0);
         }
         #endregion
 
