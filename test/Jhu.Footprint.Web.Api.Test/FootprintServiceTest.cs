@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Text;
-using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
-using System.ServiceModel.Security;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Jhu.Graywulf.AccessControl;
-using Jhu.Graywulf.Web.Api.V1;
 using Jhu.Graywulf.Web.Services;
 
 namespace Jhu.Footprint.Web.Api.V1
@@ -224,7 +219,14 @@ namespace Jhu.Footprint.Web.Api.V1
             var f1 = CreateTestFootprint(TestUser, TestUser, name, true);
             var r1 = CreateTestRegion(TestUser, TestUser, name, name);
 
-            var r2 = GetTestFootprintShape(TestUser, TestUser, name);
+
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session, TestUser);
+                var r2 = client.GetUserFootprintShape(TestUser, name);
+
+                Assert.IsNotNull(r2);
+            }
         }
 
         [TestMethod]
@@ -234,9 +236,14 @@ namespace Jhu.Footprint.Web.Api.V1
 
             var f1 = CreateTestFootprint(TestUser, TestUser, name, true);
             var r1 = CreateTestRegion(TestUser, TestUser, name, name);
-            var o1 = GetTestFootprintOutline(TestUser, TestUser, name);
 
-            Assert.IsTrue(o1 != null && o1.Length > 0);
+            using (var session = new RestClientSession())
+            {
+                var url = "http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + TestUser + "/footprints/" + name + "/outline";
+                var buffer = session.MakeWebRequest(url);
+                Assert.IsTrue(buffer != null && buffer.Length > 0);
+            }
+
         }
 
         [TestMethod]
@@ -247,8 +254,13 @@ namespace Jhu.Footprint.Web.Api.V1
             var f1 = CreateTestFootprint(TestUser, TestUser, name, true);
             var r1 = CreateTestRegion(TestUser, TestUser, name, name);
 
-            var p1 = GetTestFootprintOutlinePoints(TestUser, TestUser, name, 0.1);
-            Assert.IsTrue(p1 != null && p1.Length > 0);
+            using (var session = new RestClientSession())
+            {
+                var url = "http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + TestUser + "/footprints/" + name + "/outline/points";
+
+                var buffer = session.MakeWebRequest(url);
+                Assert.IsTrue(buffer != null && buffer.Length > 0);
+            }
         }
 
         [TestMethod]
@@ -259,9 +271,13 @@ namespace Jhu.Footprint.Web.Api.V1
             var f1 = CreateTestFootprint(TestUser, TestUser, name, true);
             var r1 = CreateTestRegion(TestUser, TestUser, name, name);
 
-            var p1 = PlotTestFootprint(TestUser, TestUser, name);
+            using (var session = new RestClientSession())
+            {
+                var url = "http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + TestUser + "/footprints/" + name + "/plot";
 
-            Assert.IsTrue(p1 != null && p1.Length > 0);
+                var buffer = session.MakeWebRequest(url);
+                Assert.IsTrue(buffer != null && buffer.Length > 0);
+            }
         }
 
         [TestMethod]
@@ -272,9 +288,14 @@ namespace Jhu.Footprint.Web.Api.V1
             var f1 = CreateTestFootprint(TestUser, TestUser, name, true);
             var r1 = CreateTestRegion(TestUser, TestUser, name, name);
 
-            var p1 = PlotTestFootprint(TestUser, TestUser, name);
 
-            Assert.IsTrue(p1 != null && p1.Length > 0);
+            using (var session = new RestClientSession())
+            {
+                var url = "http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + TestUser + "/footprints/" + name + "/plot/adv";
+
+                var buffer = session.MakeWebRequest(url);
+                Assert.IsTrue(buffer != null && buffer.Length > 0);
+            }
         }
 
         #endregion
@@ -295,9 +316,14 @@ namespace Jhu.Footprint.Web.Api.V1
 
             var f1 = CreateTestFootprint(TestUser, TestUser, name, true);
             var r1 = CreateTestRegion(TestUser, TestUser, name, name);
-            var r2 = GetTestRegionShape(TestUser,TestUser, name, name);
 
-            Assert.IsTrue(r2.Area > 0);
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session, TestUser);
+                var region = client.GetUserFootprintRegionShape(TestUser, name, name);
+
+                Assert.IsTrue(region.Area > 0);
+            }
         }
 
         [TestMethod]
@@ -307,9 +333,15 @@ namespace Jhu.Footprint.Web.Api.V1
 
             var f1 = CreateTestFootprint(TestUser, TestUser, name, true);
             var r1 = CreateTestRegion(TestUser, TestUser, name, name);
-            var o1 = GetTestRegionOutline(TestUser,TestUser,name,name);
 
-            Assert.IsTrue(o1 != null && o1.Length > 0);
+            using (var session = new RestClientSession())
+            {
+                var url = "http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + TestUser + "/footprints/" + name + "/regions/" + name + "/outline";
+
+                var buffer = session.MakeWebRequest(url);
+                Assert.IsTrue(buffer != null && buffer.Length > 0);
+            }
+
         }
 
         [TestMethod]
@@ -320,8 +352,13 @@ namespace Jhu.Footprint.Web.Api.V1
             var f1 = CreateTestFootprint(TestUser, TestUser, name, true);
             var r1 = CreateTestRegion(TestUser, TestUser, name, name);
 
-            var p1 = GetTestRegionOutlinePoints(TestUser, TestUser, name, name, 0.1);
-            Assert.IsTrue(p1 != null && p1.Length > 0);
+            using (var session = new RestClientSession())
+            {
+                var url = "http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + TestUser + "/footprints/" + name + "/regions/" + name + "/outline/points";
+
+                var buffer = session.MakeWebRequest(url);
+                Assert.IsTrue(buffer != null && buffer.Length > 0);
+            }
         }
 
         [TestMethod]
@@ -332,9 +369,13 @@ namespace Jhu.Footprint.Web.Api.V1
             var f1 = CreateTestFootprint(TestUser, TestUser, name, true);
             var r1 = CreateTestRegion(TestUser, TestUser, name, name);
 
-            var p1 = PlotTestRegion(TestUser, TestUser, name, name);
+            using (var session = new RestClientSession())
+            {
+                var url = "http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + TestUser + "/footprints/" + name + "/regions/" + name + "/plot";
 
-            Assert.IsTrue(p1 != null && p1.Length > 0);
+                var buffer = session.MakeWebRequest(url);
+                Assert.IsTrue(buffer != null && buffer.Length > 0);
+            }
         }
 
         [TestMethod]
@@ -345,11 +386,17 @@ namespace Jhu.Footprint.Web.Api.V1
             var f1 = CreateTestFootprint(TestUser, TestUser, name, true);
             var r1 = CreateTestRegion(TestUser, TestUser, name, name);
 
-            var p1 = PlotTestRegionAdvanced(TestUser, TestUser, name, name);
+            using (var session = new RestClientSession())
+            {
+                var url = "http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + TestUser + "/footprints/" + name + "/regions/" + name + "/plot/adv";
 
-            Assert.IsTrue(p1 != null && p1.Length > 0);
+                var buffer = session.MakeWebRequest(url);
+                Assert.IsTrue(buffer != null && buffer.Length > 0);
+            }
         }
         #endregion
+
+    }
 
 
 #if false
@@ -526,5 +573,5 @@ namespace Jhu.Footprint.Web.Api.V1
             }
         }
 #endif
-    }
+
 }

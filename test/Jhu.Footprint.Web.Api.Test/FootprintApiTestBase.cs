@@ -106,55 +106,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 client.DeleteUserFootprint(owner, name);
             }
         }
-
-        protected Spherical.Region GetTestFootprintShape(string user, string owner, string name)
-        {
-            using (var session = new RestClientSession())
-            {
-                var client = CreateClient(session, user);
-                return client.GetUserFootprintShape(owner, name);
-            }
-        }
-
-        protected byte[] GetTestFootprintOutline(string user, string owner, string name)
-        {
-            using (var session = new RestClientSession())
-            {
-                var url = "http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + owner + "/footprints/" + name + "/outline";
-                return session.MakeWebRequest(url);
-            }
-        }
-
-        protected byte[] GetTestFootprintOutlinePoints(string user, string owner, string name, double resolution)
-        {
-            using (var session = new RestClientSession())
-            {
-                var url = "http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + owner + "/footprints/" + name + "/outline/points";
-
-                return session.MakeWebRequest(url);
-            }
-        }
-
-        protected byte[] PlotTestFootprint(string user, string owner, string name)
-        {
-            using (var session = new RestClientSession())
-            {
-                var url = "http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + owner + "/footprints/" + name + "/plot";
-
-                return session.MakeWebRequest(url);
-            }
-        }
-
-        protected byte[] PlotTestFootprintAdvanced(string user, string owner, string name)
-        {
-            using (var session = new RestClientSession())
-            {
-                var client = CreateClient(session, user);
-                var url = "http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + owner + "/footprints/" + name + "/plot/adv";
-
-                return session.MakeWebRequest(url);
-            }
-        }
+        
 
         protected FootprintRegion CreateTestRegion(string user, string owner, string name, string regionName)
         {
@@ -208,55 +160,6 @@ namespace Jhu.Footprint.Web.Api.V1
             {
                 var client = CreateClient(session, user);
                 client.DeleteUserFootprintRegion(owner, name, regionName);
-            }
-        }
-
-        protected Spherical.Region GetTestRegionShape(string user, string owner, string name, string regionName)
-        {
-            using (var session = new RestClientSession())
-            {
-                var client = CreateClient(session, user);
-                var region = client.GetUserFootprintRegionShape(owner, name, regionName);
-                return region;
-            }
-        }
-
-        protected byte[] GetTestRegionOutline(string user, string owner, string name, string regionName)
-        {
-            using (var session = new RestClientSession())
-            {
-                var url = "http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + owner + "/footprints/" + name + "/regions/" + regionName + "/outline";
-                return session.MakeWebRequest(url);
-            }
-        }
-
-        protected byte[] GetTestRegionOutlinePoints(string user, string owner, string name, string regionName, double resolution)
-        {
-            using (var session = new RestClientSession())
-            {
-                var url = "http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + owner + "/footprints/" + name + "/regions/" + regionName + "/outline/points";
-
-                return session.MakeWebRequest(url);
-            }
-        }
-
-        protected byte[] PlotTestRegion(string user, string owner, string name, string regionName)
-        {
-            using (var session = new RestClientSession())
-            {
-                var url = "http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + owner + "/footprints/" + name + "/regions/" + regionName + "/plot";
-
-                return session.MakeWebRequest(url);
-            }
-        }
-
-        protected byte[] PlotTestRegionAdvanced(string user, string owner, string name, string regionName)
-        {
-            using (var session = new RestClientSession())
-            {
-                var url = "http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + owner + "/footprints/" + name + "/regions/" + regionName + "/plot/adv";
-
-                return session.MakeWebRequest(url);
             }
         }
 
