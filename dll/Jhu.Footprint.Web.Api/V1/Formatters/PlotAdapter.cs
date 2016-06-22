@@ -56,7 +56,10 @@ namespace Jhu.Footprint.Web.Api.V1
                 case Constants.MimeTypeEps:
                 case Constants.MimeTypeEmf:
                 default:
-                    throw new NotImplementedException();
+                    //throw new NotImplementedException();
+                    // TODO: when loading plot with <img> the mime type is text/plain
+                    WriteAsBitmap(stream, plot, Constants.MimeTypePng);
+                    break;
             }
         }
 
