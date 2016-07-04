@@ -116,6 +116,7 @@ namespace Jhu.Footprint.Web.Api.V1
         IEnumerable<Lib.EquatorialPoint> GetUserFootprintOutlinePoints(string owner, string name, double resolution);
 
         [OperationContract]
+        [PlotFormatter]
         [WebGet(UriTemplate = Urls.UserFootprint + Urls.Plot, BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Returns the points of the outline of a footprint.")]
         Spherical.Visualizer.Plot PlotUserFootprint(
