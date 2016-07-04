@@ -6,6 +6,7 @@
     <jgwc:ToolbarButton ID="Edit" runat="server" Text="edit" SkinID="Menu" />
     <jgwc:ToolbarButton ID="MyFootprint" runat="server" Text="my footprints" SkinID="Menu" />
     <jgwc:ToolbarButton ID="Api" runat="server" Text="api" SkinID="Menu" />
+    <jgwc:ToolbarButton ID="Plot" runat="server" Text="plot" SkinID="Menu" />
     <jgwc:ToolbarButton ID="Docs" runat="server" Text="docs" SkinID="Menu" />
     <jgwc:ToolbarSpan runat="server" SkinID="Menu" />
 </jgwc:Toolbar>

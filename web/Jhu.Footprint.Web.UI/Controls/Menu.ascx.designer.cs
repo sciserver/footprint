@@ -58,6 +58,15 @@ namespace Jhu.Footprint.Web.UI.Controls {
         protected global::Jhu.Graywulf.Web.Controls.ToolbarButton Api;
         
         /// <summary>
+        /// Plot control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Jhu.Graywulf.Web.Controls.ToolbarButton Plot;
+        
+        /// <summary>
         /// Docs control.
         /// </summary>
         /// <remarks>
