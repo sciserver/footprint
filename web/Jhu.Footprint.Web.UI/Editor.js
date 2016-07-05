@@ -260,7 +260,7 @@ function saveRegion() {
 }
 
 
-// Load region /test only at the moment!/
+// Load region 
 function loadRegion() {
     var params = {
         owner: $("#SaveUserInput").val(),
