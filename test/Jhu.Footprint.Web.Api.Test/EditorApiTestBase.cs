@@ -55,27 +55,22 @@ namespace Jhu.Footprint.Web.Api.V1
             return client;
         }
 
-        protected RestClientSession ResetTest(string user)
+        protected FootprintRegionRequest GetTestRegion()
         {
-            using (var session = new RestClientSession())
+            return GetTestRegion("CIRCLE J2000 10 10 10");
+        }
+
+        protected FootprintRegionRequest GetTestRegion(string regionString)
+        {
+            var req = new FootprintRegionRequest()
             {
-                var client = CreateClient(session, user);
-                client.Reset();
-                return session;
-            }
-        }
-
-        protected void NewTest(RestClientSession session, string user)
-        {
-            var client = CreateClient(session, user);
-            client.New(Region);
-        }
-
-        protected Spherical.Region GetTestShape(RestClientSession session, string user)
-        {
-            var client = CreateClient(session, TestUser);
-            return client.GetShape();
-
+                Region = new FootprintRegion()
+                {
+                    RegionString = regionString,
+                    FillFactor = 0.8,
+                }
+            };
+            return req;
         }
 
 

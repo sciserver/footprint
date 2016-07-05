@@ -26,33 +26,29 @@ namespace Jhu.Footprint.Web.Api.V1
         #region Basic region operations
 
         [OperationContract]
-        [WebGet(UriTemplate = "/reset")]
+        [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/reset")]
         [Description("Reset editor to an empty region")]
         void Reset();
 
         [OperationContract]
-        [RegionFormatter]
-        [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/new", BodyStyle = WebMessageBodyStyle.Bare)]
+        [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/new")]
         [Description("Upload a new region")]
-        void New(Spherical.Region region);
+        void New(FootprintRegionRequest request);
 
         [OperationContract]
-        [RegionFormatter]
-        [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/union", BodyStyle = WebMessageBodyStyle.Bare)]
+        [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/union")]
         [Description("Union edited region with the posted one.")]
-        void Union(Spherical.Region region);
+        void Union(FootprintRegionRequest request);
 
         [OperationContract]
-        [RegionFormatter]
-        [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/intersect", BodyStyle = WebMessageBodyStyle.Bare)]
+        [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/intersect")]
         [Description("Intersect edited region with the posted one.")]
-        void Intersect(Spherical.Region region);
+        void Intersect(FootprintRegionRequest request);
 
         [OperationContract]
-        [RegionFormatter]
-        [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/subtract", BodyStyle = WebMessageBodyStyle.Bare)]
+        [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/subtract")]
         [Description("Subtract posted region from the edited one")]
-        void Subtract(Spherical.Region region);
+        void Subtract(FootprintRegionRequest request);
 
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/grow?r={arcmin}")]
@@ -92,7 +88,7 @@ namespace Jhu.Footprint.Web.Api.V1
         Spherical.Outline GetOutline();
 
         [OperationContract]
-        [TestJsonXmlFormat]
+        [TextJsonXmlFormat]
         [WebGet(UriTemplate = Urls.OutlinePoints)]
         [Description("Returns the points of the outline of the region.")]
         IEnumerable<Lib.EquatorialPoint> GetOutlinePoints(double resolution);

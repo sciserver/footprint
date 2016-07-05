@@ -45,29 +45,29 @@ namespace Jhu.Footprint.Web.Api.V1
             SessionRegion = new Spherical.Region();
         }
 
-        public void New(Spherical.Region region)
+        public void New(FootprintRegionRequest request)
         {
+            var region = request.Region.GetRegion();
             SessionRegion = region;
-            SessionRegion.Simplify();
         }
 
-        public void Union(Spherical.Region region)
+        public void Union(FootprintRegionRequest request)
         {
-            region.Simplify();
+            var region = request.Region.GetRegion();
             SessionRegion.SmartUnion(region);
             SessionRegion.Simplify();
         }
 
-        public void Intersect(Spherical.Region region)
+        public void Intersect(FootprintRegionRequest request)
         {
-            region.Simplify();
+            var region = request.Region.GetRegion();
             SessionRegion.SmartIntersect(region, true);
             SessionRegion.Simplify();
         }
 
-        public void Subtract(Spherical.Region region)
+        public void Subtract(FootprintRegionRequest request)
         {
-            region.Simplify();
+            var region = request.Region.GetRegion();
             SessionRegion.Difference(region);
             SessionRegion.Simplify();
         }

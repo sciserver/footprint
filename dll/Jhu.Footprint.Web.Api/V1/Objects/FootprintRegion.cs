@@ -51,6 +51,20 @@ namespace Jhu.Footprint.Web.Api.V1
             SetValues(footprint, region);
         }
 
+        public Spherical.Region GetRegion()
+        {
+            if (RegionString != null)
+            {
+                var region = Spherical.Region.Parse(RegionString);
+                region.Simplify();
+                return region;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public void GetValues(Lib.FootprintRegion region)
         {
             region.FillFactor = FillFactor ?? region.FillFactor;

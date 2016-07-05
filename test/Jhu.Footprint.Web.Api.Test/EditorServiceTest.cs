@@ -10,12 +10,43 @@ namespace Jhu.Footprint.Web.Api.V1
     public class EditorServiceTest: EditorApiTestBase
     {
         [TestMethod]
+        public void ResetTest()
+        {
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session, TestUser);
+                client.Reset();
+                var res = client.GetShape();
+                Assert.AreEqual(0, res.ConvexList.Count);
+            }
+        }
+
+        [TestMethod]
+        public void NewTest()
+        {
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session, TestUser);
+                var region = GetTestRegion();
+                client.New(region);
+                var res = client.GetShape();
+                Assert.AreEqual(1, res.ConvexList.Count);
+            }
+        }
+
+        [TestMethod]
         public void UnionTest()
         {
-            var session = ResetTest(TestUser);
-            NewTest(session, TestUser);
-            var shape = GetTestShape(session, TestUser);
-            
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session, TestUser);
+                var r1 = GetTestRegion();
+                client.New(r1);
+                var r2 = GetTestRegion("CIRCLE J2000 15 10 15");
+                client.Union(r2);
+                var res = client.GetShape();
+                Assert.AreEqual(2, res.ConvexList.Count);
+            }
         }
 
         protected void IntersectTest(Spherical.Region region)

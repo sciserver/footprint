@@ -110,7 +110,7 @@ namespace Jhu.Footprint.Web.Api.V1
         Spherical.Outline GetUserFootprintOutline(string owner, string name);
 
         [OperationContract]
-        [TestJsonXmlFormat]
+        [TextJsonXmlFormat]
         [WebGet(UriTemplate = Urls.UserFootprint + Urls.OutlinePoints)]
         [Description("Returns the points of the outline of a footprint.")]
         IEnumerable<Lib.EquatorialPoint> GetUserFootprintOutlinePoints(string owner, string name, double resolution);
@@ -118,7 +118,7 @@ namespace Jhu.Footprint.Web.Api.V1
         [OperationContract]
         [PlotFormatter]
         [WebGet(UriTemplate = Urls.UserFootprint + Urls.Plot, BodyStyle = WebMessageBodyStyle.Bare)]
-        [Description("Returns the points of the outline of a footprint.")]
+        [Description("Plots a footprint")]
         Spherical.Visualizer.Plot PlotUserFootprint(
             string owner,
             string name,
@@ -134,7 +134,9 @@ namespace Jhu.Footprint.Web.Api.V1
             string colorTheme);
 
         [OperationContract]
-        [WebInvoke(Method = HttpMethod.Post, UriTemplate = Urls.UserFootprint + Urls.PlotAdvanced)]
+        [WebInvoke(Method = HttpMethod.Post, UriTemplate = Urls.UserFootprint + Urls.PlotAdvanced, BodyStyle = WebMessageBodyStyle.Bare)]
+        [PlotFormatter]
+        [Description("Plots a footprint, with advanced parameters")]
         Spherical.Visualizer.Plot PlotUserFootprintAdvanced(string owner, string name, string operation, Plot plotParameters);
 
         #endregion
@@ -158,13 +160,14 @@ namespace Jhu.Footprint.Web.Api.V1
         Spherical.Outline GetUserFootprintRegionOutline(string owner, string name, string regionName);
 
         [OperationContract]
-        [TestJsonXmlFormat]
+        [TextJsonXmlFormat]
         [WebGet(UriTemplate = Urls.UserFootprintRegion + Urls.OutlinePoints)]
         [Description("Returns the points of the outline of a footprint.")]
         IEnumerable<Lib.EquatorialPoint> GetUserFootprintRegionOutlinePoints(string owner, string name, string regionName, double resolution);
 
         [OperationContract]
         [WebGet(UriTemplate = Urls.UserFootprintRegion + Urls.Plot, BodyStyle = WebMessageBodyStyle.Bare)]
+        [PlotFormatter]
         [Description("Plots a footprint.")]
         Spherical.Visualizer.Plot PlotUserFootprintRegion(
             string owner,
@@ -182,7 +185,8 @@ namespace Jhu.Footprint.Web.Api.V1
             string colorTheme);
 
         [OperationContract]
-        [WebInvoke(Method = HttpMethod.Post, UriTemplate = Urls.UserFootprintRegion + Urls.PlotAdvanced)]
+        [WebInvoke(Method = HttpMethod.Post, UriTemplate = Urls.UserFootprintRegion + Urls.PlotAdvanced, BodyStyle = WebMessageBodyStyle.Bare)]
+        [PlotFormatter]
         [Description("Plots a footprint.")]
         Spherical.Visualizer.Plot PlotUserFootprintRegionAdvanced(string owner, string name, string regionName, string operation, Plot plotParameters);
 
