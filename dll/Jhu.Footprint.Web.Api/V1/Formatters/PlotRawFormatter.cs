@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.ServiceModel.Dispatcher;
+using System.ServiceModel.Description;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Web;
 using System.IO;
@@ -14,13 +15,13 @@ namespace Jhu.Footprint.Web.Api.V1
 {
     public class PlotRawFormatter : StreamingRawFormatter<Spherical.Visualizer.Plot>, IDispatchMessageFormatter, IClientMessageFormatter
     {
-        public PlotRawFormatter(IDispatchMessageFormatter formatter)
-            : base(formatter)
+        public PlotRawFormatter(OperationDescription operationDescription, ServiceEndpoint endpoint, IDispatchMessageFormatter fallbackFormatter)
+            : base(operationDescription, endpoint, fallbackFormatter)
         {
         }
 
-        public PlotRawFormatter(IClientMessageFormatter formatter)
-            : base(formatter)
+        public PlotRawFormatter(OperationDescription operationDescription, ServiceEndpoint endpoint, IClientMessageFormatter fallbackFormatter)
+            : base(operationDescription, endpoint, fallbackFormatter)
         {
         }
 

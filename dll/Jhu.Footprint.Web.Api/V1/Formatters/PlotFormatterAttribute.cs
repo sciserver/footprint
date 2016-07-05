@@ -5,19 +5,20 @@ using System.Text;
 using System.Threading.Tasks;
 using Jhu.Graywulf.Web.Services;
 using System.ServiceModel.Dispatcher;
+using System.ServiceModel.Description;
 
 namespace Jhu.Footprint.Web.Api.V1
 {
     public class PlotFormatterAttribute : StreamingRawFormatAttribute
     {
-        protected override StreamingRawFormatterBase CreateDispatchFormatter(IDispatchMessageFormatter formatter)
+        protected override StreamingRawFormatterBase OnCreateDispatchFormatter(OperationDescription operationDescription, ServiceEndpoint endpoint, IDispatchMessageFormatter fallbackFormatter)
         {
-            return new PlotRawFormatter(formatter);
+            return new PlotRawFormatter(operationDescription, endpoint, fallbackFormatter);
         }
 
-        protected override StreamingRawFormatterBase CreateClientFormatter(IClientMessageFormatter formatter)
+        protected override StreamingRawFormatterBase OnCreateClientFormatter(OperationDescription operationDescription, ServiceEndpoint endpoint, IClientMessageFormatter fallbackFormatter)
         {
-            return new PlotRawFormatter(formatter);
+            return new PlotRawFormatter(operationDescription, endpoint, fallbackFormatter);
         }
     }
 }
