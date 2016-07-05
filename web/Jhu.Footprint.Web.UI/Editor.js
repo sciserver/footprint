@@ -56,9 +56,11 @@ $(document).ready(function () {
         var selectedRegionType = $("#RegionTypeSelector input:radio:checked").val();
 
         var regionString = createRegionString(selectedRegionType);
+        var json = createFootprintRegionRequest(regionString);
 
         console.info(regionString)
-        addRegion(selectedAdditionType, regionString);
+
+        addRegion(selectedAdditionType, json);
 
         // TODO: figure is not showing in Chrome
         refreshCanvas();
@@ -78,11 +80,11 @@ $(document).ready(function () {
         ResetSelectList("#RegionSelect");
         setRegionList();
     });
-    
+
     $("body").on("click", "#LoadRegionButton", function () {
         loadRegion();
         refreshCanvas();
-        
+
         $("#LoadModal").modal("hide");
     });
 
@@ -179,6 +181,15 @@ function createRegionString(type) {
     return regionStrings.join(" ");
 }
 
+function createFootprintRegionRequest(regionString) {
+    return {
+        region: {
+            fillFactor: 1.0,
+            regionString: regionString
+        }
+    };
+}
+
 // refresh PlotCanvas
 function refreshCanvas() {
     var d = new Date();
@@ -197,15 +208,15 @@ function setCookies() {
 
 
 // Building region creating ajax call
-function addRegion(type, dataString) {
+function addRegion(type, json) {
     var methodUrl = createUrl(editorSvcUrl, [type]);
 
     $.ajax({
         url: methodUrl,
         type: "POST",
         mimeType: 'text/html',
-        contentType: "text/plain",
-        data: dataString
+        contentType: "application/json",
+        data: JSON.stringify(json)
     });
 }
 
