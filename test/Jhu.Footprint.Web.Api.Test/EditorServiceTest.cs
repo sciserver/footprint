@@ -7,7 +7,7 @@ using Jhu.Graywulf.Web.Services;
 namespace Jhu.Footprint.Web.Api.V1
 {
     [TestClass]
-    public class EditorServiceTest: EditorApiTestBase
+    public class EditorServiceTest : EditorApiTestBase
     {
         [TestMethod]
         public void ResetTest()
@@ -49,44 +49,118 @@ namespace Jhu.Footprint.Web.Api.V1
             }
         }
 
-        protected void IntersectTest(Spherical.Region region)
+        [TestMethod]
+        public void IntersectTest()
         {
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session, TestUser);
+                var r1 = GetTestRegion();
+                client.New(r1);
+                var r2 = GetTestRegion("CIRCLE J2000 15 10 15");
+                client.Intersect(r2);
+                var res = client.GetShape();
+                Assert.IsTrue(res.ConvexList.Count >= 1);
+            }
 
         }
 
-        protected void SubtractTest(Spherical.Region region)
+        [TestMethod]
+        public void SubtractTest()
         {
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session, TestUser);
+                var r1 = GetTestRegion();
+                client.New(r1);
+                var r2 = GetTestRegion("CIRCLE J2000 15 10 15");
+                client.Subtract(r2);
+                var res = client.GetShape();
+                Assert.IsTrue(res.ConvexList.Count >= 1);
+            }
 
         }
 
-        protected void GrowTest(double arcmin)
+        [TestMethod]
+        public void GrowTest()
         {
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session, TestUser);
+                var r1 = GetTestRegion();
+                client.New(r1);
+                client.Grow(10);
+                var res = client.GetShape();
+
+                Assert.IsTrue(res.Area > r1.Region.GetRegion().Area);
+            }
 
         }
 
-        protected void LoadTest(string owner, string name, string regionName)
+        [TestMethod]
+        public void SaveLoadTest()
         {
 
+            using (var session = new RestClientSession())
+            {
+                var name = GetTestUniqueName();
+                var client = CreateClient(session, TestUser);
+                var r1 = GetTestRegion();
+                client.New(r1);
+                client.Save(TestUser, name, name);
+
+                client.Load(TestUser, name, name);
+
+                var res = client.GetShape();
+                Assert.AreEqual(res.ToString(), r1.Region.GetRegion().ToString());
+            }
         }
 
-        protected void SaveTest(string owner, string name, string regionName)
+        [TestMethod]
+        public void GetTestOutline()
         {
-
+            using (var session = new RestClientSession())
+            {
+                var name = GetTestUniqueName();
+                var client = CreateClient(session, TestUser);
+                var r1 = GetTestRegion();
+                client.New(r1);
+                var url = "http://" + Environment.MachineName + "/footprint/api/v1/Editor.svc/outline";
+                var buffer = session.HttpGet(url);
+                Assert.IsTrue(buffer != null && buffer.Length > 0);
+            }
         }
 
-        protected byte[] GetTestOutline()
+        [TestMethod]
+        public void PlotTestFootprintRegion()
         {
-            throw new NotImplementedException();
+            using (var session = new RestClientSession())
+            {
+                var name = GetTestUniqueName();
+                var client = CreateClient(session, TestUser);
+                var r1 = GetTestRegion();
+                client.New(r1);
+                var url = "http://" + Environment.MachineName + "/footprint/api/v1/Editor.svc/plot";
+                var buffer = session.HttpGet(url,"image/png");
+                Assert.IsTrue(buffer != null && buffer.Length > 0);
+            }
         }
 
-        protected byte[] PlotTestFootprintRegion()
+        [TestMethod]
+        public void PlotTestFootprintRegionAdvanced()
         {
-            throw new NotImplementedException();
-        }
-
-        protected byte[] PlotTestFootprintRegionAdvanced()
-        {
-            throw new NotImplementedException();
+            using (var session = new RestClientSession())
+            {
+                var name = GetTestUniqueName();
+                var client = CreateClient(session, TestUser);
+                var r1 = GetTestRegion();
+                client.New(r1);
+                var url = "http://" + Environment.MachineName + "/footprint/api/v1/Editor.svc/plot";
+                var json = "{ \"ra\": 10, \"dec\": 10 }";
+                var data = System.Text.ASCIIEncoding.Default.GetBytes(json);
+                var buffer = session.HttpPost(url, "image/png", "application/json", data);
+                Assert.IsTrue(buffer != null && buffer.Length > 0);
+            }
         }
     }
 }

@@ -7,10 +7,6 @@ namespace Jhu.Footprint.Web.Api.V1
 {
     public class EditorApiTestBase : ApiTestBase
     {
-        protected Spherical.Region Region = Spherical.Region.Parse("CIRCLE J2000 10 10 10");
-        protected Spherical.Region RegionShifted = Spherical.Region.Parse("CIRCLE J2000 9.8 9.8 10");
-
-
         /*
          * Test prerequisites in Graywulf Registry:
          * Users: test, test-admin, test-writer, test-reader
@@ -72,7 +68,6 @@ namespace Jhu.Footprint.Web.Api.V1
             };
             return req;
         }
-
 
     }
 }
