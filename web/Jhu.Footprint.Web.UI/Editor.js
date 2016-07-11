@@ -69,7 +69,7 @@ $(document).ready(function () {
     })
 
     // -------------> LOAD MODAL
-
+    // TODO: VERY IMPORTANT TO LOAD OWNER NAMES ASWELL!!!
     $("body").on("show.bs.modal", "#LoadModal", function () {
         ResetSelectList("#RegionSelect");
         ResetSelectList("#FootprintSelect");
@@ -297,10 +297,11 @@ function setOwner() {
 
 // set Footprint list of User
 function setFootprintList() {
-    var serviceUrl = createUrl(footprintSvcUrl, ["footprints"])
+    var serviceUrl = createUrl(footprintSvcUrl, ["footprints"]);
+    console.log(serviceUrl);
     $.get(serviceUrl, function (data, status) {
         $(data).find("footprint").each(function () {
-            $("#FootprintSelect").append($('<option>').append($(this).find("name").text()));
+            $("#FootprintSelect").append($('<option>').append($(this).find("owner").text()+"/"+$(this).find("name").text()));
         })
     });
 }
@@ -308,8 +309,9 @@ function setFootprintList() {
 
 // GET selected folder and the footprints within
 function setRegionList() {
-    var owner = $("#SaveUserInput").val();
-    var footprint = $("#FootprintSelect option:selected").text();
+    //var owner = $("#SaveUserInput").val();
+    var owner = $("#FootprintSelect option:selected").text().split("/")[0];
+    var footprint = $("#FootprintSelect option:selected").text().split("/")[1];
     var serviceUrl = createUrl(footprintSvcUrl, ["users", owner, "footprints", footprint, "regions"])
     $.get(serviceUrl, function (data, status) {
         var nameList = $(data).find("name").each(function () {
