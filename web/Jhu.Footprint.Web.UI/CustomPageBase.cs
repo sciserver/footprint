@@ -16,7 +16,7 @@ namespace Jhu.Footprint.Web.UI
             {
                 if (footprintContext == null)
                 {
-                    footprintContext = new Context();
+                    CreateContext();
                 }
 
                 return footprintContext;
@@ -39,6 +39,14 @@ namespace Jhu.Footprint.Web.UI
             }
 
             base.OnUnload(e);
+        }
+
+        private void CreateContext()
+        {
+            footprintContext = new Context()
+            {
+                Principal = Page.User
+            };
         }
     }
 }
