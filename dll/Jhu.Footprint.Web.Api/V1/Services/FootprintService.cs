@@ -281,8 +281,9 @@ namespace Jhu.Footprint.Web.Api.V1
 
                 footprint.Load(owner, name);
 
-                var plot = Lib.FootprintPlot.GetDefaultPlot(new[] { footprint.CombinedRegion.Region });
+                // var plot = Lib.FootprintPlot.GetDefaultPlot(new[] { footprint.CombinedRegion.Region });
 
+                var plot = Lib.FootprintPlot.GetPlot(new[] { footprint.CombinedRegion.Region }, projection, sys, ra, dec, b, l, width, height, colorTheme);
                 // TODO: change this part to use all parameters
                 // Size is different for vector graphics!
                 plot.Width = Math.Max(width, 1080);
