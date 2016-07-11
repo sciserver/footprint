@@ -1,55 +1,92 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/UI.master" CodeBehind="FootprintPlot.aspx.cs" Inherits="Jhu.Footprint.Web.UI.Plot.FootprintPlot" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/UI.master" CodeBehind="Plot.aspx.cs" Inherits="Jhu.Footprint.Web.UI.Plot" %>
 
 
 <asp:Content ID="plot" ContentPlaceHolderID="middle" runat="server">
-    <div>
-        <asp:UpdatePanel runat="server">
-            <ContentTemplate>
-                <table class="block">
-                    <tr>
-                        <td class="block_canvas">
-                            <asp:Image ID="PlotCanvas" runat="server" />
-                        </td>
+    <asp:ScriptManagerProxy runat="server">
+        <Scripts>
+            <%--<asp:ScriptReference Path="Scripts/astro.js" />--%>
+            <%--<asp:ScriptReference Path="Editor.js" />--%>
+        </Scripts>
+    </asp:ScriptManagerProxy>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-9">
+                <asp:UpdatePanel runat="server">
+                    <ContentTemplate>
+                        <div id="PlotCanvasContainer">
+                            <asp:Image runat="server" ID="PlotCanvas" CssClass="img-responsive" Width="1080" Height="600" />
+                            <%--<spherical:PlotCanvas runat="server" ID="PlotCanvas" CssClass="img-responsive" />--%>
+                            <button type="button" class="btn btn-sm" id="refreshCanvasButton"><span class="glyphicon glyphicon-refresh"></span></button>
 
-                        <td class="block_buttons">
+                        </div>
+                    </ContentTemplate>
+                </asp:UpdatePanel>
+            </div>
 
-                            <table>
-                                <tr>
-                                    <td>
-                                        <b>Projection</b>
-                                        <asp:RadioButtonList ID="plotProjectionStyle" runat="server" AutoPostBack="True">
-                                            <asp:ListItem Selected="True">Aitoff</asp:ListItem>
-                                            <asp:ListItem>Equirectangular</asp:ListItem>
-                                            <asp:ListItem Value="HammerAitoff">Hammer Aitoff</asp:ListItem>
-                                            <asp:ListItem>Mollweide</asp:ListItem>
-                                            <asp:ListItem>Orthographic</asp:ListItem>
-                                            <asp:ListItem>Stereographic</asp:ListItem>
-                                        </asp:RadioButtonList>
+            <div class="cl-sm-2">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#LoadModal">Load Region</button>
+                <hr />
+                <p class="cm-header">Projection</p>
+                <asp:RadioButtonList ID="plotProjectionStyle" runat="server" AutoPostBack="True">
+                    <asp:ListItem Selected="True">Aitoff</asp:ListItem>
+                    <asp:ListItem>Equirectangular</asp:ListItem>
+                    <asp:ListItem Value="HammerAitoff">Hammer Aitoff</asp:ListItem>
+                    <asp:ListItem>Mollweide</asp:ListItem>
+                    <asp:ListItem>Orthographic</asp:ListItem>
+                    <asp:ListItem>Stereographic</asp:ListItem>
+                </asp:RadioButtonList>
+                <hr />
+                <asp:RadioButtonList runat="server" AutoPostBack="True" ID="plotDegreeStyle" >
+                    <asp:ListItem Selected="True">Decimal</asp:ListItem>
+                    <asp:ListItem Value="Sexagesimal">HMS-DMS</asp:ListItem>
+                    <asp:ListItem>Galactic</asp:ListItem>
+                </asp:RadioButtonList>
+                <hr />
+                <asp:CheckBox ID="plotGrid" runat="server" AutoPostBack="True" Checked="True" Text="Grid" />
+                <asp:CheckBox ID="plotAutoZoom" runat="server" AutoPostBack="True" Text="Auto Zoom" />
+                <asp:CheckBox ID="plotAutoRotate" runat="server" AutoPostBack="True" Text="Auto Rotate" />
 
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <asp:RadioButtonList runat="server" AutoPostBack="True" ID="plotDegreeStyle">
-                                            <asp:ListItem Selected="True">Decimal</asp:ListItem>
-                                            <asp:ListItem Value="Sexagesimal">HMS-DMS</asp:ListItem>
-                                            <asp:ListItem>Galactic</asp:ListItem>
-                                        </asp:RadioButtonList>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <asp:CheckBox ID="plotGrid" runat="server" AutoPostBack="True" Checked="True" Text="Grid" />
-                                        <asp:CheckBox ID="plotAutoZoom" runat="server" AutoPostBack="True" Text="Auto Zoom" />
-                                        <asp:CheckBox ID="plotAutoRotate" runat="server" AutoPostBack="True" Text="Auto Rotate" />
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
-            </ContentTemplate>
-        </asp:UpdatePanel>
+            </div>
+        </div>
 
+        <div id="LoadModal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                        <h4 class="modal-title">Load Footprint</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <label for="FootprintSelect" class="control-label">Folder: </label>
+                                <%--<select id="FootprintSelect" class="form-control " runat="server" ClientIDMode="Static" AutoPostback="False">
+                                    <option selected="selected" disabled="disabled">Please select...</option>
+                                </select>--%>
+                                <asp:DropDownlist runat="server" ID="FootprintSelect">
+
+                                </asp:DropDownlist>
+
+                            </div>
+
+                            <div class="form-group ">
+                                <label for="RegionSelect" class="control-label">Footprint:  </label>
+                                <%--<select id="RegionSelect" class="form-control" runat="server" ClientIDMode="Static" AutoPostback="False">
+                                    <option disabled="disabled">Please select...</option>
+                                </select>--%>
+                                
+                                <asp:DropDownlist runat="server" ID="RegionSelect">
+
+                                </asp:DropDownlist>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <asp:Button runat="server" Text="Load" CssClass="btn btn-success" ID="LoadRegionButton" ClientIDMode="Static" OnClick="LoadRegionButton_OnClick"/>
+                            <button type="button" class="btn btn-danger " data-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </asp:Content>

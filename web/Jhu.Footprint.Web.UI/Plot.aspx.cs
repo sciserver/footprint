@@ -9,49 +9,70 @@ using Jhu.Spherical;
 using Jhu.Spherical.Visualizer;
 using Jhu.Spherical.Web.Controls;
 
-namespace Jhu.Footprint.Web.UI.Plot
+namespace Jhu.Footprint.Web.UI
 {
-    public partial class FootprintPlot : System.Web.UI.Page
+    public partial class Plot : CustomPageBase
     {
+
+        public static string GetUrl()
+        {
+            return "~/Plot.aspx";
+        }
+
         #region Event handlers
         protected void Page_Load(object sender, EventArgs e)
-        {   
-
+        {
+            if (!IsPostBack)
+            {
+                RefreshFootprintList();
+            }
         }
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
-            GeneratePlot();
         }
 
-
-
+        protected void LoadRegionButton_OnClick(object sender, EventArgs e)
+        {
+            GeneratePlot();
+        }
         #endregion
+
+        //protected string GetPlotBaseUrl()
+        //{
+        //    // TODO: Import owners with javascript as well
+        //    var selected = FootprintSelect.Value.Split('/');
+        //    var owner = "undefined";
+        //    var footprint = "undefined";
+        //    if (selected.Length == 2)
+        //    {
+        //    owner = selected[0] ;
+        //    footprint = selected[1] ;
+        //    }
+        //    var region = RegionSelect.Value;
+            
+        //    return "http://localhost/footprint/api/v1/Footprint.svc/users/" + owner + "/footprints/"+footprint+"/regions/"+region+"/plot?";
+        //}
 
         protected void GeneratePlot()
         {
-            
-            // in early develop phase           
+            // in early development phase    
+            // Setup image url  
+            var imgUrl = "http://localhost/footprint/api/v1/Footprint.svc/users/"+Page.User.Identity.Name+"/footprints/"+FootprintSelect.SelectedItem+"/Plot?";
+     
 
-            // TODO :  footprint request
-
-
-            string imgUrl = "http://localhost/footprint/api/v1/Footprint.svc/users/evelin/SDSS.DR7/Stripe5/plot?";
-
-
-            // Setup image url
 
             switch (plotDegreeStyle.SelectedValue)
             { 
                 default:
                 case "Decimal":
-                    imgUrl += "degStyle=dms";
+                    imgUrl += "sys=dms";
                     break;
                 case "Sexagesimal":
-                    imgUrl += "degStyle=hms";
+                    imgUrl += "sys=hms";
                     break;
                 case "Galactic":
-                    imgUrl += "degStyle=galactic";
+                    imgUrl += "sys=galactic";
                     break;
             }
 
@@ -90,13 +111,31 @@ namespace Jhu.Footprint.Web.UI.Plot
             // TODO : save as : jpg, pdf stb
 
             PlotCanvas.ImageUrl = imgUrl;
-            PlotCanvas.Width = 7 * 96;
-            PlotCanvas.Height = 7 *96;
 
         }
         // TODO save png
 
-        
+        private void RefreshFootprintList()
+        {
+            FootprintSelect.Items.Clear();
+            FootprintSelect.Items.Add(new ListItem("(select item)", ""));
+
+            var s = new Lib.FootprintSearch(FootprintContext)
+            {
+                Owner = Page.User.Identity.Name
+            };
+
+            foreach (var f in s.Find())
+            {
+                var it = new ListItem()
+                {
+                    Text = f.Name,
+                    Value = f.Id.ToString()
+                };
+
+                FootprintSelect.Items.Add(it);
+            }
+        }       
 
     }
 }

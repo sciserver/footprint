@@ -103,7 +103,8 @@
     <Content Include="Docs\Default.aspx" />
     <Content Include="Editor.js" />
     <Content Include="Global.asax" />
-    <Content Include="Plot\FootprintPlot.aspx" />
+    <Content Include="Plot.aspx" />
+    <Content Include="Plot.js" />
     <Content Include="Scripts\astro.js" />
     <Content Include="Scripts\Bootstrap\css\bootstrap-theme.css" />
     <Content Include="Scripts\Bootstrap\css\bootstrap-theme.min.css" />
@@ -435,12 +436,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Plot\FootprintPlot.aspx.cs">
-      <DependentUpon>FootprintPlot.aspx</DependentUpon>
+    <Compile Include="Plot.aspx.cs">
+      <DependentUpon>Plot.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Plot\FootprintPlot.aspx.designer.cs">
-      <DependentUpon>FootprintPlot.aspx</DependentUpon>
+    <Compile Include="Plot.aspx.designer.cs">
+      <DependentUpon>Plot.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Search.aspx.cs">

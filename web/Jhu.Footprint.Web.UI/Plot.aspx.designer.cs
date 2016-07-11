@@ -7,10 +7,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Jhu.Footprint.Web.UI.Plot {
+namespace Jhu.Footprint.Web.UI {
     
     
-    public partial class FootprintPlot {
+    public partial class Plot {
         
         /// <summary>
         /// PlotCanvas control.
@@ -65,5 +65,32 @@ namespace Jhu.Footprint.Web.UI.Plot {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox plotAutoRotate;
+        
+        /// <summary>
+        /// FootprintSelect control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList FootprintSelect;
+        
+        /// <summary>
+        /// RegionSelect control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList RegionSelect;
+        
+        /// <summary>
+        /// LoadRegionButton control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button LoadRegionButton;
     }
 }
