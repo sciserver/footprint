@@ -97,8 +97,8 @@ namespace Jhu.Footprint.Web.Lib
         {
             var plot = GetDefaultPlot(regions, sys);
 
-            if (width > 0) plot.Width = width * 96;
-            if (height > 0) plot.Height = height * 96;
+            plot.Width = Math.Max(width, 1080);
+            plot.Height = Math.Max(height, 600);
 
             if (projection != "")
             {
@@ -114,32 +114,6 @@ namespace Jhu.Footprint.Web.Lib
                 }
             }
             
-            /*
-            var axes = new AxesLayer();
-            plot.Layers.RemoveAt(plot.Layers.Count);
-
-            switch (sys)
-            {
-                default:
-                case "dms":
-                    axes.X1Axis.Title.Text = "Right ascension (deg)";
-                    break;
-                case "galactic":
-                    axes.X1Axis.Title.Text = "Galactic longitude (deg)";
-                    axes.Y1Axis.Title.Text = "Galactic latitude (deg)";
-                    break;
-                case "hms":
-                    axes.X1Axis.Title.Text = "Right ascension (hour)";
-                    axes.X1Axis.Scale.DegreeFormat.DegreeStyle = DegreeStyle.Hours;
-                    axes.X2Axis.Scale.DegreeFormat.DegreeStyle = DegreeStyle.Hours;
-                    axes.Y1Axis.Scale.DegreeFormat.DegreeStyle = DegreeStyle.Symbols;
-                    axes.Y2Axis.Scale.DegreeFormat.DegreeStyle = DegreeStyle.Symbols;
-                    break;
-
-            }
-
-            plot.Layers.Add(axes);
-            */
             return plot;
         }
     }

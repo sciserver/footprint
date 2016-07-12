@@ -286,8 +286,6 @@ namespace Jhu.Footprint.Web.Api.V1
                 var plot = Lib.FootprintPlot.GetPlot(new[] { footprint.CombinedRegion.Region }, projection, sys, ra, dec, b, l, width, height, colorTheme);
                 // TODO: change this part to use all parameters
                 // Size is different for vector graphics!
-                plot.Width = Math.Max(width, 1080);
-                plot.Height = Math.Max(height, 600);
 
                 return plot;
             }
@@ -383,12 +381,10 @@ namespace Jhu.Footprint.Web.Api.V1
                 var region = new Lib.FootprintRegion(footprint);
                 region.Load(regionName);
 
-                var plot = Lib.FootprintPlot.GetDefaultPlot(new[] { region.Region });
+                var plot = Lib.FootprintPlot.GetPlot(new[] { footprint.CombinedRegion.Region }, projection, sys, ra, dec, b, l, width, height, colorTheme);
 
                 // TODO: change this part to use all parameters
                 // Size is different for vector graphics!
-                plot.Width = Math.Max(width, 1080);
-                plot.Height = Math.Max(height, 600);
 
                 return plot;
             }
