@@ -262,9 +262,9 @@ function saveRegion() {
 
 // Load region 
 function loadRegion() {
-    var params = {
-        owner: $("#SaveUserInput").val(),
-        name: $("#FootprintSelect option:selected").text(),
+    var params = {        
+        owner: $("#FootprintSelect option:selected").text().split("/")[0],
+        name: $("#FootprintSelect option:selected").text().split("/")[1],
         region: $("#RegionSelect option:selected").text()
     };
     var methodUrl = createUrl(editorSvcUrl, ["load"], params);
