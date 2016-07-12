@@ -2,20 +2,13 @@
 
 
 <asp:Content ID="plot" ContentPlaceHolderID="middle" runat="server">
-    <asp:ScriptManagerProxy runat="server">
-        <Scripts>
-            <%--<asp:ScriptReference Path="Scripts/astro.js" />--%>
-            <%--<asp:ScriptReference Path="Editor.js" />--%>
-        </Scripts>
-    </asp:ScriptManagerProxy>
     <div class="container">
         <div class="row">
-            <div class="col-sm-9">
+            <div class="col-sm-10">
                 <asp:UpdatePanel runat="server">
                     <ContentTemplate>
                         <div id="PlotCanvasContainer">
                             <asp:Image runat="server" ID="PlotCanvas" CssClass="img-responsive" Width="1080" Height="600" />
-                            <%--<spherical:PlotCanvas runat="server" ID="PlotCanvas" CssClass="img-responsive" />--%>
                             <button type="button" class="btn btn-sm" id="refreshCanvasButton"><span class="glyphicon glyphicon-refresh"></span></button>
 
                         </div>
@@ -36,7 +29,7 @@
                     <asp:ListItem>Stereographic</asp:ListItem>
                 </asp:RadioButtonList>
                 <hr />
-                <asp:RadioButtonList runat="server" AutoPostBack="True" ID="plotDegreeStyle" >
+                <asp:RadioButtonList runat="server" AutoPostBack="True" ID="plotDegreeStyle">
                     <asp:ListItem Selected="True">Decimal</asp:ListItem>
                     <asp:ListItem Value="Sexagesimal">HMS-DMS</asp:ListItem>
                     <asp:ListItem>Galactic</asp:ListItem>
@@ -57,36 +50,32 @@
                         <h4 class="modal-title">Load Footprint</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="form-inline">
-                            <div class="form-group">
-                                <label for="FootprintSelect" class="control-label">Folder: </label>
-                                <%--<select id="FootprintSelect" class="form-control " runat="server" ClientIDMode="Static" AutoPostback="False">
-                                    <option selected="selected" disabled="disabled">Please select...</option>
-                                </select>--%>
-                                <asp:DropDownlist runat="server" ID="FootprintSelect">
 
-                                </asp:DropDownlist>
+                        <asp:UpdatePanel runat="server">
+                            <ContentTemplate>
+                                <div class="form-group">
+                                    <label for="FootprintSelect" class="control-label">Folder: </label>
+                                    <asp:DropDownList runat="server" ID="FootprintSelect" OnSelectedIndexChanged="FootprintSelect_SelectedIndexChanged" AutoPostBack="true">
+                                    </asp:DropDownList>
 
-                            </div>
+                                </div>
 
-                            <div class="form-group ">
-                                <label for="RegionSelect" class="control-label">Footprint:  </label>
-                                <%--<select id="RegionSelect" class="form-control" runat="server" ClientIDMode="Static" AutoPostback="False">
-                                    <option disabled="disabled">Please select...</option>
-                                </select>--%>
-                                
-                                <asp:DropDownlist runat="server" ID="RegionSelect">
+                                <div class="form-group ">
+                                    <label for="RegionSelect" class="control-label">Footprint:  </label>
+                                    <asp:DropDownList runat="server" ID="RegionSelect">
+                                    </asp:DropDownList>
+                                </div>
 
-                                </asp:DropDownlist>
-                            </div>
-                        </div>
+                            </ContentTemplate>
+                        </asp:UpdatePanel>
                         <div class="modal-footer">
-                            <asp:Button runat="server" Text="Load" CssClass="btn btn-success" ID="LoadRegionButton" ClientIDMode="Static" OnClick="LoadRegionButton_OnClick"/>
+                            <asp:Button runat="server" Text="Load" CssClass="btn btn-success" ID="LoadRegionButton" ClientIDMode="Static" OnClick="LoadRegionButton_OnClick" />
                             <button type="button" class="btn btn-danger " data-dismiss="modal">Cancel</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 </asp:Content>

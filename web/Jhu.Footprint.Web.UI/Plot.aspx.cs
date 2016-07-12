@@ -25,7 +25,9 @@ namespace Jhu.Footprint.Web.UI
             if (!IsPostBack)
             {
                 RefreshFootprintList();
+                Lib.FootprintPlot.GetDefaultPlot( new [] { new Spherical.Region() });
             }
+
         }
 
         protected void Page_PreRender(object sender, EventArgs e)
@@ -35,6 +37,15 @@ namespace Jhu.Footprint.Web.UI
         protected void LoadRegionButton_OnClick(object sender, EventArgs e)
         {
             GeneratePlot();
+        }
+
+        protected void FootprintSelect_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int j;
+            if (Int32.TryParse(FootprintSelect.SelectedValue, out j))
+            {
+                RefreshFootprintRegionList(j);
+            }
         }
         #endregion
 
@@ -50,7 +61,7 @@ namespace Jhu.Footprint.Web.UI
         //    footprint = selected[1] ;
         //    }
         //    var region = RegionSelect.Value;
-            
+
         //    return "http://localhost/footprint/api/v1/Footprint.svc/users/" + owner + "/footprints/"+footprint+"/regions/"+region+"/plot?";
         //}
 
@@ -58,12 +69,12 @@ namespace Jhu.Footprint.Web.UI
         {
             // in early development phase    
             // Setup image url  
-            var imgUrl = "http://localhost/footprint/api/v1/Footprint.svc/users/"+Page.User.Identity.Name+"/footprints/"+FootprintSelect.SelectedItem+"/Plot?";
-     
+            var imgUrl = "http://localhost/footprint/api/v1/Footprint.svc/users/" + Page.User.Identity.Name + "/footprints/" + FootprintSelect.SelectedItem +"/regions/"+ RegionSelect.SelectedItem + "/plot?";
+
 
 
             switch (plotDegreeStyle.SelectedValue)
-            { 
+            {
                 default:
                 case "Decimal":
                     imgUrl += "sys=dms";
@@ -77,7 +88,7 @@ namespace Jhu.Footprint.Web.UI
             }
 
             switch (plotProjectionStyle.SelectedValue)
-            { 
+            {
                 default:
                 case "Aitoff":
                     imgUrl += "&proj=Aitoff";
@@ -118,7 +129,9 @@ namespace Jhu.Footprint.Web.UI
         private void RefreshFootprintList()
         {
             FootprintSelect.Items.Clear();
-            FootprintSelect.Items.Add(new ListItem("(select item)", ""));
+            FootprintSelect.Items.Add(new ListItem("Select item...", ""));
+            FootprintSelect.Items[0].Attributes.Add("disabled", "disabled");
+            FootprintSelect.Items[0].Attributes.Add("selected", "True");
 
             var s = new Lib.FootprintSearch(FootprintContext)
             {
@@ -135,7 +148,33 @@ namespace Jhu.Footprint.Web.UI
 
                 FootprintSelect.Items.Add(it);
             }
-        }       
+        }
 
+
+        private void RefreshFootprintRegionList(int id)
+        {
+            RegionSelect.Items.Clear();
+            RegionSelect.Items.Add(new ListItem("Select item...", ""));
+            RegionSelect.Items[0].Attributes.Add("disabled", "disabled");
+            RegionSelect.Items[0].Attributes.Add("selected", "True");
+
+
+            var s = new Lib.FootprintRegionSearch(FootprintContext)
+            {
+                Owner = Page.User.Identity.Name,
+                FootprintId = id
+            };
+
+            foreach (var r in s.Find())
+            {
+                var it = new ListItem()
+                {
+                    Text = r.Name,
+                    Value = r.Id.ToString()
+                };
+
+                RegionSelect.Items.Add(it);
+            }
+        }
     }
 }
