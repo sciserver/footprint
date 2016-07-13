@@ -6,7 +6,7 @@ var authSvcUrl = "http://localhost/auth/api/v1/auth.svc";
 
 $(document).one('ready', function () {
     // Setup cookie
-    setCookies();
+    //setCookies();
 
     // Set owner
     // TODO: include group
@@ -197,49 +197,20 @@ function refreshCanvas() {
 }
 
 // SERVICE CALLS
-// Setup Cookies
-function setCookies() {
-    $.ajax({
-        url: createUrl(editorSvcUrl, ["reset"]),
-        type: "GET",
-        mimeType: 'text/html'
-    });
-}
 
 
 // Building region creating ajax call
 function addRegion(type, json) {
     var methodUrl = createUrl(editorSvcUrl, [type]);
 
-    $.ajax({
-        url: methodUrl,
-        type: "POST",
-        mimeType: 'text/html',
-        contentType: "application/json",
-        data: JSON.stringify(json)
-    });
+    serviceCall(methodUrl, "POST", { contentType: "application/json", data: JSON.stringify(json) });
 }
 
 // grow region
 function growRegion(radius) {
     var methodUrl = editorSvcUrl + "/grow?r=" + radius;
 
-    $.ajax({
-        url: methodUrl,
-        type: "POST",
-        mimeType: 'text/html',
-        contentType: "text/plain"
-    });
-}
-
-// get the shape of region
-function getShape() {
-    var methodUrl = editorSvcUrl + "/shape";
-    $.ajax({
-        url: methodUrl,
-        type: "GET",
-        headers: { Accept: "text/plain" }
-    });
+    serviceCall(methodUrl, "POST");
 }
 
 // Save region
@@ -251,12 +222,8 @@ function saveRegion() {
     };
 
     var methodUrl = createUrl(editorSvcUrl, ["save"], params);
-    $.ajax({
-        url: methodUrl,
-        type: "POST",
-        mimeType: 'text/html',
-        contentType: "text/plain"
-    });
+
+    serviceCall(methodUrl, "POST");
 }
 
 
@@ -269,13 +236,7 @@ function loadRegion() {
     };
     var methodUrl = createUrl(editorSvcUrl, ["load"], params);
 
-    $.ajax({
-        url: methodUrl,
-        type: "GET",
-        mimeType: 'text/html',
-        contentType: "text/plain",
-        headers: { Accept: "text/plain" }
-    });
+    serviceCall(methodUrl, "GET", { headers: { Accept: "text/plain" } });
 }
 
 function setOwner() {
@@ -320,3 +281,62 @@ function setRegionList() {
     });
 }
 // <----- SERVICE CALLS
+
+// ULTIMATE AJAX FUNCTION
+
+function serviceCall(url, type, optParams)
+{
+    // set default values
+    var mimeType = "text/html";
+    var contentType = "text/plain";
+
+    if (typeof optParams != "undefined")
+    {
+        $.each(optParams, function (key, value) {
+            console.log(key + ": " + value);
+            switch (key) {
+                case "mimeType":
+                    mimeType = value;
+                    break;
+                case "contentType":
+                    contentType = value;
+                    break;
+                case "headers":
+                    $.ajaxSetup({ headers: value });
+                    break;
+                case "data":
+                    $.ajaxSetup({ data: value });
+                    break;
+            };
+        });
+    }
+    $.ajax({
+        url: url,
+        type: type,
+        mimeType: mimeType,
+        contentType: contentType
+    });
+}
+
+// Unnecessary? 
+/*
+// get the shape of region
+function getShape() {
+    var methodUrl = editorSvcUrl + "/shape";
+    $.ajax({
+        url: methodUrl,
+        type: "GET",
+        headers: { Accept: "text/plain" }
+    });
+}
+
+
+// Setup Cookies
+function setCookies() {
+    $.ajax({
+        url: createUrl(editorSvcUrl, ["reset"]),
+        type: "GET",
+        mimeType: 'text/html'
+    });
+}
+*/
