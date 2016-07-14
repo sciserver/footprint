@@ -14,6 +14,8 @@ namespace Jhu.Footprint.Web.Lib
         {
             return GetDefaultPlot(regions, null);
         }
+
+
         public static Spherical.Visualizer.Plot GetDefaultPlot(IEnumerable<Spherical.Region> regions, string sys)
         {
             var plot = new Spherical.Visualizer.Plot();
@@ -95,6 +97,10 @@ namespace Jhu.Footprint.Web.Lib
 
         public static Spherical.Visualizer.Plot GetPlot(IEnumerable<Spherical.Region> regions, string projection, string sys, string ra, string dec, string b, string l, float width, float height, string colorTheme)
         {
+            if (sys == "galactic")
+            {
+                regions.AsParallel().ForAll(r => r.Rotate(Jhu.Spherical.Rotation.EquatorialToGalactic));
+            }
             var plot = GetDefaultPlot(regions, sys);
 
             plot.Width = Math.Max(width, 1080);
