@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Drawing;
-using Jhu.Spherical;
-using Jhu.Spherical.Visualizer;
-using Jhu.Spherical.Web.Controls;
 
 namespace Jhu.Footprint.Web.UI
 {
@@ -25,7 +18,10 @@ namespace Jhu.Footprint.Web.UI
             if (!IsPostBack)
             {
                 RefreshFootprintList();
-                Lib.FootprintPlot.GetDefaultPlot( new [] { new Spherical.Region() });
+            }
+            else
+            {
+                GeneratePlot();
             }
 
         }
@@ -48,23 +44,7 @@ namespace Jhu.Footprint.Web.UI
             }
         }
         #endregion
-
-        //protected string GetPlotBaseUrl()
-        //{
-        //    // TODO: Import owners with javascript as well
-        //    var selected = FootprintSelect.Value.Split('/');
-        //    var owner = "undefined";
-        //    var footprint = "undefined";
-        //    if (selected.Length == 2)
-        //    {
-        //    owner = selected[0] ;
-        //    footprint = selected[1] ;
-        //    }
-        //    var region = RegionSelect.Value;
-
-        //    return "http://localhost/footprint/api/v1/Footprint.svc/users/" + owner + "/footprints/"+footprint+"/regions/"+region+"/plot?";
-        //}
-
+       
         protected void GeneratePlot()
         {
             // in early development phase    
@@ -87,28 +67,7 @@ namespace Jhu.Footprint.Web.UI
                     break;
             }
 
-            switch (plotProjectionStyle.SelectedValue)
-            {
-                default:
-                case "Aitoff":
-                    imgUrl += "&proj=Aitoff";
-                    break;
-                case "Equirectangular":
-                    imgUrl += "&proj=Equirectangular";
-                    break;
-                case "HammerAitoff":
-                    imgUrl += "&proj=HammerAitoff";
-                    break;
-                case "Mollweide":
-                    imgUrl += "&proj=Mollweide";
-                    break;
-                case "Orthographic":
-                    imgUrl += "&proj=Orthographic";
-                    break;
-                case "Stereographic":
-                    imgUrl += "&proj=Stereographic";
-                    break;
-            }
+            imgUrl += "&proj=" + plotProjectionStyle.SelectedValue;
 
             if (plotGrid.Checked) imgUrl += "&grid=true";
 
@@ -150,7 +109,6 @@ namespace Jhu.Footprint.Web.UI
             }
         }
 
-
         private void RefreshFootprintRegionList(int id)
         {
             RegionSelect.Items.Clear();
@@ -175,6 +133,25 @@ namespace Jhu.Footprint.Web.UI
 
                 RegionSelect.Items.Add(it);
             }
+
+
+            /*
+            protected string GetImageUrl()
+            {
+                var baseUrl = "http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + Page.User.Identity.Name;
+                var footprintName = FootprintSelect.SelectedIndex.Equals(0) ?  "undefined" : FootprintSelect.SelectedItem.ToString();
+                var regionName = (  RegionSelect.Items.Count == 0 | RegionSelect.SelectedIndex.Equals(0)) ? "undefined" : RegionSelect.SelectedItem.ToString();
+                if (regionName.Equals("undefined"))
+                {
+                    return baseUrl + "/footprints/" + footprintName + "/plot?";
+                }
+                else
+                {
+                    return baseUrl + "/footprints/" + footprintName + "/regions/" + RegionSelect.SelectedItem + "/plot?";
+
+                }
+            }
+            */
         }
     }
 }
