@@ -9,6 +9,7 @@
                     <ContentTemplate>
                         <div id="PlotCanvasContainer">
                             <asp:Image runat="server" ID="PlotCanvas" CssClass="img-responsive" Width="1080" Height="600" />
+                            <%--<spherical:PlotCanvas runat="server" ID="PlotCanvas" CssClass="img-responsive" Width="1080" Height="600" />--%>
                             <button type="button" class="btn btn-sm" id="refreshCanvasButton"><span class="glyphicon glyphicon-refresh"></span></button>
 
                         </div>
@@ -21,18 +22,18 @@
                 <hr />
                 <p class="cm-header">Projection</p>
                 <asp:RadioButtonList ID="plotProjectionStyle" runat="server" AutoPostBack="True">
-                    <asp:ListItem Selected="True">Aitoff</asp:ListItem>
-                    <asp:ListItem>Equirectangular</asp:ListItem>
+                    <asp:ListItem Value="Aitoff" Selected="True">Aitoff</asp:ListItem>
+                    <asp:ListItem Value="Equirectangular">Equirectangular</asp:ListItem>
                     <asp:ListItem Value="HammerAitoff">Hammer Aitoff</asp:ListItem>
-                    <asp:ListItem>Mollweide</asp:ListItem>
-                    <asp:ListItem>Orthographic</asp:ListItem>
-                    <asp:ListItem>Stereographic</asp:ListItem>
+                    <asp:ListItem Value="Mollweide">Mollweide</asp:ListItem>
+                    <asp:ListItem Value="Orthographic">Orthographic</asp:ListItem>
+                    <asp:ListItem Value="Stereographic">Stereographic</asp:ListItem>
                 </asp:RadioButtonList>
                 <hr />
                 <asp:RadioButtonList runat="server" AutoPostBack="True" ID="plotDegreeStyle">
-                    <asp:ListItem Selected="True">Decimal</asp:ListItem>
+                    <asp:ListItem Value="Decimal" Selected="True">Decimal</asp:ListItem>
                     <asp:ListItem Value="Sexagesimal">HMS-DMS</asp:ListItem>
-                    <asp:ListItem>Galactic</asp:ListItem>
+                    <asp:ListItem Value="Galactic">Galactic</asp:ListItem>
                 </asp:RadioButtonList>
                 <hr />
                 <asp:CheckBox ID="plotGrid" runat="server" AutoPostBack="True" Checked="True" Text="Grid" />
@@ -53,25 +54,25 @@
 
                         <asp:UpdatePanel runat="server">
                             <ContentTemplate>
-                                <div class="form-group">
-                                    <label for="FootprintSelect" class="control-label">Folder: </label>
-                                    <asp:DropDownList runat="server" ID="FootprintSelect" OnSelectedIndexChanged="FootprintSelect_SelectedIndexChanged" AutoPostBack="true">
+                                <div class="form-group form-inline">
+                                    <label for="FootprintSelect" class="control-label">Footprint: </label>
+                                    <asp:DropDownList runat="server" ID="FootprintSelect" OnSelectedIndexChanged="FootprintSelect_SelectedIndexChanged" AutoPostBack="true" CssClass="form-control">
                                     </asp:DropDownList>
 
                                 </div>
 
-                                <div class="form-group ">
-                                    <label for="RegionSelect" class="control-label">Footprint:  </label>
-                                    <asp:DropDownList runat="server" ID="RegionSelect">
+                                <div class="form-group form-inline ">
+                                    <label for="RegionSelect" class="control-label">Region:  </label>
+                                    <asp:DropDownList runat="server" ID="RegionSelect" CssClass="form-control">
                                     </asp:DropDownList>
                                 </div>
 
                             </ContentTemplate>
                         </asp:UpdatePanel>
-                        <div class="modal-footer">
-                            <asp:Button runat="server" Text="Load" CssClass="btn btn-success" ID="LoadRegionButton" ClientIDMode="Static" OnClick="LoadRegionButton_OnClick" />
-                            <button type="button" class="btn btn-danger " data-dismiss="modal">Cancel</button>
-                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <asp:Button runat="server" Text="Load" CssClass="btn btn-success" ID="LoadRegionButton" ClientIDMode="Static" OnClick="LoadRegionButton_OnClick" />
+                        <button type="button" class="btn btn-danger " data-dismiss="modal">Cancel</button>
                     </div>
                 </div>
             </div>
