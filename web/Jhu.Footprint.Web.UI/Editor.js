@@ -69,20 +69,7 @@ $(document).ready(function () {
     })
 
     // -------------> LOAD MODAL
-    // TODO: VERY IMPORTANT TO LOAD OWNER NAMES ASWELL!!!
-    $("body").on("show.bs.modal", "#LoadModal", function () {
-        ResetSelectList("#RegionSelect");
-        ResetSelectList("#FootprintSelect");
-        setFootprintList();
-    });
-
-    $("body").on("change", "#FootprintSelect", function () {
-        ResetSelectList("#RegionSelect");
-        setRegionList();
-    });
-
     $("body").on("click", "#LoadRegionButton", function () {
-        loadRegion();
         refreshCanvas();
 
         $("#LoadModal").modal("hide");
@@ -104,17 +91,6 @@ $(document).ready(function () {
         $("#SaveModal").modal("hide");
     });
 });
-
-// Reset Select options
-function ResetSelectList(selectId) {
-    $(selectId).empty()
-        .append("<option>Please select...</option>");
-    $(selectId + " option:selected").attr('disabled', 'disabled');
-}
-/*
-
-
-*/
 
 // Centering modals
 function centerModals($element) {
@@ -226,19 +202,7 @@ function saveRegion() {
     serviceCall(methodUrl, "POST");
 }
 
-
-// Load region 
-function loadRegion() {
-    var params = {        
-        owner: $("#FootprintSelect option:selected").text().split("/")[0],
-        name: $("#FootprintSelect option:selected").text().split("/")[1],
-        region: $("#RegionSelect option:selected").text()
-    };
-    var methodUrl = createUrl(editorSvcUrl, ["load"], params);
-
-    serviceCall(methodUrl, "GET", { headers: { Accept: "text/plain" } });
-}
-
+// <----- Ajax 
 function setOwner() {
     var methodUrl = createUrl(authSvcUrl, ["me"]);
     var owner = "";
@@ -255,35 +219,7 @@ function setOwner() {
 
 }
 
-
-// set Footprint list of User
-function setFootprintList() {
-    var serviceUrl = createUrl(footprintSvcUrl, ["footprints"]);
-    console.log(serviceUrl);
-    $.get(serviceUrl, function (data, status) {
-        $(data).find("footprint").each(function () {
-            $("#FootprintSelect").append($('<option>').append($(this).find("owner").text()+"/"+$(this).find("name").text()));
-        })
-    });
-}
-
-
-// GET selected folder and the footprints within
-function setRegionList() {
-    //var owner = $("#SaveUserInput").val();
-    var owner = $("#FootprintSelect option:selected").text().split("/")[0];
-    var footprint = $("#FootprintSelect option:selected").text().split("/")[1];
-    var serviceUrl = createUrl(footprintSvcUrl, ["users", owner, "footprints", footprint, "regions"])
-    $.get(serviceUrl, function (data, status) {
-        var nameList = $(data).find("name").each(function () {
-            $("#RegionSelect").append($("<option>").append($(this).text()));
-        })
-    });
-}
-// <----- SERVICE CALLS
-
-// ULTIMATE AJAX FUNCTION
-
+// The ultimate ajax function (: 
 function serviceCall(url, type, optParams)
 {
     // set default values
@@ -310,6 +246,7 @@ function serviceCall(url, type, optParams)
             };
         });
     }
+
     $.ajax({
         url: url,
         type: type,
