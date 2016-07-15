@@ -9,7 +9,6 @@
                     <ContentTemplate>
                         <div id="PlotCanvasContainer">
                             <asp:Image runat="server" ID="PlotCanvas" CssClass="img-responsive" Width="1080" Height="600" />
-                            <%--<spherical:PlotCanvas runat="server" ID="PlotCanvas" CssClass="img-responsive" Width="1080" Height="600" />--%>
                             <button type="button" class="btn btn-sm" id="refreshCanvasButton"><span class="glyphicon glyphicon-refresh"></span></button>
 
                         </div>
