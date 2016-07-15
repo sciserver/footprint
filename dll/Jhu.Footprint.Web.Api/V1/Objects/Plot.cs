@@ -13,7 +13,7 @@ namespace Jhu.Footprint.Web.Api.V1
     [Description("Footprint plot prameters")]
     public class Plot
     {
-        [DataMember(Name = "widht")]
+        [DataMember(Name = "width")]
         public float? Width { get; set; }
 
         [DataMember(Name = "height")]
@@ -84,6 +84,55 @@ namespace Jhu.Footprint.Web.Api.V1
         {
             plot.Width = Width ?? plot.Width;
             plot.Height = Height ?? plot.Height;
+
+            plot.AutoRotate = AutoRotate ?? true;
+            plot.AutoZoom = AutoZoom ?? false;
+
+
+            // projection
+            if (Projection != "")
+            {
+                try
+                {
+                    Projection = "Jhu.Spherical.Visualizer." + Projection + "Projection,Jhu.Spherical.Visualizer";
+                    var t = Type.GetType(Projection);
+                    plot.Projection = (Projection)Activator.CreateInstance(t);
+                }
+                catch (Exception e)
+                {
+                    plot.Projection = new AitoffProjection();
+                }
+            }
         }
+
+        public Spherical.Visualizer.Plot GetPlot(IEnumerable<Spherical.Region> regions)
+        {
+            var plot = new Spherical.Visualizer.Plot();
+            var regionds = new ObjectListDataSource(regions);
+
+            // Plot regions
+            if (RegionsVisible ?? true)
+            {
+                var r1 = new RegionsLayer();
+                r1.DataSource = regionds;
+                r1.Outline.Visible = false;
+                plot.Layers.Add(r1);
+            }         
+
+
+            // plot outline
+            if (OutlineVisible ?? true)
+            {
+            var r2 = new RegionsLayer();
+            r2.DataSource = regionds;
+            r2.Fill.Visible = false;
+            }
+
+            return plot;
+        }
+
+        private void SetValues()
+        { }
+        
     }
 }
