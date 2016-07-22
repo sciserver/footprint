@@ -13,6 +13,8 @@ namespace Jhu.Footprint.Web.Api.V1
     [Description("Footprint plot prameters")]
     public class Plot
     {
+        private IEnumerable<Spherical.Region> Regions;
+
         [DataMember(Name = "width")]
         public float? Width { get; set; }
 
@@ -54,6 +56,7 @@ namespace Jhu.Footprint.Web.Api.V1
         [DataMember(Name = "gridDensity")]
         public float? GridDensity { get; set; }
 
+        // Do we need two of them? 
         [DataMember(Name = "gridSys")]
         [Description("Coordinate system. Valid values: eq, gal.")]
         public string GridCoordinateSystem { get; set; }
@@ -78,15 +81,24 @@ namespace Jhu.Footprint.Web.Api.V1
         public bool? RegionsVisible { get; set; }
 
         [DataMember(Name = "outlineVisible")]
-        public bool? OutlineVisible { get; set; }
+        public bool? OutlineVisible { get; set; }       
+
+        public Plot()
+        {
+
+        }
+
+        public Plot(IEnumerable<Spherical.Region> regions)
+        {
+            Regions = regions;
+        }
 
         public void GetValues(Spherical.Visualizer.Plot plot)
         {
             plot.Width = Width ?? plot.Width;
             plot.Height = Height ?? plot.Height;
 
-            plot.AutoRotate = AutoRotate ?? true;
-            plot.AutoZoom = AutoZoom ?? false;
+            // TODO: colorTheme
 
 
             // projection
@@ -103,6 +115,69 @@ namespace Jhu.Footprint.Web.Api.V1
                     plot.Projection = new AitoffProjection();
                 }
             }
+
+            // TODO: CoordinateSystem
+
+            // TODO: ra, dec, l, b 
+
+            plot.AutoRotate = AutoRotate ?? true;
+            plot.AutoZoom = AutoZoom ?? false;
+
+            // plot grid
+            var grid = new GridLayer();
+
+            if (GridVisible ?? true)
+            {
+                grid.RaScale.Density = GridDensity ?? 100;
+                grid.DecScale.Density = GridDensity ?? 100;
+                plot.Layers.Add(grid);
+                plot.Layers.Add(new BorderLayer());
+            }
+
+            var axes = new AxesLayer();   
+
+            if (AxesVisible ?? true)
+            {
+                axes.X1Axis.Labels.Visible = AxisLabelsVisible ?? true;
+                axes.X2Axis.Labels.Visible = AxisLabelsVisible ?? true;
+                axes.Y1Axis.Labels.Visible = AxisLabelsVisible ?? true;
+                axes.Y2Axis.Labels.Visible = AxisLabelsVisible ?? true;
+
+                // TODO: Fontsize
+
+                plot.Layers.Add(axes);
+            }
+
+            // DegreeStyle
+
+            switch (DegreeStyle)
+            {
+                default:
+                case "decimal":
+                    grid.RaScale.DegreeFormat.DegreeStyle = Spherical.Visualizer.DegreeStyle.Decimal;
+                    grid.DecScale.DegreeFormat.DegreeStyle = Spherical.Visualizer.DegreeStyle.Decimal;
+                    axes.X1Axis.Scale.DegreeFormat.DegreeStyle = Spherical.Visualizer.DegreeStyle.Decimal;
+                    axes.X2Axis.Scale.DegreeFormat.DegreeStyle = Spherical.Visualizer.DegreeStyle.Decimal;
+                    axes.Y1Axis.Scale.DegreeFormat.DegreeStyle = Spherical.Visualizer.DegreeStyle.Decimal;
+                    axes.Y2Axis.Scale.DegreeFormat.DegreeStyle = Spherical.Visualizer.DegreeStyle.Decimal;
+                    break;
+                case "hms":
+                    grid.RaScale.DegreeFormat.DegreeStyle = Spherical.Visualizer.DegreeStyle.Hours;
+                    grid.DecScale.DegreeFormat.DegreeStyle = Spherical.Visualizer.DegreeStyle.Symbols;
+                    axes.X1Axis.Scale.DegreeFormat.DegreeStyle = Spherical.Visualizer.DegreeStyle.Hours;
+                    axes.X2Axis.Scale.DegreeFormat.DegreeStyle = Spherical.Visualizer.DegreeStyle.Hours;
+                    axes.Y1Axis.Scale.DegreeFormat.DegreeStyle = Spherical.Visualizer.DegreeStyle.Symbols;
+                    axes.Y2Axis.Scale.DegreeFormat.DegreeStyle = Spherical.Visualizer.DegreeStyle.Symbols;
+                    break;
+
+            }
+
+            // TODO: Linewidth
+
+            // TODO: Regions Visible
+
+            // TODO: Outlines Visible
+
         }
 
         public Spherical.Visualizer.Plot GetPlot(IEnumerable<Spherical.Region> regions)
@@ -117,22 +192,19 @@ namespace Jhu.Footprint.Web.Api.V1
                 r1.DataSource = regionds;
                 r1.Outline.Visible = false;
                 plot.Layers.Add(r1);
-            }         
+            }
 
 
             // plot outline
             if (OutlineVisible ?? true)
             {
-            var r2 = new RegionsLayer();
-            r2.DataSource = regionds;
-            r2.Fill.Visible = false;
+                var r2 = new RegionsLayer();
+                r2.DataSource = regionds;
+                r2.Fill.Visible = false;
             }
 
             return plot;
         }
 
-        private void SetValues()
-        { }
-        
     }
 }
