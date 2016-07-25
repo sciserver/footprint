@@ -13,7 +13,7 @@ namespace Jhu.Footprint.Web.Api.V1
     [Description("Footprint plot prameters")]
     public class Plot
     {
-        private IEnumerable<Spherical.Region> Regions;
+        private IEnumerable<Spherical.Region> regions;
 
         [DataMember(Name = "width")]
         public float? Width { get; set; }
@@ -81,16 +81,16 @@ namespace Jhu.Footprint.Web.Api.V1
         public bool? RegionsVisible { get; set; }
 
         [DataMember(Name = "outlineVisible")]
-        public bool? OutlineVisible { get; set; }       
+        public bool? OutlineVisible { get; set; }
 
         public Plot()
         {
-
+            regions = null;
         }
 
         public Plot(IEnumerable<Spherical.Region> regions)
         {
-            Regions = regions;
+            this.regions = regions;
         }
 
         public void GetValues(Spherical.Visualizer.Plot plot)
@@ -117,6 +117,19 @@ namespace Jhu.Footprint.Web.Api.V1
             }
 
             // TODO: CoordinateSystem
+            if (regions != null)
+            {
+                switch (CoordinateSystem)
+                {
+                    default:
+                    case "equatorial":
+                        break;
+                    case "galactic":
+                        regions.AsParallel().ForAll(r => r.Rotate(Spherical.Rotation.EquatorialToGalactic);
+                        break;
+                }
+            }
+
 
             // TODO: ra, dec, l, b 
 
@@ -134,7 +147,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 plot.Layers.Add(new BorderLayer());
             }
 
-            var axes = new AxesLayer();   
+            var axes = new AxesLayer();
 
             if (AxesVisible ?? true)
             {
