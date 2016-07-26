@@ -13,7 +13,7 @@ namespace Jhu.Footprint.Web.Api.V1
     [Description("Footprint plot prameters")]
     public class Plot
     {
-        private IEnumerable<Spherical.Region> regions;
+        private IEnumerable<Spherical.Region> regions = null;
 
         [DataMember(Name = "width")]
         public float? Width { get; set; }
@@ -85,18 +85,13 @@ namespace Jhu.Footprint.Web.Api.V1
 
         public Plot()
         {
-            regions = null;
         }
 
-        public Plot(IEnumerable<Spherical.Region> regions)
+        private void GetValues(Spherical.Visualizer.Plot plot)
         {
-            this.regions = regions;
-        }
 
-        public void GetValues(Spherical.Visualizer.Plot plot)
-        {
-            plot.Width = Width ?? plot.Width;
-            plot.Height = Height ?? plot.Height;
+            plot.Width = Math.Max(Width ?? 1080, 1080);
+            plot.Height = Math.Max( Height ?? 600, 600);
 
             // TODO: colorTheme
 
@@ -125,7 +120,7 @@ namespace Jhu.Footprint.Web.Api.V1
                     case "equatorial":
                         break;
                     case "galactic":
-                        regions.AsParallel().ForAll(r => r.Rotate(Spherical.Rotation.EquatorialToGalactic);
+                        regions.AsParallel().ForAll(r => r.Rotate(Spherical.Rotation.EquatorialToGalactic));
                         break;
                 }
             }
@@ -187,37 +182,48 @@ namespace Jhu.Footprint.Web.Api.V1
 
             // TODO: Linewidth
 
-            // TODO: Regions Visible
 
-            // TODO: Outlines Visible
+            // plot regions
+            var regionds = new ObjectListDataSource(regions);
+            
+            if (RegionsVisible ?? true)
+            {
+                var r = new RegionsLayer();
+                r.DataSource = regionds;
+                r.Outline.Visible = false;
+                plot.Layers.Add(r);
+
+            }
+            
+            // plot outline
+            if (OutlineVisible ?? true)
+            {
+                var r = new RegionsLayer();
+                r.DataSource = regionds;
+                r.Fill.Visible = false;
+
+                var pen = new System.Drawing.Pen(System.Drawing.Brushes.Black, 1)
+                {
+                    LineJoin = System.Drawing.Drawing2D.LineJoin.Bevel
+                };
+
+                r.Outline.Pens = new[] { pen };
+                plot.Layers.Add(r);
+            }
+
 
         }
 
         public Spherical.Visualizer.Plot GetPlot(IEnumerable<Spherical.Region> regions)
         {
             var plot = new Spherical.Visualizer.Plot();
-            var regionds = new ObjectListDataSource(regions);
 
-            // Plot regions
-            if (RegionsVisible ?? true)
-            {
-                var r1 = new RegionsLayer();
-                r1.DataSource = regionds;
-                r1.Outline.Visible = false;
-                plot.Layers.Add(r1);
-            }
-
-
-            // plot outline
-            if (OutlineVisible ?? true)
-            {
-                var r2 = new RegionsLayer();
-                r2.DataSource = regionds;
-                r2.Fill.Visible = false;
-            }
+            this.regions = regions;
+            GetValues(plot);
 
             return plot;
-        }
 
+        }
+        
     }
 }

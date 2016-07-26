@@ -245,7 +245,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
                 footprint.Load(owner, name);
 
-                return footprint.CombinedRegion.Region ;
+                return footprint.CombinedRegion.Region;
             }
         }
 
@@ -273,25 +273,33 @@ namespace Jhu.Footprint.Web.Api.V1
             }
         }
 
-        public Spherical.Visualizer.Plot PlotUserFootprint(string owner, string name, string operation, string projection, string sys, string ra, string dec, string b, string l, float width, float height, string colorTheme)
+        public Spherical.Visualizer.Plot PlotUserFootprint(string owner, string name, string projection, string sys, string ra, string dec, string b, string l, float width, float height, string colorTheme)
         {
-            using (var context = CreateContext())
+
+            //var plot = Lib.FootprintPlot.GetPlot(new[] { footprint.CombinedRegion.Region }, projection, sys, ra, dec, b, l, width, height, colorTheme);
+            // TODO: change this part to use all parameters
+            // Size is different for vector graphics!
+
+
+            var plotParameters = new Plot()
             {
-                var footprint = new Lib.Footprint(context);
+                Projection = projection,
+                CoordinateSystem = sys,
+                //Ra = ra,
+                //Dec = dec
+                //B = b,
+                //L = l,
+                Width = width,
+                Height = height,
+                ColorTheme = colorTheme
 
-                footprint.Load(owner, name);
+            };
 
-                // var plot = Lib.FootprintPlot.GetDefaultPlot(new[] { footprint.CombinedRegion.Region });
+            return PlotUserFootprintAdvanced(owner, name, plotParameters);
 
-                var plot = Lib.FootprintPlot.GetPlot(new[] { footprint.CombinedRegion.Region }, projection, sys, ra, dec, b, l, width, height, colorTheme);
-                // TODO: change this part to use all parameters
-                // Size is different for vector graphics!
-
-                return plot;
-            }
         }
 
-        public Spherical.Visualizer.Plot PlotUserFootprintAdvanced(string owner, string name, string operation, Plot plotParameters)
+        public Spherical.Visualizer.Plot PlotUserFootprintAdvanced(string owner, string name, Plot plotParameters)
         {
             using (var context = CreateContext())
             {
@@ -299,11 +307,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
                 footprint.Load(owner, name);
 
-                var plot = Lib.FootprintPlot.GetDefaultPlot(new[] { footprint.CombinedRegion.Region });
-
-                plotParameters.GetValues(plot);
-
-                return plot;
+                return plotParameters.GetPlot(new[] { footprint.CombinedRegion.Region });
             }
         }
 
@@ -371,26 +375,29 @@ namespace Jhu.Footprint.Web.Api.V1
             }
         }
 
-        public Spherical.Visualizer.Plot PlotUserFootprintRegion(string owner, string name, string regionName, string operation, string projection, string sys, string ra, string dec, string b, string l, float width, float height, string colorTheme)
+        public Spherical.Visualizer.Plot PlotUserFootprintRegion(string owner, string name, string regionName, string projection, string sys, string ra, string dec, string b, string l, float width, float height, string colorTheme)
         {
-            using (var context = CreateContext())
+            var plotParameters = new Plot()
             {
-                var footprint = new Lib.Footprint(context);
-                footprint.Load(owner, name);
+                Projection = projection,
+                CoordinateSystem = sys,
+                //Ra = ra,
+                //Dec = dec
+                //B = b,
+                //L = l,
+                Width = width,
+                Height = height,
+                ColorTheme = colorTheme
+            };
 
-                var region = new Lib.FootprintRegion(footprint);
-                region.Load(regionName);
+            // TODO: change this part to use all parameters
+            // Size is different for vector graphics!
 
-                var plot = Lib.FootprintPlot.GetPlot(new[] { region.Region }, projection, sys, ra, dec, b, l, width, height, colorTheme);
+            return PlotUserFootprintRegionAdvanced(owner, name, regionName, plotParameters);
 
-                // TODO: change this part to use all parameters
-                // Size is different for vector graphics!
-
-                return plot;
-            }
         }
 
-        public Spherical.Visualizer.Plot PlotUserFootprintRegionAdvanced(string owner, string name, string regionName, string operation, Plot plotParameters)
+        public Spherical.Visualizer.Plot PlotUserFootprintRegionAdvanced(string owner, string name, string regionName, Plot plotParameters)
         {
             using (var context = CreateContext())
             {
@@ -400,11 +407,10 @@ namespace Jhu.Footprint.Web.Api.V1
                 var region = new Lib.FootprintRegion(footprint);
                 region.Load(regionName);
 
-                var plot = Lib.FootprintPlot.GetDefaultPlot(new[] { region.Region });
+                //var plot = Lib.FootprintPlot.GetDefaultPlot(new[] { region.Region });
 
-                plotParameters.GetValues(plot);
 
-                return plot;
+                return plotParameters.GetPlot(new[] { region.Region });
             }
         }
 

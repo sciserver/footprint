@@ -122,7 +122,6 @@ namespace Jhu.Footprint.Web.Api.V1
         Spherical.Visualizer.Plot PlotUserFootprint(
             string owner,
             string name,
-            string operation,
             string projection,
             string sys,
             string ra,
@@ -137,7 +136,7 @@ namespace Jhu.Footprint.Web.Api.V1
         [WebInvoke(Method = HttpMethod.Post, UriTemplate = Urls.UserFootprint + Urls.PlotAdvanced, BodyStyle = WebMessageBodyStyle.Bare)]
         [PlotFormatter]
         [Description("Plots a footprint, with advanced parameters")]
-        Spherical.Visualizer.Plot PlotUserFootprintAdvanced(string owner, string name, string operation, Plot plotParameters);
+        Spherical.Visualizer.Plot PlotUserFootprintAdvanced(string owner, string name, Plot plotParameters);
 
         #endregion
         #region Individual region set, get and plot
@@ -173,7 +172,6 @@ namespace Jhu.Footprint.Web.Api.V1
             string owner,
             string name,
             string regionName,
-            string operation,
             string projection,
             string sys,
             string ra,
@@ -188,7 +186,7 @@ namespace Jhu.Footprint.Web.Api.V1
         [WebInvoke(Method = HttpMethod.Post, UriTemplate = Urls.UserFootprintRegion + Urls.PlotAdvanced, BodyStyle = WebMessageBodyStyle.Bare)]
         [PlotFormatter]
         [Description("Plots a footprint.")]
-        Spherical.Visualizer.Plot PlotUserFootprintRegionAdvanced(string owner, string name, string regionName, string operation, Plot plotParameters);
+        Spherical.Visualizer.Plot PlotUserFootprintRegionAdvanced(string owner, string name, string regionName, Plot plotParameters);
 
         // TODO: add HTM cover
 

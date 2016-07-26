@@ -98,7 +98,6 @@ namespace Jhu.Footprint.Web.Api.V1
         [WebGet(UriTemplate = Urls.Plot, BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Plots a footprint.")]
         Spherical.Visualizer.Plot PlotUserFootprintRegion(
-            string operation,
             string projection,
             string sys,
             string ra,
@@ -113,7 +112,7 @@ namespace Jhu.Footprint.Web.Api.V1
         [PlotFormatter]
         [WebInvoke(Method = HttpMethod.Post, UriTemplate = Urls.PlotAdvanced)]
         [Description("Plots a footprint.")]
-        Spherical.Visualizer.Plot PlotUserFootprintRegionAdvanced(string operation, Plot plot);
+        Spherical.Visualizer.Plot PlotUserFootprintRegionAdvanced(Plot plot);
 
         // TODO: add HTM cover
     }

@@ -149,25 +149,37 @@ namespace Jhu.Footprint.Web.Api.V1
             return Lib.FootprintFormatter.InterpolateOutlinePoints(SessionRegion.Outline, resolution);
         }
 
-        public Spherical.Visualizer.Plot PlotUserFootprintRegion(string operation, string projection, string sys, string ra, string dec, string b, string l, float width, float height, string colorTheme)
+        public Spherical.Visualizer.Plot PlotUserFootprintRegion(string projection, string sys, string ra, string dec, string b, string l, float width, float height, string colorTheme)
         {
             var plot = Lib.FootprintPlot.GetDefaultPlot(new[] { SessionRegion });
 
             // TODO: change this part to use all parameters
             // Size is different for vector graphics!
-            plot.Width = Math.Max(width, 1080);
-            plot.Height = Math.Max(height, 600);
 
-            return plot;
+            var plotParameters = new Plot()
+            {
+                Projection = projection,
+                CoordinateSystem = sys,
+                //Ra = ra,
+                //Dec = dec
+                //B = b,
+                //L = l,
+                Width = Math.Max(width, 1080),
+                Height = Math.Max(height,600),
+                ColorTheme = colorTheme,
+                AutoRotate = true,
+                AutoZoom = true,
+
+            };
+
+            return plotParameters.GetPlot(new[] { SessionRegion });
         }
 
-        public Spherical.Visualizer.Plot PlotUserFootprintRegionAdvanced(string operation, Plot plotParameters)
+        public Spherical.Visualizer.Plot PlotUserFootprintRegionAdvanced(Plot plotParameters)
         {
-            var plot = Lib.FootprintPlot.GetDefaultPlot(new[] { SessionRegion });
-
-            plotParameters.GetValues(plot);
-
-            return plot;
+            //var plot = Lib.FootprintPlot.GetDefaultPlot(new[] { SessionRegion });
+            
+            return plotParameters.GetPlot(new[] { SessionRegion });
         }
     }
 }
