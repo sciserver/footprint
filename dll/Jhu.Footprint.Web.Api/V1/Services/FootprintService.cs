@@ -273,7 +273,7 @@ namespace Jhu.Footprint.Web.Api.V1
             }
         }
 
-        public Spherical.Visualizer.Plot PlotUserFootprint(string owner, string name, string projection, string sys, string ra, string dec, string b, string l, float width, float height, string colorTheme)
+        public Spherical.Visualizer.Plot PlotUserFootprint(string owner, string name, string projection, string sys, string ra, string dec, string b, string l, float width, float height, string colorTheme, string autoZoom, string autoRotate, string grid, string degreeStyle)
         {
 
             //var plot = Lib.FootprintPlot.GetPlot(new[] { footprint.CombinedRegion.Region }, projection, sys, ra, dec, b, l, width, height, colorTheme);
@@ -291,8 +291,11 @@ namespace Jhu.Footprint.Web.Api.V1
                 //L = l,
                 Width = width,
                 Height = height,
-                ColorTheme = colorTheme
-
+                ColorTheme = colorTheme,
+                AutoZoom = (autoZoom == "") ? true : Convert.ToBoolean(autoZoom),
+                AutoRotate = (autoRotate == "") ? true : Convert.ToBoolean(autoRotate),
+                GridVisible = (grid == "") ? true : Convert.ToBoolean(grid),
+                DegreeStyle = degreeStyle
             };
 
             return PlotUserFootprintAdvanced(owner, name, plotParameters);
@@ -375,7 +378,7 @@ namespace Jhu.Footprint.Web.Api.V1
             }
         }
 
-        public Spherical.Visualizer.Plot PlotUserFootprintRegion(string owner, string name, string regionName, string projection, string sys, string ra, string dec, string b, string l, float width, float height, string colorTheme)
+        public Spherical.Visualizer.Plot PlotUserFootprintRegion(string owner, string name, string regionName, string projection, string sys, string ra, string dec, string b, string l, float width, float height, string colorTheme, string autoZoom, string autoRotate, string grid, string degreeStyle)
         {
             var plotParameters = new Plot()
             {
@@ -387,7 +390,11 @@ namespace Jhu.Footprint.Web.Api.V1
                 //L = l,
                 Width = width,
                 Height = height,
-                ColorTheme = colorTheme
+                ColorTheme = colorTheme,
+                AutoZoom = (autoZoom == "") ? true : Convert.ToBoolean(autoZoom),
+                AutoRotate = (autoRotate == "") ? true : Convert.ToBoolean(autoRotate),
+                GridVisible = (grid == "") ? true : Convert.ToBoolean(grid),
+                DegreeStyle = degreeStyle
             };
 
             // TODO: change this part to use all parameters

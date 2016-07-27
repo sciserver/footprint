@@ -106,7 +106,10 @@ namespace Jhu.Footprint.Web.Api.V1
             string l,
             float width,
             float height,
-            string colorTheme);
+            string colorTheme, 
+            string autoZoom, 
+            string autoRotate, 
+            string grid);
 
         [OperationContract]
         [PlotFormatter]

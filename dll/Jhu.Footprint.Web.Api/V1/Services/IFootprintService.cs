@@ -130,7 +130,11 @@ namespace Jhu.Footprint.Web.Api.V1
             string l,
             float width,
             float height,
-            string colorTheme);
+            string colorTheme,
+            string autoZoom,
+            string autoRotate,
+            string grid,
+            string degreeStyle);
 
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Post, UriTemplate = Urls.UserFootprint + Urls.PlotAdvanced, BodyStyle = WebMessageBodyStyle.Bare)]
@@ -180,7 +184,11 @@ namespace Jhu.Footprint.Web.Api.V1
             string l,
             float width,
             float height,
-            string colorTheme);
+            string colorTheme,
+            string autoZoom,
+            string autoRotate,
+            string grid,
+            string degreeStyle);
 
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Post, UriTemplate = Urls.UserFootprintRegion + Urls.PlotAdvanced, BodyStyle = WebMessageBodyStyle.Bare)]
