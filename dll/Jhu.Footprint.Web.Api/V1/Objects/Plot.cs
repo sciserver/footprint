@@ -111,7 +111,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 }
             }
 
-            // TODO: CoordinateSystem
+
             if (regions != null)
             {
                 switch (CoordinateSystem)
