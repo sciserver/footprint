@@ -40,13 +40,22 @@ namespace Jhu.Footprint.Web.UI {
         protected global::System.Web.UI.WebControls.RadioButtonList plotDegreeStyle;
         
         /// <summary>
+        /// plotSystem control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButtonList plotSystem;
+        
+        /// <summary>
         /// plotGrid control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox plotGrid;
+        protected global::System.Web.UI.WebControls.ListItem plotGrid;
         
         /// <summary>
         /// plotAutoZoom control.
@@ -55,7 +64,7 @@ namespace Jhu.Footprint.Web.UI {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox plotAutoZoom;
+        protected global::System.Web.UI.WebControls.ListItem plotAutoZoom;
         
         /// <summary>
         /// plotAutoRotate control.
@@ -64,7 +73,7 @@ namespace Jhu.Footprint.Web.UI {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox plotAutoRotate;
+        protected global::System.Web.UI.WebControls.ListItem plotAutoRotate;
         
         /// <summary>
         /// FootprintSelect control.

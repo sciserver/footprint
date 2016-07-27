@@ -21,7 +21,12 @@ namespace Jhu.Footprint.Web.UI
             }
             else
             {
-                GeneratePlot();
+                string controlName = Page.Request.Params["__EVENTTARGET"];
+                if (!String.IsNullOrEmpty(controlName) & Page.FindControl(controlName) != FootprintSelect)
+                {
+                    GeneratePlot();
+                }
+
             }
 
         }
@@ -44,12 +49,12 @@ namespace Jhu.Footprint.Web.UI
             }
         }
         #endregion
-       
+
         protected void GeneratePlot()
         {
             // in early development phase    
             // Setup image url  
-            var imgUrl = "http://localhost/footprint/api/v1/Footprint.svc/users/" + Page.User.Identity.Name + "/footprints/" + FootprintSelect.SelectedItem +"/regions/"+ RegionSelect.SelectedItem + "/plot?";
+            var imgUrl = "http://localhost/footprint/api/v1/Footprint.svc/users/" + Page.User.Identity.Name + "/footprints/" + FootprintSelect.SelectedItem + "/regions/" + RegionSelect.SelectedItem + "/plot?";
 
 
 
@@ -57,23 +62,33 @@ namespace Jhu.Footprint.Web.UI
             {
                 default:
                 case "Decimal":
-                    imgUrl += "sys=dms";
+                    imgUrl += "&degStyle=decimal";
                     break;
                 case "Sexagesimal":
-                    imgUrl += "sys=hms";
-                    break;
-                case "Galactic":
-                    imgUrl += "sys=galactic";
+                    imgUrl += "&degStyle=hms";
                     break;
             }
 
+            switch (plotSystem.SelectedValue)
+            {
+                default:
+                case "Equatorial":
+                    imgUrl += "&sys=equatorial";
+                    break;
+                case "Galactic":
+                    imgUrl += "&sys=galactic";
+                    break;
+
+            }
+
+
             imgUrl += "&proj=" + plotProjectionStyle.SelectedValue;
 
-            if (plotGrid.Checked) imgUrl += "&grid=true";
+            imgUrl += plotGrid.Selected ? "&grid=true" : "&grid=false";
 
-            if (plotAutoRotate.Checked) imgUrl += "&autoRotate=true";
+            imgUrl += plotAutoRotate.Selected ? "&rotate=true" : "&rotate=false";
 
-            if (plotAutoZoom.Checked) imgUrl += "&autoZoom=true";
+            imgUrl += plotAutoZoom.Selected ? "&zoom=true" : "&zoom=false";
 
 
             // TODO : zoom ( slider )

@@ -32,12 +32,19 @@
                 <asp:RadioButtonList runat="server" AutoPostBack="True" ID="plotDegreeStyle">
                     <asp:ListItem Value="Decimal" Selected="True">Decimal</asp:ListItem>
                     <asp:ListItem Value="Sexagesimal">HMS-DMS</asp:ListItem>
+                </asp:RadioButtonList>
+                <hr />
+                <asp:RadioButtonList runat="server" AutoPostBack="True" ID="plotSystem">
+                    <asp:ListItem Value="Equatorial" Selected="True">Equatorial</asp:ListItem>
                     <asp:ListItem Value="Galactic">Galactic</asp:ListItem>
                 </asp:RadioButtonList>
                 <hr />
-                <asp:CheckBox ID="plotGrid" runat="server" AutoPostBack="True" Checked="True" Text="Grid" />
-                <asp:CheckBox ID="plotAutoZoom" runat="server" AutoPostBack="True" Text="Auto Zoom" />
-                <asp:CheckBox ID="plotAutoRotate" runat="server" AutoPostBack="True" Text="Auto Rotate" />
+                <asp:CheckBoxList AutoPostBack="True" runat="server">
+                <asp:ListItem ID="plotGrid" runat="server" Selected="True">Grid</asp:ListItem>
+                <asp:ListItem ID="plotAutoZoom" runat="server">Auto Zoom</asp:ListItem>
+                <asp:ListItem ID="plotAutoRotate" runat="server" Selected="true">Auto Rotate</asp:ListItem>
+
+                </asp:CheckBoxList>
 
             </div>
         </div>
