@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace Jhu.Footprint.Web.Lib
 {
-    public enum FootprintSearchMethod
+    public enum SearchMethod
     {
-        Name,
-        Object,
-        Point,
-        Intersect
+        Name,       // footprint name
+        Point,      // Coordinates
+        Cone,
+        Intersect,
+        Contain
     }
 
     [Flags]

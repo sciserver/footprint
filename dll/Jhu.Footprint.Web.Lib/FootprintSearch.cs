@@ -15,6 +15,10 @@ namespace Jhu.Footprint.Web.Lib
     {
         private string owner;
         private string name;
+        private SearchMethod searchMethod;
+        private Cartesian[] points;
+        private double radius;
+        private Region region;
 
         [DbColumn]
         public string Owner
@@ -28,6 +32,30 @@ namespace Jhu.Footprint.Web.Lib
         {
             get { return name; }
             set { name = value; }
+        }
+
+        public SearchMethod SearchMethod
+        {
+            get { return searchMethod; }
+            set { searchMethod = value; }
+        }
+
+        public Cartesian[] Point
+        {
+            get { return points; }
+            set { points = value; }
+        }
+
+        public double Radius
+        {
+            get { return radius; }
+            set { radius = value; }
+        }
+
+        public Region Region
+        {
+            get { return region; }
+            set { region = value; }
         }
 
         public FootprintSearch()
@@ -48,5 +76,6 @@ namespace Jhu.Footprint.Web.Lib
             this.owner = null;
         }
 
+        
     }
 }

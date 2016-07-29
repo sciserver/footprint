@@ -7,6 +7,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Xml.Serialization;
 using Jhu.Graywulf.Entities.Mapping;
+using Jhu.Spherical;
 
 namespace Jhu.Footprint.Web.Lib
 {
@@ -18,6 +19,10 @@ namespace Jhu.Footprint.Web.Lib
         private int? footprintId;
         private string footprintName;
         private string name;
+        private SearchMethod searchMethod;
+        private Cartesian[] points;
+        private double radius;
+        private Region region;
 
         #endregion
         #region Properties
@@ -49,6 +54,30 @@ namespace Jhu.Footprint.Web.Lib
             set { name = value; }
         }
 
+        public SearchMethod SearchMethod
+        {
+            get { return searchMethod; }
+            set { searchMethod = value; }
+        }
+
+        public Cartesian[] Point
+        {
+            get { return points; }
+            set { points = value; }
+        }
+
+        public double Radius
+        {
+            get { return radius; }
+            set { radius = value; }
+        }
+
+        public Region Region
+        {
+            get { return region; }
+            set { region = value; }
+        }
+
         #endregion
 
         #region Constructors & intitializers
@@ -74,5 +103,39 @@ namespace Jhu.Footprint.Web.Lib
         }
 
         #endregion
+
+        protected override string GetTableQuery()
+        {
+            switch (searchMethod)
+            {
+                case SearchMethod.Point:
+                    return GetTableQuery_PointSearch();
+                case SearchMethod.Cone:
+                case SearchMethod.Intersect:
+                case SearchMethod.Contain:
+                    throw new NotImplementedException();
+                default:
+                    return base.GetTableQuery();
+            }
+        }
+
+        private string GetTableQuery_PointSearch()
+        {
+            return @"
+SELECT r.ID, [FootprintID], [Name], [FillFactor], [Type]
+FROM [dbo].[FootprintRegion] r
+INNER JOIN [dbo].[FindFootprintRegionEq](@ra, @dec) f
+	ON r.ID = f.RegionID";
+        }
+
+        protected override void AppendParameters()
+        {
+            switch (searchMethod)
+            {
+                default:
+                    base.AppendParameters();
+                    break;
+            }
+        }
     }
 }
