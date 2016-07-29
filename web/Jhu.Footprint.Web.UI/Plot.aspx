@@ -18,6 +18,7 @@
 
             <div class="cl-sm-2">
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#LoadModal">Load Region</button>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#SaveModal">Download</button>
                 <hr />
                 <p class="cm-header">Projection</p>
                 <asp:RadioButtonList ID="plotProjectionStyle" runat="server" AutoPostBack="True">
@@ -40,9 +41,9 @@
                 </asp:RadioButtonList>
                 <hr />
                 <asp:CheckBoxList AutoPostBack="True" runat="server">
-                <asp:ListItem ID="plotGrid" runat="server" Selected="True">Grid</asp:ListItem>
-                <asp:ListItem ID="plotAutoZoom" runat="server">Auto Zoom</asp:ListItem>
-                <asp:ListItem ID="plotAutoRotate" runat="server" Selected="true">Auto Rotate</asp:ListItem>
+                    <asp:ListItem ID="plotGrid" runat="server" Selected="True">Grid</asp:ListItem>
+                    <asp:ListItem ID="plotAutoZoom" runat="server">Auto Zoom</asp:ListItem>
+                    <asp:ListItem ID="plotAutoRotate" runat="server" Selected="true">Auto Rotate</asp:ListItem>
 
                 </asp:CheckBoxList>
 
@@ -82,7 +83,30 @@
                     </div>
                 </div>
             </div>
+
         </div>
+
+        <div id="SaveModal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                        <h4 class="modal-title">Download Footprint</h4>
+                    </div>
+                    <div class="modal-body">
+                                TODO: size + Format selector
+                                + JS script to make the ajax call
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" id="Button1">Download</button>
+                        <button type="button" class="btn btn-danger " data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
 
     </div>
 </asp:Content>
