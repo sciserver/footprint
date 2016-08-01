@@ -31,6 +31,42 @@ namespace Jhu.Footprint.Web.UI {
         protected global::System.Web.UI.WebControls.TextBox name;
         
         /// <summary>
+        /// raLabel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label raLabel;
+        
+        /// <summary>
+        /// raInput control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox raInput;
+        
+        /// <summary>
+        /// decLabel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label decLabel;
+        
+        /// <summary>
+        /// decInput control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox decInput;
+        
+        /// <summary>
         /// ok control.
         /// </summary>
         /// <remarks>
