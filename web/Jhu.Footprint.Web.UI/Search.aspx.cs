@@ -24,15 +24,15 @@ namespace Jhu.Footprint.Web.UI
             footprintList.DataBind();
         }
 
-        protected void footprintDataSource_ObjectCreating(object sender, ObjectDataSourceEventArgs e)
+        protected void footprintRegionDataSource_ObjectCreating(object sender, ObjectDataSourceEventArgs e)
         {
             //return new Jhu.Footprint.Web.Lib.Search();
             //RegistryUser.Name
 
-            var search = new Jhu.Footprint.Web.Lib.FootprintSearch(FootprintContext)
+            var search = new Jhu.Footprint.Web.Lib.FootprintRegionSearch(FootprintContext)
             {
                 // TODO: not working with the new version
-                //SearchMethod = Lib.FootprintSearchMethod.Name,
+                SearchMethod = Lib.SearchMethod.Name,
                 //User = RegistryUser.Name,
                 Name = name.Text,
             };

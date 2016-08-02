@@ -28,9 +28,9 @@
             <br />
             <asp:Button ID="ok" runat="server" OnClick="ok_Click" Text="search" />
 
-            <asp:ObjectDataSource ID="footprintDataSource" runat="server" OnObjectCreating="footprintDataSource_ObjectCreating" SelectCountMethod="Count" SelectMethod="Find" TypeName="Jhu.Footprint.Web.Lib.FootprintFolderSearch"
-                DataObjectTypeName="Jhu.Footprint.Web.Lib.FootprintFolder" />
-            <asp:ListView ID="footprintList" runat="server" DataSourceID="footprintDataSource" Visible="False">
+            <asp:ObjectDataSource ID="footprintRegionDataSource" runat="server" OnObjectCreating="footprintRegionDataSource_ObjectCreating" SelectCountMethod="Count" SelectMethod="Find" TypeName="Jhu.Footprint.Web.Lib.FootprintRegionSearch"
+                DataObjectTypeName="Jhu.Footprint.Web.Lib.FootprintRegion" />
+            <asp:ListView ID="footprintList" runat="server" DataSourceID="footprintRegionDataSource" Visible="False">
                 <LayoutTemplate>
                     <table>
                         <asp:PlaceHolder runat="server" ID="groupPlaceholder" />
