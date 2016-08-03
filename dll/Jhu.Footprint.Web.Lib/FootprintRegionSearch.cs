@@ -20,7 +20,7 @@ namespace Jhu.Footprint.Web.Lib
         private string footprintName;
         private string name;
         private SearchMethod searchMethod;
-        private Cartesian[] points;
+        private Cartesian points;
         private double radius;
         private Region region;
 
@@ -60,7 +60,7 @@ namespace Jhu.Footprint.Web.Lib
             set { searchMethod = value; }
         }
 
-        public Cartesian[] Point
+        public Cartesian Point
         {
             get { return points; }
             set { points = value; }
@@ -122,20 +122,31 @@ namespace Jhu.Footprint.Web.Lib
         private string GetTableQuery_PointSearch()
         {
             return @"
-SELECT r.ID, [FootprintID], [Name], [FillFactor], [Type]
+SELECT r.ID, [FootprintID], r.[Name], [FillFactor], [Type], [__acl]
 FROM [dbo].[FootprintRegion] r
-INNER JOIN [dbo].[FindFootprintRegionEq](@ra, @dec) f
-	ON r.ID = f.RegionID";
+INNER JOIN [dbo].[Footprint] f 
+    ON r.footprintID = f.ID
+INNER JOIN [dbo].[FindFootprintRegionEq](@ra, @dec) ff
+	ON r.ID = ff.RegionID";
         }
 
         protected override void AppendParameters()
         {
             switch (searchMethod)
             {
+                case SearchMethod.Point:
+                    AppendParameters_PointSearch();
+                    break;
                 default:
                     base.AppendParameters();
                     break;
             }
+        }
+
+        private void AppendParameters_PointSearch()
+        {
+            AppendSearchParameter("@ra",SqlDbType.Float,Point.RA);
+            AppendSearchParameter("@dec", SqlDbType.Float, Point.Dec);
         }
     }
 }
