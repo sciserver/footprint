@@ -13,6 +13,24 @@ namespace Jhu.Footprint.Web.UI {
     public partial class Search {
         
         /// <summary>
+        /// SearchMethod control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField SearchMethod;
+        
+        /// <summary>
+        /// SearchTabContainer control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl SearchTabContainer;
+        
+        /// <summary>
         /// nameLabel control.
         /// </summary>
         /// <remarks>
@@ -31,40 +49,121 @@ namespace Jhu.Footprint.Web.UI {
         protected global::System.Web.UI.WebControls.TextBox name;
         
         /// <summary>
-        /// raLabel control.
+        /// PointRALabel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label raLabel;
+        protected global::System.Web.UI.WebControls.Label PointRALabel;
         
         /// <summary>
-        /// raInput control.
+        /// PointRAInput control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox raInput;
+        protected global::System.Web.UI.WebControls.TextBox PointRAInput;
         
         /// <summary>
-        /// decLabel control.
+        /// PointDecLabel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label decLabel;
+        protected global::System.Web.UI.WebControls.Label PointDecLabel;
         
         /// <summary>
-        /// decInput control.
+        /// PointDecInput control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox decInput;
+        protected global::System.Web.UI.WebControls.TextBox PointDecInput;
+        
+        /// <summary>
+        /// ConeRALabel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label ConeRALabel;
+        
+        /// <summary>
+        /// ConeRAInput control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox ConeRAInput;
+        
+        /// <summary>
+        /// ConeDecLabel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label ConeDecLabel;
+        
+        /// <summary>
+        /// ConeDecInput control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox ConeDecInput;
+        
+        /// <summary>
+        /// ConeRadiusLabel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label ConeRadiusLabel;
+        
+        /// <summary>
+        /// ConeRadiusInput control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox ConeRadiusInput;
+        
+        /// <summary>
+        /// ConeSearch control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button ConeSearch;
+        
+        /// <summary>
+        /// IntersectSearch control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button IntersectSearch;
+        
+        /// <summary>
+        /// ContainSearch control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button ContainSearch;
         
         /// <summary>
         /// ok control.

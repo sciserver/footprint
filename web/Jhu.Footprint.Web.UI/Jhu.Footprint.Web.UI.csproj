@@ -377,6 +377,7 @@
     <Content Include="Scripts\jQuery\jquery-2.2.4.js" />
     <Content Include="Scripts\jQuery\jquery-2.2.4.min.js" />
     <Content Include="Search.aspx" />
+    <Content Include="Search.js" />
     <Content Include="Templates\ActivationEmail.xml" />
     <Content Include="Templates\ErrorFeedbackEmail.xml" />
     <Content Include="Templates\FeedbackEmail.xml" />

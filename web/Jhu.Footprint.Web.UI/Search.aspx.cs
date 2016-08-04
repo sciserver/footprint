@@ -9,6 +9,7 @@ namespace Jhu.Footprint.Web.UI
 {
     public partial class Search : CustomPageBase
     {
+
         public static string GetUrl()
         {
             return "~/Search.aspx";
@@ -23,18 +24,17 @@ namespace Jhu.Footprint.Web.UI
             footprintList.Visible = true;
             footprintList.DataBind();
         }
+        
 
         protected void footprintRegionDataSource_ObjectCreating(object sender, ObjectDataSourceEventArgs e)
         {
-            //return new Jhu.Footprint.Web.Lib.Search();
-            //RegistryUser.Name
 
             var search = new Jhu.Footprint.Web.Lib.FootprintRegionSearch(FootprintContext)
             {
                 // TODO: not working with the new version
-                SearchMethod = Lib.SearchMethod.Name,
-                //User = RegistryUser.Name,
+                SearchMethod = (Lib.SearchMethod)Enum.Parse(typeof(Lib.SearchMethod), SearchMethod.Value, true),
                 Name = name.Text,
+                Point = new Spherical.Cartesian(Convert.ToDouble(PointRAInput.Text), Convert.ToDouble(PointDecInput.Text))
             };
 
             e.ObjectInstance = search;
