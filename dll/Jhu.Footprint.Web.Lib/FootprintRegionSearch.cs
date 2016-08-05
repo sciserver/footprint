@@ -126,7 +126,7 @@ SELECT r.ID, [FootprintID], r.[Name], [FillFactor], [Type], [__acl]
 FROM [dbo].[FootprintRegion] r
 INNER JOIN [dbo].[Footprint] f 
     ON r.footprintID = f.ID
-INNER JOIN [dbo].[FindFootprintRegionEq](@ra, @dec) ff
+INNER JOIN [fps].[FindFootprintRegionEq](@ra, @dec) ff
 	ON r.ID = ff.RegionID";
         }
 
