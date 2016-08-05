@@ -1,3 +1,8 @@
+IF OBJECT_ID('[dbo].[spFindFootprintRegionEq]') IS NOT NULL
+DROP FUNCTION [dbo].[spFindFootprintRegionEq]
+
+GO
+
 IF OBJECT_ID('[fps].[spComputeHtmCover]') IS NOT NULL
 DROP PROC [fps].[spComputeHtmCover]
 

@@ -276,3 +276,32 @@ AS
 	FROM htm.Cover(@region)
 
 GO
+
+CREATE FUNCTION [fps].[FindFootprintRegionEq]
+(	
+	@ra float,
+	@dec float
+)
+RETURNS TABLE 
+AS
+RETURN 
+(
+	WITH q AS
+	(
+		SELECT RegionID
+		FROM FootprintRegionHtm htm
+		WHERE htmid.FromEq(@ra, @dec) BETWEEN htmIDStart AND htmIDEnd AND [partial] = 0
+
+		UNION
+
+		SELECT RegionID
+		FROM FootprintRegionHtm htm
+		INNER JOIN FootprintRegion r ON r.ID = htm.RegionID
+		WHERE htmid.FromEq(@ra, @dec) BETWEEN htmIDStart AND htmIDEnd AND [partial] = 1
+			AND region.ContainsEq(r.Region, @ra, @dec) = 1
+	)
+	SELECT RegionID
+	FROM q
+)
+
+GO
