@@ -14,7 +14,7 @@
     </asp:ScriptManagerProxy>
     <div class="container">
         
-        <asp:HiddenField runat="server" id="SearchMethod" Value="NameSearch" ClientIDMode="Static"/>
+        <asp:HiddenField runat="server" id="SearchMethod" Value="Name" ClientIDMode="Static"/>
 
         <div class="dock-fill">
             <h1>Footprint Catalog Search</h1>
