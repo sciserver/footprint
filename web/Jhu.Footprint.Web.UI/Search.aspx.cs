@@ -28,14 +28,29 @@ namespace Jhu.Footprint.Web.UI
 
         protected void footprintRegionDataSource_ObjectCreating(object sender, ObjectDataSourceEventArgs e)
         {
-
-            var search = new Jhu.Footprint.Web.Lib.FootprintRegionSearch(FootprintContext)
-            {
-                // TODO: not working with the new version
-                SearchMethod = (Lib.SearchMethod)Enum.Parse(typeof(Lib.SearchMethod), SearchMethod.Value, true),
-                Name = name.Text,
-                Point = new Spherical.Cartesian(Convert.ToDouble(PointRAInput.Text), Convert.ToDouble(PointDecInput.Text))
+            var method = (Lib.SearchMethod)Enum.Parse(typeof(Lib.SearchMethod), SearchMethod.Value, true);
+            var search = new Lib.FootprintRegionSearch(FootprintContext)
+            {                
+                SearchMethod = method
             };
+
+            switch (method)
+            {
+                case Lib.SearchMethod.Name:
+                    search.Name = name.Text;
+                    break;
+                case Lib.SearchMethod.Point:
+                    search.Point = new Spherical.Cartesian(Convert.ToDouble(PointRAInput.Text), Convert.ToDouble(PointDecInput.Text));
+                    break;
+                case Lib.SearchMethod.Cone:
+                    search.Point = new Spherical.Cartesian(Convert.ToDouble(PointRAInput.Text), Convert.ToDouble(PointDecInput.Text));
+                    search.Radius = Convert.ToDouble(ConeRadiusInput.Text);
+                    break;
+                case Lib.SearchMethod.Intersect:
+                case Lib.SearchMethod.Contain:
+                default:
+                    throw new NotImplementedException();
+            }
 
             e.ObjectInstance = search;
 
