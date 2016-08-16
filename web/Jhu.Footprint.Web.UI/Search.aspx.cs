@@ -43,7 +43,7 @@ namespace Jhu.Footprint.Web.UI
                     search.Point = new Spherical.Cartesian(Convert.ToDouble(PointRAInput.Text), Convert.ToDouble(PointDecInput.Text));
                     break;
                 case Lib.SearchMethod.Cone:
-                    search.Point = new Spherical.Cartesian(Convert.ToDouble(PointRAInput.Text), Convert.ToDouble(PointDecInput.Text));
+                    search.Point = new Spherical.Cartesian(Convert.ToDouble(ConeRAInput.Text), Convert.ToDouble(ConeDecInput.Text));
                     search.Radius = Convert.ToDouble(ConeRadiusInput.Text);
                     break;
                 case Lib.SearchMethod.Intersect:

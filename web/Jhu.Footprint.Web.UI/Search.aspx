@@ -6,15 +6,15 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="toolbar" runat="server">
 </asp:Content>
-<asp:Content ID="Content3" ContentPlaceHolderID="middle" runat="server">    
+<asp:Content ID="Content3" ContentPlaceHolderID="middle" runat="server">
     <asp:ScriptManagerProxy runat="server">
         <Scripts>
             <asp:ScriptReference Path="Search.js" />
         </Scripts>
     </asp:ScriptManagerProxy>
     <div class="container">
-        
-        <asp:HiddenField runat="server" id="SearchMethod" Value="Name" ClientIDMode="Static"/>
+
+        <asp:HiddenField runat="server" ID="SearchMethod" Value="Name" ClientIDMode="Static" />
 
         <div class="dock-fill">
             <h1>Footprint Catalog Search</h1>
@@ -22,26 +22,22 @@
                 <div class="col-sm-12">
                     <ul runat="server" id="SearchTabContainer" class="nav nav-tabs">
                         <li class="active"><a id="NameSearch" data-toggle="tab" href="#NameSearchPanel">Name</a></li>
-                        <li><a ID="PointSearch" data-toggle="tab" href="#PointSearchPanel">Coordinate</a></li>
-                        <li><a data-toggle="tab" href="#ConeSearchPanel">Cone</a></li>
-                        <li><a data-toggle="tab" href="#IntersectSearchPanel">Intersect</a></li>
-                        <li><a data-toggle="tab" href="#ContainSearchPanel">Contain</a></li>
+                        <li><a id="PointSearch" data-toggle="tab" href="#PointSearchPanel">Coordinate</a></li>
+                        <li><a id="ConeSearch" data-toggle="tab" href="#ConeSearchPanel">Cone</a></li>
+                        <li><a id="IntersectSearch" data-toggle="tab" href="#IntersectSearchPanel">Intersect</a></li>
+                        <li><a id="ContainSearch" data-toggle="tab" href="#ContainSearchPanel">Contain</a></li>
                     </ul>
 
                     <div class="tab-content col-sm-6">
                         <div id="NameSearchPanel" class="tab-pane fade in active">
                             <asp:Label ID="nameLabel" runat="server" Text="Name:" CssClass="control-label"></asp:Label>
                             <asp:TextBox runat="server" ID="name" CssClass="form-control" />
-
-                            <%--<asp:Button ID="NameSearch" runat="server" OnClick="ok_Click" Text="search" />--%>
                         </div>
                         <div id="PointSearchPanel" class="tab-pane fade">
                             <asp:Label ID="PointRALabel" runat="server" Text="Ra:" CssClass="control-label"></asp:Label>
                             <asp:TextBox runat="server" ID="PointRAInput" CssClass="form-control" />
                             <asp:Label ID="PointDecLabel" runat="server" Text="Dec:" CssClass="control-label"></asp:Label>
                             <asp:TextBox runat="server" ID="PointDecInput" CssClass="form-control" />
-
-                            <%--<asp:Button ID="PointSearch" runat="server" OnClick="ok_Click" Text="search" />--%>
                         </div>
 
                         <div id="ConeSearchPanel" class="tab-pane fade">
@@ -51,18 +47,14 @@
                             <asp:TextBox runat="server" ID="ConeDecInput" CssClass="form-control" />
                             <asp:Label ID="ConeRadiusLabel" runat="server" Text="Radius:" CssClass="control-label"></asp:Label>
                             <asp:TextBox runat="server" ID="ConeRadiusInput" CssClass="form-control" />
-
-                            <asp:Button ID="ConeSearch" runat="server" OnClick="ok_Click" Text="search" />
                         </div>
+
                         <div id="IntersectSearchPanel" class="tab-pane fade">
                             TODO
-                            
-            <asp:Button ID="IntersectSearch" runat="server" OnClick="ok_Click" Text="search" />
                         </div>
                         <div id="ContainSearchPanel" class="tab-pane fade">
                             TODO
                             
-            <asp:Button ID="ContainSearch" runat="server" OnClick="ok_Click" Text="search" />
                         </div>
                     </div>
                 </div>
