@@ -305,3 +305,85 @@ RETURN
 )
 
 GO
+
+CREATE FUNCTION [fps].[FindFootprintRegionIntersectHtm]
+(	
+	@region varbinary(max)
+)
+RETURNS TABLE 
+AS
+RETURN 
+(
+	WITH cover AS
+	(
+		SELECT * FROM htm.CoverAdvanced(@region, 0, 0.9, 2)
+	),
+	q AS
+	(
+		SELECT htm.*
+		FROM cover
+		INNER LOOP JOIN FootprintRegionHtm htm ON
+			htm.htmIDStart BETWEEN cover.htmIDStart AND cover.htmIDEnd
+
+		UNION
+
+		SELECT htm.*
+		FROM cover
+		INNER LOOP JOIN FootprintRegionHtm htm ON
+			(htm.htmIDStart = cover.htmIDStart OR
+			htm.htmIDStart = cover.htmIDStart & 0xFFFFFFFFFFFFFFFC OR
+			htm.htmIDStart = cover.htmIDStart & 0xFFFFFFFFFFFFFFF0 OR
+			htm.htmIDStart = cover.htmIDStart & 0xFFFFFFFFFFFFFFC0 OR
+			htm.htmIDStart = cover.htmIDStart & 0xFFFFFFFFFFFFFF00 OR
+			htm.htmIDStart = cover.htmIDStart & 0xFFFFFFFFFFFFFC00 OR
+			htm.htmIDStart = cover.htmIDStart & 0xFFFFFFFFFFFFF000 OR
+			htm.htmIDStart = cover.htmIDStart & 0xFFFFFFFFFFFFC000 OR
+			htm.htmIDStart = cover.htmIDStart & 0xFFFFFFFFFFFF0000 OR
+			htm.htmIDStart = cover.htmIDStart & 0xFFFFFFFFFFFC0000 OR
+			htm.htmIDStart = cover.htmIDStart & 0xFFFFFFFFFFF00000 OR
+			htm.htmIDStart = cover.htmIDStart & 0xFFFFFFFFFFC00000 OR
+			htm.htmIDStart = cover.htmIDStart & 0xFFFFFFFFFF000000 OR
+			htm.htmIDStart = cover.htmIDStart & 0xFFFFFFFFFC000000 OR
+			htm.htmIDStart = cover.htmIDStart & 0xFFFFFFFFF0000000 OR
+			htm.htmIDStart = cover.htmIDStart & 0xFFFFFFFFC0000000 OR
+			htm.htmIDStart = cover.htmIDStart & 0xFFFFFFFF00000000 OR
+			htm.htmIDStart = cover.htmIDStart & 0xFFFFFFFC00000000 OR
+			htm.htmIDStart = cover.htmIDStart & 0xFFFFFFF000000000 OR
+			htm.htmIDStart = cover.htmIDStart & 0xFFFFFFC000000000)
+			AND htm.htmIDEnd >= cover.htmIDStart
+	)
+	SELECT q.*
+	FROM q
+)
+
+GO
+
+CREATE FUNCTION [fps].[FindFootprintRegionIDIntersect]
+(	
+	@region varbinary(max)
+)
+RETURNS TABLE 
+AS
+RETURN 
+(
+	SELECT DISTINCT RegionID
+	FROM fps.FindFootprintRegionIntersectHtm(@region) htm
+)
+
+GO
+
+CREATE FUNCTION [fps].[FindFootprintRegionIntersect]
+(	
+	@region varbinary(max)
+)
+RETURNS TABLE 
+AS
+RETURN 
+(
+	SELECT r.* 
+	FROM fps.FindFootprintRegionIDIntersect(@region) q
+	INNER JOIN FootprintRegion r
+		ON r.ID = q.RegionID
+)
+
+GO

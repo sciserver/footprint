@@ -1,5 +1,20 @@
-IF OBJECT_ID('[dbo].[spFindFootprintRegionEq]') IS NOT NULL
-DROP FUNCTION [dbo].[spFindFootprintRegionEq]
+IF OBJECT_ID('[fps].[FindFootprintRegionIntersect]') IS NOT NULL
+DROP FUNCTION [fps].[FindFootprintRegionIntersect]
+
+GO
+
+IF OBJECT_ID('[fps].[FindFootprintRegionIDIntersect]') IS NOT NULL
+DROP FUNCTION [fps].[FindFootprintRegionIDIntersect]
+
+GO
+
+IF OBJECT_ID('[fps].[FindFootprintRegionIntersectHtm]') IS NOT NULL
+DROP FUNCTION [fps].[FindFootprintRegionIntersectHtm]
+
+GO
+
+IF OBJECT_ID('[dbo].[FindFootprintRegionEq]') IS NOT NULL
+DROP FUNCTION [dbo].[FindFootprintRegionEq]
 
 GO
 
