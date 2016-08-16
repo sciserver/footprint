@@ -112,6 +112,7 @@ namespace Jhu.Footprint.Web.Lib
                     return GetTableQuery_PointSearch();
                 case SearchMethod.Cone:
                 case SearchMethod.Intersect:
+                    return GetTableQuery_IntersectSearch();                    
                 case SearchMethod.Contain:
                     throw new NotImplementedException();
                 default:
@@ -130,6 +131,15 @@ INNER JOIN [fps].[FindFootprintRegionEq](@ra, @dec) ff
 	ON r.ID = ff.RegionID";
         }
 
+        private string GetTableQuery_IntersectSearch()
+        {
+            return @"
+SELECT r.ID, [FootprintID], r.[Name], [FillFactor], [Type], [__acl]
+FROM [fps].[FindFootprintRegionIntersect](@region) r
+INNER JOIN [dbo].[Footprint] f 
+    ON r.footprintID = f.ID";
+        }
+
         protected override void AppendParameters()
         {
             switch (searchMethod)
@@ -137,6 +147,13 @@ INNER JOIN [fps].[FindFootprintRegionEq](@ra, @dec) ff
                 case SearchMethod.Point:
                     AppendParameters_PointSearch();
                     break;
+                case SearchMethod.Cone:
+                    AppendParameters_ConeSearch();
+                    break;
+                case SearchMethod.Contain:
+                case SearchMethod.Intersect:
+                    AppendParameters_IntersectSearch();
+                       break;
                 default:
                     base.AppendParameters();
                     break;
@@ -148,5 +165,19 @@ INNER JOIN [fps].[FindFootprintRegionEq](@ra, @dec) ff
             AppendSearchParameter("@ra",SqlDbType.Float,Point.RA);
             AppendSearchParameter("@dec", SqlDbType.Float, Point.Dec);
         }
+
+        private void AppendParameters_ConeSearch()
+        {
+            var sb = new ShapeBuilder();
+            var circle = sb.CreateCircle(Point,radius);
+            var region = new Region(circle, false);
+            AppendSearchParameter("@region", SqlDbType.VarBinary, region.ToSqlBytes().Value);
+        }
+        private void AppendParameters_IntersectSearch()
+        {
+            AppendSearchParameter("@region",SqlDbType.VarBinary,Region.ToSqlBytes().Value);
+        }
+        
+        
     }
 }
