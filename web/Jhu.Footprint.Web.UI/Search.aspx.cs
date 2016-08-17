@@ -47,6 +47,8 @@ namespace Jhu.Footprint.Web.UI
                     search.Radius = Convert.ToDouble(ConeRadiusInput.Text);
                     break;
                 case Lib.SearchMethod.Intersect:
+                    search.Region = Spherical.Region.Parse(IntersectRegion.Text);
+                    break;
                 case Lib.SearchMethod.Contain:
                 default:
                     throw new NotImplementedException();

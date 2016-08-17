@@ -112,7 +112,7 @@ namespace Jhu.Footprint.Web.Lib
                     return GetTableQuery_PointSearch();
                 case SearchMethod.Cone:
                 case SearchMethod.Intersect:
-                    return GetTableQuery_IntersectSearch();                    
+                    return GetTableQuery_IntersectSearch();
                 case SearchMethod.Contain:
                     throw new NotImplementedException();
                 default:
@@ -153,7 +153,7 @@ INNER JOIN [dbo].[Footprint] f
                 case SearchMethod.Contain:
                 case SearchMethod.Intersect:
                     AppendParameters_IntersectSearch();
-                       break;
+                    break;
                 default:
                     base.AppendParameters();
                     break;
@@ -162,22 +162,22 @@ INNER JOIN [dbo].[Footprint] f
 
         private void AppendParameters_PointSearch()
         {
-            AppendSearchParameter("@ra",SqlDbType.Float,Point.RA);
+            AppendSearchParameter("@ra", SqlDbType.Float, Point.RA);
             AppendSearchParameter("@dec", SqlDbType.Float, Point.Dec);
         }
 
         private void AppendParameters_ConeSearch()
         {
             var sb = new ShapeBuilder();
-            var circle = sb.CreateCircle(Point,radius);
+            var circle = sb.CreateCircle(Point, radius);
             var region = new Region(circle, false);
             AppendSearchParameter("@region", SqlDbType.VarBinary, region.ToSqlBytes().Value);
         }
         private void AppendParameters_IntersectSearch()
         {
-            AppendSearchParameter("@region",SqlDbType.VarBinary,Region.ToSqlBytes().Value);
+            AppendSearchParameter("@region", SqlDbType.VarBinary, Region.ToSqlBytes().Value);
         }
-        
-        
+
+
     }
 }

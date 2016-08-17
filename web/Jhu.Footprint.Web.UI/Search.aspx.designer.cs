@@ -139,6 +139,15 @@ namespace Jhu.Footprint.Web.UI {
         protected global::System.Web.UI.WebControls.TextBox ConeRadiusInput;
         
         /// <summary>
+        /// IntersectRegion control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox IntersectRegion;
+        
+        /// <summary>
         /// ok control.
         /// </summary>
         /// <remarks>
