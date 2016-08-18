@@ -1,3 +1,13 @@
+IF OBJECT_ID('[fps].[FindFootprintRegionContain]') IS NOT NULL
+DROP FUNCTION [fps].[FindFootprintRegionContain]
+
+GO
+
+IF OBJECT_ID('[fps].[FindFootprintRegionIDContain]') IS NOT NULL
+DROP FUNCTION [fps].[FindFootprintRegionIDContain]
+
+GO
+
 IF OBJECT_ID('[fps].[FindFootprintRegionIntersect]') IS NOT NULL
 DROP FUNCTION [fps].[FindFootprintRegionIntersect]
 

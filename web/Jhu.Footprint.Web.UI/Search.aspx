@@ -54,8 +54,8 @@
                             <asp:TextBox runat="server" ID="IntersectRegion" TextMode="MultiLine" Rows="5" Columns="50" CssClass="form-control">CIRCLE J2000 170 13 120</asp:TextBox>
                         </div>
                         <div id="ContainSearchPanel" class="tab-pane fade">
-                            TODO
-                            
+                            <asp:Label runat="server" Text="Region Description:" CssClass="control-label"></asp:Label>
+                            <asp:TextBox runat="server" ID="ContainRegion" TextMode="MultiLine" Rows="5" Columns="50" CssClass="form-control">CIRCLE J2000 170 5 200</asp:TextBox>
                         </div>
                     </div>
                 </div>

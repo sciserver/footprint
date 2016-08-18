@@ -387,3 +387,69 @@ RETURN
 )
 
 GO
+
+CREATE FUNCTION [fps].[FindFootprintRegionIDContain]
+(	
+	@region varbinary(max)
+)
+RETURNS @ret TABLE 
+(
+	RegionID INT NOT NULL
+)
+AS
+BEGIN 
+
+	DECLARE @htmTemp TABLE
+	(
+		[regionID] [int] NOT NULL,
+		[htmIDStart] [bigint] NOT NULL,
+		[htmIDEnd] [bigint] NOT NULL,
+		[partial] [bit] NOT NULL
+	);
+
+	INSERT @htmTemp
+	SELECT * FROM [fps].[FindFootprintRegionIntersectHtm](@region);
+
+	WITH __intersecting AS
+	(
+		SELECT DISTINCT regionID
+		FROM @htmTemp
+	),
+	__contained AS
+	(
+		SELECT htm.*
+		FROM __intersecting
+		INNER LOOP JOIN FootprintRegionHtm htm
+			ON __intersecting.regionID = htm.RegionID 
+
+		EXCEPT
+
+		SELECT *
+		FROM @htmTemp
+	)
+	INSERT @ret
+		(RegionID)
+	SELECT DISTINCT RegionID
+		FROM __contained
+
+	RETURN;
+
+END;
+
+GO
+
+CREATE FUNCTION [fps].[FindFootprintRegionContain]
+(	
+	@region varbinary(max)
+)
+RETURNS TABLE
+AS
+RETURN 
+(
+	SELECT r.*
+	FROM fps.FindFootprintRegionIDContain(@region) q
+	INNER JOIN FootprintRegion r
+		ON r.ID = q.RegionID
+)
+
+GO

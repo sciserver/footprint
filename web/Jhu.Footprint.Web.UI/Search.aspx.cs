@@ -50,6 +50,8 @@ namespace Jhu.Footprint.Web.UI
                     search.Region = Spherical.Region.Parse(IntersectRegion.Text);
                     break;
                 case Lib.SearchMethod.Contain:
+                    search.Region = Spherical.Region.Parse(ContainRegion.Text);
+                    break;
                 default:
                     throw new NotImplementedException();
             }

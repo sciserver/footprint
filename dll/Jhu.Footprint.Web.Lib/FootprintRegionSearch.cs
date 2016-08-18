@@ -114,7 +114,7 @@ namespace Jhu.Footprint.Web.Lib
                 case SearchMethod.Intersect:
                     return GetTableQuery_IntersectSearch();
                 case SearchMethod.Contain:
-                    throw new NotImplementedException();
+                    return GetTableQuery_ContainSearch();
                 default:
                     return base.GetTableQuery();
             }
@@ -136,6 +136,15 @@ INNER JOIN [fps].[FindFootprintRegionEq](@ra, @dec) ff
             return @"
 SELECT r.ID, [FootprintID], r.[Name], [FillFactor], [Type], [__acl]
 FROM [fps].[FindFootprintRegionIntersect](@region) r
+INNER JOIN [dbo].[Footprint] f 
+    ON r.footprintID = f.ID";
+        }
+
+        private string GetTableQuery_ContainSearch()
+        {
+            return @"
+SELECT r.ID, [FootprintID], r.[Name], [FillFactor], [Type], [__acl]
+FROM [fps].[FindFootprintRegionContain](@region) r
 INNER JOIN [dbo].[Footprint] f 
     ON r.footprintID = f.ID";
         }
