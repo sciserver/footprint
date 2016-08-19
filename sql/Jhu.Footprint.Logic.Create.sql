@@ -122,6 +122,8 @@ AS
 
 			UPDATE Footprint
 			SET CombinedRegionID = @combinedRegionID
+			WHERE ID = @FootprintID
+
 		END ELSE BEGIN
 			-- Update combined region with the very last one
 
@@ -178,6 +180,7 @@ AS
 
 		UPDATE Footprint
 		SET CombinedRegionID = 0
+		WHERE ID = @FootprintID
 
 	END ELSE IF @count = 1 BEGIN
 		-- one remaining region, delete cache if any
@@ -248,6 +251,7 @@ AS
 
 			UPDATE Footprint
 			SET CombinedRegionID = @combinedRegionID
+			WHERE ID = @FootprintID
 
 		END
 
