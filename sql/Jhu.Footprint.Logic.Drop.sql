@@ -23,8 +23,8 @@ DROP FUNCTION [fps].[FindFootprintRegionIntersectHtm]
 
 GO
 
-IF OBJECT_ID('[dbo].[FindFootprintRegionEq]') IS NOT NULL
-DROP FUNCTION [dbo].[FindFootprintRegionEq]
+IF OBJECT_ID('[fps].[FindFootprintRegionEq]') IS NOT NULL
+DROP FUNCTION [fps].[FindFootprintRegionEq]
 
 GO
 
