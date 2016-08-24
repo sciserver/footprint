@@ -11,12 +11,13 @@ using Jhu.Spherical;
 
 namespace Jhu.Footprint.Web.Lib
 {
-    public class FootprintSearch: Jhu.Graywulf.Entities.SecurableEntitySearch<Footprint>
+    public class FootprintSearch : RegionSearch<Footprint>
     {
+#if false
         private string owner;
         private string name;
         private SearchMethod searchMethod;
-        private Cartesian[] points;
+        private Cartesian point;
         private double radius;
         private Region region;
 
@@ -40,10 +41,10 @@ namespace Jhu.Footprint.Web.Lib
             set { searchMethod = value; }
         }
 
-        public Cartesian[] Point
+        public Cartesian Point
         {
-            get { return points; }
-            set { points = value; }
+            get { return point; }
+            set { point = value; }
         }
 
         public double Radius
@@ -57,25 +58,26 @@ namespace Jhu.Footprint.Web.Lib
             get { return region; }
             set { region = value; }
         }
+#endif
 
+        #region Constructors & initializers
         public FootprintSearch()
             : base()
         {
-            InitializeMembers();
         }
 
         public FootprintSearch(Context context)
-            : base(context) 
+            : base(context)
         {
-            InitializeMembers();
         }
 
-        private void InitializeMembers()
+        #endregion
+
+        protected override void AppendSearchCriteria()
         {
-            this.name = null;
-            this.owner = null;
+            base.AppendSearchCriteria();
+            AppendSearchCriterion("WHERE r.ID = f.CombinedRegionID");
         }
 
-        
     }
 }
