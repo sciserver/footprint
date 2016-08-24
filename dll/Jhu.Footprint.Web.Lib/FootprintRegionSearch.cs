@@ -20,7 +20,7 @@ namespace Jhu.Footprint.Web.Lib
         private string footprintName;
         private string name;
         private SearchMethod searchMethod;
-        private Cartesian points;
+        private Cartesian point;
         private double radius;
         private Region region;
 
@@ -62,8 +62,8 @@ namespace Jhu.Footprint.Web.Lib
 
         public Cartesian Point
         {
-            get { return points; }
-            set { points = value; }
+            get { return point; }
+            set { point = value; }
         }
 
         public double Radius
@@ -100,6 +100,10 @@ namespace Jhu.Footprint.Web.Lib
             this.footprintId = null;
             this.footprintName = null;
             this.name = null;
+            this.searchMethod = SearchMethod.Name;
+            this.point = new Cartesian();
+            this.radius = 0;
+            this.region = null;
         }
 
         #endregion
