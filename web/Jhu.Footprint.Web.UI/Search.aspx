@@ -18,6 +18,12 @@
 
         <div class="dock-fill">
             <h1>Footprint Catalog Search</h1>
+
+            <asp:RadioButtonList runat="server" ID="SearchTypeSelector">
+                <asp:ListItem>Footprint</asp:ListItem>
+                <asp:ListItem>Region</asp:ListItem>
+            </asp:RadioButtonList>
+
             <div class="row">
                 <div class="col-sm-12">
                     <ul runat="server" id="SearchTabContainer" class="nav nav-tabs">
