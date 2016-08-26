@@ -66,8 +66,10 @@
     <Compile Include="FootprintRegionSearch.cs" />
     <Compile Include="FootprintSearch.cs" />
     <Compile Include="GalacticPoint.cs" />
+    <Compile Include="IRegionSearch.cs" />
     <Compile Include="Plot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RegionSearch.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\graywulf\dll\Jhu.Graywulf.AccessControl\Jhu.Graywulf.AccessControl.csproj">

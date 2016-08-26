@@ -21,18 +21,45 @@ namespace Jhu.Footprint.Web.UI
 
         protected void ok_Click(object sender, EventArgs e)
         {
-            footprintList.Visible = true;
-            footprintList.DataBind();
+            var searchType = (Lib.SearchType)Enum.Parse(typeof(Lib.SearchType), SearchTypeSelector.SelectedValue, true);
+
+            switch (searchType)
+            {
+                case Lib.SearchType.Footprint:
+                    footprintList.Visible = true;
+                    footprintList.DataBind();
+                    break;
+                case Lib.SearchType.Region:
+
+                    regionList.Visible = true;
+                    regionList.DataBind();
+                    break;
+                default:
+                    break;
+            }
         }
-        
+
 
         protected void footprintRegionDataSource_ObjectCreating(object sender, ObjectDataSourceEventArgs e)
         {
             var method = (Lib.SearchMethod)Enum.Parse(typeof(Lib.SearchMethod), SearchMethod.Value, true);
-            var search = new Lib.FootprintRegionSearch(FootprintContext)
-            {                
-                SearchMethod = method
-            };
+            var searchType = (Lib.SearchType)Enum.Parse(typeof(Lib.SearchType), SearchTypeSelector.SelectedValue, true);
+
+            Lib.IRegionSearch search;
+
+            switch (searchType)
+            {
+                case Lib.SearchType.Footprint:
+                    search = new Lib.FootprintSearch(FootprintContext);
+                    break;
+                case Lib.SearchType.Region:
+                    search = new Lib.FootprintRegionSearch(FootprintContext);
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }
+
+            search.SearchMethod = method;
 
             switch (method)
             {
@@ -59,5 +86,7 @@ namespace Jhu.Footprint.Web.UI
             e.ObjectInstance = search;
 
         }
+
+
     }
 }

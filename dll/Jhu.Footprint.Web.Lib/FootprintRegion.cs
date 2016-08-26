@@ -15,7 +15,7 @@ using Jhu.Graywulf.AccessControl;
 namespace Jhu.Footprint.Web.Lib
 {
     [DbTable]
-    public class FootprintRegion : Jhu.Graywulf.Entities.Entity
+    public class FootprintRegion : Jhu.Graywulf.Entities.SecurableEntity
     {
         #region Member variables
 

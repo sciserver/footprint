@@ -13,52 +13,6 @@ namespace Jhu.Footprint.Web.Lib
 {
     public class FootprintSearch : RegionSearch<Footprint>
     {
-#if false
-        private string owner;
-        private string name;
-        private SearchMethod searchMethod;
-        private Cartesian point;
-        private double radius;
-        private Region region;
-
-        [DbColumn]
-        public string Owner
-        {
-            get { return owner; }
-            set { owner = value; }
-        }
-
-        [DbColumn]
-        public string Name
-        {
-            get { return name; }
-            set { name = value; }
-        }
-
-        public SearchMethod SearchMethod
-        {
-            get { return searchMethod; }
-            set { searchMethod = value; }
-        }
-
-        public Cartesian Point
-        {
-            get { return point; }
-            set { point = value; }
-        }
-
-        public double Radius
-        {
-            get { return radius; }
-            set { radius = value; }
-        }
-
-        public Region Region
-        {
-            get { return region; }
-            set { region = value; }
-        }
-#endif
 
         #region Constructors & initializers
         public FootprintSearch()
@@ -76,7 +30,7 @@ namespace Jhu.Footprint.Web.Lib
         protected override void AppendSearchCriteria()
         {
             base.AppendSearchCriteria();
-            AppendSearchCriterion("WHERE r.ID = f.CombinedRegionID");
+            AppendSearchCriterion("r.ID = f.CombinedRegionID");
         }
 
     }

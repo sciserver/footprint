@@ -6,6 +6,12 @@ using System.Threading.Tasks;
 
 namespace Jhu.Footprint.Web.Lib
 {
+    public enum SearchType
+    {
+        Footprint,
+        Region
+    }
+
     public enum SearchMethod
     {
         Name,       // footprint name

@@ -10,7 +10,7 @@ using Jhu.Spherical;
 
 namespace Jhu.Footprint.Web.Lib
 {
-    public class RegionSearch<T> : Graywulf.Entities.SecurableEntitySearch<T>
+    public class RegionSearch<T> : Graywulf.Entities.SecurableEntitySearch<T>, IRegionSearch
         where T : Jhu.Graywulf.Entities.SecurableEntity, new()
     {
         protected string owner;
@@ -106,8 +106,7 @@ FROM [dbo].[FootprintRegion] r
 INNER JOIN [dbo].[Footprint] f 
     ON r.footprintID = f.ID
 INNER JOIN [fps].[FindFootprintRegionEq](@ra, @dec) ff
-	ON r.ID = ff.RegionID
-WHERE r.ID = f.CombinedRegionID";
+	ON r.ID = ff.RegionID";
         }
 
         private string GetTableQuery_IntersectSearch()

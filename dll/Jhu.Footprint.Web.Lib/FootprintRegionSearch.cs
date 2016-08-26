@@ -11,28 +11,16 @@ using Jhu.Spherical;
 
 namespace Jhu.Footprint.Web.Lib
 {
-    public class FootprintRegionSearch : Jhu.Graywulf.Entities.SecurableEntitySearch<FootprintRegion>
+    public class FootprintRegionSearch : Lib.RegionSearch<FootprintRegion>
     {
         #region Member variables
 
-        private string owner;
         private int? footprintId;
         private string footprintName;
-        private string name;
-        private SearchMethod searchMethod;
-        private Cartesian point;
-        private double radius;
-        private Region region;
+
 
         #endregion
         #region Properties
-
-        [DbColumn]
-        public string Owner
-        {
-            get { return owner; }
-            set { owner = value; }
-        }
 
         [DbColumn]
         public int? FootprintId
@@ -46,38 +34,7 @@ namespace Jhu.Footprint.Web.Lib
             get { return footprintName; }
             set { footprintName = value; }
         }
-
-        [DbColumn]
-        public string Name
-        {
-            get { return name; }
-            set { name = value; }
-        }
-
-        public SearchMethod SearchMethod
-        {
-            get { return searchMethod; }
-            set { searchMethod = value; }
-        }
-
-        public Cartesian Point
-        {
-            get { return point; }
-            set { point = value; }
-        }
-
-        public double Radius
-        {
-            get { return radius; }
-            set { radius = value; }
-        }
-
-        public Region Region
-        {
-            get { return region; }
-            set { region = value; }
-        }
-
+        
         #endregion
 
         #region Constructors & intitializers
@@ -85,29 +42,30 @@ namespace Jhu.Footprint.Web.Lib
         public FootprintRegionSearch()
             : base()
         {
-            InitializeMembers();
+            //InitializeMembers();
         }
 
         public FootprintRegionSearch(Context context)
             : base(context)
         {
-            InitializeMembers();
+            //InitializeMembers();
         }
-
+        
+        /*
         public void InitializeMembers()
         {
-            this.owner = null;
-            this.footprintId = null;
-            this.footprintName = null;
-            this.name = null;
-            this.searchMethod = SearchMethod.Name;
-            this.point = new Cartesian();
-            this.radius = 0;
-            this.region = null;
+            owner = null;
+            footprintId = null;
+            footprintName = null;
+            name = null;
+            searchMethod = SearchMethod.Name;
+            point = new Cartesian();
+            radius = 0;
+            region = null;
         }
-
+        */
         #endregion
-
+        /*
         protected override string GetTableQuery()
         {
             switch (searchMethod)
@@ -191,6 +149,6 @@ INNER JOIN [dbo].[Footprint] f
             AppendSearchParameter("@region", SqlDbType.VarBinary, Region.ToSqlBytes().Value);
         }
 
-
+    */
     }
 }

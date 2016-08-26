@@ -20,8 +20,8 @@
             <h1>Footprint Catalog Search</h1>
 
             <asp:RadioButtonList runat="server" ID="SearchTypeSelector">
-                <asp:ListItem>Footprint</asp:ListItem>
-                <asp:ListItem>Region</asp:ListItem>
+                <asp:ListItem Value="Footprint">Footprint</asp:ListItem>
+                <asp:ListItem Value="Region" Selected="True">Region</asp:ListItem>
             </asp:RadioButtonList>
 
             <div class="row">
@@ -75,7 +75,30 @@
                 <ContentTemplate>
                     <asp:ObjectDataSource ID="footprintRegionDataSource" runat="server" OnObjectCreating="footprintRegionDataSource_ObjectCreating" SelectCountMethod="Count" SelectMethod="Find" TypeName="Jhu.Footprint.Web.Lib.FootprintRegionSearch"
                         DataObjectTypeName="Jhu.Footprint.Web.Lib.FootprintRegion" />
-                    <asp:ListView ID="footprintList" runat="server" DataSourceID="footprintRegionDataSource" Visible="False">
+                    <asp:ListView ID="regionList" runat="server" DataSourceID="footprintRegionDataSource" Visible="False">
+                        <LayoutTemplate>
+                            <table>
+                                <asp:PlaceHolder runat="server" ID="groupPlaceholder" />
+                            </table>
+                        </LayoutTemplate>
+                        <GroupTemplate>
+                            <tr>
+                                <asp:PlaceHolder runat="server" ID="itemPlaceholder" />
+                            </tr>
+                        </GroupTemplate>
+                        <ItemTemplate>
+                            <td>
+                                <%# Eval("Name") %>
+                            </td>
+                        </ItemTemplate>
+                        <EmptyDataTemplate>
+                            No footprints found.
+                        </EmptyDataTemplate>
+                    </asp:ListView>
+
+                    <asp:ObjectDataSource ID="footprintDataSource" runat="server" OnObjectCreating="footprintRegionDataSource_ObjectCreating" SelectCountMethod="Count" SelectMethod="Find" TypeName="Jhu.Footprint.Web.Lib.FootprintSearch"
+                        DataObjectTypeName="Jhu.Footprint.Web.Lib.FootprintRegion" />
+                    <asp:ListView ID="footprintList" runat="server" DataSourceID="footprintDataSource" Visible="False">
                         <LayoutTemplate>
                             <table>
                                 <asp:PlaceHolder runat="server" ID="groupPlaceholder" />
