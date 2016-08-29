@@ -73,12 +73,12 @@ namespace Jhu.Footprint.Web.Lib
         private void InitializeMembers()
         {
 
-            this.name = null;
-            this.owner = null;
-            this.searchMethod = SearchMethod.Name;
-            this.point = new Cartesian();
-            this.radius = 0;
-            this.region = null;
+            name = null;
+            owner = null;
+            searchMethod = SearchMethod.Name;
+            point = new Cartesian();
+            radius = 0;
+            region = null;
         }
 
         protected override string GetTableQuery()
@@ -101,18 +101,18 @@ namespace Jhu.Footprint.Web.Lib
         private string GetTableQuery_PointSearch()
         {
             return @"
-SELECT r.ID, [FootprintID], r.[Name], [FillFactor], [Type], [__acl]
+SELECT r.ID, [FootprintID], r.[Name], [FillFactor], [Type], f.CombinedRegionID, [__acl]
 FROM [dbo].[FootprintRegion] r
-INNER JOIN [dbo].[Footprint] f 
-    ON r.footprintID = f.ID
 INNER JOIN [fps].[FindFootprintRegionEq](@ra, @dec) ff
-	ON r.ID = ff.RegionID";
+	ON r.ID = ff.RegionID
+INNER JOIN [dbo].[Footprint] f 
+    ON r.footprintID = f.ID";
         }
 
         private string GetTableQuery_IntersectSearch()
         {
             return @"
-SELECT r.ID, [FootprintID], r.[Name], [FillFactor], [Type], [__acl]
+SELECT r.ID, [FootprintID], r.[Name], [FillFactor], [Type],  f.CombinedRegionID, [__acl]
 FROM [fps].[FindFootprintRegionIntersect](@region) r
 INNER JOIN [dbo].[Footprint] f 
     ON r.footprintID = f.ID";
@@ -121,7 +121,7 @@ INNER JOIN [dbo].[Footprint] f
         private string GetTableQuery_ContainSearch()
         {
             return @"
-SELECT r.ID, [FootprintID], r.[Name], [FillFactor], [Type], [__acl]
+SELECT r.ID, [FootprintID], r.[Name], [FillFactor], [Type],  f.CombinedRegionID, [__acl]
 FROM [fps].[FindFootprintRegionContain](@region) r
 INNER JOIN [dbo].[Footprint] f 
     ON r.footprintID = f.ID";

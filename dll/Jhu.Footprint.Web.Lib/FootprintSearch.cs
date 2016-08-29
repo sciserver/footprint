@@ -13,7 +13,7 @@ namespace Jhu.Footprint.Web.Lib
 {
     public class FootprintSearch : RegionSearch<Footprint>
     {
-
+        
         #region Constructors & initializers
         public FootprintSearch()
             : base()
@@ -30,7 +30,7 @@ namespace Jhu.Footprint.Web.Lib
         protected override void AppendSearchCriteria()
         {
             base.AppendSearchCriteria();
-            AppendSearchCriterion("r.ID = f.CombinedRegionID");
+            AppendSearchCriterion("ID = CombinedRegionID");
         }
 
     }
