@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Data;
-using System.Data.SqlClient;
-using System.Xml.Serialization;
-using Jhu.Graywulf.Entities.Mapping;
-using Jhu.Spherical;
+﻿using Jhu.Graywulf.Entities.Mapping;
 
 namespace Jhu.Footprint.Web.Lib
 {
