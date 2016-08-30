@@ -24,6 +24,7 @@ namespace Jhu.Footprint.Web.Lib
         private int id;
         private int footprintId;
         private string name;
+        private string footprintName;
         private double fillFactor;
         private RegionType type;
         private Region region;
@@ -51,6 +52,18 @@ namespace Jhu.Footprint.Web.Lib
         {
             get { return name; }
             set { name = value; }
+        }
+
+        public string FootprintName
+        {
+            get {
+                if (footprintName == "")
+                {
+                    GetFootprintName();
+                }
+                return footprintName;                
+            }
+            
         }
 
         [DbColumn]
@@ -122,6 +135,7 @@ namespace Jhu.Footprint.Web.Lib
             this.id = 0;
             this.footprintId = 0;
             this.name = "";
+            this.footprintName = "";
             this.fillFactor = 1.0;
             this.type = RegionType.Single;
             this.region = null;
@@ -331,6 +345,31 @@ WHERE r.ID = @ID
             }
         }
 
+        private void GetFootprintName()
+        {
+            var context = new Context();
+
+            var sql = @"
+SELECT f.name
+FROM [Footprint] f
+INNER JOIN [FootprintRegion] r
+ON f.ID = r.FootprintID
+WHERE r.ID = @ID";
+
+            using (var cmd = context.CreateCommand(sql))
+            {
+                cmd.Parameters.Add("@ID", SqlDbType.Int).Value = id;
+
+                using (var dr = context.ExecuteCommandReader(cmd))
+                {
+                    dr.Read();
+
+                    footprintName = dr.GetString(0);
+                }
+            }
+        }
+
+
         public void SaveRegion()
         {
             EvaluateAccess().EnsureUpdate();
@@ -353,6 +392,7 @@ WHERE r.ID = @ID
         public void RefreshThumbnail()
         {
         }
+        
 
         #endregion
     }

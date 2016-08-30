@@ -88,6 +88,9 @@
                         </GroupTemplate>
                         <ItemTemplate>
                             <td>
+                                <%# Eval("FootprintName") %>
+                            </td>
+                            <td>
                                 <%# Eval("Name") %>
                             </td>
                         </ItemTemplate>
@@ -97,7 +100,7 @@
                     </asp:ListView>
 
                     <asp:ObjectDataSource ID="footprintDataSource" runat="server" OnObjectCreating="footprintRegionDataSource_ObjectCreating" SelectCountMethod="Count" SelectMethod="Find" TypeName="Jhu.Footprint.Web.Lib.FootprintSearch"
-                        DataObjectTypeName="Jhu.Footprint.Web.Lib.FootprintRegion" />
+                        DataObjectTypeName="Jhu.Footprint.Web.Lib.Footprint" />
                     <asp:ListView ID="footprintList" runat="server" DataSourceID="footprintDataSource" Visible="False">
                         <LayoutTemplate>
                             <table>
