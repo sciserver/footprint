@@ -26,11 +26,12 @@ namespace Jhu.Footprint.Web.UI
             switch (searchType)
             {
                 case Lib.SearchType.Footprint:
+                    regionList.Visible = false;
                     footprintList.Visible = true;
                     footprintList.DataBind();
                     break;
                 case Lib.SearchType.Region:
-
+                    footprintList.Visible = false;
                     regionList.Visible = true;
                     regionList.DataBind();
                     break;
