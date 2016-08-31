@@ -5,7 +5,7 @@ using Jhu.Spherical;
 namespace Jhu.Footprint.Web.Lib
 {
     public abstract class RegionSearch<T> : Graywulf.Entities.SecurableEntitySearch<T>, IRegionSearch
-        where T : Graywulf.Entities.SecurableEntity, new()
+        where T : Graywulf.Entities.Entity, new()
     {
         protected string owner;
         protected string name;
