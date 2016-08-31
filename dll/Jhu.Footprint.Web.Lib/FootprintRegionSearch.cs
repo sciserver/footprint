@@ -8,7 +8,7 @@ namespace Jhu.Footprint.Web.Lib
 
         private int? footprintId;
         private string footprintName;
-
+        private SearchType searchType;
 
         #endregion
         #region Properties
@@ -25,7 +25,13 @@ namespace Jhu.Footprint.Web.Lib
             get { return footprintName; }
             set { footprintName = value; }
         }
-        
+
+        public SearchType SearchType
+        {
+            get { return searchType; }
+            set { searchType = value; }
+        }
+
         #endregion
 
         #region Constructors & intitializers
@@ -41,12 +47,58 @@ namespace Jhu.Footprint.Web.Lib
         {
             InitializeMembers();
         }
-        
+
         public void InitializeMembers()
         {
             footprintId = null;
             footprintName = null;
         }
         #endregion
+
+
+        protected override void AppendSearchCriteria()
+        {
+            switch (searchType)
+            {
+                case SearchType.Footprint:
+                    base.AppendSearchCriteria();
+                    AppendSearchCriterion("ID = CombinedRegionID");
+                    break;
+                case SearchType.Region:
+                default:
+                    base.AppendSearchCriteria();
+                    break;
+
+            }
+        }
+
+        protected override string GetTableQuery_PointSearch()
+        {
+            return @"
+SELECT r.ID, [FootprintID], r.[Name], [FillFactor], [Type], f.CombinedRegionID, [__acl]
+FROM [dbo].[FootprintRegion] r
+INNER JOIN [fps].[FindFootprintRegionEq](@ra, @dec) ff
+	ON r.ID = ff.RegionID
+INNER JOIN [dbo].[Footprint] f 
+    ON r.footprintID = f.ID";
+        }
+
+        protected override string GetTableQuery_IntersectSearch()
+        {
+            return @"
+SELECT r.ID, [FootprintID], r.[Name], [FillFactor], [Type],  f.CombinedRegionID, [__acl]
+FROM [fps].[FindFootprintRegionIntersect](@region) r
+INNER JOIN [dbo].[Footprint] f 
+    ON r.footprintID = f.ID";
+        }
+
+        protected override string GetTableQuery_ContainSearch()
+        {
+            return @"
+SELECT r.ID, [FootprintID], r.[Name], [FillFactor], [Type],  f.CombinedRegionID, [__acl]
+FROM [fps].[FindFootprintRegionContain](@region) r
+INNER JOIN [dbo].[Footprint] f 
+    ON r.footprintID = f.ID";
+        }
     }
 }

@@ -21,23 +21,9 @@ namespace Jhu.Footprint.Web.UI
 
         protected void ok_Click(object sender, EventArgs e)
         {
-            var searchType = (Lib.SearchType)Enum.Parse(typeof(Lib.SearchType), SearchTypeSelector.SelectedValue, true);
+            regionList.Visible = true;
+            regionList.DataBind();
 
-            switch (searchType)
-            {
-                case Lib.SearchType.Footprint:
-                    regionList.Visible = false;
-                    footprintList.Visible = true;
-                    footprintList.DataBind();
-                    break;
-                case Lib.SearchType.Region:
-                    footprintList.Visible = false;
-                    regionList.Visible = true;
-                    regionList.DataBind();
-                    break;
-                default:
-                    break;
-            }
         }
 
 
@@ -46,20 +32,8 @@ namespace Jhu.Footprint.Web.UI
             var method = (Lib.SearchMethod)Enum.Parse(typeof(Lib.SearchMethod), SearchMethod.Value, true);
             var searchType = (Lib.SearchType)Enum.Parse(typeof(Lib.SearchType), SearchTypeSelector.SelectedValue, true);
 
-            Lib.IRegionSearch search;
-
-            switch (searchType)
-            {
-                case Lib.SearchType.Footprint:
-                    search = new Lib.FootprintSearch(FootprintContext);
-                    break;
-                case Lib.SearchType.Region:
-                    search = new Lib.FootprintRegionSearch(FootprintContext);
-                    break;
-                default:
-                    throw new NotImplementedException();
-            }
-
+            var search = new Lib.FootprintRegionSearch(FootprintContext);
+            search.SearchType = searchType;
             search.SearchMethod = method;
 
             switch (method)

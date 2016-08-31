@@ -4,7 +4,7 @@ using Jhu.Spherical;
 
 namespace Jhu.Footprint.Web.Lib
 {
-    public class RegionSearch<T> : Graywulf.Entities.SecurableEntitySearch<T>, IRegionSearch
+    public abstract class RegionSearch<T> : Graywulf.Entities.SecurableEntitySearch<T>, IRegionSearch
         where T : Graywulf.Entities.SecurableEntity, new()
     {
         protected string owner;
@@ -92,34 +92,11 @@ namespace Jhu.Footprint.Web.Lib
             }
         }
 
-        private string GetTableQuery_PointSearch()
-        {
-            return @"
-SELECT r.ID, [FootprintID], r.[Name], [FillFactor], [Type], f.CombinedRegionID, [__acl]
-FROM [dbo].[FootprintRegion] r
-INNER JOIN [fps].[FindFootprintRegionEq](@ra, @dec) ff
-	ON r.ID = ff.RegionID
-INNER JOIN [dbo].[Footprint] f 
-    ON r.footprintID = f.ID";
-        }
+        protected abstract string GetTableQuery_PointSearch();
 
-        private string GetTableQuery_IntersectSearch()
-        {
-            return @"
-SELECT r.ID, [FootprintID], r.[Name], [FillFactor], [Type],  f.CombinedRegionID, [__acl]
-FROM [fps].[FindFootprintRegionIntersect](@region) r
-INNER JOIN [dbo].[Footprint] f 
-    ON r.footprintID = f.ID";
-        }
+        protected abstract string GetTableQuery_IntersectSearch();
 
-        private string GetTableQuery_ContainSearch()
-        {
-            return @"
-SELECT r.ID, [FootprintID], r.[Name], [FillFactor], [Type],  f.CombinedRegionID, [__acl]
-FROM [fps].[FindFootprintRegionContain](@region) r
-INNER JOIN [dbo].[Footprint] f 
-    ON r.footprintID = f.ID";
-        }
+        protected abstract string GetTableQuery_ContainSearch();
 
         protected override void AppendParameters()
         {

@@ -98,29 +98,6 @@
                             No footprints found.
                         </EmptyDataTemplate>
                     </asp:ListView>
-
-                    <asp:ObjectDataSource ID="footprintDataSource" runat="server" OnObjectCreating="footprintRegionDataSource_ObjectCreating" SelectCountMethod="Count" SelectMethod="Find" TypeName="Jhu.Footprint.Web.Lib.FootprintSearch"
-                        DataObjectTypeName="Jhu.Footprint.Web.Lib.Footprint" />
-                    <asp:ListView ID="footprintList" runat="server" DataSourceID="footprintDataSource" Visible="False">
-                        <LayoutTemplate>
-                            <table>
-                                <asp:PlaceHolder runat="server" ID="groupPlaceholder" />
-                            </table>
-                        </LayoutTemplate>
-                        <GroupTemplate>
-                            <tr>
-                                <asp:PlaceHolder runat="server" ID="itemPlaceholder" />
-                            </tr>
-                        </GroupTemplate>
-                        <ItemTemplate>
-                            <td>
-                                <%# Eval("Name") %>
-                            </td>
-                        </ItemTemplate>
-                        <EmptyDataTemplate>
-                            No footprints found.
-                        </EmptyDataTemplate>
-                    </asp:ListView>
                 </ContentTemplate>
             </asp:UpdatePanel>
 

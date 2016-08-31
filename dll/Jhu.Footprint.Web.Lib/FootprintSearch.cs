@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace Jhu.Footprint.Web.Lib
 {
     public class FootprintSearch : RegionSearch<Footprint>
@@ -17,11 +19,19 @@ namespace Jhu.Footprint.Web.Lib
 
         #endregion
 
-        protected override void AppendSearchCriteria()
+        protected override string GetTableQuery_PointSearch()
         {
-            base.AppendSearchCriteria();
-            AppendSearchCriterion("ID = CombinedRegionID");
+            throw new NotImplementedException();
         }
 
+        protected override string GetTableQuery_IntersectSearch()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override string GetTableQuery_ContainSearch()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
