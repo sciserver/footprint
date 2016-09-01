@@ -132,5 +132,166 @@ namespace Jhu.Footprint.Web.Lib.Test
                 Assert.AreEqual(0, search.Find().Count());
             }
         }
+
+        [TestMethod]
+        public void RegionPointSearchTest()
+        {
+            var name = GetTestUniqueName();
+            int footprintid;
+
+            using (var context = CreateContext())
+            {
+                var footprint = new Footprint(context)
+                {
+                    Name = name
+                };
+
+                footprintid = (int)footprint.Save();
+
+                var region = new FootprintRegion(footprint)
+                {
+                    Name = name,
+                    Type = RegionType.Single,
+                    Region = Spherical.Region.Parse("CIRCLE J2000 10 10 10")
+                };
+                region.Region.Simplify();
+
+                region.Save();
+                region.SaveRegion();
+            }
+
+            using (var context = CreateContext())
+            {
+                var search = new FootprintRegionSearch(context)
+                {
+                    SearchMethod = SearchMethod.Point,
+                    Point = new Spherical.Cartesian(10,10)
+                };
+
+                Assert.AreEqual(1, search.Count());
+                Assert.AreEqual(1, search.Find().Count());
+            }
+        }
+
+        [TestMethod]
+        public void RegionConeSearchTest()
+        {
+            var name = GetTestUniqueName();
+            int footprintid;
+
+            using (var context = CreateContext())
+            {
+                var footprint = new Footprint(context)
+                {
+                    Name = name
+                };
+
+                footprintid = (int)footprint.Save();
+
+                var region = new FootprintRegion(footprint)
+                {
+                    Name = name,
+                    Type = RegionType.Single,
+                    Region = Spherical.Region.Parse("CIRCLE J2000 10 10 10")
+                };
+                region.Region.Simplify();
+
+                region.Save();
+                region.SaveRegion();
+            }
+
+            using (var context = CreateContext())
+            {
+                var search = new FootprintRegionSearch(context)
+                {
+                    SearchMethod = SearchMethod.Cone,
+                    Point = new Spherical.Cartesian(9, 9),
+                    Radius = 100
+                };
+
+                Assert.AreEqual(1, search.Count());
+                Assert.AreEqual(1, search.Find().Count());
+            }
+        }
+
+        [TestMethod]
+        public void RegionIntersectSearchTest()
+        {
+            var name = GetTestUniqueName();
+            int footprintid;
+
+            using (var context = CreateContext())
+            {
+                var footprint = new Footprint(context)
+                {
+                    Name = name
+                };
+
+                footprintid = (int)footprint.Save();
+
+                var region = new FootprintRegion(footprint)
+                {
+                    Name = name,
+                    Type = RegionType.Single,
+                    Region = Spherical.Region.Parse("CIRCLE J2000 10 10 10")
+                };
+                region.Region.Simplify();
+
+                region.Save();
+                region.SaveRegion();
+            }
+
+            using (var context = CreateContext())
+            {
+                var search = new FootprintRegionSearch(context)
+                {
+                    SearchMethod = SearchMethod.Intersect,
+                    Region = Spherical.Region.Parse("CIRCLE J2000 9 9 100")
+                };
+
+                Assert.AreEqual(1, search.Count());
+                Assert.AreEqual(1, search.Find().Count());
+            }
+        }
+
+        [TestMethod]
+        public void RegionContainSearchTest()
+        {
+            var name = GetTestUniqueName();
+            int footprintid;
+
+            using (var context = CreateContext())
+            {
+                var footprint = new Footprint(context)
+                {
+                    Name = name
+                };
+
+                footprintid = (int)footprint.Save();
+
+                var region = new FootprintRegion(footprint)
+                {
+                    Name = name,
+                    Type = RegionType.Single,
+                    Region = Spherical.Region.Parse("CIRCLE J2000 10 10 10")
+                };
+                region.Region.Simplify();
+
+                region.Save();
+                region.SaveRegion();
+            }
+
+            using (var context = CreateContext())
+            {
+                var search = new FootprintRegionSearch(context)
+                {
+                    SearchMethod = SearchMethod.Contain,
+                    Region = Spherical.Region.Parse("CIRCLE J2000 10 10 9")
+                };
+
+                Assert.AreEqual(1, search.Count());
+                Assert.AreEqual(1, search.Find().Count());
+            }
+        }
     }
 }
