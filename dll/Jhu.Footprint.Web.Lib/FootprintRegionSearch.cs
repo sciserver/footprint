@@ -52,6 +52,7 @@ namespace Jhu.Footprint.Web.Lib
         {
             footprintId = null;
             footprintName = null;
+            searchType = SearchType.Region;
         }
         #endregion
 
