@@ -126,7 +126,7 @@ namespace Jhu.Footprint.Web.Lib
                 Type = RegionType.Single,
                 Region = Spherical.Region.Parse("CIRCLE J2000 10 10 10")
             };
-
+            region.Region.Simplify();
             region.Save();
             region.SaveRegion();
 
