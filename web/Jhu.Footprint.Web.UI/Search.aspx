@@ -19,56 +19,62 @@
         <div class="dock-fill">
             <h1>Footprint Catalog Search</h1>
 
-            <asp:RadioButtonList runat="server" ID="SearchTypeSelector">
-                <asp:ListItem Value="Footprint">Footprint</asp:ListItem>
-                <asp:ListItem Value="Region" Selected="True">Region</asp:ListItem>
-            </asp:RadioButtonList>
+            <div class="checkbox">
+                <label><input type="checkbox" aria-label="AdvancedSearchOptions" id="AdvancedSearchOptionsToggle">Advanced Search</label>
+            </div>
+            
+            <div id="AdvancedSearchOptionsPanel" class="hidden">
 
-            <div class="row">
-                <div class="col-sm-12">
-                    <ul runat="server" id="SearchTabContainer" class="nav nav-tabs">
-                        <li class="active"><a id="NameSearch" data-toggle="tab" href="#NameSearchPanel">Name</a></li>
-                        <li><a id="PointSearch" data-toggle="tab" href="#PointSearchPanel">Coordinate</a></li>
-                        <li><a id="ConeSearch" data-toggle="tab" href="#ConeSearchPanel">Cone</a></li>
-                        <li><a id="IntersectSearch" data-toggle="tab" href="#IntersectSearchPanel">Intersect</a></li>
-                        <li><a id="ContainSearch" data-toggle="tab" href="#ContainSearchPanel">Contain</a></li>
-                    </ul>
+                <asp:RadioButtonList runat="server" ID="SearchTypeSelector">
+                    <asp:ListItem Value="Footprint">Footprint</asp:ListItem>
+                    <asp:ListItem Value="Region" Selected="True">Region</asp:ListItem>
+                </asp:RadioButtonList>
 
-                    <div class="tab-content col-sm-6">
-                        <div id="NameSearchPanel" class="tab-pane fade in active">
-                            <asp:Label ID="nameLabel" runat="server" Text="Name:" CssClass="control-label"></asp:Label>
-                            <asp:TextBox runat="server" ID="name" CssClass="form-control" />
-                        </div>
-                        <div id="PointSearchPanel" class="tab-pane fade">
-                            <asp:Label ID="PointRALabel" runat="server" Text="Ra:" CssClass="control-label"></asp:Label>
-                            <asp:TextBox runat="server" ID="PointRAInput" CssClass="form-control" />
-                            <asp:Label ID="PointDecLabel" runat="server" Text="Dec:" CssClass="control-label"></asp:Label>
-                            <asp:TextBox runat="server" ID="PointDecInput" CssClass="form-control" />
-                        </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <ul runat="server" id="SearchTabContainer" class="nav nav-tabs">
+                            <li class="active"><a id="NameSearch" data-toggle="tab" href="#NameSearchPanel">Name</a></li>
+                            <li><a id="PointSearch" data-toggle="tab" href="#PointSearchPanel">Coordinate</a></li>
+                            <li><a id="ConeSearch" data-toggle="tab" href="#ConeSearchPanel">Cone</a></li>
+                            <li><a id="IntersectSearch" data-toggle="tab" href="#IntersectSearchPanel">Intersect</a></li>
+                            <li><a id="ContainSearch" data-toggle="tab" href="#ContainSearchPanel">Contain</a></li>
+                        </ul>
 
-                        <div id="ConeSearchPanel" class="tab-pane fade">
-                            <asp:Label ID="ConeRALabel" runat="server" Text="Ra:" CssClass="control-label"></asp:Label>
-                            <asp:TextBox runat="server" ID="ConeRAInput" CssClass="form-control" />
-                            <asp:Label ID="ConeDecLabel" runat="server" Text="Dec:" CssClass="control-label"></asp:Label>
-                            <asp:TextBox runat="server" ID="ConeDecInput" CssClass="form-control" />
-                            <asp:Label ID="ConeRadiusLabel" runat="server" Text="Radius:" CssClass="control-label"></asp:Label>
-                            <asp:TextBox runat="server" ID="ConeRadiusInput" CssClass="form-control" />
-                        </div>
+                        <div class="tab-content col-sm-6">
+                            <div id="NameSearchPanel" class="tab-pane fade in active">
+                                <asp:Label ID="nameLabel" runat="server" Text="Name:" CssClass="control-label"></asp:Label>
+                                <asp:TextBox runat="server" ID="name" CssClass="form-control" />
+                            </div>
+                            <div id="PointSearchPanel" class="tab-pane fade">
+                                <asp:Label ID="PointRALabel" runat="server" Text="Ra:" CssClass="control-label"></asp:Label>
+                                <asp:TextBox runat="server" ID="PointRAInput" CssClass="form-control" />
+                                <asp:Label ID="PointDecLabel" runat="server" Text="Dec:" CssClass="control-label"></asp:Label>
+                                <asp:TextBox runat="server" ID="PointDecInput" CssClass="form-control" />
+                            </div>
 
-                        <div id="IntersectSearchPanel" class="tab-pane fade">
-                            <asp:Label runat="server" Text="Region Description:" CssClass="control-label"></asp:Label>
-                            <asp:TextBox runat="server" ID="IntersectRegion" TextMode="MultiLine" Rows="5" Columns="50" CssClass="form-control">CIRCLE J2000 170 13 120</asp:TextBox>
-                        </div>
-                        <div id="ContainSearchPanel" class="tab-pane fade">
-                            <asp:Label runat="server" Text="Region Description:" CssClass="control-label"></asp:Label>
-                            <asp:TextBox runat="server" ID="ContainRegion" TextMode="MultiLine" Rows="5" Columns="50" CssClass="form-control">CIRCLE J2000 170 5 200</asp:TextBox>
+                            <div id="ConeSearchPanel" class="tab-pane fade">
+                                <asp:Label ID="ConeRALabel" runat="server" Text="Ra:" CssClass="control-label"></asp:Label>
+                                <asp:TextBox runat="server" ID="ConeRAInput" CssClass="form-control" />
+                                <asp:Label ID="ConeDecLabel" runat="server" Text="Dec:" CssClass="control-label"></asp:Label>
+                                <asp:TextBox runat="server" ID="ConeDecInput" CssClass="form-control" />
+                                <asp:Label ID="ConeRadiusLabel" runat="server" Text="Radius:" CssClass="control-label"></asp:Label>
+                                <asp:TextBox runat="server" ID="ConeRadiusInput" CssClass="form-control" />
+                            </div>
+
+                            <div id="IntersectSearchPanel" class="tab-pane fade">
+                                <asp:Label runat="server" Text="Region Description:" CssClass="control-label"></asp:Label>
+                                <asp:TextBox runat="server" ID="IntersectRegion" TextMode="MultiLine" Rows="5" Columns="50" CssClass="form-control">CIRCLE J2000 170 13 120</asp:TextBox>
+                            </div>
+                            <div id="ContainSearchPanel" class="tab-pane fade">
+                                <asp:Label runat="server" Text="Region Description:" CssClass="control-label"></asp:Label>
+                                <asp:TextBox runat="server" ID="ContainRegion" TextMode="MultiLine" Rows="5" Columns="50" CssClass="form-control">CIRCLE J2000 170 5 200</asp:TextBox>
+                            </div>
                         </div>
                     </div>
                 </div>
+
+                <asp:Button ID="ok" runat="server" OnClick="ok_Click" Text="search" />
             </div>
-
-            <asp:Button ID="ok" runat="server" OnClick="ok_Click" Text="search" />
-
             <br />
 
             <asp:UpdatePanel runat="server">
@@ -88,10 +94,10 @@
                         </GroupTemplate>
                         <ItemTemplate>
                             <td>
-                                <%# Eval("FootprintName") %>
+                                <%# Eval("FootprintName") %><br />
                             </td>
                             <td>
-                                <%# Eval("Name") %>
+                                <%# Eval("Name") %><br />
                             </td>
                         </ItemTemplate>
                         <EmptyDataTemplate>

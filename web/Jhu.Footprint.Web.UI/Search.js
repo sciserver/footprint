@@ -9,6 +9,8 @@
     });
 
     keepLastTabActive();
+
+    toggleAdvencedSearch();
 });
 
 function keepLastTabActive() {
@@ -22,5 +24,16 @@ function keepLastTabActive() {
     var lastTab = localStorage.getItem('lastTab');
     if (lastTab) {
         $('[href="' + lastTab + '"]').tab('show');
-    }
+    }    
+}
+
+function toggleAdvencedSearch() {
+    $("body").on("click", "#AdvancedSearchOptionsToggle", function () {
+        if ($(this).is(":checked")) {
+            $("#AdvancedSearchOptionsPanel").removeClass("hidden");
+        }
+        else {
+            $("#AdvancedSearchOptionsPanel").addClass("hidden");
+        }
+    })
 }
