@@ -19,27 +19,29 @@
         <div class="dock-fill">
             <h1>Footprint Catalog Search</h1>
 
-            <div class="checkbox">
-                <label><input type="checkbox" aria-label="AdvancedSearchOptions" id="AdvancedSearchOptionsToggle">Advanced Search</label>
+            <div class="row" id="FastSearchPanel">
+                <div class="col-sm-6">
+                    <asp:TextBox runat="server" ID="FastSearchInput" CssClass="form-control"></asp:TextBox>
+
+                </div>
             </div>
-            
-            <div id="AdvancedSearchOptionsPanel" class="hidden">
 
-                <asp:RadioButtonList runat="server" ID="SearchTypeSelector">
-                    <asp:ListItem Value="Footprint">Footprint</asp:ListItem>
-                    <asp:ListItem Value="Region" Selected="True">Region</asp:ListItem>
-                </asp:RadioButtonList>
+            <div class="row">
+                <div id="AdvancedSearchOptionsPanel" class="hidden">
 
-                <div class="row">
-                    <div class="col-sm-12">
-                        <ul runat="server" id="SearchTabContainer" class="nav nav-tabs">
-                            <li class="active"><a id="NameSearch" data-toggle="tab" href="#NameSearchPanel">Name</a></li>
-                            <li><a id="PointSearch" data-toggle="tab" href="#PointSearchPanel">Coordinate</a></li>
-                            <li><a id="ConeSearch" data-toggle="tab" href="#ConeSearchPanel">Cone</a></li>
-                            <li><a id="IntersectSearch" data-toggle="tab" href="#IntersectSearchPanel">Intersect</a></li>
-                            <li><a id="ContainSearch" data-toggle="tab" href="#ContainSearchPanel">Contain</a></li>
-                        </ul>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <ul runat="server" id="SearchTabContainer" class="nav nav-tabs">
+                                <li class="active"><a id="NameSearch" data-toggle="tab" href="#NameSearchPanel">Name</a></li>
+                                <li><a id="PointSearch" data-toggle="tab" href="#PointSearchPanel">Coordinate</a></li>
+                                <li><a id="ConeSearch" data-toggle="tab" href="#ConeSearchPanel">Cone</a></li>
+                                <li><a id="IntersectSearch" data-toggle="tab" href="#IntersectSearchPanel">Intersect</a></li>
+                                <li><a id="ContainSearch" data-toggle="tab" href="#ContainSearchPanel">Contain</a></li>
+                            </ul>
 
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="tab-content col-sm-6">
                             <div id="NameSearchPanel" class="tab-pane fade in active">
                                 <asp:Label ID="nameLabel" runat="server" Text="Name:" CssClass="control-label"></asp:Label>
@@ -73,9 +75,23 @@
                     </div>
                 </div>
 
-                <asp:Button ID="ok" runat="server" OnClick="ok_Click" Text="search" />
             </div>
+
             <br />
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <label class="checkbox-inline">
+                        <input type="checkbox" aria-label="AdvancedSearchOptions" id="AdvancedSearchOptionsToggle">Advanced Search</label>
+                    <label class="checkbox-inline">
+                        <asp:CheckBox runat="server" type="checkbox" aria-label="RegionSearchToggle" ID="RegionSearchToggle"></asp:CheckBox>Region</label>
+                    <br />
+                </div>
+            </div>
+
+            <br />
+
+            <asp:Button ID="ok" runat="server" OnClick="ok_Click" Text="search" CssClass="btn btn-primary" />
 
             <asp:UpdatePanel runat="server">
                 <ContentTemplate>

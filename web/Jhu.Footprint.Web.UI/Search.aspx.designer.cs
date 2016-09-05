@@ -22,13 +22,13 @@ namespace Jhu.Footprint.Web.UI {
         protected global::System.Web.UI.WebControls.HiddenField SearchMethod;
         
         /// <summary>
-        /// SearchTypeSelector control.
+        /// FastSearchInput control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButtonList SearchTypeSelector;
+        protected global::System.Web.UI.WebControls.TextBox FastSearchInput;
         
         /// <summary>
         /// SearchTabContainer control.
@@ -164,6 +164,15 @@ namespace Jhu.Footprint.Web.UI {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox ContainRegion;
+        
+        /// <summary>
+        /// RegionSearchToggle control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox RegionSearchToggle;
         
         /// <summary>
         /// ok control.

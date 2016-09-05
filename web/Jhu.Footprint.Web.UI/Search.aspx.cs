@@ -30,7 +30,13 @@ namespace Jhu.Footprint.Web.UI
         protected void footprintRegionDataSource_ObjectCreating(object sender, ObjectDataSourceEventArgs e)
         {
             var method = (Lib.SearchMethod)Enum.Parse(typeof(Lib.SearchMethod), SearchMethod.Value, true);
-            var searchType = (Lib.SearchType)Enum.Parse(typeof(Lib.SearchType), SearchTypeSelector.SelectedValue, true);
+            var searchType = Lib.SearchType.Footprint;
+
+            if (RegionSearchToggle.Checked)
+            {
+                searchType = Lib.SearchType.Region;
+            }
+
 
             var search = new Lib.FootprintRegionSearch(FootprintContext);
             search.SearchType = searchType;
