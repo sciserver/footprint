@@ -55,8 +55,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
         [DataMember(Name = "gridDensity")]
         public float? GridDensity { get; set; }
-
-        // Do we need two of them? 
+        
         [DataMember(Name = "gridSys")]
         [Description("Coordinate system. Valid values: eq, gal.")]
         public string GridCoordinateSystem { get; set; }
