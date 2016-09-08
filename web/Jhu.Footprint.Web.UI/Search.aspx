@@ -19,6 +19,7 @@
         <div class="dock-fill">
             <h1>Footprint Catalog Search</h1>
 
+            <!-- TODO: Implement fast search (wire with the NED and/or Simbad service) -->
             <div class="row" id="FastSearchPanel">
                 <div class="col-sm-6">
                     <asp:TextBox runat="server" ID="FastSearchInput" CssClass="form-control"></asp:TextBox>
@@ -84,7 +85,7 @@
                     <label class="checkbox-inline">
                         <input type="checkbox" aria-label="AdvancedSearchOptions" id="AdvancedSearchOptionsToggle">Advanced Search</label>
                     <label class="checkbox-inline">
-                        <asp:CheckBox runat="server" type="checkbox" aria-label="RegionSearchToggle" ID="RegionSearchToggle"></asp:CheckBox>Region</label>
+                        <asp:CheckBox runat="server" ID="RegionSearchToggle"></asp:CheckBox>Region</label>
                     <br />
                 </div>
             </div>
