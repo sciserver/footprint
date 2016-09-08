@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Xml.Serialization;
@@ -248,5 +249,70 @@ namespace Jhu.Footprint.Web.Lib
             var name = GetTestUniqueName();
             RefreshCombinedRegionHelper3(name, CombinationMethod.Intersection);
         }
+
+        #region thumbnail tests
+        [TestMethod]
+        public void CreateThumbnailTest()
+        {
+            var name = GetTestUniqueName();
+
+            using (var context = CreateContext())
+            {
+                var footprint = CreateTestFootprint(context, name);
+                var r = CreateTestRegion(footprint, name);
+
+                r.CreateThumbnail();
+
+            }
+        }
+
+        [TestMethod]
+        public void LoadThumbnailTest()
+        {
+            var name = GetTestUniqueName();
+            int footprintId;
+            int regionId;
+            byte[] t1;
+            byte[] t2;
+
+            using (var context = CreateContext())
+            {
+                //var footprint = CreateTestFootprint(context, name);
+                var f = new Lib.Footprint(context)
+                {
+                    Name = name
+                };
+                footprintId = (int)f.Save();
+
+                var r = new Lib.FootprintRegion(f)
+                {
+                    Name = name,
+                    Region = Spherical.Region.Parse("CIRCLE J2000 10 10 10")
+                };
+
+                regionId = (int)r.Save();
+                r.CreateThumbnail();
+                t1 = r.Thumbnail;
+            }
+
+            using (var context = CreateContext())
+            {
+                var f = new Footprint(context);
+                f.Load(footprintId);
+
+                var r = new FootprintRegion(f)
+                {
+                    Id = regionId
+                };
+
+                r.Load(regionId);
+                r.LoadThumbnail();
+                t2 = r.Thumbnail;
+            }
+            t1.SequenceEqual(t2);
+
+        }
+        #endregion
+
     }
 }

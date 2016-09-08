@@ -8,9 +8,11 @@ using Jhu.Spherical;
 using System.Data;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
+using System.Drawing.Imaging;
 using System.IO;
 using Jhu.Graywulf.Entities.Mapping;
 using Jhu.Graywulf.AccessControl;
+using Jhu.Spherical.Visualizer;
 
 namespace Jhu.Footprint.Web.Lib
 {
@@ -56,14 +58,15 @@ namespace Jhu.Footprint.Web.Lib
 
         public string FootprintName
         {
-            get {
+            get
+            {
                 if (footprintName == "")
                 {
                     GetFootprintName();
                 }
-                return footprintName;                
+                return footprintName;
             }
-            
+
         }
 
         [DbColumn]
@@ -82,12 +85,14 @@ namespace Jhu.Footprint.Web.Lib
 
         public Region Region
         {
-            get {
+            get
+            {
                 if (region == null)
                 {
                     LoadRegion();
                 }
-                return region; }
+                return region;
+            }
             set { region = value; }
         }
 
@@ -321,7 +326,7 @@ WHERE FootprintID = @FootprintID AND Name = @Name;
                 return base.GetCheckExistsCommand();
             }
         }
-
+        
         private void LoadRegion()
         {
             EvaluateAccess().EnsureRead();
@@ -387,12 +392,72 @@ WHERE r.ID = @ID";
 
         public void LoadThumbnail()
         {
+
+            EvaluateAccess().EnsureRead();
+
+            var sql = @"
+SELECT thumbnail
+FROM [FootprintRegion] r
+WHERE r.ID = @ID
+";
+
+            using (var cmd = Context.CreateCommand(sql))
+            {
+                cmd.Parameters.Add("@ID", SqlDbType.Int).Value = this.id;
+
+                using (var dr = Context.ExecuteCommandReader(cmd))
+                {
+                    dr.Read();
+
+                    this.thumbnail = (byte[])dr["thumbnail"];
+                }
+            }
         }
 
         public void RefreshThumbnail()
         {
         }
-        
+
+        public void CreateThumbnail()
+        {
+            // generate plot
+            var p = new Spherical.Visualizer.Plot()
+            {
+                Width = 300,
+                Height = 224,
+                Projection = new Spherical.Visualizer.AitoffProjection(),
+                AutoRotate = true,
+                AutoZoom = true
+            };
+
+            var regionds = new ObjectListDataSource(new[] { region });
+            var r = new RegionsLayer();
+            r.DataSource = regionds;
+            p.Layers.Add(r);
+
+
+            // create binary array
+            var ms = new MemoryStream();
+            p.RenderToBitmap(ms, ImageFormat.Png);
+            thumbnail = ms.ToArray();
+
+            // SQL here
+
+                var sql = @"
+UPDATE [dbo].[FootprintRegion] 
+SET Thumbnail= @Thumbnail
+WHERE Id = @Id";
+
+            using (var cmd = new SqlCommand(sql))
+            {
+                cmd.Parameters.Add("@Id", SqlDbType.Int).Value = id;
+                cmd.Parameters.Add("@Thumbnail", SqlDbType.VarBinary).Value = thumbnail == null ? (object)DBNull.Value : thumbnail;
+                
+                Context.ExecuteCommandNonQuery(cmd);
+            }
+        }
+
+
 
         #endregion
     }
