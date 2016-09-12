@@ -106,7 +106,14 @@ namespace Jhu.Footprint.Web.Lib
         [DbColumn(Binding = DbColumnBinding.Auxiliary)]
         public byte[] Thumbnail
         {
-            get { return thumbnail; }
+            get
+            {
+                if (thumbnail == null)
+                {
+                    LoadThumbnail();
+                }
+                return thumbnail;
+            }
             set { thumbnail = value; }
         }
 
@@ -326,7 +333,7 @@ WHERE FootprintID = @FootprintID AND Name = @Name;
                 return base.GetCheckExistsCommand();
             }
         }
-        
+
         private void LoadRegion()
         {
             EvaluateAccess().EnsureRead();
@@ -409,7 +416,12 @@ WHERE r.ID = @ID
                 {
                     dr.Read();
 
-                    this.thumbnail = (byte[])dr["thumbnail"];
+                    this.thumbnail = dr["thumbnail"] == DBNull.Value ? null : (byte[])dr["thumbnail"];
+
+                    if (thumbnail == null)
+                    {
+                        CreateThumbnail();
+                    }
                 }
             }
         }
@@ -430,6 +442,11 @@ WHERE r.ID = @ID
                 AutoZoom = true
             };
 
+            if (region == null)
+            {
+                LoadRegion();
+            }
+
             var regionds = new ObjectListDataSource(new[] { region });
             var r = new RegionsLayer();
             r.DataSource = regionds;
@@ -443,7 +460,7 @@ WHERE r.ID = @ID
 
             // SQL here
 
-                var sql = @"
+            var sql = @"
 UPDATE [dbo].[FootprintRegion] 
 SET Thumbnail= @Thumbnail
 WHERE Id = @Id";
@@ -452,7 +469,7 @@ WHERE Id = @Id";
             {
                 cmd.Parameters.Add("@Id", SqlDbType.Int).Value = id;
                 cmd.Parameters.Add("@Thumbnail", SqlDbType.VarBinary).Value = thumbnail == null ? (object)DBNull.Value : thumbnail;
-                
+
                 Context.ExecuteCommandNonQuery(cmd);
             }
         }
