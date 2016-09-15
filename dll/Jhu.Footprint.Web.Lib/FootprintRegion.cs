@@ -56,19 +56,6 @@ namespace Jhu.Footprint.Web.Lib
             set { name = value; }
         }
 
-        public string FootprintName
-        {
-            get
-            {
-                if (footprintName == "")
-                {
-                    GetFootprintName();
-                }
-                return footprintName;
-            }
-
-        }
-
         [DbColumn]
         public double FillFactor
         {
@@ -81,6 +68,14 @@ namespace Jhu.Footprint.Web.Lib
         {
             get { return type; }
             set { type = value; }
+        }
+
+        [DbColumn(Name = "FootprintName", Binding = DbColumnBinding.Auxiliary)]
+        public string FootprintName
+        {
+            get { return footprintName; }
+            set { footprintName = value; }
+
         }
 
         public Region Region
@@ -357,31 +352,6 @@ WHERE r.ID = @ID
             }
         }
 
-        private void GetFootprintName()
-        {
-            var context = new Context();
-
-            var sql = @"
-SELECT f.name
-FROM [Footprint] f
-INNER JOIN [FootprintRegion] r
-ON f.ID = r.FootprintID
-WHERE r.ID = @ID";
-
-            using (var cmd = context.CreateCommand(sql))
-            {
-                cmd.Parameters.Add("@ID", SqlDbType.Int).Value = id;
-
-                using (var dr = context.ExecuteCommandReader(cmd))
-                {
-                    dr.Read();
-
-                    footprintName = dr.GetString(0);
-                }
-            }
-        }
-
-
         public void SaveRegion()
         {
             EvaluateAccess().EnsureUpdate();
@@ -432,6 +402,7 @@ WHERE r.ID = @ID
 
         public void CreateThumbnail()
         {
+
             // generate plot
             var p = new Spherical.Visualizer.Plot()
             {
