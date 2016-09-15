@@ -142,6 +142,12 @@ namespace Jhu.Footprint.Web.Api.V1
         [Description("Plots a footprint, with advanced parameters")]
         Spherical.Visualizer.Plot PlotUserFootprintAdvanced(string owner, string name, Plot plotParameters);
 
+        [OperationContract]
+        [WebGet(UriTemplate = Urls.UserFootprint + Urls.Thumbnail)]
+        [Description("Get the thumbnail of a footprint.")]
+        Stream GetUserFootprintThumbnail(string owner, string name);
+
+
         #endregion
         #region Individual region set, get and plot
 
@@ -195,6 +201,12 @@ namespace Jhu.Footprint.Web.Api.V1
         [PlotFormatter]
         [Description("Plots a footprint.")]
         Spherical.Visualizer.Plot PlotUserFootprintRegionAdvanced(string owner, string name, string regionName, Plot plotParameters);
+
+
+        [OperationContract]
+        [WebGet(UriTemplate = Urls.UserFootprintRegion + Urls.Thumbnail)]
+        [Description("Get the thumbnail of a footprint.")]
+        Stream GetUserFootprintRegionThumbnail(string owner, string name, string regionName);
 
         // TODO: add HTM cover
 

@@ -314,6 +314,19 @@ namespace Jhu.Footprint.Web.Api.V1
             }
         }
 
+        public Stream GetUserFootprintThumbnail(string owner, string name)
+        {
+            using (var context = CreateContext())
+            {
+                var footprint = new Lib.Footprint(context);
+                footprint.Load(owner, name);
+
+                var ms = new MemoryStream(footprint.CombinedRegion.Thumbnail);
+                return ms;
+            }
+        }
+
+
         #endregion
         #region Individual region get and plot
 
@@ -418,6 +431,21 @@ namespace Jhu.Footprint.Web.Api.V1
 
 
                 return plotParameters.GetPlot(new[] { region.Region });
+            }
+        }
+
+        public Stream GetUserFootprintRegionThumbnail(string owner, string name, string regionName)
+        {
+            using (var context = CreateContext())
+            {
+                var footprint = new Lib.Footprint(context);
+                footprint.Load(owner, name);
+
+                var region = new Lib.FootprintRegion(footprint);
+                region.Load(regionName);
+
+                var ms = new MemoryStream(region.Thumbnail);
+                return ms;
             }
         }
 
