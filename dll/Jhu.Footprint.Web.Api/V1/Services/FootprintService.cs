@@ -5,6 +5,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
 using System.Web;
+using System.ServiceModel.Web;
 using Jhu.Graywulf.Web.Services;
 
 namespace Jhu.Footprint.Web.Api.V1
@@ -321,6 +322,8 @@ namespace Jhu.Footprint.Web.Api.V1
                 var footprint = new Lib.Footprint(context);
                 footprint.Load(owner, name);
 
+                WebOperationContext.Current.OutgoingResponse.ContentType = "image/jpeg";
+
                 var ms = new MemoryStream(footprint.CombinedRegion.Thumbnail);
                 return ms;
             }
@@ -443,6 +446,8 @@ namespace Jhu.Footprint.Web.Api.V1
 
                 var region = new Lib.FootprintRegion(footprint);
                 region.Load(regionName);
+
+                WebOperationContext.Current.OutgoingResponse.ContentType = "image/jpeg";
 
                 var ms = new MemoryStream(region.Thumbnail);
                 return ms;
