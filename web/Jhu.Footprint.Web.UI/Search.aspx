@@ -110,12 +110,12 @@
                             </tr>
                         </GroupTemplate>
                         <ItemTemplate>
-                            <td>
+                            <tr>
                                 <%# Eval("FootprintName") %><br />
-                            </td>
-                            <td>
                                 <%# Eval("Name") %><br />
-                            </td>
+                                <img src='<%# String.Format("http://localhost/footprint/api/v1/Footprint.svc/users/{0}/footprints/{1}/regions/{2}/thumbnail", Eval("FootprintOwner"), Eval("FootprintName"),Eval("Name"))%>' alt="" /><br />
+                            </tr>
+
                         </ItemTemplate>
                         <EmptyDataTemplate>
                             No footprints found.
