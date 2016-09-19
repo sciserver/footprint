@@ -8,6 +8,7 @@ using Jhu.Spherical;
 using System.Data;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using Jhu.Graywulf.Entities.Mapping;
@@ -27,10 +28,12 @@ namespace Jhu.Footprint.Web.Lib
         private int footprintId;
         private string name;
         private string footprintName;
+        private string footprintOwner;
         private double fillFactor;
         private RegionType type;
-        private Region region;
+        private Spherical.Region region;
         private byte[] thumbnail;
+        
 
         #endregion
         #region Properties
@@ -78,7 +81,14 @@ namespace Jhu.Footprint.Web.Lib
 
         }
 
-        public Region Region
+        [DbColumn(Name = "Owner", Binding = DbColumnBinding.Auxiliary)]
+        public string FootprintOwner
+        {
+            get { return footprintOwner; }
+            set { footprintOwner = value;  }
+        }
+
+        public Spherical.Region Region
         {
             get
             {
@@ -95,7 +105,7 @@ namespace Jhu.Footprint.Web.Lib
         public byte[] RegionBinary
         {
             get { return region.ToSqlBytes().Value; }
-            set { region = Region.FromSqlBytes(new SqlBytes(value)); }
+            set { region = Spherical.Region.FromSqlBytes(new SqlBytes(value)); }
         }
 
         [DbColumn(Binding = DbColumnBinding.Auxiliary)]
@@ -111,7 +121,7 @@ namespace Jhu.Footprint.Web.Lib
             }
             set { thumbnail = value; }
         }
-
+        
         #endregion
         #region Constructors and initializers
 
@@ -158,7 +168,7 @@ namespace Jhu.Footprint.Web.Lib
             this.name = old.name;
             this.fillFactor = old.fillFactor;
             this.type = old.type;
-            this.region = new Region(old.region);
+            this.region = new Spherical.Region(old.region);
             this.thumbnail = old.thumbnail;
         }
 
@@ -398,6 +408,7 @@ WHERE r.ID = @ID
 
         public void RefreshThumbnail()
         {
+            // TO DO
         }
 
         public void CreateThumbnail()
@@ -418,11 +429,31 @@ WHERE r.ID = @ID
                 LoadRegion();
             }
 
+            // add grid
+            var grid = new GridLayer();
+            grid.Line.Pen = Pens.LightGray;
+            grid.DecScale.Density = 150f;
+            p.Layers.Add(grid);
+
+            // add region
             var regionds = new ObjectListDataSource(new[] { region });
             var r = new RegionsLayer();
             r.DataSource = regionds;
             p.Layers.Add(r);
 
+            // add axes
+            var font = new Font("Consolas", 7.5f);
+            var axes = new AxesLayer();
+
+            axes.X1Axis.Labels.Font = font;
+            axes.X1Axis.Labels.Font = font;
+            axes.X1Axis.Title.Text = "Right ascension (deg)";
+            axes.X2Axis.Labels.Visible = false;
+            axes.Y1Axis.Title.Font = font;
+            axes.Y1Axis.Labels.Font = font;
+            axes.Y1Axis.Title.Text = "Declination (deg)";
+            axes.Y2Axis.Labels.Visible = false;
+            p.Layers.Add(axes);
 
             // create binary array
             var ms = new MemoryStream();
