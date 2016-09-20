@@ -102,6 +102,7 @@
     <Content Include="Default.aspx" />
     <Content Include="Docs\Default.aspx" />
     <Content Include="Editor.js" />
+    <Content Include="MyFootprint.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Plot.aspx" />
     <Content Include="Plot.js" />
@@ -433,6 +434,13 @@
     </Compile>
     <Compile Include="Docs\Docs.master.designer.cs">
       <DependentUpon>Docs.master</DependentUpon>
+    </Compile>
+    <Compile Include="MyFootprint.aspx.cs">
+      <DependentUpon>MyFootprint.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MyFootprint.aspx.designer.cs">
+      <DependentUpon>MyFootprint.aspx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

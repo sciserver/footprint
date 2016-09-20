@@ -9,6 +9,7 @@ namespace Jhu.Footprint.Web.UI.Controls
             Home.NavigateUrl = Jhu.Footprint.Web.UI.Default.GetUrl();
             Search.NavigateUrl = Jhu.Footprint.Web.UI.Search.GetUrl();
             Edit.NavigateUrl = Jhu.Footprint.Web.UI.Editor.GetUrl();
+            MyFootprint.NavigateUrl = Jhu.Footprint.Web.UI.MyFootprint.GetUrl();
             Plot.NavigateUrl = Jhu.Footprint.Web.UI.Plot.GetUrl();
             Docs.NavigateUrl = Jhu.Footprint.Web.UI.Docs.Default.GetUrl();
         }
