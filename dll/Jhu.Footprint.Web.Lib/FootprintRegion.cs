@@ -73,21 +73,6 @@ namespace Jhu.Footprint.Web.Lib
             set { type = value; }
         }
 
-        [DbColumn(Name = "FootprintName", Binding = DbColumnBinding.Auxiliary)]
-        public string FootprintName
-        {
-            get { return footprintName; }
-            set { footprintName = value; }
-
-        }
-
-        [DbColumn(Name = "Owner", Binding = DbColumnBinding.Auxiliary)]
-        public string FootprintOwner
-        {
-            get { return footprintOwner; }
-            set { footprintOwner = value;  }
-        }
-
         public Spherical.Region Region
         {
             get
@@ -120,6 +105,21 @@ namespace Jhu.Footprint.Web.Lib
                 return thumbnail;
             }
             set { thumbnail = value; }
+        }
+
+        [DbColumn(Name = "FootprintName", Binding = DbColumnBinding.Auxiliary)]
+        public string FootprintName
+        {
+            get { return footprintName; }
+            set { footprintName = value; }
+
+        }
+
+        [DbColumn(Name = "Owner", Binding = DbColumnBinding.Auxiliary)]
+        public string FootprintOwner
+        {
+            get { return footprintOwner; }
+            set { footprintOwner = value;  }
         }
         
         #endregion
@@ -272,7 +272,7 @@ WHERE ID != @ID
         protected override string GetTableQuery()
         {
             return @"
-SELECT r.*, f.Owner, f.Name AS FootprintName, f.__acl
+SELECT r.*, f.Name AS FootprintName, f.Owner, f.__acl
 FROM [FootprintRegion] r
 INNER JOIN [Footprint] f
     ON r.FootprintID = f.ID
@@ -442,15 +442,11 @@ WHERE r.ID = @ID
             p.Layers.Add(r);
 
             // add axes
-            var font = new Font("Consolas", 7.5f);
             var axes = new AxesLayer();
-
-            axes.X1Axis.Labels.Font = font;
-            axes.X1Axis.Labels.Font = font;
+            
             axes.X1Axis.Title.Text = "Right ascension (deg)";
+            axes.X1Axis.Title.Visible = true;
             axes.X2Axis.Labels.Visible = false;
-            axes.Y1Axis.Title.Font = font;
-            axes.Y1Axis.Labels.Font = font;
             axes.Y1Axis.Title.Text = "Declination (deg)";
             axes.Y2Axis.Labels.Visible = false;
             p.Layers.Add(axes);
