@@ -272,7 +272,7 @@ WHERE ID != @ID
         protected override string GetTableQuery()
         {
             return @"
-SELECT r.*, f.Name AS FootprintName, f.Owner, f.__acl
+SELECT r.*, CombinedRegionId, f.Name AS FootprintName, f.Owner, f.__acl
 FROM [FootprintRegion] r
 INNER JOIN [Footprint] f
     ON r.FootprintID = f.ID
@@ -431,8 +431,6 @@ WHERE r.ID = @ID
 
             // add grid
             var grid = new GridLayer();
-            grid.Line.Pen = Pens.LightGray;
-            grid.DecScale.Density = 150f;
             p.Layers.Add(grid);
 
             // add region
