@@ -3,6 +3,7 @@
 <asp:Content ID="Editor" ContentPlaceHolderID="middle" runat="server">
     <asp:ScriptManagerProxy runat="server">
         <Scripts>
+            <asp:ScriptReference Path="Scripts/generalFunctions.js" />
             <asp:ScriptReference Path="Scripts/astro.js" />
             <asp:ScriptReference Path="Editor.js" />
         </Scripts>
@@ -15,7 +16,6 @@
                         <div id="PlotCanvasContainer">
                             <img id="PlotCanvas" src="http://localhost/footprint/api/v1/editor.svc/plot" class="img-responsive" />
                             <button type="button" class="btn btn-sm" id="refreshCanvasButton"><span class="glyphicon glyphicon-refresh"></span></button>
-                            <%--<div id="RegionStringTest"></div>--%>
                         </div>
                     </ContentTemplate>
                 </asp:UpdatePanel>

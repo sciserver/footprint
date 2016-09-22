@@ -104,6 +104,7 @@
     <Content Include="Editor.js" />
     <Content Include="MyFootprint.aspx" />
     <Content Include="Global.asax" />
+    <Content Include="MyFootprint.js" />
     <Content Include="Plot.aspx" />
     <Content Include="Plot.js" />
     <Content Include="Scripts\astro.js" />
@@ -375,6 +376,7 @@
     <Content Include="Scripts\CodeMirror\theme\vibrant-ink.css" />
     <Content Include="Scripts\CodeMirror\theme\xq-dark.css" />
     <Content Include="Scripts\CodeMirror\theme\xq-light.css" />
+    <Content Include="Scripts\generalFunctions.js" />
     <Content Include="Scripts\jQuery\jquery-2.2.4.js" />
     <Content Include="Scripts\jQuery\jquery-2.2.4.min.js" />
     <Content Include="Search.aspx" />
