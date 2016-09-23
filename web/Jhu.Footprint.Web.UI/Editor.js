@@ -2,15 +2,13 @@
 // TODO: maybe should be done in a more proper way?
 var footprintSvcUrl = "http://localhost/footprint/api/v1/footprint.svc";
 var editorSvcUrl = "http://localhost/footprint/api/v1/editor.svc";
-var authSvcUrl = "http://localhost/auth/api/v1/auth.svc";
 
 $(document).one('ready', function () {
-    // Setup cookie
-    //setCookies();
-
     // Set owner
     // TODO: include group
     setOwner();
+    user = localStorage.getItem("owner");
+    $("#SaveUserInput").val(user);
 });
 
 $(document).ready(function () {
@@ -93,23 +91,6 @@ $(document).ready(function () {
 });
 
 
-// Create service urls
-
-function createUrl(baseUrl, pathParts, optQueryParts) {
-    var finalUrl = baseUrl;
-    $.each(pathParts, function (i, part) {
-        finalUrl += "/" + part;
-    });
-
-    if (typeof optQueryParts != "undefined") {
-        finalUrl += "?";
-        $.each(optQueryParts, function (key, value) {
-            finalUrl += key + "=" + value + "&";
-        });
-    }
-    console.info(finalUrl);
-    return finalUrl;
-}
 
 
 // Create region strings
@@ -187,21 +168,7 @@ function saveRegion() {
 }
 
 // <----- Ajax 
-function setOwner() {
-    var methodUrl = createUrl(authSvcUrl, ["me"]);
-    var owner = "";
-    var request = $.ajax({
-        url: methodUrl,
-        type: "GET",
-        mimeType: 'text/html',
-        contentType: "text/plain",
-        success: function (data) {
-            owner = $(data).find("name").text();
-            $("#SaveUserInput").val(owner);
-        }
-    });
 
-}
 
 
 // Unnecessary? 

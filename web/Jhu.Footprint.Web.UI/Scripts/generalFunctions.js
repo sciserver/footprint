@@ -1,4 +1,5 @@
-﻿
+﻿var authSvcUrl = "http://localhost/auth/api/v1/auth.svc";
+
 // The ajax function 
 function serviceCall(url, type, optParams) {
     // set default values
@@ -49,4 +50,41 @@ function centerModals($element) {
         $clone.remove();
         $(this).find('.modal-content').css("margin-top", top);
     });
+}
+
+
+// Create service urls
+
+function createUrl(baseUrl, pathParts, optQueryParts) {
+    var finalUrl = baseUrl;
+    $.each(pathParts, function (i, part) {
+        finalUrl += "/" + part;
+    });
+
+    if (typeof optQueryParts != "undefined") {
+        finalUrl += "?";
+        $.each(optQueryParts, function (key, value) {
+            finalUrl += key + "=" + value + "&";
+        });
+    }
+    console.info(finalUrl);
+    return finalUrl;
+}
+
+
+// set user
+function setOwner() {
+    var methodUrl = createUrl(authSvcUrl, ["me"]);
+    var owner;
+    var request = $.ajax({
+        url: methodUrl,
+        type: "GET",
+        mimeType: 'text/html',
+        contentType: "text/plain",
+        success: function (data) {
+            owner = $(data).find("name").text();
+            localStorage.setItem('owner', owner);
+        }
+    });
+
 }
