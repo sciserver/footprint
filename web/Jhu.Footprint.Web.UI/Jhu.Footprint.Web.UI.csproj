@@ -105,6 +105,7 @@
     <Content Include="MyFootprint.aspx" />
     <Content Include="Global.asax" />
     <Content Include="MyFootprint.js" />
+    <Content Include="MyRegion.aspx" />
     <Content Include="Plot.aspx" />
     <Content Include="Plot.js" />
     <Content Include="Scripts\astro.js" />
@@ -446,6 +447,13 @@
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="MyRegion.aspx.cs">
+      <DependentUpon>MyRegion.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MyRegion.aspx.designer.cs">
+      <DependentUpon>MyRegion.aspx</DependentUpon>
     </Compile>
     <Compile Include="Plot.aspx.cs">
       <DependentUpon>Plot.aspx</DependentUpon>
