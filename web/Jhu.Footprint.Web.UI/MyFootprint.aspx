@@ -40,7 +40,7 @@
                                     </div>
                                     </br>
 
-                                    <a href='<%# String.Format("MyRegion.aspx?FootprintName={0}",Eval("FootprintName")) %>' class="">
+                                    <a href='<%# String.Format("MyRegion.aspx?FootprintName={0}&FootprintId={1}",Eval("FootprintName"),Eval("FootprintId")) %>' class="">
                                         <img src='<%# String.Format("http://localhost/footprint/api/v1/Footprint.svc/users/{0}/footprints/{1}/regions/{2}/thumbnail", Eval("FootprintOwner"), Eval("FootprintName"),Eval("Name"))%>' /><br />
                                     </a>
 

@@ -4,12 +4,13 @@
     <div class="container">
         <asp:UpdatePanel runat="server">
             <ContentTemplate>
+                <div runat="server" class="h1" id ="FootprintNameHeader"></div>
                 <asp:ObjectDataSource ID="footprintRegionDataSource" runat="server" OnObjectCreating="footprintRegionDataSource_ObjectCreating" SelectCountMethod="Count" SelectMethod="Find" TypeName="Jhu.Footprint.Web.Lib.FootprintRegionSearch"
                     DataObjectTypeName="Jhu.Footprint.Web.Lib.FootprintRegion" />
                 <asp:ListView ID="regionList" runat="server" DataSourceID="footprintRegionDataSource" Visible="False" ClientIDMode="Static">
                     <LayoutTemplate>
                         <table>
-                            <div class="h1"><%# Eval("FootprintName") %></div>
+                            
                             <asp:PlaceHolder runat="server" ID="groupPlaceholder" />
                         </table>
                     </LayoutTemplate>

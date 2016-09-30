@@ -13,6 +13,15 @@ namespace Jhu.Footprint.Web.UI {
     public partial class MyRegion {
         
         /// <summary>
+        /// FootprintNameHeader control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl FootprintNameHeader;
+        
+        /// <summary>
         /// footprintRegionDataSource control.
         /// </summary>
         /// <remarks>
