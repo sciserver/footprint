@@ -16,10 +16,13 @@ namespace Jhu.Footprint.Web.UI
         }
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (!IsPostBack)
+            {
             var fName = HttpUtility.ParseQueryString(HttpContext.Current.Request.Url.Query)["FootprintName"];
             FootprintNameHeader.InnerText = fName;
             regionList.Visible = true;
             regionList.DataBind();
+            }
         }
         protected void footprintRegionDataSource_ObjectCreating(object sender, ObjectDataSourceEventArgs e)
         {
@@ -32,6 +35,17 @@ namespace Jhu.Footprint.Web.UI
             
             e.ObjectInstance = search;
 
+        }
+
+        protected void loadRegionToEditor_OnClick(object sender, EventArgs e)
+        {
+            LinkButton link = (LinkButton)sender;
+            var footprintName = link.Attributes["footprintName"];
+            var regionName = link.Attributes["regionName"];
+            var es = new Api.V1.EditorService();
+            es.Load(Page.User.Identity.Name, footprintName, regionName);
+
+            Response.Redirect("Editor.aspx");
         }
     }
 }

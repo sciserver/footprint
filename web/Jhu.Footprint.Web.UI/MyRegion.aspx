@@ -4,13 +4,13 @@
     <div class="container">
         <asp:UpdatePanel runat="server">
             <ContentTemplate>
-                <div runat="server" class="h1" id ="FootprintNameHeader"></div>
+                <div runat="server" class="h1" id="FootprintNameHeader"></div>
                 <asp:ObjectDataSource ID="footprintRegionDataSource" runat="server" OnObjectCreating="footprintRegionDataSource_ObjectCreating" SelectCountMethod="Count" SelectMethod="Find" TypeName="Jhu.Footprint.Web.Lib.FootprintRegionSearch"
                     DataObjectTypeName="Jhu.Footprint.Web.Lib.FootprintRegion" />
                 <asp:ListView ID="regionList" runat="server" DataSourceID="footprintRegionDataSource" Visible="False" ClientIDMode="Static">
                     <LayoutTemplate>
                         <table>
-                            
+
                             <asp:PlaceHolder runat="server" ID="groupPlaceholder" />
                         </table>
                     </LayoutTemplate>
@@ -27,8 +27,10 @@
                                 <div class="checkbox col-sm-2 hidden DeleteFootprints">
                                     <input type="checkbox" name="deleteCheckbox" value='<%# Eval("FootprintName") %>'>
                                 </div>
-                                </br>                                    
-                                        <img src='<%# String.Format("http://localhost/footprint/api/v1/Footprint.svc/users/{0}/footprints/{1}/regions/{2}/thumbnail", Eval("FootprintOwner"), Eval("FootprintName"),Eval("Name"))%>' /><br />
+                                </br>             
+                                <asp:LinkButton runat="server" footprintName='<%# Eval("FootprintName") %>' regionName='<%# Eval("Name") %>' OnClick="loadRegionToEditor_OnClick">
+                                    <img src='<%# String.Format("http://localhost/footprint/api/v1/Footprint.svc/users/{0}/footprints/{1}/regions/{2}/thumbnail", Eval("FootprintOwner"), Eval("FootprintName"),Eval("Name"))%>' /><br />
+                                </asp:LinkButton>
                             </div>
                         </td>
                     </ItemTemplate>
