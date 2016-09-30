@@ -35,8 +35,8 @@ namespace Jhu.Footprint.Web.UI
 
         protected void LoadRegionButton_OnClick(object sender, EventArgs e)
         {
-            var vmi = new Api.V1.EditorService();
-            vmi.Load(Page.User.Identity.Name, FootprintSelect.SelectedItem.ToString(), RegionSelect.SelectedItem.ToString());
+            var es = new Api.V1.EditorService();
+            es.Load(Page.User.Identity.Name, FootprintSelect.SelectedItem.ToString(), RegionSelect.SelectedItem.ToString());
         }
         #endregion
         
