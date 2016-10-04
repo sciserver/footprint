@@ -42,10 +42,11 @@ namespace Jhu.Footprint.Web.UI
             LinkButton link = (LinkButton)sender;
             var footprintName = link.Attributes["footprintName"];
             var regionName = link.Attributes["regionName"];
+            var regionId = link.Attributes["regionId"];
             var es = new Api.V1.EditorService();
             es.Load(Page.User.Identity.Name, footprintName, regionName);
 
-            Response.Redirect("Editor.aspx");
+            Response.Redirect(String.Format("Editor.aspx?footprintName={0}&regionName={1}&regionId={2}", footprintName, regionName, regionId));
         }
     }
 }

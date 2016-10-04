@@ -28,7 +28,7 @@
                                     <input type="checkbox" name="deleteCheckbox" value='<%# Eval("FootprintName") %>'>
                                 </div>
                                 </br>             
-                                <asp:LinkButton runat="server" footprintName='<%# Eval("FootprintName") %>' regionName='<%# Eval("Name") %>' OnClick="loadRegionToEditor_OnClick">
+                                <asp:LinkButton runat="server" footprintName='<%# Eval("FootprintName") %>' regionName='<%# Eval("Name") %>' regionId='<%# Eval("Id") %>'  OnClick="loadRegionToEditor_OnClick">
                                     <img src='<%# String.Format("http://localhost/footprint/api/v1/Footprint.svc/users/{0}/footprints/{1}/regions/{2}/thumbnail", Eval("FootprintOwner"), Eval("FootprintName"),Eval("Name"))%>' /><br />
                                 </asp:LinkButton>
                             </div>
