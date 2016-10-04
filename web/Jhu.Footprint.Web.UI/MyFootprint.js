@@ -25,6 +25,7 @@ $(document).ready(function () {
 
         $(".DeleteFootprints").addClass("hidden");
         $("#SelectFootprints").removeClass("hidden");
+        __doPostBack($(this));
     });
 });
 
