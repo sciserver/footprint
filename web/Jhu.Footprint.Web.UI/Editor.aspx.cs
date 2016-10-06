@@ -35,8 +35,12 @@ namespace Jhu.Footprint.Web.UI
 
         protected void LoadRegionButton_OnClick(object sender, EventArgs e)
         {
+            var footprintName = FootprintSelect.SelectedItem.ToString();
+            var regionName = RegionSelect.SelectedItem.ToString();
             var es = new Api.V1.EditorService();
-            es.Load(Page.User.Identity.Name, FootprintSelect.SelectedItem.ToString(), RegionSelect.SelectedItem.ToString());
+            es.Load(Page.User.Identity.Name, footprintName, regionName);
+
+            Response.Redirect(String.Format("Editor.aspx?footprintName={0}&regionName={1}",footprintName,regionName));
         }
         #endregion
         

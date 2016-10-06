@@ -155,14 +155,14 @@
                             <ContentTemplate>
                                 <div class="form-group form-inline">
                                     <label for="FootprintSelect" class="control-label">Footprint: </label>
-                                    <asp:DropDownList runat="server" ID="FootprintSelect" ClientIDMode="Static" OnSelectedIndexChanged="FootprintSelect_SelectedIndexChanged" AutoPostBack="true" CssClass="form-control">
+                                    <asp:DropDownList runat="server" ID="FootprintSelect" OnSelectedIndexChanged="FootprintSelect_SelectedIndexChanged" AutoPostBack="true" CssClass="form-control">
                                     </asp:DropDownList>
 
                                 </div>
 
                                 <div class="form-group form-inline ">
                                     <label for="RegionSelect" class="control-label">Region:  </label>
-                                    <asp:DropDownList runat="server" ID="RegionSelect" ClientIDMode="Static" CssClass="form-control">
+                                    <asp:DropDownList runat="server" ID="RegionSelect" CssClass="form-control">
                                     </asp:DropDownList>
                                 </div>
 

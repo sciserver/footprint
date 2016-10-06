@@ -9,6 +9,9 @@ $(document).one('ready', function () {
     setOwner();
     user = localStorage.getItem("owner");
     $("#SaveUserInput").val(user);
+
+    // Set Save region parameters
+    setSaveRegionParameters();
 });
 
 $(document).ready(function () {
@@ -165,6 +168,17 @@ function saveRegion() {
     var methodUrl = createUrl(editorSvcUrl, ["save"], params);
 
     serviceCall(methodUrl, "POST");
+}
+
+function setSaveRegionParameters() {
+    var footprintName = getQueryParameterByName("footprintName");
+    var regionName = getQueryParameterByName("regionName");
+    if (footprintName && regionName )
+    {
+        $("#SaveUserFootprintName").val(footprintName);
+        $("#SaveUserRegionName").val(regionName);
+    }
+
 }
 
 // <----- Ajax 
