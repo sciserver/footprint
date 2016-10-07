@@ -26,7 +26,7 @@ AS
 
 	-- Save region
 	UPDATE FootprintRegion
-	SET region = @region
+	SET region = @region, Thumbnail = NULL
 	FROM FootprintRegion r
 	WHERE r.ID = @RegionID;
 
@@ -133,13 +133,13 @@ AS
 				-- UNION
 
 				UPDATE FootprintRegion
-				SET Region = @combinedRegion.[Union](Region).ToBinary()
+				SET Region = @combinedRegion.[Union](Region).ToBinary(), Thumbnail = NULL
 				WHERE ID = @combinedRegionID
 			END ELSE IF @combinationMethod = 2 BEGIN
 				-- INTERSECT
 
 				UPDATE FootprintRegion
-				SET Region = @combinedRegion.[Intersect](Region).ToBinary()
+				SET Region = @combinedRegion.[Intersect](Region).ToBinary(), Thumbnail = NULL
 				WHERE ID = @combinedRegionID
 			END ELSE THROW 51000, 'Invalid combination method.', 1;
 
@@ -235,7 +235,7 @@ AS
 			PRINT 'Updating cache region';
 
 			UPDATE FootprintRegion
-			SET Region = @combinedRegion.ToBinary()
+			SET Region = @combinedRegion.ToBinary(), Thumbnail = NULL
 			WHERE ID = @combinedRegionID
 
 		END ELSE BEGIN
