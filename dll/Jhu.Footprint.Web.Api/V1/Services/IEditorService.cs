@@ -17,6 +17,8 @@ using Lib = Jhu.Footprint.Web.Lib;
 namespace Jhu.Footprint.Web.Api.V1
 {
     [ServiceContract]
+    [ServiceName(Name = "Editor", Version = "v1")]
+    [Description("Create and edit observation footprints.")]
     public interface IEditorService
     {
         [OperationContract]

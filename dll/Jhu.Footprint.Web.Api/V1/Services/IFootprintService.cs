@@ -16,7 +16,8 @@ using Lib = Jhu.Footprint.Web.Lib;
 namespace Jhu.Footprint.Web.Api.V1
 {
     [ServiceContract]
-    [Description("TODO")]
+    [ServiceName(Name = "Footprint", Version = "v1")]
+    [Description("Store, search and retrieve observation footprints.")]
     public interface IFootprintService
     {
         [OperationContract]
