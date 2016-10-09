@@ -67,6 +67,17 @@
   <ItemGroup>
     <Content Include="Api\V1\Footprint.svc" />
     <Content Include="Default.aspx" />
+    <Content Include="Docs\01_introduction\00_index.aspx" />
+    <Content Include="Docs\99_info\00_index.aspx" />
+    <Content Include="Docs\99_info\01_personnel.aspx" />
+    <Content Include="Docs\99_info\03_copyright.aspx" />
+    <Content Include="Docs\images\elte.png" />
+    <Content Include="Docs\images\hvo.png" />
+    <Content Include="Docs\images\idies.png" />
+    <Content Include="Docs\images\ivoa.png" />
+    <Content Include="Docs\images\jhu.png" />
+    <Content Include="Docs\images\nsf.png" />
+    <Content Include="Docs\images\vao.png" />
     <Content Include="Editor.js" />
     <Content Include="MyFootprint.aspx" />
     <Content Include="Global.asax" />
@@ -512,6 +523,9 @@
   <ItemGroup>
     <Content Include="App_Masters\Basic\Basic.master" />
     <Content Include="App_Masters\Basic\UI.master" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Docs\Web.config" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
