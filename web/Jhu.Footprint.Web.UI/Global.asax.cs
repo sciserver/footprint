@@ -16,14 +16,39 @@ namespace Jhu.Footprint.Web.UI
 {
     public class Global : FederationApplicationBase
     {
-        protected override void OnUserArrived(GraywulfPrincipal principal)
+
+        protected override void RegisterApps()
         {
-            base.OnUserArrived(principal);
+            base.RegisterApps();
+
+            RegisterApp(typeof(Jhu.Graywulf.Web.UI.Apps.Common.App));
+            RegisterApp(typeof(Jhu.Graywulf.Web.UI.Apps.Api.App));
+            RegisterApp(typeof(Jhu.Graywulf.Web.UI.Apps.Docs.App));
         }
 
-        protected override void OnUserLeft(GraywulfPrincipal principal)
+        protected override void RegisterServices()
         {
-            base.OnUserLeft(principal);
+            base.RegisterServices();
+
+            RegisterService(typeof(Jhu.Footprint.Web.Api.V1.IEditorService));
+            RegisterService(typeof(Jhu.Footprint.Web.Api.V1.IFootprintService));
+        }
+
+        protected override void RegisterButtons()
+        {
+            base.RegisterButtons();
+
+            RegisterFooterButton(new Graywulf.Web.UI.Controls.MenuButton()
+            {
+                Text = "copyright",
+                NavigateUrl = "~/Docs/99_info/03_copyright.aspx"
+            });
+
+            RegisterFooterButton(new Graywulf.Web.UI.Controls.MenuButton()
+            {
+                Text = "personnel",
+                NavigateUrl = "~/Docs/99_info/01_personnel.aspx"
+            });
         }
     }
 }

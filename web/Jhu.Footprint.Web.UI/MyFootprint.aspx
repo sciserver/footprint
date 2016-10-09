@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/UI.master" AutoEventWireup="true" CodeBehind="MyFootprint.aspx.cs" Inherits="Jhu.Footprint.Web.UI.MyFootprint" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="MyFootprint.aspx.cs" Inherits="Jhu.Footprint.Web.UI.MyFootprint" %>
 
 
 <asp:Content ID="MyFootprint" ContentPlaceHolderID="middle" runat="server">

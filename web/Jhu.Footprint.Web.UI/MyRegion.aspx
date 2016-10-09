@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/UI.master" AutoEventWireup="true" CodeBehind="MyRegion.aspx.cs" Inherits="Jhu.Footprint.Web.UI.MyRegion" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="MyRegion.aspx.cs" Inherits="Jhu.Footprint.Web.UI.MyRegion" %>
 
 <asp:Content ID="MyRegion" ContentPlaceHolderID="middle" runat="server">
     <div class="container">

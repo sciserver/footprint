@@ -23,14 +23,6 @@ namespace Jhu.Footprint.Web.UI
             }
         }
 
-        /*
-        protected override void OnPreRender(EventArgs e)
-        {
-            Page.DataBind();
-
-            base.OnPreRender(e);
-        }*/
-
         protected override void OnUnload(EventArgs e)
         {
             if (footprintContext != null)
