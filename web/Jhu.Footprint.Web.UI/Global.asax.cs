@@ -38,6 +38,24 @@ namespace Jhu.Footprint.Web.UI
         {
             base.RegisterButtons();
 
+            RegisterMenuButton(new Graywulf.Web.UI.Controls.MenuButton()
+            {
+                Text = "search",
+                NavigateUrl = Search.GetUrl()
+            });
+
+            RegisterMenuButton(new Graywulf.Web.UI.Controls.MenuButton()
+            {
+                Text= "editor",
+                NavigateUrl = Editor.GetUrl()
+            });
+
+            RegisterMenuButton(new Graywulf.Web.UI.Controls.MenuButton()
+            {
+                Text = "my footprints",
+                NavigateUrl = MyFootprint.GetUrl()
+            });
+
             RegisterFooterButton(new Graywulf.Web.UI.Controls.MenuButton()
             {
                 Text = "copyright",
