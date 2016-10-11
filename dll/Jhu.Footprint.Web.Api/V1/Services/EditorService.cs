@@ -97,21 +97,38 @@ namespace Jhu.Footprint.Web.Api.V1
             }
         }
 
-        public void Save(string owner, string name, string regionName)
+        public void Save(string owner, string name, string regionName, string combinationMethod)
         {
+
+            Lib.CombinationMethod method;
+            switch (combinationMethod)
+            {
+                case "intersect":
+                    method = Lib.CombinationMethod.Intersection;
+                    break;
+                case "union":
+                    method = Lib.CombinationMethod.Union;
+                    break;
+                default:
+                    method = Lib.CombinationMethod.None;
+                    break;
+            }
+
             using (var context = CreateContext())
             {
                 var footprint = new Lib.Footprint(context);
                 if (footprint.CheckExists(owner, name))
                 {
                     footprint.Load(owner, name);
+                    footprint.CombinationMethod = method;
+                    footprint.Save();
                 }
                 else
                 {
                     footprint.Owner = owner;
                     footprint.Name = name;
-                    
-                    footprint.CombinationMethod = Lib.CombinationMethod.Intersection;
+
+                    footprint.CombinationMethod = method;
                     footprint.Save();
                 }
 
@@ -165,7 +182,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 //B = b,
                 //L = l,
                 Width = Math.Max(width, 1080),
-                Height = Math.Max(height,600),
+                Height = Math.Max(height, 600),
                 ColorTheme = colorTheme,
                 AutoRotate = true,
                 AutoZoom = true,
@@ -178,7 +195,7 @@ namespace Jhu.Footprint.Web.Api.V1
         public Spherical.Visualizer.Plot PlotUserFootprintRegionAdvanced(Plot plotParameters)
         {
             //var plot = Lib.FootprintPlot.GetDefaultPlot(new[] { SessionRegion });
-            
+
             return plotParameters.GetPlot(new[] { SessionRegion });
         }
     }

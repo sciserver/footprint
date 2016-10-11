@@ -23,7 +23,7 @@
             <div class="col-sm-2" id="editorMainButtonGroup">
                 <div class="">
                     <button type="button" class="btn btn-lg btn-default btn-block" data-toggle="modal" data-target="#AddRegionModal">Add region</button>
-                    <button type="button" class="btn btn-lg btn-default btn-block" data-toggle="modal" data-target="#LoadModal">Load footprint</button>
+                    <button type="button" class="btn btn-lg btn-default btn-block" data-toggle="modal" data-target="#LoadModal">Load region</button>
                     <button type="button" class="btn btn-lg btn-default btn-block" data-toggle="modal" data-target="#GrowModal">Grow</button>
                     <button type="button" class="btn btn-lg btn-success btn-block" data-toggle="modal" data-target="#SaveModal">Save</button>
                     <button type="button" class="btn btn-lg btn-success btn-block disabled" disabled="disabled">Download</button>
@@ -186,11 +186,20 @@
                         <h4 class="modal-title">Save Region</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="form-group">
-                            <label for="SaveUserInput" class="control-label">User/Group: </label>
-                            <input id="SaveUserInput" class="form-control" disabled="disabled" />
+                        <div class="form-group"><label for="SaveUserInput" class="control-label">User/Group: </label>
+                            <input id="SaveUserInput" class="form-control" disabled="disabled" /><br />
                             <label for="SaveUserFootprintName" class="control-label">Footprint: </label>
-                            <input id="SaveUserFootprintName" class="form-control" placeholder="Enter footprint name." />
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <input id="SaveUserFootprintName" class="form-control" placeholder="Enter footprint name." /><br />
+                                </div>
+                                <div class="col-sm-4">
+                                    <label class="radio-inline">
+                                        <input type="radio" value="intersect" name="FootprintCombinationMethod" />Intersect</label>
+                                    <label class="radio-inline">
+                                        <input type="radio" value="union" name="FootprintCombinationMethod" checked="checked"/>Union</label>
+                                </div>
+                            </div>
                             <label for="SaveUserRegionName" class="control-label">Region: </label>
                             <input id="SaveUserRegionName" class="form-control" placeholder="Enter region name." />
                             <hr />

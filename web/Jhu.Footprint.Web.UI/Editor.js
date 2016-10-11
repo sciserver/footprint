@@ -162,7 +162,8 @@ function saveRegion() {
     var params = {
         owner: $("#SaveUserInput").val(),
         name: $("#SaveUserFootprintName").val(),
-        region: $("#SaveUserRegionName").val()
+        region: $("#SaveUserRegionName").val(),
+        method: $("input:radio[name=FootprintCombinationMethod]:checked").val()
     };
 
     var methodUrl = createUrl(editorSvcUrl, ["save"], params);

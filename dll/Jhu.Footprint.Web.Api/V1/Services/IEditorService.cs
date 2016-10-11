@@ -71,9 +71,9 @@ namespace Jhu.Footprint.Web.Api.V1
         void Load(string owner, string name, string regionName);
 
         [OperationContract]
-        [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/save?owner={owner}&name={name}&region={regionName}")]
+        [WebInvoke(Method = HttpMethod.Post, UriTemplate = "/save?owner={owner}&name={name}&region={regionName}&method={combinationMethod}")]
         [Description("Save a region to the database")]
-        void Save(string owner, string name, string regionName);
+        void Save(string owner, string name, string regionName, string combinationMethod);
 
         #endregion
 

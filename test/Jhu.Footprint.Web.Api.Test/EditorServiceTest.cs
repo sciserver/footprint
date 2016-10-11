@@ -107,7 +107,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 var client = CreateClient(session, TestUser);
                 var r1 = GetTestRegion();
                 client.New(r1);
-                client.Save(TestUser, name, name);
+                client.Save(TestUser, name, name, "");
 
                 client.Load(TestUser, name, name);
 
