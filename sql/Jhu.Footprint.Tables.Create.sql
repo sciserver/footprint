@@ -1,8 +1,8 @@
 CREATE TABLE [dbo].[Footprint]
 (
 	[ID] [int] IDENTITY(1,1) NOT NULL,
-	[Name] [nvarchar](256) NOT NULL,
-	[Owner] [nvarchar](250) NOT NULL,
+	[Name] [varchar](256) NOT NULL,
+	[Owner] [varchar](250) NOT NULL,
 	[CombinedRegionID] [int] NOT NULL,
 	[CombinationMethod] [tinyint] NOT NULL,
 	[DateCreated] [datetime] NOT NULL,
@@ -28,7 +28,7 @@ CREATE TABLE [dbo].[FootprintRegion]
 (
 	[ID] [int] IDENTITY(1,1) NOT NULL,
 	[FootprintID] [int] NOT NULL,
-	[Name] [nvarchar](256) NOT NULL, 
+	[Name] [varchar](256) NOT NULL, 
 	[FillFactor] [float] NOT NULL,
 	[Type] [tinyint] NOT NULL,
 	[Region] [varbinary](max) NULL,
