@@ -216,3 +216,6 @@ FakesAssemblies/
 /web/Jhu.Footprint.Web.UI/Apps/Api
 /web/Jhu.Footprint.Web.UI/Apps/Common
 /web/Jhu.Footprint.Web.UI/Apps/Docs
+/test/Jhu.Footprint.Web.Api.Test/Properties/AssemblyInfo.cs
+/test/Jhu.Footprint.Web.Lib.Test/Properties/AssemblyInfo.cs
+/web/Jhu.Footprint.Web.UI/Properties/AssemblyInfo.cs
