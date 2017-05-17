@@ -22,6 +22,7 @@ namespace Jhu.Footprint.Web.UI
             base.RegisterApps();
 
             RegisterApp(typeof(Jhu.Graywulf.Web.UI.Apps.Common.App));
+            RegisterApp(typeof(Jhu.Footprint.Web.UI.Apps.Footprint.App));
             RegisterApp(typeof(Jhu.Graywulf.Web.UI.Apps.Api.App));
             RegisterApp(typeof(Jhu.Graywulf.Web.UI.Apps.Docs.App));
         }
@@ -37,24 +38,6 @@ namespace Jhu.Footprint.Web.UI
         protected override void RegisterButtons()
         {
             base.RegisterButtons();
-
-            RegisterMenuButton(new Graywulf.Web.UI.Controls.MenuButton()
-            {
-                Text = "search",
-                NavigateUrl = Search.GetUrl()
-            });
-
-            RegisterMenuButton(new Graywulf.Web.UI.Controls.MenuButton()
-            {
-                Text= "editor",
-                NavigateUrl = Editor.GetUrl()
-            });
-
-            RegisterMenuButton(new Graywulf.Web.UI.Controls.MenuButton()
-            {
-                Text = "my footprints",
-                NavigateUrl = MyFootprint.GetUrl()
-            });
 
             RegisterFooterButton(new Graywulf.Web.UI.Controls.MenuButton()
             {

@@ -2,14 +2,14 @@
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace Jhu.Footprint.Web.UI
+namespace Jhu.Footprint.Web.UI.Apps.Footprint
 {
     public partial class Plot : CustomPageBase
     {
 
         public static string GetUrl()
         {
-            return "~/Plot.aspx";
+            return "~/Apps/Footprint/Plot.aspx";
         }
 
         #region Event handlers

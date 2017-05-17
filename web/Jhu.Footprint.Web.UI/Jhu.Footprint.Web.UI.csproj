@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <Import Project="$(SolutionDir)\build\Jhu.Graywulf.Build.tasks" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -66,6 +67,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Api\V1\Footprint.svc" />
+    <Content Include="Apps\Footprint\Editor.aspx" />
+    <Content Include="Apps\Footprint\Editor.js" />
+    <Content Include="Apps\Footprint\MyFootprint.aspx" />
+    <Content Include="Apps\Footprint\MyFootprint.js" />
+    <Content Include="Apps\Footprint\MyRegion.aspx" />
+    <Content Include="Apps\Footprint\Plot.aspx" />
+    <Content Include="Apps\Footprint\Plot.js" />
+    <Content Include="Apps\Footprint\Search.aspx" />
+    <Content Include="Apps\Footprint\Search.js" />
     <Content Include="Default.aspx" />
     <Content Include="Docs\01_introduction\00_index.aspx" />
     <Content Include="Docs\99_info\00_index.aspx" />
@@ -78,14 +88,12 @@
     <Content Include="Docs\images\jhu.png" />
     <Content Include="Docs\images\nsf.png" />
     <Content Include="Docs\images\vao.png" />
-    <Content Include="Editor.js" />
-    <Content Include="MyFootprint.aspx" />
     <Content Include="Global.asax" />
-    <Content Include="MyFootprint.js" />
-    <Content Include="MyRegion.aspx" />
-    <Content Include="Plot.aspx" />
-    <Content Include="Plot.js" />
     <Content Include="Scripts\astro.js" />
+    <Content Include="Scripts\Bootstrap-Lightbox\ekko-lightbox.css" />
+    <Content Include="Scripts\Bootstrap-Lightbox\ekko-lightbox.js" />
+    <Content Include="Scripts\Bootstrap-Lightbox\ekko-lightbox.min.css" />
+    <Content Include="Scripts\Bootstrap-Lightbox\ekko-lightbox.min.js" />
     <Content Include="Scripts\Bootstrap\css\bootstrap-theme.css" />
     <Content Include="Scripts\Bootstrap\css\bootstrap-theme.min.css" />
     <Content Include="Scripts\Bootstrap\css\bootstrap.css" />
@@ -560,10 +568,6 @@
     <Content Include="Scripts\SyntaxHighlighter\styles\shThemeMDUltra.css" />
     <Content Include="Scripts\SyntaxHighlighter\styles\shThemeMidnight.css" />
     <Content Include="Scripts\SyntaxHighlighter\styles\shThemeRDark.css" />
-    <Content Include="Search.aspx" />
-    <Content Include="Search.js" />
-    <Content Include="Web.config" />
-    <Content Include="Editor.aspx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Masters\Basic\Basic.master.cs">
@@ -580,6 +584,42 @@
     <Content Include="App_Masters\Basic\UI.master.designer.cs">
       <DependentUpon>UI.master</DependentUpon>
     </Content>
+    <Compile Include="Apps\Footprint\App.cs" />
+    <Compile Include="Apps\Footprint\Editor.aspx.cs">
+      <DependentUpon>Editor.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Apps\Footprint\Editor.aspx.designer.cs">
+      <DependentUpon>Editor.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Apps\Footprint\MyFootprint.aspx.cs">
+      <DependentUpon>MyFootprint.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Apps\Footprint\MyFootprint.aspx.designer.cs">
+      <DependentUpon>MyFootprint.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Apps\Footprint\MyRegion.aspx.cs">
+      <DependentUpon>MyRegion.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Apps\Footprint\MyRegion.aspx.designer.cs">
+      <DependentUpon>MyRegion.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Apps\Footprint\Plot.aspx.cs">
+      <DependentUpon>Plot.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Apps\Footprint\Plot.aspx.designer.cs">
+      <DependentUpon>Plot.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Apps\Footprint\Search.aspx.cs">
+      <DependentUpon>Search.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Apps\Footprint\Search.aspx.designer.cs">
+      <DependentUpon>Search.aspx</DependentUpon>
+    </Compile>
     <Compile Include="CustomPageBase.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -593,48 +633,10 @@
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
-    <Compile Include="MyFootprint.aspx.cs">
-      <DependentUpon>MyFootprint.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="MyFootprint.aspx.designer.cs">
-      <DependentUpon>MyFootprint.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="MyRegion.aspx.cs">
-      <DependentUpon>MyRegion.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="MyRegion.aspx.designer.cs">
-      <DependentUpon>MyRegion.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Plot.aspx.cs">
-      <DependentUpon>Plot.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Plot.aspx.designer.cs">
-      <DependentUpon>Plot.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Search.aspx.cs">
-      <DependentUpon>Search.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Search.aspx.designer.cs">
-      <DependentUpon>Search.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Editor.aspx.cs">
-      <DependentUpon>Editor.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Editor.aspx.designer.cs">
-      <DependentUpon>Editor.aspx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Web.original.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Scripts\CodeMirror\mode\livescript\livescript.ls" />
@@ -720,7 +722,6 @@
     <Content Include="Scripts\Bootstrap\css\bootstrap-theme.css.map" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Apps\" />
     <Folder Include="App_Themes\" />
   </ItemGroup>
   <ItemGroup>
@@ -729,6 +730,23 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Docs\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="pre-build.ps1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="post-build.ps1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Base.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Scripts\Bootstrap-Lightbox\ekko-lightbox.js.map" />
+    <Content Include="Scripts\Bootstrap-Lightbox\ekko-lightbox.min.css.map" />
+    <Content Include="Scripts\Bootstrap-Lightbox\ekko-lightbox.min.js.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="build.config" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -745,7 +763,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>35347</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/footprint</IISUrl>
+          <IISUrl>http://localhost/dobos/footprint</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
@@ -756,16 +774,8 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
-    <PreBuildEvent>if not exist $(ProjectDir)App_Masters\Basic mklink /D $(ProjectDir)App_Masters\Basic $(SolutionDir)graywulf\web\Jhu.Graywulf.Web.UI\App_Masters\Basic
-if not exist $(ProjectDir)App_Themes\Basic mklink /D $(ProjectDir)App_Themes\Basic $(SolutionDir)graywulf\web\Jhu.Graywulf.Web.UI\App_Themes\Basic
-
-if not exist $(ProjectDir)Apps\Api mklink /D $(ProjectDir)Apps\Api $(SolutionDir)graywulf\web\Jhu.Graywulf.Web.UI\Apps\Api
-if not exist $(ProjectDir)Apps\Common mklink /D $(ProjectDir)Apps\Common $(SolutionDir)graywulf\web\Jhu.Graywulf.Web.UI\Apps\Common
-if not exist $(ProjectDir)Apps\Docs mklink /D $(ProjectDir)Apps\Docs $(SolutionDir)graywulf\web\Jhu.Graywulf.Web.UI\Apps\Docs
-
-$(SolutionDir)graywulf\build\Jhu.Graywulf.ConfigUtil\bin\$(ConfigurationName)\gwconfig.exe configure -root $(SolutionDir) -config Config\Configurations.xml -proj Jhu.Footprint.Web.UI
-
-</PreBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
@@ -774,11 +784,5 @@ $(SolutionDir)graywulf\build\Jhu.Graywulf.ConfigUtil\bin\$(ConfigurationName)\gw
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+  <Import Project="$(SolutionDir)\build\Jhu.Graywulf.Build.targets" />
 </Project>

@@ -5,14 +5,14 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace Jhu.Footprint.Web.UI
+namespace Jhu.Footprint.Web.UI.Apps.Footprint
 {
     public partial class MyFootprint : CustomPageBase
     {
 
         public static string GetUrl()
         {
-            return "~/MyFootprint.aspx";
+            return "~/Apps/Footprint/MyFootprint.aspx";
         }
         protected void Page_Load(object sender, EventArgs e)
         {

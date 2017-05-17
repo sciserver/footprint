@@ -211,3 +211,8 @@ FakesAssemblies/
 # Visual Studio 6 workspace options file
 *.opt
 /test/Jhu.Footprint.Web.Api.Test/App.config
+/dll/Jhu.Footprint.Web.Api/Properties/AssemblyInfo.cs
+/dll/Jhu.Footprint.Web.Lib/Properties/AssemblyInfo.cs
+/web/Jhu.Footprint.Web.UI/Apps/Api
+/web/Jhu.Footprint.Web.UI/Apps/Common
+/web/Jhu.Footprint.Web.UI/Apps/Docs

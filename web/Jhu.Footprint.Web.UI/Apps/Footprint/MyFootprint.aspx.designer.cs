@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Jhu.Footprint.Web.UI {
+namespace Jhu.Footprint.Web.UI.Apps.Footprint {
     
     
     public partial class MyFootprint {

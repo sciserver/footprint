@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Plot.aspx.cs" Inherits="Jhu.Footprint.Web.UI.Plot" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Plot.aspx.cs" Inherits="Jhu.Footprint.Web.UI.Apps.Footprint.Plot" %>
 
 
 <asp:Content ID="plot" ContentPlaceHolderID="middle" runat="server"><asp:ScriptManagerProxy runat="server">

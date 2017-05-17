@@ -7,36 +7,36 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Jhu.Footprint.Web.UI {
+namespace Jhu.Footprint.Web.UI.Apps.Footprint {
     
     
-    public partial class MyRegion {
+    public partial class Editor {
         
         /// <summary>
-        /// FootprintNameHeader control.
+        /// FootprintSelect control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl FootprintNameHeader;
+        protected global::System.Web.UI.WebControls.DropDownList FootprintSelect;
         
         /// <summary>
-        /// footprintRegionDataSource control.
+        /// RegionSelect control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ObjectDataSource footprintRegionDataSource;
+        protected global::System.Web.UI.WebControls.DropDownList RegionSelect;
         
         /// <summary>
-        /// regionList control.
+        /// LoadRegionButton control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ListView regionList;
+        protected global::System.Web.UI.WebControls.Button LoadRegionButton;
     }
 }
