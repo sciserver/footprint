@@ -11,14 +11,6 @@ namespace Jhu.Footprint.Web.Lib
 {
     public class FootprintTestBase : Jhu.Graywulf.Test.TestClassBase
     {
-        protected const string TestUser = "test";
-        protected const string OtherUser = "other";
-
-        protected static string MapSolutionRelativePath(string path)
-        {
-            var dir = Path.GetDirectoryName(Environment.GetEnvironmentVariable("SolutionPath"));
-            return Path.Combine(dir, path);
-        }
 
         protected static string MapProjectRelativePath(string path)
         {
@@ -63,7 +55,7 @@ namespace Jhu.Footprint.Web.Lib
         {
             using (var context = CreateContext())
             {
-                var script = File.ReadAllText(MapSolutionRelativePath(filename));
+                var script = File.ReadAllText(GetTestFilePath(filename));
                 context.ExecuteScriptNonQuery(script);
             }
         }

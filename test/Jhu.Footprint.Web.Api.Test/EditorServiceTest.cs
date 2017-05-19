@@ -125,7 +125,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 var client = CreateClient(session, TestUser);
                 var r1 = GetTestRegion();
                 client.New(r1);
-                var url = "http://" + Environment.MachineName + "/footprint/api/v1/Editor.svc/outline";
+                var url = EditorApiBaseUrl + "/outline";
                 var buffer = session.HttpGet(url);
                 Assert.IsTrue(buffer != null && buffer.Length > 0);
             }
@@ -140,7 +140,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 var client = CreateClient(session, TestUser);
                 var r1 = GetTestRegion();
                 client.New(r1);
-                var url = "http://" + Environment.MachineName + "/footprint/api/v1/Editor.svc/plot";
+                var url = EditorApiBaseUrl + "/plot";
                 var buffer = session.HttpGet(url,"image/png");
                 Assert.IsTrue(buffer != null && buffer.Length > 0);
             }
@@ -155,7 +155,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 var client = CreateClient(session, TestUser);
                 var r1 = GetTestRegion();
                 client.New(r1);
-                var url = "http://" + Environment.MachineName + "/footprint/api/v1/Editor.svc/plot";
+                var url = EditorApiBaseUrl + "/plot";
                 var json = "{ \"ra\": 10, \"dec\": 10 }";
                 var data = System.Text.ASCIIEncoding.Default.GetBytes(json);
                 var buffer = session.HttpPost(url, "image/png", "application/json", data);

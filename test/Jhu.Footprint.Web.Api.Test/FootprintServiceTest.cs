@@ -239,7 +239,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
             using (var session = new RestClientSession())
             {
-                var url = "http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + TestUser + "/footprints/" + name + "/outline";
+                var url = FootprintApiBaseUrl + "/users/" + TestUser + "/footprints/" + name + "/outline";
                 var buffer = session.HttpGet(url);
                 Assert.IsTrue(buffer != null && buffer.Length > 0);
             }
@@ -256,7 +256,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
             using (var session = new RestClientSession())
             {
-                var url = "http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + TestUser + "/footprints/" + name + "/outline/points";
+                var url = FootprintApiBaseUrl + "/users/" + TestUser + "/footprints/" + name + "/outline/points";
 
                 var buffer = session.HttpGet(url);
                 Assert.IsTrue(buffer != null && buffer.Length > 0);
@@ -273,7 +273,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
             using (var session = new RestClientSession())
             {
-                var url = "http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + TestUser + "/footprints/" + name + "/plot";
+                var url = FootprintApiBaseUrl + "/users/" + TestUser + "/footprints/" + name + "/plot";
 
                 var buffer = session.HttpGet(url, "image/jpeg");
                 Assert.IsTrue(buffer != null && buffer.Length > 0);
@@ -294,7 +294,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 // Sign in and initiate session
                 var client = CreateClient(session, TestUser);
 
-                var url = "http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + TestUser + "/footprints/" + name + "/plot";
+                var url = FootprintApiBaseUrl + "/users/" + TestUser + "/footprints/" + name + "/plot";
                 var json = "{ \"ra\": 10, \"dec\": 10 }";
                 var data = System.Text.ASCIIEncoding.Default.GetBytes(json);
                 var buffer = session.HttpPost(url, "image/png", "application/json", data);
@@ -340,7 +340,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
             using (var session = new RestClientSession())
             {
-                var url = "http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + TestUser + "/footprints/" + name + "/regions/" + name + "/outline";
+                var url = FootprintApiBaseUrl + "/users/" + TestUser + "/footprints/" + name + "/regions/" + name + "/outline";
 
                 var buffer = session.HttpGet(url);
                 Assert.IsTrue(buffer != null && buffer.Length > 0);
@@ -358,7 +358,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
             using (var session = new RestClientSession())
             {
-                var url = "http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + TestUser + "/footprints/" + name + "/regions/" + name + "/outline/points";
+                var url = FootprintApiBaseUrl + "/users/" + TestUser + "/footprints/" + name + "/regions/" + name + "/outline/points";
 
                 var buffer = session.HttpGet(url);
                 Assert.IsTrue(buffer != null && buffer.Length > 0);
@@ -375,7 +375,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
             using (var session = new RestClientSession())
             {
-                var url = "http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + TestUser + "/footprints/" + name + "/regions/" + name + "/plot";
+                var url = FootprintApiBaseUrl + "/users/" + TestUser + "/footprints/" + name + "/regions/" + name + "/plot";
 
                 var buffer = session.HttpGet(url, "image/png");
                 Assert.IsTrue(buffer != null && buffer.Length > 0);
@@ -395,7 +395,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 // Sign in and initiate session
                 var client = CreateClient(session, TestUser);
 
-                var url = "http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc/users/" + TestUser + "/footprints/" + name + "/regions/" + name + "/plot";
+                var url = FootprintApiBaseUrl + "/users/" + TestUser + "/footprints/" + name + "/regions/" + name + "/plot";
                 var json = "{ \"ra\": 10, \"dec\": 10 }";
                 var data = System.Text.ASCIIEncoding.Default.GetBytes(json);
                 var buffer = session.HttpPost(url, "image/png", "application/json", data);

@@ -43,6 +43,7 @@
     <Reference Include="Microsoft.SqlServer.Management.Sdk.Sfc, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.SqlServer.Smo, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
@@ -60,6 +61,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="AppSettings.cs" />
     <Compile Include="CoordinateTransformationTest.cs" />
     <Compile Include="FootprintRegionTest.cs" />
     <Compile Include="FootprintRegionSearchTest.cs" />
@@ -95,6 +97,7 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="Base.config" />
+    <None Include="build.config" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
