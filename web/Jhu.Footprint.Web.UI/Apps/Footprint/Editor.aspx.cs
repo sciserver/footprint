@@ -11,6 +11,11 @@ namespace Jhu.Footprint.Web.UI.Apps.Footprint
             return "~/Apps/Footprint/Editor.aspx";
         }
 
+        public override string SelectedButton
+        {
+            get { return App.ButtonKeyEditor; }
+        }
+
         #region Event handlers
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -40,10 +45,10 @@ namespace Jhu.Footprint.Web.UI.Apps.Footprint
             var es = new Api.V1.EditorService();
             es.Load(Page.User.Identity.Name, footprintName, regionName);
 
-            Response.Redirect(String.Format("Editor.aspx?footprintName={0}&regionName={1}",footprintName,regionName));
+            Response.Redirect(String.Format("Editor.aspx?footprintName={0}&regionName={1}", footprintName, regionName));
         }
         #endregion
-        
+
 
         private void RefreshFootprintList()
         {

@@ -15,6 +15,11 @@ namespace Jhu.Footprint.Web.UI.Apps.Footprint
             return "~/Apps/Footprint/Search.aspx";
         }
 
+        public override string SelectedButton
+        {
+            get { return App.ButtonKeySearch; }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
         }

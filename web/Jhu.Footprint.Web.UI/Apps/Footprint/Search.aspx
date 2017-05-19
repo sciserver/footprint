@@ -2,11 +2,11 @@
 
 
 
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-</asp:Content>
-<asp:Content ID="Content2" ContentPlaceHolderID="toolbar" runat="server">
-</asp:Content>
-<asp:Content ID="Content3" ContentPlaceHolderID="middle" runat="server">
+<asp:content id="Content1" contentplaceholderid="head" runat="server">
+</asp:content>
+<asp:content id="Content2" contentplaceholderid="toolbar" runat="server">
+</asp:content>
+<asp:content id="Content3" contentplaceholderid="middle" runat="server">
     <asp:ScriptManagerProxy runat="server">
         <Scripts>
             <asp:ScriptReference Path="Search.js" />
@@ -126,4 +126,4 @@
 
         </div>
     </div>
-</asp:Content>
+</asp:content>
