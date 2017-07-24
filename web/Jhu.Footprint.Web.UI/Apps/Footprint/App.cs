@@ -8,6 +8,7 @@ namespace Jhu.Footprint.Web.UI.Apps.Footprint
 {
     public class App : AppBase
     {
+        public const string ButtonKeyBrowse = "footprint-browse";
         public const string ButtonKeySearch = "footprint-search";
         public const string ButtonKeyEditor = "footprint-editor";
         public const string ButtonKeyMyFootprint = "footprint-myfootprint";
@@ -15,7 +16,15 @@ namespace Jhu.Footprint.Web.UI.Apps.Footprint
         public override void RegisterButtons(UIApplicationBase application)
         {
             application.RegisterMenuButton(
-                new Graywulf.Web.UI.Controls.MenuButton()
+                new Graywulf.Web.UI.MenuButton()
+                {
+                    Key = ButtonKeyBrowse,
+                    Text = "browse",
+                    NavigateUrl = ""        // *** TODO
+                });
+
+            application.RegisterMenuButton(
+                new Graywulf.Web.UI.MenuButton()
                 {
                     Key = ButtonKeySearch,
                     Text = "search",
@@ -23,7 +32,7 @@ namespace Jhu.Footprint.Web.UI.Apps.Footprint
                 });
 
             application.RegisterMenuButton(
-                new Graywulf.Web.UI.Controls.MenuButton()
+                new Graywulf.Web.UI.MenuButton()
                 {
                     Key = ButtonKeyEditor,
                     Text = "editor",
@@ -31,7 +40,7 @@ namespace Jhu.Footprint.Web.UI.Apps.Footprint
                 });
 
             application.RegisterMenuButton(
-                new Graywulf.Web.UI.Controls.MenuButton()
+                new Graywulf.Web.UI.MenuButton()
                 {
                     Key = ButtonKeyMyFootprint,
                     Text = "my footprints",

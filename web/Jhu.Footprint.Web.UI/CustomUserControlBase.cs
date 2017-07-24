@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using Jhu.Graywulf.Registry;
-using Jhu.Graywulf.Web.UI;
+using Jhu.Footprint.Web.Lib;
 
 namespace Jhu.Footprint.Web.UI
 {
@@ -12,6 +11,11 @@ namespace Jhu.Footprint.Web.UI
         public new CustomPageBase Page
         {
             get { return (CustomPageBase)base.Page; }
+        }
+
+        public Context FootprintContext
+        {
+            get { return Page.FootprintContext; }
         }
     }
 }

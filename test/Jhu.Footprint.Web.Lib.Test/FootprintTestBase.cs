@@ -11,7 +11,6 @@ namespace Jhu.Footprint.Web.Lib
 {
     public class FootprintTestBase : Jhu.Graywulf.Test.TestClassBase
     {
-
         protected static string MapProjectRelativePath(string path)
         {
             return Path.Combine(Environment.CurrentDirectory, @"..\..\..\..\", path);
@@ -24,7 +23,7 @@ namespace Jhu.Footprint.Web.Lib
                 Identity = new Identity()
                 {
                     IsAuthenticated = true,
-                    Name = TestUser
+                    Name = TestUser,
                 }
             };
         }
@@ -36,7 +35,7 @@ namespace Jhu.Footprint.Web.Lib
                 Identity = new Identity()
                 {
                     IsAuthenticated = true,
-                    Name = OtherUser
+                    Name = OtherUser,
                 }
             };
         }

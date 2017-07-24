@@ -13,30 +13,21 @@ namespace Jhu.Footprint.Web.UI.Apps.Footprint {
     public partial class Editor {
         
         /// <summary>
-        /// FootprintSelect control.
+        /// toolbarSpan control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList FootprintSelect;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl toolbarSpan;
         
         /// <summary>
-        /// RegionSelect control.
+        /// PlotCanvas control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList RegionSelect;
-        
-        /// <summary>
-        /// LoadRegionButton control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button LoadRegionButton;
+        protected global::System.Web.UI.WebControls.Image PlotCanvas;
     }
 }

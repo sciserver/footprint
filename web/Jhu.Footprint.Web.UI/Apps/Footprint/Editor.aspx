@@ -1,221 +1,149 @@
 ﻿<%@ Page Title="" Language="C#" AutoEventWireup="true" CodeBehind="Editor.aspx.cs" Inherits="Jhu.Footprint.Web.UI.Apps.Footprint.Editor" %>
 
+<asp:Content runat="server" ContentPlaceHolderID="toolbar">
+    <asp:UpdatePanel runat="server">
+        <ContentTemplate>
+            <div class="toolbar">
+                <a data-toggle="modal" data-target="#AddRegionModal">add shape</a>
+                <a data-toggle="modal" data-target="#LoadModal">load region</a>
+                <a data-toggle="modal" data-target="#GrowModal">Grow</a>
+                <a data-toggle="modal" data-target="#SaveModal">Save</a>
+                <a>Download</a>
+                <!--<div runat="server" id="toolbarSpan" class="span"></div>-->
+                <a id="refreshCanvasButton"><!--<span class="glyphicon glyphicon-refresh"></span>--> refresh</a>
+            </div>
+        </ContentTemplate>
+    </asp:UpdatePanel>
+</asp:Content>
 <asp:Content ID="Editor" ContentPlaceHolderID="middle" runat="server">
     <asp:ScriptManagerProxy runat="server">
         <Scripts>
-            <asp:ScriptReference Path="Scripts/generalFunctions.js" />
-            <asp:ScriptReference Path="Scripts/astro.js" />
-            <asp:ScriptReference Path="Editor.js" />
+            <asp:ScriptReference Path="Footprint.js" />
+            <asp:ScriptReference Path="Editor.aspx.js" />
+            <asp:ScriptReference Path="~/Scripts/astro.js" />
         </Scripts>
     </asp:ScriptManagerProxy>
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-10">
-                <asp:UpdatePanel runat="server">
-                    <ContentTemplate>
+    <asp:UpdatePanel runat="server">
+        <ContentTemplate>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-10">
                         <div id="PlotCanvasContainer">
-                            <img id="PlotCanvas" src="http://localhost/footprint/api/v1/editor.svc/plot" class="img-responsive" />
-                            <button type="button" class="btn btn-sm" id="refreshCanvasButton"><span class="glyphicon glyphicon-refresh"></span></button>
+                            <asp:Image runat="server" ID="PlotCanvas" ImageUrl="~/api/v1/editor.svc/plot" CssClass="img-responsive" />
+                            
                         </div>
-                    </ContentTemplate>
-                </asp:UpdatePanel>
-            </div>
-            <div class="col-sm-2" id="editorMainButtonGroup">
-                <div class="">
-                    <button type="button" class="btn btn-lg btn-default btn-block" data-toggle="modal" data-target="#AddRegionModal">Add region</button>
-                    <button type="button" class="btn btn-lg btn-default btn-block" data-toggle="modal" data-target="#LoadModal">Load region</button>
-                    <button type="button" class="btn btn-lg btn-default btn-block" data-toggle="modal" data-target="#GrowModal">Grow</button>
-                    <button type="button" class="btn btn-lg btn-success btn-block" data-toggle="modal" data-target="#SaveModal">Save</button>
-                    <button type="button" class="btn btn-lg btn-success btn-block disabled" disabled="disabled">Download</button>
-
-                </div>
-            </div>
-        </div>
-
-        <div id="GrowModal" class="modal" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
-                        <h4 class="modal-title">Grow region</h4>
-
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-inline">
-                            <label for="GrowRadius" class="control-label">Radius (arcmin): </label>
-                            <input type="text" class="form-control" id="GrowRadius" placeholder="10" />
-                            <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" title="Use negative value to reduce. Valid range: -120 .. 120 arcmin"></span>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-success" id="GrowButton">Grow</button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <div id="AddRegionModal" class="modal" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
-                        <h4 class="modal-title">Add Region</h4>
+                <div id="GrowModal" class="modal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                                <h4 class="modal-title">Grow region</h4>
+
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-inline">
+                                    <label for="GrowRadius" class="control-label">Radius (arcmin): </label>
+                                    <input type="text" class="form-control" id="GrowRadius" placeholder="10" />
+                                    <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" title="Use negative value to reduce. Valid range: -120 .. 120 arcmin"></span>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-success" id="GrowButton">Grow</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="modal-body">
-                        <div id="AdditionTypeSelector" class="text-center">
-                            <h3 class="FormLabel">Select addition type:</h3>
-                            <div class="btn-group" data-toggle="buttons">
-                                <label class="btn btn-primary active">
-                                    <input type="radio" name="AdditionTypeSelector" value="new" checked="checked">
-                                    New
-                                </label>
-                                <label class="btn btn-primary">
-                                    <input type="radio" name="AdditionTypeSelector" value="union">
-                                    Union
-                                </label>
-                                <label class="btn btn-primary">
-                                    <input type="radio" name="AdditionTypeSelector" value="intersect">
-                                    Intersect
-                                </label>
-                                <label class="btn btn-primary">
-                                    <input type="radio" name="AdditionTypeSelector" value="subtract">
-                                    Subtract
-                                </label>
-                            </div>
-                        </div>
+                </div>
 
-                        <hr />
-
-                        <div id="RegionTypeSelector" class="text-center">
-                            <h3 class="FormLabel">Select region type:</h3>
-                            <div class="btn-group" data-toggle="buttons">
-                                <label class="btn btn-primary active">
-                                    <input type="radio" name="RegionTypeSelector" value="circle" checked="checked">
-                                    Circle
-                                </label>
-                                <label class="btn btn-primary">
-                                    <input type="radio" name="RegionTypeSelector" value="polygon">
-                                    Polygon
-                                </label>
-                                <label class="btn btn-primary">
-                                    <input type="radio" name="RegionTypeSelector" value="costum">
-                                    Costum
-                                </label>
+                <div id="AddRegionModal" class="modal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                                <h4 class="modal-title">Add Region</h4>
                             </div>
-                            <hr />
-                        </div>
+                            <div class="modal-body">
+                                <div id="AdditionTypeSelector" class="text-center">
+                                    <h3 class="FormLabel">Select addition type:</h3>
+                                    <div class="btn-group" data-toggle="buttons">
+                                        <label class="btn btn-primary active">
+                                            <input type="radio" name="AdditionTypeSelector" value="new" checked="checked">
+                                            New
+                                        </label>
+                                        <label class="btn btn-primary">
+                                            <input type="radio" name="AdditionTypeSelector" value="union">
+                                            Union
+                                        </label>
+                                        <label class="btn btn-primary">
+                                            <input type="radio" name="AdditionTypeSelector" value="intersect">
+                                            Intersect
+                                        </label>
+                                        <label class="btn btn-primary">
+                                            <input type="radio" name="AdditionTypeSelector" value="subtract">
+                                            Subtract
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <hr />
+
+                                <div id="RegionTypeSelector" class="text-center">
+                                    <h3 class="FormLabel">Select region type:</h3>
+                                    <div class="btn-group" data-toggle="buttons">
+                                        <label class="btn btn-primary active">
+                                            <input type="radio" name="RegionTypeSelector" value="circle" checked="checked">
+                                            Circle
+                                        </label>
+                                        <label class="btn btn-primary">
+                                            <input type="radio" name="RegionTypeSelector" value="polygon">
+                                            Polygon
+                                        </label>
+                                        <label class="btn btn-primary">
+                                            <input type="radio" name="RegionTypeSelector" value="costum">
+                                            Costum
+                                        </label>
+                                    </div>
+                                    <hr />
+                                </div>
 
 
-                        <div id="CircleRegionForm" class="AddRegionForms">
-                            <div class="form-inline">
-                                <label for="CircleRA" class="FormLabel">Center:</label>
-                                <input id="CircleRA" type="text" class="form-control" placeholder="12:00:00.00" data-toogle="tooltip" title="Right Ascension" />
-                                <input id="CircleDec" type="text" class="form-control" placeholder="00:00:00.00" data-toogle="tooltip" title="Declination" />
-                            </div>
-                            <div class="form-inline">
-                                <label for="CircleRaidus" class="FormLabel">Radius:</label>
-                                <input id="CircleRadius" type="text" class="form-control" placeholder="120" data-toogle="tooltip" title="Arcmin" />
-                            </div>
-                        </div>
-                        <div id="PolygonRegionForm" class="AddRegionForms text-center hidden">
-                            <div class="form-inline">
-                                <label for="PolygonPoints" class="FormLabel">Points: </label>
-                                <textarea rows="8" id="PolygonPoints" class="form-control" style="min-width: 50%" data-toogle="tooltip" title="Specify one polygon point in each line. Use sexagesimal or decimal format.">
+                                <div id="CircleRegionForm" class="AddRegionForms">
+                                    <div class="form-inline">
+                                        <label for="CircleRA" class="FormLabel">Center:</label>
+                                        <input id="CircleRA" type="text" class="form-control" placeholder="12:00:00.00" data-toogle="tooltip" title="Right Ascension" />
+                                        <input id="CircleDec" type="text" class="form-control" placeholder="00:00:00.00" data-toogle="tooltip" title="Declination" />
+                                    </div>
+                                    <div class="form-inline">
+                                        <label for="CircleRaidus" class="FormLabel">Radius:</label>
+                                        <input id="CircleRadius" type="text" class="form-control" placeholder="120" data-toogle="tooltip" title="Arcmin" />
+                                    </div>
+                                </div>
+                                <div id="PolygonRegionForm" class="AddRegionForms text-center hidden">
+                                    <div class="form-inline">
+                                        <label for="PolygonPoints" class="FormLabel">Points: </label>
+                                        <textarea rows="8" id="PolygonPoints" class="form-control" style="min-width: 50%" data-toogle="tooltip" title="Specify one polygon point in each line. Use sexagesimal or decimal format.">
 12:00:00.00,   00:00:00.00
 12:00:00.00,   10:00:00.00
 11:00:00.00,   10:00:00.00
 11:00:00.00,   00:00:00.00
                                         </textarea>
-                            </div>
-                        </div>
-                        <div id="CostumRegionForm" class="AddRegionForms hidden">
-                            costum
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-success" id="AddRegionButton">Add</button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <div id="LoadModal" class="modal" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
-                        <h4 class="modal-title">Load Footprint</h4>
-                    </div>
-                    <div class="modal-body">
-
-                        <asp:UpdatePanel runat="server">
-                            <ContentTemplate>
-                                <div class="form-group form-inline">
-                                    <label for="FootprintSelect" class="control-label">Footprint: </label>
-                                    <asp:DropDownList runat="server" ID="FootprintSelect" OnSelectedIndexChanged="FootprintSelect_SelectedIndexChanged" AutoPostBack="true" CssClass="form-control">
-                                    </asp:DropDownList>
-
+                                    </div>
                                 </div>
-
-                                <div class="form-group form-inline ">
-                                    <label for="RegionSelect" class="control-label">Region:  </label>
-                                    <asp:DropDownList runat="server" ID="RegionSelect" CssClass="form-control">
-                                    </asp:DropDownList>
-                                </div>
-
-                            </ContentTemplate>
-                        </asp:UpdatePanel>
-                    </div>
-                    <div class="modal-footer">
-                        <asp:Button runat="server" Text="Load" CssClass="btn btn-success" ID="LoadRegionButton" OnClick="LoadRegionButton_OnClick" ClientIDMode="Static" />
-                        <button type="button" class="btn btn-danger " data-dismiss="modal">Cancel</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <div id="SaveModal" class="modal" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
-                        <h4 class="modal-title">Save Region</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group"><label for="SaveUserInput" class="control-label">User/Group: </label>
-                            <input id="SaveUserInput" class="form-control" disabled="disabled" /><br />
-                            <label for="SaveUserFootprintName" class="control-label">Footprint: </label>
-                            <div class="row">
-                                <div class="col-sm-8">
-                                    <input id="SaveUserFootprintName" class="form-control" placeholder="Enter footprint name." /><br />
-                                </div>
-                                <div class="col-sm-4">
-                                    <label class="radio-inline">
-                                        <input type="radio" value="intersect" name="FootprintCombinationMethod" />Intersect</label>
-                                    <label class="radio-inline">
-                                        <input type="radio" value="union" name="FootprintCombinationMethod" checked="checked"/>Union</label>
+                                <div id="CostumRegionForm" class="AddRegionForms hidden">
+                                    costum
                                 </div>
                             </div>
-                            <label for="SaveUserRegionName" class="control-label">Region: </label>
-                            <input id="SaveUserRegionName" class="form-control" placeholder="Enter region name." />
-                            <hr />
-                            <label for="SaveFillFactorInput" class="control-label">Fill factor:</label>
-                            <input id="SaveFillFactorInput" class="form-control" disabled="disabled" />
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-success" id="AddRegionButton">Add</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-success" id="SaveRegionButton">Save</button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div id="DownloadModal">
-        </div>
-    </div>
+        </ContentTemplate>
+    </asp:UpdatePanel>
 </asp:Content>

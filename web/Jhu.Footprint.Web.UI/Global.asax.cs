@@ -39,13 +39,13 @@ namespace Jhu.Footprint.Web.UI
         {
             base.RegisterButtons();
 
-            RegisterFooterButton(new Graywulf.Web.UI.Controls.MenuButton()
+            RegisterFooterButton(new Graywulf.Web.UI.MenuButton()
             {
                 Text = "copyright",
                 NavigateUrl = "~/Docs/99_info/03_copyright.aspx"
             });
 
-            RegisterFooterButton(new Graywulf.Web.UI.Controls.MenuButton()
+            RegisterFooterButton(new Graywulf.Web.UI.MenuButton()
             {
                 Text = "personnel",
                 NavigateUrl = "~/Docs/99_info/01_personnel.aspx"
