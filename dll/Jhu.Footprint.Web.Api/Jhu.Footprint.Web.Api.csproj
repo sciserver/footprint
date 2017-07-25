@@ -8,7 +8,7 @@
     <ProjectGuid>{24570021-F4C8-4015-A0AF-82D4BBBEC40D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Jhu.Footprint.Web.Api</RootNamespace>
+    <RootNamespace>Jhu.Footprint</RootNamespace>
     <AssemblyName>Jhu.Footprint.Web.Api</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -50,32 +50,32 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="V1\Formatters\PlotRawFormatter.cs" />
-    <Compile Include="V1\Formatters\PlotFormatterAttribute.cs" />
-    <Compile Include="V1\Formatters\PlotAdapter.cs" />
-    <Compile Include="V1\Formatters\OutlineAdapter.cs" />
-    <Compile Include="V1\Formatters\RegionAdapter.cs" />
-    <Compile Include="V1\Formatters\OutlineFormatterAttribute.cs" />
-    <Compile Include="V1\Formatters\RegionFormatterAttribute.cs" />
-    <Compile Include="V1\Formatters\OutlineRawFormatter.cs" />
-    <Compile Include="V1\Formatters\RegionRawFormatter.cs" />
-    <Compile Include="V1\Objects\Links.cs" />
-    <Compile Include="V1\Objects\Footprint.cs" />
-    <Compile Include="V1\Objects\FootprintRegion.cs" />
-    <Compile Include="V1\Objects\Plot.cs" />
-    <Compile Include="V1\Requests\FootprintRegionRequest.cs" />
-    <Compile Include="V1\Requests\FootprintRequest.cs" />
-    <Compile Include="V1\Requests\PlotRequest.cs" />
-    <Compile Include="V1\Responses\FootprintListResponse.cs" />
-    <Compile Include="V1\Responses\FootprintRegionListResponse.cs" />
-    <Compile Include="V1\Responses\FootprintRegionResponse.cs" />
-    <Compile Include="V1\Responses\FootprintResponse.cs" />
-    <Compile Include="V1\Services\ServiceBase.cs" />
-    <Compile Include="V1\Services\Urls.cs" />
-    <Compile Include="V1\Services\EditorService.cs" />
-    <Compile Include="V1\Services\FootprintService.cs" />
-    <Compile Include="V1\Services\IEditorService.cs" />
-    <Compile Include="V1\Services\IFootprintService.cs" />
+    <Compile Include="Web\Api\V1\Formatters\OutlineAdapter.cs" />
+    <Compile Include="Web\Api\V1\Formatters\OutlineFormatterAttribute.cs" />
+    <Compile Include="Web\Api\V1\Formatters\OutlineRawFormatter.cs" />
+    <Compile Include="Web\Api\V1\Formatters\PlotAdapter.cs" />
+    <Compile Include="Web\Api\V1\Formatters\PlotFormatterAttribute.cs" />
+    <Compile Include="Web\Api\V1\Formatters\PlotRawFormatter.cs" />
+    <Compile Include="Web\Api\V1\Formatters\RegionAdapter.cs" />
+    <Compile Include="Web\Api\V1\Formatters\RegionFormatterAttribute.cs" />
+    <Compile Include="Web\Api\V1\Formatters\RegionRawFormatter.cs" />
+    <Compile Include="Web\Api\V1\Objects\Footprint.cs" />
+    <Compile Include="Web\Api\V1\Objects\FootprintRegion.cs" />
+    <Compile Include="Web\Api\V1\Objects\Links.cs" />
+    <Compile Include="Web\Api\V1\Objects\Plot.cs" />
+    <Compile Include="Web\Api\V1\Requests\FootprintRegionRequest.cs" />
+    <Compile Include="Web\Api\V1\Requests\FootprintRequest.cs" />
+    <Compile Include="Web\Api\V1\Requests\PlotRequest.cs" />
+    <Compile Include="Web\Api\V1\Responses\FootprintListResponse.cs" />
+    <Compile Include="Web\Api\V1\Responses\FootprintRegionListResponse.cs" />
+    <Compile Include="Web\Api\V1\Responses\FootprintRegionResponse.cs" />
+    <Compile Include="Web\Api\V1\Responses\FootprintResponse.cs" />
+    <Compile Include="Web\Api\V1\Services\EditorService.cs" />
+    <Compile Include="Web\Api\V1\Services\FootprintService.cs" />
+    <Compile Include="Web\Api\V1\Services\IEditorService.cs" />
+    <Compile Include="Web\Api\V1\Services\IFootprintService.cs" />
+    <Compile Include="Web\Api\V1\Services\ServiceBase.cs" />
+    <Compile Include="Web\Api\V1\Services\Urls.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\graywulf\dll\Jhu.Graywulf.AccessControl\Jhu.Graywulf.AccessControl.csproj">

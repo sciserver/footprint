@@ -12,6 +12,7 @@ AS
 	DECLARE @existing bit
 	DECLARE @footprintID int
 	DECLARE @type tinyint
+	DECLARE @combinedRegionID int = NULL
 	
 	SELECT 
 		@footprintID = FootprintID,
@@ -36,12 +37,14 @@ AS
 	IF @type = 0 BEGIN
 		IF @existing = 0 BEGIN
 			-- Update
-			EXEC [fps].[spUpdateCombinedRegion] @footprintID, @RegionID
+			EXEC @combinedRegionID = [fps].[spUpdateCombinedRegion] @footprintID, @RegionID
 		END ELSE BEGIN
 			-- Refresh
-			EXEC [fps].[spRefreshCombinedRegion] @footprintID
+			EXEC @combinedRegionID = [fps].[spRefreshCombinedRegion] @footprintID
 		END
 	END
+
+	RETURN @combinedRegionID
 
 GO
 
@@ -73,12 +76,16 @@ AS
 		UPDATE Footprint
 		SET CombinedRegionID = @RegionID
 		WHERE ID = @FootprintID
+
+		SET @combinedRegionID = @RegionID
+
 	END
 	ELSE BEGIN
-		-- More than one single regions
+		-- More than one single region
 
 		-- Load combined region
 		SELECT @combinationMethod = f.CombinationMethod,
+			   @combinedRegionID = f.CombinedRegionID,
 		       @combinedRegion = r.Region
 		FROM Footprint f
 		LEFT OUTER JOIN FootprintRegion r
@@ -127,26 +134,36 @@ AS
 		END ELSE BEGIN
 			-- Update combined region with the very last one
 
-			PRINT 'Updating combined region';
+			PRINT 'Updating combined region with new one';
+
+			DECLARE @region [dbo].[Region] = NULL
+
+			SELECT @region = Region
+			FROM FootprintRegion
+			WHERE ID = @RegionID
 
 			IF @combinationMethod = 1 BEGIN
 				-- UNION
 
 				UPDATE FootprintRegion
-				SET Region = @combinedRegion.[Union](Region).ToBinary(), Thumbnail = NULL
+				SET Region = @combinedRegion.[Union](@region).ToBinary(), Thumbnail = NULL
 				WHERE ID = @combinedRegionID
+
 			END ELSE IF @combinationMethod = 2 BEGIN
 				-- INTERSECT
 
 				UPDATE FootprintRegion
-				SET Region = @combinedRegion.[Intersect](Region).ToBinary(), Thumbnail = NULL
+				SET Region = @combinedRegion.[Intersect](@region).ToBinary(), Thumbnail = NULL
 				WHERE ID = @combinedRegionID
+
 			END ELSE THROW 51000, 'Invalid combination method.', 1;
 
 			-- Generate HTM
 			EXEC [fps].[spComputeHtmCover] @combinedRegionID
 		END
 	END
+
+	RETURN @combinedRegionID
 
 GO
 
@@ -182,6 +199,8 @@ AS
 		SET CombinedRegionID = 0
 		WHERE ID = @FootprintID
 
+		SET @combinedRegionID = 0
+
 	END ELSE IF @count = 1 BEGIN
 		-- one remaining region, delete cache if any
 		-- and use one region as combined region
@@ -192,10 +211,11 @@ AS
 		WHERE FootprintID = @FootprintID
 		      AND Type = 1
 
-		-- TODO: delete HTM
+		-- HTM is deleted through foreign key cascade
 
 		UPDATE Footprint
-		SET CombinedRegionID = r.ID
+		SET CombinedRegionID = r.ID,
+		    @combinedRegionID = r.ID
 		FROM Footprint f
 		INNER JOIN FootprintRegion r
 			ON r.FootprintID = f.ID
@@ -258,6 +278,8 @@ AS
 		-- Generate HTM
 		EXEC [fps].[spComputeHtmCover] @combinedRegionID
 	END
+
+	RETURN @combinedRegionID
 
 GO
 

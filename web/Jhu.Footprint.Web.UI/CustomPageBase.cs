@@ -8,9 +8,9 @@ namespace Jhu.Footprint.Web.UI
 {
     public class CustomPageBase : Jhu.Graywulf.Web.UI.PageBase
     {
-        private Context footprintContext;
+        private FootprintContext footprintContext;
 
-        public Context FootprintContext
+        public FootprintContext FootprintContext
         {
             get 
             {
@@ -35,7 +35,7 @@ namespace Jhu.Footprint.Web.UI
 
         private void CreateContext()
         {
-            footprintContext = new Context()
+            footprintContext = new FootprintContext()
             {
                 Principal = Page.User
             };

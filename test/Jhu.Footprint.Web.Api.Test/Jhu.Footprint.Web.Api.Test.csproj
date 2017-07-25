@@ -7,7 +7,7 @@
     <ProjectGuid>{02E5D24F-4A27-4C44-AAC6-E42ADFC573A1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Jhu.Footprint.Web.Api.Test</RootNamespace>
+    <RootNamespace>Jhu.Footprint</RootNamespace>
     <AssemblyName>Jhu.Footprint.Web.Api.Test</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -65,12 +65,12 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="FootprintApiTestBase.cs" />
-    <Compile Include="FootprintServiceSecurityTest.cs" />
-    <Compile Include="FootprintServiceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="EditorServiceTest.cs" />
-    <Compile Include="EditorApiTestBase.cs" />
+    <Compile Include="Web\Api\EditorApiTestBase.cs" />
+    <Compile Include="Web\Api\EditorServiceTest.cs" />
+    <Compile Include="Web\Api\FootprintApiTestBase.cs" />
+    <Compile Include="Web\Api\FootprintServiceSecurityTest.cs" />
+    <Compile Include="Web\Api\FootprintServiceTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\graywulf\dll\Jhu.Graywulf.AccessControl\Jhu.Graywulf.AccessControl.csproj">

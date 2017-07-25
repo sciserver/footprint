@@ -13,7 +13,7 @@ namespace Jhu.Footprint.Web.UI
             get { return (CustomPageBase)base.Page; }
         }
 
-        public Context FootprintContext
+        public FootprintContext FootprintContext
         {
             get { return Page.FootprintContext; }
         }
