@@ -11,11 +11,29 @@ namespace Jhu.Footprint.Web.Lib
 {
     public class FootprintTestBase : Jhu.Graywulf.Test.TestClassBase
     {
-        protected static string MapProjectRelativePath(string path)
+        protected Spherical.Region MakeTestCircle(int i)
         {
-            return Path.Combine(Environment.CurrentDirectory, @"..\..\..\..\", path);
-        }
+            Spherical.Region r;
 
+            switch (i)
+            {
+                case 0:
+                    r = Spherical.Region.Parse("CIRCLE J2000 0.0 0.0 30");
+                    break;
+                case 1:
+                    r = Spherical.Region.Parse("CIRCLE J2000 0.1 0.0 30");
+                    break;
+                case 2:
+                    r =  Spherical.Region.Parse("CIRCLE J2000 -0.1 0.0 30");
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }
+
+            r.Simplify();
+            return r;
+        }
+        
         public static Principal CreateTestPrincipal()
         {
             return new Principal()
@@ -40,9 +58,9 @@ namespace Jhu.Footprint.Web.Lib
             };
         }
 
-        public static Context CreateContext()
+        public static FootprintContext CreateContext()
         {
-            var context = new Context()
+            var context = new FootprintContext()
             {
                 Principal = CreateTestPrincipal()
             };
@@ -90,12 +108,12 @@ namespace Jhu.Footprint.Web.Lib
             }
         }*/
 
-        protected Footprint CreateTestFootprint(Context context, string name)
+        protected Footprint CreateTestFootprint(FootprintContext context, string name)
         {
             return CreateTestFootprint(context, name, CombinationMethod.None);
         }
 
-        protected Footprint CreateTestFootprint(Context context, string name, CombinationMethod combinationMethod)
+        protected Footprint CreateTestFootprint(FootprintContext context, string name, CombinationMethod combinationMethod)
         {
             var footprint = new Footprint(context)
             {
@@ -124,7 +142,7 @@ namespace Jhu.Footprint.Web.Lib
             return region;
         }
 
-        protected FootprintRegion CreateTestFootprintAndRegion(Context context, string name)
+        protected FootprintRegion CreateTestFootprintAndRegion(FootprintContext context, string name)
         {
             var footprint = CreateTestFootprint(context, name);
             var region = CreateTestRegion(footprint, name);

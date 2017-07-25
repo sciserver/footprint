@@ -81,6 +81,7 @@ namespace Jhu.Footprint.Web.Lib
                 {
                     LoadRegion();
                 }
+
                 return region;
             }
             set { region = value; }
@@ -192,17 +193,17 @@ namespace Jhu.Footprint.Web.Lib
         {
             if (Constants.RestictedNames.Contains(this.name))
             {
-                throw Error.FootprintNameNotAvailable(this.name);
+                throw Error.RestrictedName(this.name);
             }
 
             if (!Constants.NamePattern.Match(this.name).Success)
             {
-                throw Error.FootprintNameInvalid(this.name);
+                throw Error.InvalidName(this.name);
             }
 
             if (IsNameDuplicate())
             {
-                throw Error.DuplicateFootprintRegionName(this.name);
+                throw Error.DuplicateRegionName(this.footprintOwner, this.footprintName, this.name);
             }
 
             base.OnValidating(e);
@@ -212,7 +213,7 @@ namespace Jhu.Footprint.Web.Lib
         {
             if (parent == null)
             {
-                parent = new Footprint((Context)Context);
+                parent = new Footprint((FootprintContext)Context);
             }
 
             if (!parent.IsLoaded)
@@ -365,6 +366,11 @@ WHERE r.ID = @ID
         public void SaveRegion()
         {
             EvaluateAccess().EnsureUpdate();
+
+            if (region != null && !region.IsSimplified)
+            {
+
+            }
 
             var sql = "[fps].[spSaveRegion]";
 

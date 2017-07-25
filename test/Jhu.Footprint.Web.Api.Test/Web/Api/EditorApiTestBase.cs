@@ -21,7 +21,7 @@ namespace Jhu.Footprint.Web.Api.V1
             }
         }
 
-        protected Context CreateContext()
+        protected FootprintContext CreateContext()
         {
             return FootprintTestBase.CreateContext();
         }

@@ -70,25 +70,7 @@ namespace Jhu.Footprint.Web.Lib {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot find the specified footprint: &apos;{0}/{1}/{2}&apos;..
-        /// </summary>
-        internal static string CannotFindFootprint {
-            get {
-                return ResourceManager.GetString("CannotFindFootprint", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Cannot find the specified footprint folder: &apos;{0}/{1}&apos;..
-        /// </summary>
-        internal static string CannotFindFootprintFolder {
-            get {
-                return ResourceManager.GetString("CannotFindFootprintFolder", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Duplicate footprint name:  &apos;{0}&apos;..
+        ///   Looks up a localized string similar to Duplicate footprint name:  &apos;{0}/{1}&apos;..
         /// </summary>
         internal static string DuplicateFootprintName {
             get {
@@ -97,47 +79,56 @@ namespace Jhu.Footprint.Web.Lib {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Duplicate footprint region name: &apos;{0}&apos;..
+        ///   Looks up a localized string similar to Duplicate region name: &apos;{0}/{1}/{2}&apos;..
         /// </summary>
-        internal static string DuplicateFootprintRegionName {
+        internal static string DuplicateRegionName {
             get {
-                return ResourceManager.GetString("DuplicateFootprintRegionName", resourceCulture);
+                return ResourceManager.GetString("DuplicateRegionName", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid footprint name &apos;{0}&apos;..
+        ///   Looks up a localized string similar to Cannot find the specified footprint: &apos;{0}/{1}&apos;..
         /// </summary>
-        internal static string FootprintNameInvalid {
+        internal static string FootprintNotFound {
             get {
-                return ResourceManager.GetString("FootprintNameInvalid", resourceCulture);
+                return ResourceManager.GetString("FootprintNotFound", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot use &apos;{0}&apos; as name of the footprint. The following strings are probhited: convexhull, footprint, outline, plot, points, reduced..
+        ///   Looks up a localized string similar to Invalid footprint or region name &apos;{0}&apos;..
         /// </summary>
-        internal static string FootprintNameNotAvailable {
+        internal static string InvalidName {
             get {
-                return ResourceManager.GetString("FootprintNameNotAvailable", resourceCulture);
+                return ResourceManager.GetString("InvalidName", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot load specified footprint..
+        ///   Looks up a localized string similar to Cannot find the specified region: &apos;{0}/{1}/{2}&apos;..
         /// </summary>
-        internal static string NoFootprintDataToLoad {
+        internal static string RegionNotFound {
             get {
-                return ResourceManager.GetString("NoFootprintDataToLoad", resourceCulture);
+                return ResourceManager.GetString("RegionNotFound", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot load specified footprint folder..
+        ///   Looks up a localized string similar to Region must be simplified before saving..
         /// </summary>
-        internal static string NoFootprintFolderDataToLoad {
+        internal static string RegionNotSimplified {
             get {
-                return ResourceManager.GetString("NoFootprintFolderDataToLoad", resourceCulture);
+                return ResourceManager.GetString("RegionNotSimplified", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot use &apos;{0}&apos; as name of the footprint or region. The following strings are probhited: convexhull, footprint, outline, plot, points, reduced..
+        /// </summary>
+        internal static string RestrictedName {
+            get {
+                return ResourceManager.GetString("RestrictedName", resourceCulture);
             }
         }
     }

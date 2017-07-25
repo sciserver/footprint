@@ -19,7 +19,7 @@ namespace Jhu.Footprint.Web.Lib
 
         private int id;
         private string name;
-        private int regionId;
+        private int combinedRegionId;
         private CombinationMethod combinationMethod;
         private DateTime dateCreated;
         private DateTime dateModified;
@@ -51,8 +51,8 @@ namespace Jhu.Footprint.Web.Lib
         [DbColumn]
         public int CombinedRegionId
         {
-            get { return regionId; }
-            set { regionId = value; }
+            get { return combinedRegionId; }
+            set { combinedRegionId = value; }
         }
 
         [DbColumn]
@@ -96,7 +96,8 @@ namespace Jhu.Footprint.Web.Lib
 
         public FootprintRegion CombinedRegion
         {
-            get {
+            get
+            {
                 if (combinedRegion == null)
                 {
                     LoadFootprintRegion();
@@ -114,7 +115,7 @@ namespace Jhu.Footprint.Web.Lib
             InitializeMembers();
         }
 
-        public Footprint(Context context)
+        public Footprint(FootprintContext context)
             : base(context)
         {
             InitializeMembers();
@@ -129,7 +130,7 @@ namespace Jhu.Footprint.Web.Lib
         private void InitializeMembers()
         {
             this.id = 0;
-            this.regionId = 0;
+            this.combinedRegionId = 0;
             this.name = "";
             this.combinationMethod = CombinationMethod.None;
             this.dateCreated = DateTime.Now;
@@ -143,7 +144,7 @@ namespace Jhu.Footprint.Web.Lib
         {
             this.id = old.id;
             this.name = old.name;
-            this.regionId = old.regionId;
+            this.combinedRegionId = old.combinedRegionId;
             this.combinationMethod = old.combinationMethod;
             this.dateCreated = old.dateCreated;
             this.dateModified = old.dateModified;
@@ -303,17 +304,17 @@ WHERE Owner = @Owner
         {
             if (Constants.RestictedNames.Contains(this.name))
             {
-                throw Error.FootprintNameNotAvailable(this.name);
+                throw Error.RestrictedName(this.name);
             }
 
             if (!Constants.NamePattern.Match(this.name).Success)
             {
-                throw Error.FootprintNameInvalid(this.name);
+                throw Error.InvalidName(this.name);
             }
 
             if (IsNameDuplicate())
             {
-                throw Error.DuplicateFootprintName(this.name);
+                throw Error.DuplicateFootprintName(this.Owner, this.name);
             }
 
             base.OnValidating(e);
@@ -322,7 +323,7 @@ WHERE Owner = @Owner
         protected override void OnModifying(Graywulf.Entities.EntityEventArgs e)
         {
             this.dateModified = DateTime.Now;
-            
+
             base.OnModifying(e);
         }
 
@@ -330,11 +331,11 @@ WHERE Owner = @Owner
         {
             combinedRegion = new FootprintRegion(this)
             {
-                Id = this.regionId,
+                Id = this.combinedRegionId,
             };
 
             // if a folderFootprint exists, load it
-            if (this.regionId > 0)
+            if (this.combinedRegionId > 0)
             {
                 combinedRegion.Load();
             }
@@ -355,10 +356,14 @@ WHERE Owner = @Owner
             {
                 using (var cmd = Context.CreateStoredProcedureCommand("fps.spUpdateCombinedRegion"))
                 {
+                    cmd.Parameters.Add("RETVAL", SqlDbType.Int).Direction = ParameterDirection.ReturnValue;
                     cmd.Parameters.Add("@FootprintID", SqlDbType.BigInt).Value = this.Id;
                     cmd.Parameters.Add("@RegionID", SqlDbType.BigInt).Value = region.Id;
 
                     Context.ExecuteCommandNonQuery(cmd);
+
+                    CombinedRegionId = (int)cmd.Parameters["RETVAL"].Value;
+                    combinedRegion = null;
                 }
             }
         }
@@ -372,9 +377,13 @@ WHERE Owner = @Owner
             {
                 using (var cmd = Context.CreateStoredProcedureCommand("fps.spRefreshCombinedRegion"))
                 {
+                    cmd.Parameters.Add("RETVAL", SqlDbType.Int).Direction = ParameterDirection.ReturnValue;
                     cmd.Parameters.Add("@FootprintID", SqlDbType.BigInt).Value = this.Id;
 
                     Context.ExecuteCommandNonQuery(cmd);
+
+                    combinedRegionId = (int)cmd.Parameters["RETVAL"].Value;
+                    combinedRegion = null;
                 }
             }
         }

@@ -58,7 +58,7 @@ namespace Jhu.Footprint.Web.Lib
         {
         }
 
-        public RegionSearch(Context context)
+        public RegionSearch(FootprintContext context)
                 : base(context)
         {
             InitializeMembers();

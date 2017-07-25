@@ -12,7 +12,7 @@ namespace Jhu.Footprint.Web.Lib
         {
         }
 
-        public FootprintSearch(Context context)
+        public FootprintSearch(FootprintContext context)
             : base(context)
         {
         }

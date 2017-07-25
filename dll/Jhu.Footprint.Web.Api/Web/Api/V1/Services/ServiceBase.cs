@@ -11,14 +11,14 @@ namespace Jhu.Footprint.Web.Api.V1
     {
         #region Context creators
 
-        protected Lib.Context CreateContext()
+        protected Lib.FootprintContext CreateContext()
         {
             return CreateContext(false);
         }
 
-        protected Lib.Context CreateContext(bool autoDispose)
+        protected Lib.FootprintContext CreateContext(bool autoDispose)
         {
-            var context = new Lib.Context()
+            var context = new Lib.FootprintContext()
             {
                 AutoDispose = autoDispose
             };

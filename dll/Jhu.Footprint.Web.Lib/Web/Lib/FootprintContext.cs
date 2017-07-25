@@ -9,9 +9,9 @@ using System.Configuration;
 
 namespace Jhu.Footprint.Web.Lib
 {
-    public class Context : Jhu.Graywulf.Entities.Context, IDisposable
+    public class FootprintContext : Jhu.Graywulf.Entities.Context, IDisposable
     {
-        public Context()
+        public FootprintContext()
         {
             InitializeMembers();
         }

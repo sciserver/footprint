@@ -42,7 +42,7 @@ namespace Jhu.Footprint.Web.Lib
             InitializeMembers();
         }
 
-        public FootprintRegionSearch(Context context)
+        public FootprintRegionSearch(FootprintContext context)
             : base(context)
         {
             InitializeMembers();

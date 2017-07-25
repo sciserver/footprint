@@ -120,28 +120,25 @@
   <data name="AccessDenied" xml:space="preserve">
     <value>Access denied.</value>
   </data>
-  <data name="CannotFindFootprint" xml:space="preserve">
-    <value>Cannot find the specified footprint: '{0}/{1}/{2}'.</value>
-  </data>
-  <data name="CannotFindFootprintFolder" xml:space="preserve">
-    <value>Cannot find the specified footprint folder: '{0}/{1}'.</value>
-  </data>
   <data name="DuplicateFootprintName" xml:space="preserve">
-    <value>Duplicate footprint name:  '{0}'.</value>
+    <value>Duplicate footprint name:  '{0}/{1}'.</value>
   </data>
-  <data name="DuplicateFootprintRegionName" xml:space="preserve">
-    <value>Duplicate footprint region name: '{0}'.</value>
+  <data name="DuplicateRegionName" xml:space="preserve">
+    <value>Duplicate region name: '{0}/{1}/{2}'.</value>
   </data>
-  <data name="FootprintNameInvalid" xml:space="preserve">
-    <value>Invalid footprint name '{0}'.</value>
+  <data name="FootprintNotFound" xml:space="preserve">
+    <value>Cannot find the specified footprint: '{0}/{1}'.</value>
   </data>
-  <data name="FootprintNameNotAvailable" xml:space="preserve">
-    <value>Cannot use '{0}' as name of the footprint. The following strings are probhited: convexhull, footprint, outline, plot, points, reduced.</value>
+  <data name="InvalidName" xml:space="preserve">
+    <value>Invalid footprint or region name '{0}'.</value>
   </data>
-  <data name="NoFootprintDataToLoad" xml:space="preserve">
-    <value>Cannot load specified footprint.</value>
+  <data name="RegionNotFound" xml:space="preserve">
+    <value>Cannot find the specified region: '{0}/{1}/{2}'.</value>
   </data>
-  <data name="NoFootprintFolderDataToLoad" xml:space="preserve">
-    <value>Cannot load specified footprint folder.</value>
+  <data name="RegionNotSimplified" xml:space="preserve">
+    <value>Region must be simplified before saving.</value>
+  </data>
+  <data name="RestrictedName" xml:space="preserve">
+    <value>Cannot use '{0}' as name of the footprint or region. The following strings are probhited: convexhull, footprint, outline, plot, points, reduced.</value>
   </data>
 </root>
