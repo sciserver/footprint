@@ -1,8 +1,81 @@
-﻿// Declaration of the services' urls
-// TODO: maybe should be done in a more proper way?
-var footprintSvcUrl = "http://localhost/footprint/api/v1/footprint.svc";
-var editorSvcUrl = "http://localhost/footprint/api/v1/editor.svc";
+﻿var combineMode = null;
 
+$(document).ready(function () {
+
+    // Event handlers
+
+    $("#toolbar").on("click", "*", function (event) {
+        var item = $(event.target).data("item");
+        switch (item) {
+            case "refresh":
+                refreshCanvas();
+                break;
+            case "union":
+            case "intersect":
+                combineMode = item;
+                var arg = $(event.target).data("arg");
+                switch (arg) {
+                    case "circle":
+                        $("#circleModal").modal("show");
+                        break;
+                    default:
+                        throw "Invalid shape.";
+                }
+                break;
+            default:
+                throw "No handler for item.";
+        }
+        e.preventDefault();
+    });
+
+
+    refreshCanvas();    
+})
+
+
+// Local functions
+
+function refreshCanvas() {
+    var canvas = $("#canvas")
+    var url = createUrl(
+        editorServiceUrl,
+        [ "plot" ],
+        {
+            "proj": "Stereographic",
+            "width": canvas.width(),
+            "height": canvas.height(),
+            "zoom": $("#autoZoom")[0].checked,
+            "rotate": $("#autoRotate")[0].checked,
+            "ts": new Date().getTime()
+        });
+
+    canvas.css('background-image', 'url(' + url + ')');
+}
+
+// 
+
+// Submit the form and create the recquired region
+$("body").on("click", "#AddRegionButton", function () {
+    var selectedAdditionType = $("#AdditionTypeSelector input:radio:checked").val();
+    var selectedRegionType = $("#RegionTypeSelector input:radio:checked").val();
+
+    var regionString = createRegionString(selectedRegionType);
+    var json = createFootprintRegionRequest(regionString);
+
+    console.info(regionString)
+
+    addRegion(selectedAdditionType, json);
+
+    // TODO: figure is not showing in Chrome
+    refreshCanvas();
+
+    $(".modal").modal("hide");
+})
+
+
+
+
+/*
 $(document).one('ready', function () {
     // Set owner
     // TODO: include group
@@ -16,11 +89,6 @@ $(document).one('ready', function () {
 
 $(document).ready(function () {
 
-
-    // refresh Canvas with button
-    $("body").on("click", "#refreshCanvasButton", function () {
-        refreshCanvas();
-    })
 
     // Centering modals
     $("body").on('show.bs.modal', ".modal", function () {
@@ -50,24 +118,6 @@ $(document).ready(function () {
         }
 
     });
-
-    // Submit the form and create the recquired region
-    $("body").on("click", "#AddRegionButton", function () {
-        var selectedAdditionType = $("#AdditionTypeSelector input:radio:checked").val();
-        var selectedRegionType = $("#RegionTypeSelector input:radio:checked").val();
-
-        var regionString = createRegionString(selectedRegionType);
-        var json = createFootprintRegionRequest(regionString);
-
-        console.info(regionString)
-
-        addRegion(selectedAdditionType, json);
-
-        // TODO: figure is not showing in Chrome
-        refreshCanvas();
-
-        $(".modal").modal("hide");
-    })
 
     // -------------> LOAD MODAL
     $("body").on("click", "#LoadRegionButton", function () {
@@ -134,11 +184,6 @@ function createFootprintRegionRequest(regionString) {
     };
 }
 
-// refresh PlotCanvas
-function refreshCanvas() {
-    var d = new Date();
-    $("#PlotCanvas").attr("src", createUrl(editorSvcUrl, ["plot?ts=" + d.getTime()]));
-}
 
 // SERVICE CALLS
 

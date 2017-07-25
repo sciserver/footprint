@@ -1,4 +1,6 @@
-﻿var authSvcUrl = "http://localhost/auth/api/v1/auth.svc";
+﻿// Declaration of the services' urls
+var editorServiceUrl = "../../api/v1/editor.svc";
+var footprintServiceUrl = "../../api/v1/footprint.svc";
 
 // The ajax function 
 function serviceCall(url, type, optParams) {
@@ -54,7 +56,6 @@ function centerModals($element) {
 
 
 // Create service urls
-
 function createUrl(baseUrl, pathParts, optQueryParts) {
     var finalUrl = baseUrl;
     $.each(pathParts, function (i, part) {
@@ -71,8 +72,17 @@ function createUrl(baseUrl, pathParts, optQueryParts) {
     return finalUrl;
 }
 
+// get query parameters
+function getQueryParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
 
-// set user
 function setOwner() {
     var methodUrl = createUrl(authSvcUrl, ["me"]);
     var owner;
@@ -86,16 +96,4 @@ function setOwner() {
             localStorage.setItem('owner', owner);
         }
     });
-
-}
-
-// get query parameters
-function getQueryParameterByName(name, url) {
-    if (!url) url = window.location.href;
-    name = name.replace(/[\[\]]/g, "\\$&");
-    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-        results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
 }

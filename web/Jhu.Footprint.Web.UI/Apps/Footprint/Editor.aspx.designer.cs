@@ -13,21 +13,66 @@ namespace Jhu.Footprint.Web.UI.Apps.Footprint {
     public partial class Editor {
         
         /// <summary>
-        /// toolbarSpan control.
+        /// projectionDiv control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl toolbarSpan;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl projectionDiv;
         
         /// <summary>
-        /// PlotCanvas control.
+        /// projectionLabel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Image PlotCanvas;
+        protected global::System.Web.UI.WebControls.Label projectionLabel;
+        
+        /// <summary>
+        /// autoRotateLabel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label autoRotateLabel;
+        
+        /// <summary>
+        /// autoZoomLabel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label autoZoomLabel;
+        
+        /// <summary>
+        /// circleModal control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Jhu.Graywulf.Web.UI.Controls.Form circleModal;
+        
+        /// <summary>
+        /// circleCenterRa control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox circleCenterRa;
+        
+        /// <summary>
+        /// circleCenterDec control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox circleCenterDec;
     }
 }
