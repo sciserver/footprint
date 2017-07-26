@@ -31,22 +31,76 @@ namespace Jhu.Footprint.Web.UI.Apps.Footprint {
         protected global::System.Web.UI.WebControls.Label projectionLabel;
         
         /// <summary>
-        /// autoRotateLabel control.
+        /// projection control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label autoRotateLabel;
+        protected global::System.Web.UI.WebControls.DropDownList projection;
         
         /// <summary>
-        /// autoZoomLabel control.
+        /// autoRotate control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label autoZoomLabel;
+        protected global::System.Web.UI.WebControls.CheckBox autoRotate;
+        
+        /// <summary>
+        /// autoZoom control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox autoZoom;
+        
+        /// <summary>
+        /// grid control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox grid;
+        
+        /// <summary>
+        /// equatorial control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton equatorial;
+        
+        /// <summary>
+        /// galactic control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton galactic;
+        
+        /// <summary>
+        /// decimal control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton @decimal;
+        
+        /// <summary>
+        /// hms control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton hms;
         
         /// <summary>
         /// circleModal control.
@@ -56,6 +110,15 @@ namespace Jhu.Footprint.Web.UI.Apps.Footprint {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::Jhu.Graywulf.Web.UI.Controls.Form circleModal;
+        
+        /// <summary>
+        /// circleName control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox circleName;
         
         /// <summary>
         /// circleCenterRa control.

@@ -9,6 +9,9 @@ namespace Jhu.Footprint.Web.Api.V1
     [TestClass]
     public class EditorServiceTest : EditorApiTestBase
     {
+        // TODO: reimplement these tests
+
+            /*
         [TestMethod]
         public void ResetTest()
         {
@@ -162,5 +165,6 @@ namespace Jhu.Footprint.Web.Api.V1
                 Assert.IsTrue(buffer != null && buffer.Length > 0);
             }
         }
+        */
     }
 }

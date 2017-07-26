@@ -276,29 +276,14 @@ namespace Jhu.Footprint.Web.Api.V1
 
         public Spherical.Visualizer.Plot PlotUserFootprint(string owner, string name, string projection, string sys, string ra, string dec, string b, string l, float width, float height, string colorTheme, string autoZoom, string autoRotate, string grid, string degreeStyle)
         {
-
             //var plot = Lib.FootprintPlot.GetPlot(new[] { footprint.CombinedRegion.Region }, projection, sys, ra, dec, b, l, width, height, colorTheme);
             // TODO: change this part to use all parameters
             // Size is different for vector graphics!
 
+            // TODO allow printing combined footprint or
+            // individual regions?
 
-            var plotParameters = new Plot()
-            {
-                Projection = projection,
-                CoordinateSystem = sys,
-                //Ra = ra,
-                //Dec = dec
-                //B = b,
-                //L = l,
-                Width = width,
-                Height = height,
-                ColorTheme = colorTheme,
-                AutoZoom = (autoZoom == "") ? true : Convert.ToBoolean(autoZoom),
-                AutoRotate = (autoRotate == "") ? true : Convert.ToBoolean(autoRotate),
-                GridVisible = (grid == "") ? true : Convert.ToBoolean(grid),
-                DegreeStyle = degreeStyle
-            };
-
+            var plotParameters = new Plot(projection, sys, ra, dec, b, l, width, height, colorTheme, autoZoom, autoRotate, grid, degreeStyle);
             return PlotUserFootprintAdvanced(owner, name, plotParameters);
 
         }
@@ -396,26 +381,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
         public Spherical.Visualizer.Plot PlotUserFootprintRegion(string owner, string name, string regionName, string projection, string sys, string ra, string dec, string b, string l, float width, float height, string colorTheme, string autoZoom, string autoRotate, string grid, string degreeStyle)
         {
-            var plotParameters = new Plot()
-            {
-                Projection = projection,
-                CoordinateSystem = sys,
-                //Ra = ra,
-                //Dec = dec
-                //B = b,
-                //L = l,
-                Width = width,
-                Height = height,
-                ColorTheme = colorTheme,
-                AutoZoom = (autoZoom == "") ? true : Convert.ToBoolean(autoZoom),
-                AutoRotate = (autoRotate == "") ? true : Convert.ToBoolean(autoRotate),
-                GridVisible = (grid == "") ? true : Convert.ToBoolean(grid),
-                DegreeStyle = degreeStyle
-            };
-
-            // TODO: change this part to use all parameters
-            // Size is different for vector graphics!
-
+            var plotParameters = new Plot(projection, sys, ra, dec, b, l, width, height, colorTheme, autoZoom, autoRotate, grid, degreeStyle);
             return PlotUserFootprintRegionAdvanced(owner, name, regionName, plotParameters);
 
         }
@@ -488,7 +454,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
 
 #if false
-
+TODO: delete
 #region Private Methods
         private Lib.Footprint GetFootprint(string userName, string folderName, string footprintName)
         {

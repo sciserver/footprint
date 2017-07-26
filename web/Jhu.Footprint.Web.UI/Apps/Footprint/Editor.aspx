@@ -7,23 +7,12 @@
         <a data-toggle="modal" data-target="#downloadModal">download</a>
         <span class="separator"></span>
         <div class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown">union with<span class="caret"></span>
-            </a>
+            <a class="dropdown-toggle" data-toggle="dropdown">new region<span class="caret"></span></a>
             <ul class="dropdown-menu">
-                <li><a href="#" data-item="union" data-arg="circle">circle</a></li>
-                <li><a href="#" data-item="union" data-arg="rectangle">rectangle</a></li>
-                <li><a href="#" data-item="union" data-arg="polygon">polygon</a></li>
-                <li><a href="#" data-item="union" data-arg="chull">convex hull</a></li>
-            </ul>
-        </div>
-        <div class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown">intersect with<span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu">
-                <li><a href="#" data-item="intersect" data-arg="circle">circle</a></li>
-                <li><a href="#" data-item="intersect" data-arg="rectangle">rectangle</a></li>
-                <li><a href="#" data-item="intersect" data-arg="polygon">polygon</a></li>
-                <li><a href="#" data-item="intersect" data-arg="chull">convex hull</a></li>
+                <li><a href="#" id="newCircle">circle</a></li>
+                <li><a href="#" id="newRectangle">rectangle</a></li>
+                <li><a href="#" id="newPolygon">polygon</a></li>
+                <li><a href="#" id="newCHull">convex hull</a></li>
             </ul>
         </div>
         <a data-toggle="modal" data-target="#GrowModal">grow shape</a>
@@ -32,22 +21,37 @@
 
         <div runat="server" id="projectionDiv" style="min-width: 140px">
             <asp:Label ID="projectionLabel" runat="server" Text="Projection:" /><br />
-            <select id="projection">
-                <option value="Stereographic" selected="selected">Stereographic</option>
-                <option value="Orthographic">Orthographic</option>
-                <option value="Aitoff">Aitoff</option>
-                <option value="HammerAitoff">Hammer-Aitoff</option>
-                <option value="Mollweide">Mollweide</option>
-                <option value="Equirectangular">Equirectangular</option>
-            </select>
+            <asp:DropDownList runat="server" ID="projection" ClientIDMode="Static">
+                <asp:ListItem Text="Stereographic" Value="Stereographic" Selected="True" />
+                <asp:ListItem Text="Orthographic" Value="Orthographic" />
+                <asp:ListItem Text="Aitoff" Value="Aitoff" />
+                <asp:ListItem Text="Hammer-Aitoff" Value="HammerAitoff" />
+                <asp:ListItem Text="Mollweide" Value="Mollweide" />
+                <asp:ListItem Text="Equirectangular" Value="Equirectangular" />
+            </asp:DropDownList>
         </div>
-        <div style="min-width: 80px; text-align: left">
-            <input type="checkbox" checked="checked" id="autoRotate" />
-            <asp:Label runat="server" ID="autoRotateLabel" Text="Auto center" /><br />
-            <input type="checkbox" checked="checked" id="autoZoom" />
-            <asp:Label runat="server" ID="autoZoomLabel" Text="Auto zoom" />
+        <div class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown">options<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                <li>
+                    <asp:CheckBox runat="server" ID="autoRotate" ClientIDMode="Static" Text="auto center" /></li>
+                <li>
+                    <asp:CheckBox runat="server" ID="autoZoom" ClientIDMode="Static" Text="auto zoom" /></li>
+                <li role="separator" class="divider"></li>
+                <li>
+                    <asp:CheckBox runat="server" ID="grid" ClientIDMode="Static" Text="grid" Checked="true" /></li>
+                <li>
+                    <asp:RadioButton runat="server" GroupName="coordsys" ID="equatorial" ClientIDMode="Static" Text="equatorial" Checked="true" /></li>
+                <li>
+                    <asp:RadioButton runat="server" GroupName="coordsys" ID="galactic" ClientIDMode="Static" Text="galactic" /></li>
+                <li role="separator" class="divider"></li>
+                <li>
+                    <asp:RadioButton runat="server" GroupName="degreeStyle" ID="decimal" ClientIDMode="Static" Text="decimal" Checked="true" /></li>
+                <li>
+                    <asp:RadioButton runat="server" GroupName="degreeStyle" ID="hms" ClientIDMode="Static" Text="hms dms" /></li>
+            </ul>
         </div>
-        <a id="refresh" data-item="refresh"><span class="glyphicon glyphicon-refresh"></span></a>
+        <a id="refresh"><span class="glyphicon glyphicon-refresh"></span></a>
     </div>
 </asp:Content>
 <asp:Content ID="Editor" ContentPlaceHolderID="middle" runat="server">
@@ -60,9 +64,37 @@
     </asp:ScriptManagerProxy>
     <asp:UpdatePanel runat="server" class="dock-container dock-fill">
         <ContentTemplate>
+
+            <%-- Region List  --%>
+            <div class="dock-right dock-container" style="width: 200px; margin-left: 8px;">
+                <div class="dock-top gw-list-frame-top">
+                    <div class="gw-list-header">
+                        <div class="gw-list-row">
+                            <span style="width: 24px"></span>
+                            <span class="gw-list-span">region name</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="gw-list-frame dock-fill" id="regionList">
+                    <!--<div class="gw-list-item">
+                        <span style="width: 24px">
+                            <input type="checkbox" /></span>
+                        <span class="gw-list-span">region_name</span>
+                    </div>-->
+                </div>
+                <div class="dock-bottom gw-list-frame-bottom">
+                    <div class="gw-list-footer">
+                        <div class="gw-list-row">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <%-- Canvas  --%>
             <div id="canvas" class="dock-fill" style="background-repeat: no-repeat; background-position: center center;">
             </div>
 
+            <%-- Circle modal window  --%>
             <jgwuc:Form runat="server" ID="circleModal" ClientIDMode="Static" IsModal="true"
                 Text="Add circle">
                 <FormTemplate>
@@ -74,6 +106,12 @@
                         <li>Use decimal arc minutes for radius.</li>
                     </ul>
                     <table class="gw-form">
+                        <tr>
+                            <td class="gw-form-label">Region name:</td>
+                            <td class="gw-form-field">
+                                <asp:TextBox runat="server" ID="circleName" ClientIDMode="Static"
+                                    CssClass="narrow" /></td>
+                        </tr>
                         <tr>
                             <td class="gw-form-label">Center:</td>
                             <td class="gw-form-field">

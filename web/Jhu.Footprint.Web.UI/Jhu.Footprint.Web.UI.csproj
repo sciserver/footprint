@@ -68,18 +68,8 @@
   <ItemGroup>
     <Content Include="Api\V1\Footprint.svc" />
     <Content Include="Apps\Footprint\Editor.aspx.js" />
-    <Content Include="Apps\Footprint\EditorDownloadForm.ascx" />
     <Content Include="Apps\Footprint\Editor.aspx" />
-    <Content Include="Apps\Footprint\EditorLoadFootprintForm.ascx" />
     <Content Include="Apps\Footprint\Footprint.js" />
-    <Content Include="Apps\Footprint\MyFootprint.aspx" />
-    <Content Include="Apps\Footprint\MyFootprint.js" />
-    <Content Include="Apps\Footprint\MyRegion.aspx" />
-    <Content Include="Apps\Footprint\Plot.aspx" />
-    <Content Include="Apps\Footprint\Plot.js" />
-    <Content Include="Apps\Footprint\EditorSaveFootprintForm.ascx" />
-    <Content Include="Apps\Footprint\Search.aspx" />
-    <Content Include="Apps\Footprint\Search.js" />
     <Content Include="Default.aspx" />
     <Content Include="Docs\01_introduction\00_index.aspx" />
     <Content Include="Docs\99_info\00_index.aspx" />
@@ -588,61 +578,12 @@
       <DependentUpon>UI.master</DependentUpon>
     </Content>
     <Compile Include="Apps\Footprint\App.cs" />
-    <Compile Include="Apps\Footprint\EditorDownloadForm.ascx.cs">
-      <DependentUpon>EditorDownloadForm.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Apps\Footprint\EditorDownloadForm.ascx.designer.cs">
-      <DependentUpon>EditorDownloadForm.ascx</DependentUpon>
-    </Compile>
     <Compile Include="Apps\Footprint\Editor.aspx.cs">
       <DependentUpon>Editor.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Apps\Footprint\Editor.aspx.designer.cs">
       <DependentUpon>Editor.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Apps\Footprint\EditorLoadFootprintForm.ascx.cs">
-      <DependentUpon>EditorLoadFootprintForm.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Apps\Footprint\EditorLoadFootprintForm.ascx.designer.cs">
-      <DependentUpon>EditorLoadFootprintForm.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="Apps\Footprint\MyFootprint.aspx.cs">
-      <DependentUpon>MyFootprint.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Apps\Footprint\MyFootprint.aspx.designer.cs">
-      <DependentUpon>MyFootprint.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Apps\Footprint\MyRegion.aspx.cs">
-      <DependentUpon>MyRegion.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Apps\Footprint\MyRegion.aspx.designer.cs">
-      <DependentUpon>MyRegion.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Apps\Footprint\Plot.aspx.cs">
-      <DependentUpon>Plot.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Apps\Footprint\Plot.aspx.designer.cs">
-      <DependentUpon>Plot.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Apps\Footprint\EditorSaveFootprintForm.ascx.cs">
-      <DependentUpon>EditorSaveFootprintForm.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Apps\Footprint\EditorSaveFootprintForm.ascx.designer.cs">
-      <DependentUpon>EditorSaveFootprintForm.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="Apps\Footprint\Search.aspx.cs">
-      <DependentUpon>Search.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Apps\Footprint\Search.aspx.designer.cs">
-      <DependentUpon>Search.aspx</DependentUpon>
     </Compile>
     <Compile Include="CustomPageBase.cs">
       <SubType>ASPXCodeBehind</SubType>

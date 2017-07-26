@@ -2,11 +2,10 @@
 var editorServiceUrl = "../../api/v1/editor.svc";
 var footprintServiceUrl = "../../api/v1/footprint.svc";
 
-// The ajax function 
-function serviceCall(url, type, optParams) {
-    // set default values
+function callService(url, type, optParams, success, error) {
     var mimeType = "text/html";
-    var contentType = "text/plain";
+    var contentType = "application/json";
+    var dataType = "application/json";
 
     if (typeof optParams != "undefined") {
         $.each(optParams, function (key, value) {
@@ -32,7 +31,13 @@ function serviceCall(url, type, optParams) {
         url: url,
         type: type,
         mimeType: mimeType,
-        contentType: contentType
+        contentType: contentType,
+        dataType: "json",
+        headers: {
+            Accept: dataType,
+        },
+        success: success,
+        error: error
     });
 }
 

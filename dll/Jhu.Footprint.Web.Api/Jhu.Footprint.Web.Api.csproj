@@ -86,6 +86,10 @@
       <Project>{10b184e6-825d-4498-98d5-a42939e4bd2d}</Project>
       <Name>Jhu.Graywulf.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\graywulf\dll\Jhu.Graywulf.Registry\Jhu.Graywulf.Registry.csproj">
+      <Project>{59bfb28b-3f97-4714-b8d7-a1b40f668831}</Project>
+      <Name>Jhu.Graywulf.Registry</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\graywulf\dll\Jhu.Graywulf.Web.Api\Jhu.Graywulf.Web.Api.csproj">
       <Project>{975ee996-a41b-4c73-8562-e2b2035e8899}</Project>
       <Name>Jhu.Graywulf.Web.Api</Name>

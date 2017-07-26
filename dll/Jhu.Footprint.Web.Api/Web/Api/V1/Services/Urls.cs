@@ -14,6 +14,10 @@ namespace Jhu.Footprint.Web.Api.V1
         public const string UserFootprintRegions = UserFootprint + "/regions";
         public const string UserFootprintRegion = UserFootprintRegions + "/{regionName}";
 
+        public const string EditorFootprint = "/footprint";
+        public const string EditorFootprintRegions = EditorFootprint + "/regions";
+        public const string EditorFootprintRegion = EditorFootprintRegions + "/{regionName}";
+
         public const string OwnerSearchParam = "owner={owner}";
         public const string FootprintSearchParams = "name={name}&from={from}&max={max}";
         public const string RegionSearchParams = "regionName={regionName}&from={from}&max={max}";

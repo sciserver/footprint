@@ -4,71 +4,111 @@ $(document).ready(function () {
 
     // Event handlers
 
-    $("#toolbar").on("click", "*", function (event) {
+    $("#newCircle").on("click", function (event) {
         event.preventDefault();
-        var item = $(event.target).data("item");
-        switch (item) {
-            case "refresh":
-                refreshCanvas();
-                break;
-            case "union":
-            case "intersect":
-                regionCombineMode = item;
-                var arg = $(event.target).data("arg");
-                switch (arg) {
-                    case "circle":
-                        $("#circleModal").modal("show");
-                        break;
-                    default:
-                        throw "Invalid shape.";
-                }
-                break;
-        }
+        $("#circleModal").modal("show");
     });
 
-    $("#circleModalOk")[0].getRegionString = function () {
-        return "CIRCLE J2000 " + $("#circleCenterRa").val() + " " + $("#circleCenterDec").val() + " " + $("#circleRadius").val();
-    }
+    $("#refresh").on("click", function (event) {
+        event.preventDefault();
+        refreshAll();
+    });
 
-    $("#circleModalOk").on("click", addRegion);
+    $("#circleModalOk").on("click", function (event) {
+        event.preventDefault();
+        addRegion($("#circleName").val(), getRegionCircle());
+    });
 
-    refreshCanvas();    
+    refreshAll();
 })
 
 // Local functions
 
-function refreshCanvas() {
-    var canvas = $("#canvas")
-    var url = createUrl(
-        editorServiceUrl,
-        [ "plot" ],
-        {
-            "proj": "Stereographic",
-            "width": canvas.width(),
-            "height": canvas.height(),
-            "zoom": $("#autoZoom")[0].checked,
-            "rotate": $("#autoRotate")[0].checked,
-            "ts": new Date().getTime()
-        });
-
-    canvas.css('background-image', 'url(' + url + ')');
+function refreshAll() {
+    refreshCanvas();
+    refreshRegionList();
 }
 
-function addRegion(event) {
-    event.preventDefault();
-    var regionString = event.target.getRegionString();
-    var url = createUrl(editorServiceUrl, [regionCombineMode]);
+function getPlotParameters() {
+    return {
+        "proj": $("#projection").val(),
+        "sys": $("#equatorial")[0].checked ? "eq" : "gal",
+        // ra
+        // dec
+        // b
+        // l
+        "width": $("#canvas").width(),
+        "height": $("#canvas").height(),
+        // theme
+        "zoom": $("#autoZoom")[0].checked,
+        "rotate": $("#autoRotate")[0].checked,
+        "grid": $("#grid")[0].checked,
+        "degStyle": $("#decimal")[0].checked ? "decimal" : "hms",
+        "ts": new Date().getTime()
+    };
+}
+
+function refreshCanvas() {
+    var plot = getPlotParameters();
+    var url = createUrl(editorServiceUrl, ["footprint", "plot"], plot);
+    $("#canvas").css('background-image', 'url(' + url + ')');
+}
+
+function refreshRegionList() {
+    var url = createUrl(editorServiceUrl, ["footprint", "regions"]);
+    callService(url, "GET", null,
+        function (result, status, xhr) {
+            clearRegionList();
+            $.each(result.regions, function (key, value) {
+                appendRegionListItem(value)
+            });
+        },
+        function (xhr, status, error) {
+
+        });
+}
+
+function clearRegionList()
+{
+    var list = $("#regionList");
+    list.empty();
+}
+
+function appendRegionListItem(region)
+{
+    var html = '<div class="gw-list-item">';
+    html += '<span style="width: 24px"><input type="checkbox" data-item="' + region.name + '" /></span>';
+    html += '<span class="gw-list-span">' + region.name + '</span>';
+    html += '</div>';
+
+    var list = $("#regionList");
+    list.append(html);
+}
+
+function getRegionCircle() {
+    return "CIRCLE J2000 " + $("#circleCenterRa").val() + " " + $("#circleCenterDec").val() + " " + $("#circleRadius").val();
+}
+
+function addRegion(regionName, regionString) {
+    var url = createUrl(editorServiceUrl, ["footprint", "regions", regionName]);
     var request = {
         contentType: "application/json",
         data: JSON.stringify({
             region: {
                 fillFactor: 1.0,
+                name: regionName,
                 regionString: regionString
             }
         })
     };
-    serviceCall(url, "POST", request);
-    refreshCanvas();
+    callService(url, "POST", request,
+        function (result, status, xhr) {
+            appendRegionListItem(result.region);
+            refreshCanvas();
+        },
+        function (xhr, status, error) {
+        });
+
     $(".modal").modal("hide");
 }
 

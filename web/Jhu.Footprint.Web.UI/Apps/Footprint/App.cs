@@ -23,13 +23,13 @@ namespace Jhu.Footprint.Web.UI.Apps.Footprint
                     NavigateUrl = ""        // *** TODO
                 });
 
-            application.RegisterMenuButton(
+            /*application.RegisterMenuButton(
                 new Graywulf.Web.UI.MenuButton()
                 {
                     Key = ButtonKeySearch,
                     Text = "search",
                     NavigateUrl = Search.GetUrl()
-                });
+                });*/
 
             application.RegisterMenuButton(
                 new Graywulf.Web.UI.MenuButton()
@@ -39,13 +39,14 @@ namespace Jhu.Footprint.Web.UI.Apps.Footprint
                     NavigateUrl = Editor.GetUrl()
                 });
 
+            /*
             application.RegisterMenuButton(
                 new Graywulf.Web.UI.MenuButton()
                 {
                     Key = ButtonKeyMyFootprint,
                     Text = "my footprints",
                     NavigateUrl = MyFootprint.GetUrl()
-                });
+                });*/
         }
     }
 }

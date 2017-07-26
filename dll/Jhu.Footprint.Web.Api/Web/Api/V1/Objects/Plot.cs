@@ -50,12 +50,12 @@ namespace Jhu.Footprint.Web.Api.V1
         [DataMember(Name = "rotate")]
         public bool? AutoRotate { get; set; }
 
-        [DataMember(Name = "gridVisible")]
+        [DataMember(Name = "grid")]
         public bool? GridVisible { get; set; }
 
         [DataMember(Name = "gridDensity")]
         public float? GridDensity { get; set; }
-        
+
         [DataMember(Name = "gridSys")]
         [Description("Coordinate system. Valid values: eq, gal.")]
         public string GridCoordinateSystem { get; set; }
@@ -86,11 +86,44 @@ namespace Jhu.Footprint.Web.Api.V1
         {
         }
 
+        public Plot(
+            string projection,
+            string sys,
+            string ra,
+            string dec,
+            string b,
+            string l,
+            float width,
+            float height,
+            string colorTheme,
+            string autoZoom,
+            string autoRotate,
+            string grid,
+            string degreeStyle)
+        {
+            // TODO: change this part to use all parameters
+            // Size is different for vector graphics!
+
+            Projection = projection;
+            CoordinateSystem = sys;
+            //Ra = ra,
+            //Dec = dec
+            //B = b,
+            //L = l,
+            Width = width;
+            Height = height;
+            ColorTheme = colorTheme;
+            AutoZoom = String.IsNullOrEmpty(autoZoom) ? true : Convert.ToBoolean(autoZoom);
+            AutoRotate = String.IsNullOrEmpty(autoRotate) ? true : Convert.ToBoolean(autoRotate);
+            GridVisible = String.IsNullOrEmpty(grid) ? true : Convert.ToBoolean(grid);
+            DegreeStyle = degreeStyle;
+        }
+
         private void GetValues(Spherical.Visualizer.Plot plot)
         {
 
             plot.Width = Math.Max(Width ?? 1080, 1080);
-            plot.Height = Math.Max( Height ?? 600, 600);
+            plot.Height = Math.Max(Height ?? 600, 600);
 
             // TODO: colorTheme
 
@@ -184,7 +217,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
             // plot regions
             var regionds = new ObjectListDataSource(regions);
-            
+
             if (RegionsVisible ?? true)
             {
                 var r = new RegionsLayer();
@@ -193,7 +226,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 plot.Layers.Add(r);
 
             }
-            
+
             // plot outline
             if (OutlineVisible ?? true)
             {
@@ -223,6 +256,6 @@ namespace Jhu.Footprint.Web.Api.V1
             return plot;
 
         }
-        
+
     }
 }
