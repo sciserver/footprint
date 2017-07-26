@@ -697,6 +697,14 @@
       <Project>{c2f9863f-3d23-4185-bdbc-2dde39acbdea}</Project>
       <Name>Jhu.Graywulf.Web.UI</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\sharpastrolib\src\Jhu.SharpAstroLib.Web\Jhu.SharpAstroLib.Web.csproj">
+      <Project>{8e1302a6-882e-476a-be41-8c87cb569cec}</Project>
+      <Name>Jhu.SharpAstroLib.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\sharpastrolib\src\Jhu.SharpAstroLib\Jhu.SharpAstroLib.csproj">
+      <Project>{d2de5b24-643c-4980-980a-3e170ca0b49e}</Project>
+      <Name>Jhu.SharpAstroLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\spherical\src\Jhu.Spherical.Visualizer\Jhu.Spherical.Visualizer.csproj">
       <Project>{1dcd8ac1-dcdd-4941-9e3f-d9ef60a078f9}</Project>
       <Name>Jhu.Spherical.Visualizer</Name>

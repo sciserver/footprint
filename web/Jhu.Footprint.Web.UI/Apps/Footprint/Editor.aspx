@@ -63,45 +63,45 @@
             <div id="canvas" class="dock-fill" style="background-repeat: no-repeat; background-position: center center;">
             </div>
 
-            <!--<div id="circleModal" class="modal" tabindex="-1" role="dialog">-->
-                <jgwuc:Form runat="server" ID="circleModal" IsModal="true" 
-                    Text="Add circle">
-                    <FormTemplate>
-                        <p>
-                            Please specify the center of the circle and its radius.
-                        </p>
-                        <ul>
-                            <li>Use decimal a sexagesimal degrees for coordinates.</li>
-                            <li>Use decimal arc minutes for radius.</li>
-                        </ul>
-                        <table class="gw-form">
-                            <tr>
-                                <td class="gw-form-label">Center:</td>
-                                <td class="gw-form-field">
-                                    <asp:TextBox runat="server" ID="circleCenterRa" ClientIDMode="Static"
-                                        CssClass="narrow" placeholder="12:00:00.00"/>
-                                    <asp:TextBox runat="server" ID="circleCenterDec" ClientIDMode="Static"
-                                        CssClass="narrow" placeholder="12:00:00.00"/>
-                                    <asp:RequiredFieldValidator runat="server" ControlToValidate="circleCenterRa" />
-                                    <asp:RequiredFieldValidator runat="server" ControlToValidate="circleCenterDec" />
-                                    <asp:RegularExpressionValidator runat="server" ControlToValidate="circleCenterRa"
-                                         />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="gw-form-label">Radius:</td>
-                                <td class="gw-form-field">
-                                    <input type="text" class="narrow" placeholder="300" /> arc min
-                                </td>
-                            </tr>
-                        </table>
-                    </FormTemplate>
-                    <ButtonsTemplate>
-                        <input type="button" value="OK" />
-                        <input type="button" value="Cancel" data-dismiss="modal" />
-                    </ButtonsTemplate>
-                </jgwuc:Form>
-            <!--</div>-->
+            <jgwuc:Form runat="server" ID="circleModal" ClientIDMode="Static" IsModal="true"
+                Text="Add circle">
+                <FormTemplate>
+                    <p>
+                        Please specify the center of the circle and its radius.
+                    </p>
+                    <ul>
+                        <li>Use decimal a sexagesimal degrees for coordinates.</li>
+                        <li>Use decimal arc minutes for radius.</li>
+                    </ul>
+                    <table class="gw-form">
+                        <tr>
+                            <td class="gw-form-label">Center:</td>
+                            <td class="gw-form-field">
+                                <asp:TextBox runat="server" ID="circleCenterRa" ClientIDMode="Static"
+                                    CssClass="narrow" placeholder="12:00:00.00" />
+                                <asp:TextBox runat="server" ID="circleCenterDec" ClientIDMode="Static"
+                                    CssClass="narrow" placeholder="12:00:00.00" />
+                                <asp:RequiredFieldValidator runat="server" ControlToValidate="circleCenterRa" />
+                                <asp:RequiredFieldValidator runat="server" ControlToValidate="circleCenterDec" />
+                                <jsa:AngleFormatValidator runat="server" ControlToValidate="circleCenterRa"
+                                    Display="Dynamic"><br />Invalid RA format.</jsa:AngleFormatValidator>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="gw-form-label">Radius:</td>
+                            <td class="gw-form-field">
+                                <asp:TextBox runat="server" ID="circleRadius" ClientIDMode="Static"
+                                    CssClass="narror" placeholder="300" />
+                                arc min
+                            </td>
+                        </tr>
+                    </table>
+                </FormTemplate>
+                <ButtonsTemplate>
+                    <asp:Button runat="server" Text="OK" ID="circleModalOk" ClientIDMode="Static" />
+                    <asp:Button runat="server" Text="Cancel" data-dismiss="modal" />
+                </ButtonsTemplate>
+            </jgwuc:Form>
 
             <div id="GrowModal" class="modal" tabindex="-1" role="dialog">
                 <div class="modal-dialog" role="document">

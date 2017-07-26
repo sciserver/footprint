@@ -15,29 +15,28 @@ namespace Jhu.Footprint.Web.Api.V1
     public class EditorService : ServiceBase, IEditorService
     {
         private const string SessionKeyEditorRegion = "Jhu.Footprint.Web.Api.SessionRegion";
-
-        private HttpSessionState Session
-        {
-            get { return HttpContext.Current.Session; }
-        }
+        private Spherical.Region sessionRegion;
 
         private Spherical.Region SessionRegion
         {
-            get
-            {
-                var region = (Spherical.Region)Session[SessionKeyEditorRegion];
+            get { return sessionRegion; }
+            set { sessionRegion = value; }
+        }
 
-                if (region == null)
-                {
-                    region = new Spherical.Region();
-                }
+        protected override void OnBeforeInvoke(RestOperationContext context)
+        {
+            sessionRegion = (Spherical.Region)context.Session[SessionKeyEditorRegion];
 
-                return region;
-            }
-            set
+            if (sessionRegion == null)
             {
-                Session[SessionKeyEditorRegion] = value;
+                sessionRegion = new Spherical.Region();
             }
+        }
+
+        protected override void OnAfterInvoke(RestOperationContext context)
+        {
+            context.Session[SessionKeyEditorRegion] = sessionRegion;
+            sessionRegion = null;
         }
 
         public void Reset()
@@ -47,8 +46,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
         public void New(FootprintRegionRequest request)
         {
-            var region = request.Region.GetRegion();
-            SessionRegion = region;
+            SessionRegion = request.Region.GetRegion();
         }
 
         public void Union(FootprintRegionRequest request)

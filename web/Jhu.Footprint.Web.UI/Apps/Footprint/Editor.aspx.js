@@ -1,10 +1,11 @@
-﻿var combineMode = null;
+﻿var regionCombineMode = null;
 
 $(document).ready(function () {
 
     // Event handlers
 
     $("#toolbar").on("click", "*", function (event) {
+        event.preventDefault();
         var item = $(event.target).data("item");
         switch (item) {
             case "refresh":
@@ -12,7 +13,7 @@ $(document).ready(function () {
                 break;
             case "union":
             case "intersect":
-                combineMode = item;
+                regionCombineMode = item;
                 var arg = $(event.target).data("arg");
                 switch (arg) {
                     case "circle":
@@ -22,16 +23,17 @@ $(document).ready(function () {
                         throw "Invalid shape.";
                 }
                 break;
-            default:
-                throw "No handler for item.";
         }
-        e.preventDefault();
     });
 
+    $("#circleModalOk")[0].getRegionString = function () {
+        return "CIRCLE J2000 " + $("#circleCenterRa").val() + " " + $("#circleCenterDec").val() + " " + $("#circleRadius").val();
+    }
+
+    $("#circleModalOk").on("click", addRegion);
 
     refreshCanvas();    
 })
-
 
 // Local functions
 
@@ -50,6 +52,24 @@ function refreshCanvas() {
         });
 
     canvas.css('background-image', 'url(' + url + ')');
+}
+
+function addRegion(event) {
+    event.preventDefault();
+    var regionString = event.target.getRegionString();
+    var url = createUrl(editorServiceUrl, [regionCombineMode]);
+    var request = {
+        contentType: "application/json",
+        data: JSON.stringify({
+            region: {
+                fillFactor: 1.0,
+                regionString: regionString
+            }
+        })
+    };
+    serviceCall(url, "POST", request);
+    refreshCanvas();
+    $(".modal").modal("hide");
 }
 
 // 

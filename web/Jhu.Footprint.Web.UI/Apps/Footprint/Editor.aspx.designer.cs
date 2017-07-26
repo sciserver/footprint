@@ -74,5 +74,23 @@ namespace Jhu.Footprint.Web.UI.Apps.Footprint {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox circleCenterDec;
+        
+        /// <summary>
+        /// circleRadius control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox circleRadius;
+        
+        /// <summary>
+        /// circleModalOk control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button circleModalOk;
     }
 }
