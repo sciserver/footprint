@@ -7,7 +7,7 @@ using System.Web.UI.WebControls;
 
 namespace Jhu.Footprint.Web.UI.Apps.Footprint
 {
-    public partial class EditorRegionList : System.Web.UI.UserControl
+    public partial class EditorCanvas : System.Web.UI.UserControl
     {
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -16,8 +16,7 @@ namespace Jhu.Footprint.Web.UI.Apps.Footprint
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
-            Page.ClientScript.RegisterClientScriptInclude(typeof(UserControl).FullName, "ControlBase.js");
-            Page.ClientScript.RegisterClientScriptInclude(GetType().FullName, "EditorRegionList.ascx.js");
+            Page.ClientScript.RegisterClientScriptInclude(GetType().FullName, "EditorCanvas.ascx.js");
         }
     }
 }

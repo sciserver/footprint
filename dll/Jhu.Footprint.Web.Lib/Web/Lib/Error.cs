@@ -7,7 +7,7 @@ using Jhu.Graywulf.AccessControl;
 
 namespace Jhu.Footprint.Web.Lib
 {
-    static class Error
+    public static class Error
     {
         public static FootprintException RestrictedName(string name)
         {

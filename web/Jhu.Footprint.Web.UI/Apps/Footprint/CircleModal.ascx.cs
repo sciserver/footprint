@@ -16,6 +16,8 @@ namespace Jhu.Footprint.Web.UI.Apps.Footprint
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
+            Page.ClientScript.RegisterClientScriptInclude(typeof(UserControl).FullName, "ControlBase.js");
+            Page.ClientScript.RegisterClientScriptInclude(typeof(Jhu.Graywulf.Web.UI.Controls.Form).FullName, "ModalBase.js");
             Page.ClientScript.RegisterClientScriptInclude(GetType().FullName, "CircleModal.ascx.js");
         }
     }

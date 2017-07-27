@@ -87,14 +87,29 @@ namespace Jhu.Footprint.Web.Api.V1
 
         public FootprintRegionResponse CreateFootprintRegion(string regionName, FootprintRegionRequest request)
         {
-            // TODO: do some validation here
+            if (!Lib.Constants.NamePatternRegex.Match(regionName).Success)
+            {
+                throw Lib.Error.InvalidName(regionName);
+            }
+
+            if (SessionRegions.ContainsKey(regionName))
+            {
+                throw Lib.Error.DuplicateRegionName("editor", "editor", regionName);
+            }
+
             SessionRegions[regionName] = request.Region;
             return new FootprintRegionResponse(request.Region);
         }
 
         public FootprintRegionResponse ModifyFootprintRegion(string regionName, FootprintRegionRequest request)
         {
-            return CreateFootprintRegion(regionName, request);
+            if (!SessionRegions.ContainsKey(regionName))
+            {
+                throw Lib.Error.RegionNotFound("editor", "editor", regionName);
+            }
+
+            SessionRegions[regionName] = request.Region;
+            return new FootprintRegionResponse(request.Region);
         }
 
         public void DeleteFootprintRegion(string regionName)

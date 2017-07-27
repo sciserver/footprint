@@ -69,12 +69,17 @@
     <Content Include="Api\V1\Footprint.svc" />
     <Content Include="Apps\Footprint\CircleModal.ascx" />
     <Content Include="Apps\Footprint\CircleModal.ascx.js" />
+    <Content Include="Apps\Footprint\ControlBase.js" />
     <Content Include="Apps\Footprint\Editor.aspx.js" />
     <Content Include="Apps\Footprint\Editor.aspx" />
+    <Content Include="Apps\Footprint\EditorCanvas.ascx" />
+    <Content Include="Apps\Footprint\EditorCanvas.ascx.js" />
     <Content Include="Apps\Footprint\EditorRegionList.ascx" />
     <Content Include="Apps\Footprint\EditorRegionList.ascx.js" />
     <Content Include="Apps\Footprint\EditorService.js" />
     <Content Include="Apps\Footprint\Footprint.js" />
+    <Content Include="Apps\Footprint\ModalBase.js" />
+    <Content Include="Apps\Footprint\ServiceBase.js" />
     <Content Include="Default.aspx" />
     <Content Include="Docs\01_introduction\00_index.aspx" />
     <Content Include="Docs\99_info\00_index.aspx" />
@@ -596,6 +601,13 @@
     </Compile>
     <Compile Include="Apps\Footprint\Editor.aspx.designer.cs">
       <DependentUpon>Editor.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Apps\Footprint\EditorCanvas.ascx.cs">
+      <DependentUpon>EditorCanvas.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Apps\Footprint\EditorCanvas.ascx.designer.cs">
+      <DependentUpon>EditorCanvas.ascx</DependentUpon>
     </Compile>
     <Compile Include="Apps\Footprint\EditorRegionList.ascx.cs">
       <DependentUpon>EditorRegionList.ascx</DependentUpon>

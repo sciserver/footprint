@@ -2,6 +2,8 @@
 
 <%@ Register Src="~/Apps/Footprint/EditorRegionList.ascx" TagPrefix="uc1" TagName="EditorRegionList" %>
 <%@ Register Src="~/Apps/Footprint/CircleModal.ascx" TagPrefix="uc1" TagName="CircleModal" %>
+<%@ Register Src="~/Apps/Footprint/EditorCanvas.ascx" TagPrefix="uc1" TagName="EditorCanvas" %>
+
 
 
 
@@ -60,9 +62,10 @@
     </div>
 </asp:Content>
 <asp:Content ID="Editor" ContentPlaceHolderID="middle" runat="server">
-    <asp:ScriptManagerProxy runat="server">
+    <asp:ScriptManagerProxy runat="server" >
         <Scripts>
             <asp:ScriptReference Path="Footprint.js" />
+            <asp:ScriptReference Path="ServiceBase.js" />
             <asp:ScriptReference Path="EditorService.js" />
             <asp:ScriptReference Path="Editor.aspx.js" />
             <asp:ScriptReference Path="~/Scripts/astro.js" />
@@ -77,7 +80,8 @@
             </div>
 
             <%-- Canvas  --%>
-            <div id="canvas" class="dock-fill" style="background-repeat: no-repeat; background-position: center center;">
+            <div class="dock-container dock-fill" style="border: solid 1px #000000;">
+                <uc1:EditorCanvas runat="server" ID="editorCanvas" />
             </div>
 
             <%-- Circle modal window  --%>

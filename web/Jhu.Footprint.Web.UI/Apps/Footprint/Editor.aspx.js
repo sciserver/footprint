@@ -1,8 +1,10 @@
-﻿var regionList;
+﻿var editorCanvas;
+var regionList;
 var circleModal;
 
 $(document).ready(function () {
 
+    editorCanvas = new EditorCanvas($("#editorCanvas")[0]);
     regionList = new EditorRegionList($("#regionList")[0]);
     circleModal = new CircleModal($("#circleModal")[0]);
 
@@ -18,21 +20,24 @@ $(document).ready(function () {
         refreshAll();
     });
 
+    regionList.on("click", function (item) {
+        editorCanvas.refresh(getPlotParameters());
+    });
+
     circleModal.on("ok", function (region) {
         editorService.createFootprintRegion(region, function (region) {
             regionList.appendItem(region);
-            // TODO
-            refreshCanvas();
+            regionList.applySelection([region.name]);
+            editorCanvas.refresh(getPlotParameters());
+            circleModal.hide();
         });
     });
 
     refreshAll();
 })
 
-// Local functions
-
 function refreshAll() {
-    refreshCanvas();
+    editorCanvas.refresh(getPlotParameters());
     regionList.refreshList();
 }
 
@@ -44,34 +49,19 @@ function getPlotParameters() {
         // dec
         // b
         // l
-        "width": $("#canvas").width(),
-        "height": $("#canvas").height(),
+        // width
+        // height
         // theme
         "zoom": $("#autoZoom")[0].checked,
         "rotate": $("#autoRotate")[0].checked,
         "grid": $("#grid")[0].checked,
         "degStyle": $("#decimal")[0].checked ? "decimal" : "hms",
         "highlights": regionList.getSelection().join(","),
-        "ts": new Date().getTime()
     };
     return plot;
 }
 
-function refreshCanvas() {
-    var plot = getPlotParameters();
-    var url = createUrl(editorServiceUrl, ["footprint", "plot"], plot);
-    $("#canvas").css('background-image', 'url(' + url + ')');
-}
 
-function getRegionCircle() {
-    return "CIRCLE J2000 " + $("#circleCenterRa").val() + " " + $("#circleCenterDec").val() + " " + $("#circleRadius").val();
-}
-
-function addRegion(regionName, regionString) {
-
-
-    $(".modal").modal("hide");
-}
 
 // ---------------
 
