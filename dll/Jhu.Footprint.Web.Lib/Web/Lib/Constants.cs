@@ -23,7 +23,8 @@ namespace Jhu.Footprint.Web.Lib
         public const string RoleReader = "footprint-reader";
         public const string RoleWriter = "footprint-writer";
 
-        public static readonly Regex NamePattern = new Regex(@"^[a-zA-Z0-9_\-\.\+]{3,}$", RegexOptions.Compiled );
+        public const string NamePattern = @"^[a-zA-Z0-9_\-\.\+]{3,}$";
+        public static readonly Regex NamePatternRegex = new Regex(NamePattern, RegexOptions.Compiled );
 
         /*
          *   North galactic pole and zeropoint of l are from : astropy-1.0.6-np110py34_0 package
@@ -40,6 +41,7 @@ namespace Jhu.Footprint.Web.Lib
          *  """
          */
 
+            // TODO: move to astrolib
         public const double raGP = 192.8594812065348 * Math.PI / 180.0;     // right ascenstion of the north Galactic pole (J2000) 
         public const double decGP = 27.12825118085622 * Math.PI / 180.0;    // declination of the north Galactic pole (J2000)
         public const double lCP = 122.9319185680026 * Math.PI / 180.0;      // longitude of the north celestial pole 

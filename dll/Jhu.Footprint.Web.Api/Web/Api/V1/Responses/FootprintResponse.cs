@@ -18,6 +18,11 @@ namespace Jhu.Footprint.Web.Api.V1
         [Description("Footprint.")]
         public Footprint Footprint { get; set; }
 
+        public FootprintResponse(Footprint footprint)
+        {
+            Footprint = footprint;
+        }
+
         public FootprintResponse(Lib.Footprint footprint)
         {
             Footprint = new Footprint(footprint);

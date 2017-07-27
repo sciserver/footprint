@@ -1,12 +1,16 @@
-﻿var regionCombineMode = null;
+﻿var regionList;
+var circleModal;
 
 $(document).ready(function () {
+
+    regionList = new EditorRegionList($("#regionList")[0]);
+    circleModal = new CircleModal($("#circleModal")[0]);
 
     // Event handlers
 
     $("#newCircle").on("click", function (event) {
         event.preventDefault();
-        $("#circleModal").modal("show");
+        circleModal.show();
     });
 
     $("#refresh").on("click", function (event) {
@@ -14,9 +18,12 @@ $(document).ready(function () {
         refreshAll();
     });
 
-    $("#circleModalOk").on("click", function (event) {
-        event.preventDefault();
-        addRegion($("#circleName").val(), getRegionCircle());
+    circleModal.on("ok", function (region) {
+        editorService.createFootprintRegion(region, function (region) {
+            regionList.appendItem(region);
+            // TODO
+            refreshCanvas();
+        });
     });
 
     refreshAll();
@@ -26,11 +33,11 @@ $(document).ready(function () {
 
 function refreshAll() {
     refreshCanvas();
-    refreshRegionList();
+    regionList.refreshList();
 }
 
 function getPlotParameters() {
-    return {
+    var plot = {
         "proj": $("#projection").val(),
         "sys": $("#equatorial")[0].checked ? "eq" : "gal",
         // ra
@@ -44,8 +51,10 @@ function getPlotParameters() {
         "rotate": $("#autoRotate")[0].checked,
         "grid": $("#grid")[0].checked,
         "degStyle": $("#decimal")[0].checked ? "decimal" : "hms",
+        "highlights": regionList.getSelection().join(","),
         "ts": new Date().getTime()
     };
+    return plot;
 }
 
 function refreshCanvas() {
@@ -54,65 +63,17 @@ function refreshCanvas() {
     $("#canvas").css('background-image', 'url(' + url + ')');
 }
 
-function refreshRegionList() {
-    var url = createUrl(editorServiceUrl, ["footprint", "regions"]);
-    callService(url, "GET", null,
-        function (result, status, xhr) {
-            clearRegionList();
-            $.each(result.regions, function (key, value) {
-                appendRegionListItem(value)
-            });
-        },
-        function (xhr, status, error) {
-
-        });
-}
-
-function clearRegionList()
-{
-    var list = $("#regionList");
-    list.empty();
-}
-
-function appendRegionListItem(region)
-{
-    var html = '<div class="gw-list-item">';
-    html += '<span style="width: 24px"><input type="checkbox" data-item="' + region.name + '" /></span>';
-    html += '<span class="gw-list-span">' + region.name + '</span>';
-    html += '</div>';
-
-    var list = $("#regionList");
-    list.append(html);
-}
-
 function getRegionCircle() {
     return "CIRCLE J2000 " + $("#circleCenterRa").val() + " " + $("#circleCenterDec").val() + " " + $("#circleRadius").val();
 }
 
 function addRegion(regionName, regionString) {
-    var url = createUrl(editorServiceUrl, ["footprint", "regions", regionName]);
-    var request = {
-        contentType: "application/json",
-        data: JSON.stringify({
-            region: {
-                fillFactor: 1.0,
-                name: regionName,
-                regionString: regionString
-            }
-        })
-    };
-    callService(url, "POST", request,
-        function (result, status, xhr) {
-            appendRegionListItem(result.region);
-            refreshCanvas();
-        },
-        function (xhr, status, error) {
-        });
+
 
     $(".modal").modal("hide");
 }
 
-// 
+// ---------------
 
 // Submit the form and create the recquired region
 $("body").on("click", "#AddRegionButton", function () {

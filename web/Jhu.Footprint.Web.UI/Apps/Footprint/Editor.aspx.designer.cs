@@ -103,57 +103,21 @@ namespace Jhu.Footprint.Web.UI.Apps.Footprint {
         protected global::System.Web.UI.WebControls.RadioButton hms;
         
         /// <summary>
-        /// circleModal control.
+        /// regionList control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Jhu.Graywulf.Web.UI.Controls.Form circleModal;
+        protected global::Jhu.Footprint.Web.UI.Apps.Footprint.EditorRegionList regionList;
         
         /// <summary>
-        /// circleName control.
+        /// CircleModal control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox circleName;
-        
-        /// <summary>
-        /// circleCenterRa control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox circleCenterRa;
-        
-        /// <summary>
-        /// circleCenterDec control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox circleCenterDec;
-        
-        /// <summary>
-        /// circleRadius control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox circleRadius;
-        
-        /// <summary>
-        /// circleModalOk control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button circleModalOk;
+        protected global::Jhu.Footprint.Web.UI.Apps.Footprint.CircleModal CircleModal;
     }
 }

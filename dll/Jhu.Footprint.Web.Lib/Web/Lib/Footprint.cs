@@ -307,7 +307,7 @@ WHERE Owner = @Owner
                 throw Error.RestrictedName(this.name);
             }
 
-            if (!Constants.NamePattern.Match(this.name).Success)
+            if (!Constants.NamePatternRegex.Match(this.name).Success)
             {
                 throw Error.InvalidName(this.name);
             }

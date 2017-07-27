@@ -25,7 +25,7 @@ namespace Jhu.Footprint.Web.Api.V1
         public const string Shape = "/shape";
         public const string Outline = "/outline";
         public const string OutlinePoints = "/outline/points?res={resolution}";
-        public const string Plot = "/plot?proj={projection}&sys={sys}&ra={ra}&dec={dec}&b={b}&l={l}&width={width}&height={height}&theme={colorTheme}&zoom={autoZoom}&rotate={autoRotate}&grid={grid}&degStyle={degreeStyle}";
+        public const string Plot = "/plot?proj={projection}&sys={sys}&ra={ra}&dec={dec}&b={b}&l={l}&width={width}&height={height}&theme={colorTheme}&zoom={autoZoom}&rotate={autoRotate}&grid={grid}&degStyle={degreeStyle}&highlights={highlights}";
         public const string PlotAdvanced = "/plot?";
         public const string Thumbnail = "/thumbnail";
     }

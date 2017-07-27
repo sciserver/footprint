@@ -1,5 +1,10 @@
 ﻿<%@ Page Title="" Language="C#" AutoEventWireup="true" CodeBehind="Editor.aspx.cs" Inherits="Jhu.Footprint.Web.UI.Apps.Footprint.Editor" %>
 
+<%@ Register Src="~/Apps/Footprint/EditorRegionList.ascx" TagPrefix="uc1" TagName="EditorRegionList" %>
+<%@ Register Src="~/Apps/Footprint/CircleModal.ascx" TagPrefix="uc1" TagName="CircleModal" %>
+
+
+
 <asp:Content runat="server" ContentPlaceHolderID="toolbar">
     <div id="toolbar" class="toolbar">
         <a data-toggle="modal" data-target="#clearModal">clear</a>
@@ -58,6 +63,7 @@
     <asp:ScriptManagerProxy runat="server">
         <Scripts>
             <asp:ScriptReference Path="Footprint.js" />
+            <asp:ScriptReference Path="EditorService.js" />
             <asp:ScriptReference Path="Editor.aspx.js" />
             <asp:ScriptReference Path="~/Scripts/astro.js" />
         </Scripts>
@@ -67,27 +73,7 @@
 
             <%-- Region List  --%>
             <div class="dock-right dock-container" style="width: 200px; margin-left: 8px;">
-                <div class="dock-top gw-list-frame-top">
-                    <div class="gw-list-header">
-                        <div class="gw-list-row">
-                            <span style="width: 24px"></span>
-                            <span class="gw-list-span">region name</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="gw-list-frame dock-fill" id="regionList">
-                    <!--<div class="gw-list-item">
-                        <span style="width: 24px">
-                            <input type="checkbox" /></span>
-                        <span class="gw-list-span">region_name</span>
-                    </div>-->
-                </div>
-                <div class="dock-bottom gw-list-frame-bottom">
-                    <div class="gw-list-footer">
-                        <div class="gw-list-row">
-                        </div>
-                    </div>
-                </div>
+                <uc1:EditorRegionList runat="server" id="regionList" />
             </div>
 
             <%-- Canvas  --%>
@@ -95,51 +81,7 @@
             </div>
 
             <%-- Circle modal window  --%>
-            <jgwuc:Form runat="server" ID="circleModal" ClientIDMode="Static" IsModal="true"
-                Text="Add circle">
-                <FormTemplate>
-                    <p>
-                        Please specify the center of the circle and its radius.
-                    </p>
-                    <ul>
-                        <li>Use decimal a sexagesimal degrees for coordinates.</li>
-                        <li>Use decimal arc minutes for radius.</li>
-                    </ul>
-                    <table class="gw-form">
-                        <tr>
-                            <td class="gw-form-label">Region name:</td>
-                            <td class="gw-form-field">
-                                <asp:TextBox runat="server" ID="circleName" ClientIDMode="Static"
-                                    CssClass="narrow" /></td>
-                        </tr>
-                        <tr>
-                            <td class="gw-form-label">Center:</td>
-                            <td class="gw-form-field">
-                                <asp:TextBox runat="server" ID="circleCenterRa" ClientIDMode="Static"
-                                    CssClass="narrow" placeholder="12:00:00.00" />
-                                <asp:TextBox runat="server" ID="circleCenterDec" ClientIDMode="Static"
-                                    CssClass="narrow" placeholder="12:00:00.00" />
-                                <asp:RequiredFieldValidator runat="server" ControlToValidate="circleCenterRa" />
-                                <asp:RequiredFieldValidator runat="server" ControlToValidate="circleCenterDec" />
-                                <jsa:AngleFormatValidator runat="server" ControlToValidate="circleCenterRa"
-                                    Display="Dynamic"><br />Invalid RA format.</jsa:AngleFormatValidator>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="gw-form-label">Radius:</td>
-                            <td class="gw-form-field">
-                                <asp:TextBox runat="server" ID="circleRadius" ClientIDMode="Static"
-                                    CssClass="narror" placeholder="300" />
-                                arc min
-                            </td>
-                        </tr>
-                    </table>
-                </FormTemplate>
-                <ButtonsTemplate>
-                    <asp:Button runat="server" Text="OK" ID="circleModalOk" ClientIDMode="Static" />
-                    <asp:Button runat="server" Text="Cancel" data-dismiss="modal" />
-                </ButtonsTemplate>
-            </jgwuc:Form>
+            <uc1:CircleModal runat="server" id="CircleModal" />
 
             <div id="GrowModal" class="modal" tabindex="-1" role="dialog">
                 <div class="modal-dialog" role="document">

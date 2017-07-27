@@ -293,10 +293,9 @@ namespace Jhu.Footprint.Web.Api.V1
             using (var context = CreateContext())
             {
                 var footprint = new Lib.Footprint(context);
-
                 footprint.Load(owner, name);
-
-                return plotParameters.GetPlot(new[] { footprint.CombinedRegion.Region });
+                var region = new FootprintRegion(footprint, footprint.CombinedRegion);
+                return plotParameters.GetPlot(new[] { region });
             }
         }
 
@@ -392,14 +391,10 @@ namespace Jhu.Footprint.Web.Api.V1
             {
                 var footprint = new Lib.Footprint(context);
                 footprint.Load(owner, name);
-
                 var region = new Lib.FootprintRegion(footprint);
                 region.Load(regionName);
-
-                //var plot = Lib.FootprintPlot.GetDefaultPlot(new[] { region.Region });
-
-
-                return plotParameters.GetPlot(new[] { region.Region });
+                var fpr = new FootprintRegion(footprint, region);
+                return plotParameters.GetPlot(new[] { fpr });
             }
         }
 

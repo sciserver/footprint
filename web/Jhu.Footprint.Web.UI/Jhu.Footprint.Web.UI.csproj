@@ -67,8 +67,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Api\V1\Footprint.svc" />
+    <Content Include="Apps\Footprint\CircleModal.ascx" />
+    <Content Include="Apps\Footprint\CircleModal.ascx.js" />
     <Content Include="Apps\Footprint\Editor.aspx.js" />
     <Content Include="Apps\Footprint\Editor.aspx" />
+    <Content Include="Apps\Footprint\EditorRegionList.ascx" />
+    <Content Include="Apps\Footprint\EditorRegionList.ascx.js" />
+    <Content Include="Apps\Footprint\EditorService.js" />
     <Content Include="Apps\Footprint\Footprint.js" />
     <Content Include="Default.aspx" />
     <Content Include="Docs\01_introduction\00_index.aspx" />
@@ -578,12 +583,26 @@
       <DependentUpon>UI.master</DependentUpon>
     </Content>
     <Compile Include="Apps\Footprint\App.cs" />
+    <Compile Include="Apps\Footprint\CircleModal.ascx.cs">
+      <DependentUpon>CircleModal.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Apps\Footprint\CircleModal.ascx.designer.cs">
+      <DependentUpon>CircleModal.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Apps\Footprint\Editor.aspx.cs">
       <DependentUpon>Editor.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Apps\Footprint\Editor.aspx.designer.cs">
       <DependentUpon>Editor.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Apps\Footprint\EditorRegionList.ascx.cs">
+      <DependentUpon>EditorRegionList.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Apps\Footprint\EditorRegionList.ascx.designer.cs">
+      <DependentUpon>EditorRegionList.ascx</DependentUpon>
     </Compile>
     <Compile Include="CustomPageBase.cs">
       <SubType>ASPXCodeBehind</SubType>

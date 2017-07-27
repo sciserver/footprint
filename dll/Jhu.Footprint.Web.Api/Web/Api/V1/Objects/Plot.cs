@@ -13,7 +13,7 @@ namespace Jhu.Footprint.Web.Api.V1
     [Description("Footprint plot prameters")]
     public class Plot
     {
-        private IEnumerable<Spherical.Region> regions = null;
+        private IEnumerable<FootprintRegion> regions = null;
 
         [DataMember(Name = "width")]
         public float? Width { get; set; }
@@ -82,6 +82,9 @@ namespace Jhu.Footprint.Web.Api.V1
         [DataMember(Name = "outlineVisible")]
         public bool? OutlineVisible { get; set; }
 
+        [DataMember(Name = "highlights")]
+        public string[] Highligths { get; set; }
+
         public Plot()
         {
         }
@@ -121,12 +124,10 @@ namespace Jhu.Footprint.Web.Api.V1
 
         private void GetValues(Spherical.Visualizer.Plot plot)
         {
-
             plot.Width = Math.Max(Width ?? 1080, 1080);
             plot.Height = Math.Max(Height ?? 600, 600);
 
             // TODO: colorTheme
-
 
             // projection
             if (Projection != "")
@@ -143,20 +144,16 @@ namespace Jhu.Footprint.Web.Api.V1
                 }
             }
 
-
-            if (regions != null)
+            switch (CoordinateSystem)
             {
-                switch (CoordinateSystem)
-                {
-                    default:
-                    case "equatorial":
-                        break;
-                    case "galactic":
-                        regions.AsParallel().ForAll(r => r.Rotate(Spherical.Rotation.EquatorialToGalactic));
-                        break;
-                }
+                default:
+                case "equatorial":
+                    break;
+                case "galactic":
+                    // TODO: this is a bit fishy here, we should probably only tag a rotation matrix to the region
+                    regions?.AsParallel().ForAll(r => r.Region.Rotate(Spherical.Rotation.EquatorialToGalactic));
+                    break;
             }
-
 
             // TODO: ra, dec, l, b 
 
@@ -214,17 +211,20 @@ namespace Jhu.Footprint.Web.Api.V1
 
             // TODO: Linewidth
 
+            
 
-            // plot regions
             var regionds = new ObjectListDataSource(regions);
 
+            // Plot regions
             if (RegionsVisible ?? true)
-            {
+            {                
                 var r = new RegionsLayer();
                 r.DataSource = regionds;
+                r.RegionDataField = "Region";
                 r.Outline.Visible = false;
+                r.Fill.PaletteSelection = PaletteSelection.Field;
+                r.Fill.Field = "BrushIndex";
                 plot.Layers.Add(r);
-
             }
 
             // plot outline
@@ -232,21 +232,15 @@ namespace Jhu.Footprint.Web.Api.V1
             {
                 var r = new RegionsLayer();
                 r.DataSource = regionds;
+                r.RegionDataField = "Region";
                 r.Fill.Visible = false;
-
-                var pen = new System.Drawing.Pen(System.Drawing.Brushes.Black, 1)
-                {
-                    LineJoin = System.Drawing.Drawing2D.LineJoin.Bevel
-                };
-
-                r.Outline.Pens = new[] { pen };
+                r.Outline.PaletteSelection = PaletteSelection.Field;
+                r.Outline.Field = "PenIndex";
                 plot.Layers.Add(r);
             }
-
-
         }
 
-        public Spherical.Visualizer.Plot GetPlot(IEnumerable<Spherical.Region> regions)
+        public Spherical.Visualizer.Plot GetPlot(IEnumerable<FootprintRegion> regions)
         {
             var plot = new Spherical.Visualizer.Plot();
 

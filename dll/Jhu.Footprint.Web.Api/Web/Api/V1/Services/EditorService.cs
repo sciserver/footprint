@@ -18,16 +18,16 @@ namespace Jhu.Footprint.Web.Api.V1
         private const string SessionKeyEditorFootprint = "Jhu.Footprint.Web.Api.SessionFootprint";
         private const string SessionKeyEditorRegions = "Jhu.Footprint.Web.Api.SessionRegions";
 
-        private Lib.Footprint sessionFootprint;
-        private Dictionary<string, Lib.FootprintRegion> sessionRegions;
+        private Footprint sessionFootprint;
+        private Dictionary<string, FootprintRegion> sessionRegions;
 
-        private Lib.Footprint SessionFootprint
+        private Footprint SessionFootprint
         {
             get { return sessionFootprint; }
             set { sessionFootprint = value; }
         }
 
-        private Dictionary<string, Lib.FootprintRegion> SessionRegions
+        private Dictionary<string, FootprintRegion> SessionRegions
         {
             get { return sessionRegions; }
             set { sessionRegions = value; }
@@ -35,12 +35,12 @@ namespace Jhu.Footprint.Web.Api.V1
 
         protected override void OnBeforeInvoke(RestOperationContext context)
         {
-            sessionFootprint = (Lib.Footprint)context.Session[SessionKeyEditorFootprint];
-            sessionRegions = (Dictionary<string, Lib.FootprintRegion>)context.Session[SessionKeyEditorRegions];
+            sessionFootprint = (Footprint)context.Session[SessionKeyEditorFootprint];
+            sessionRegions = (Dictionary<string, FootprintRegion>)context.Session[SessionKeyEditorRegions];
 
             if (sessionFootprint == null)
             {
-                sessionFootprint = new Lib.Footprint()
+                sessionFootprint = new Footprint()
                 {
                     CombinationMethod = Lib.CombinationMethod.None,
                     Name = "new_footprint",
@@ -50,7 +50,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
             if (sessionRegions == null)
             {
-                sessionRegions = new Dictionary<string, Lib.FootprintRegion>();
+                sessionRegions = new Dictionary<string, FootprintRegion>();
             }
         }
 
@@ -82,18 +82,14 @@ namespace Jhu.Footprint.Web.Api.V1
 
         public FootprintRegionResponse GetFootprintRegion(string regionName)
         {
-            return new FootprintRegionResponse(SessionFootprint, SessionRegions[regionName]);
+            return new FootprintRegionResponse(SessionRegions[regionName]);
         }
 
         public FootprintRegionResponse CreateFootprintRegion(string regionName, FootprintRegionRequest request)
         {
-            var region = new Lib.FootprintRegion()
-            {
-                Name = regionName
-            };
-            request.Region.GetValues(region);
-            SessionRegions[regionName] = region;
-            return new FootprintRegionResponse(SessionFootprint, region);
+            // TODO: do some validation here
+            SessionRegions[regionName] = request.Region;
+            return new FootprintRegionResponse(request.Region);
         }
 
         public FootprintRegionResponse ModifyFootprintRegion(string regionName, FootprintRegionRequest request)
@@ -110,9 +106,7 @@ namespace Jhu.Footprint.Web.Api.V1
         {
             return new FootprintRegionListResponse()
             {
-                Regions = SessionRegions.Values
-                    .Select(r => new FootprintRegion(SessionFootprint, r))
-                    .ToArray()
+                Regions = SessionRegions.Values.ToArray()
             };
         }
 
@@ -147,16 +141,30 @@ namespace Jhu.Footprint.Web.Api.V1
             string autoZoom,
             string autoRotate,
             string grid,
-            string degreeStyle)
+            string degreeStyle,
+            string highlights)
         {
+            // Set highlights
+            HashSet<string> hl = null;
+
+            if (highlights != null && highlights.Length > 0)
+            {
+                hl = new HashSet<string>(highlights.Split(','));
+            }
+
+            foreach (var name in SessionRegions.Keys)
+            {
+                var r = SessionRegions[name];
+                r.BrushIndex = r.PenIndex = (hl != null && hl.Contains(name)) ? 1 : 0;
+            }
+
             var plotParameters = new Plot(projection, sys, ra, dec, b, l, width, height, colorTheme, autoZoom, autoRotate, grid, degreeStyle);
             return PlotFootprintAdvanced(plotParameters);
         }
 
         public Spherical.Visualizer.Plot PlotFootprintAdvanced(Plot plotParameters)
         {
-            var plot = plotParameters.GetPlot(SessionRegions.Values.Select(r => r.Region));
-            return plot;
+            return plotParameters.GetPlot(SessionRegions.Values);
         }
 
         public Stream GetFootprintThumbnail()
@@ -169,10 +177,10 @@ namespace Jhu.Footprint.Web.Api.V1
 
         public void SetFootprintRegionShape(string regionName, Stream stream)
         {
-            var region = new Lib.FootprintRegion()
+            var region = new FootprintRegion()
             {
                 Name = regionName,
-                FootprintOwner = RestOperationContext.Current.Principal.Identity.Name,
+                Owner = RestOperationContext.Current.Principal.Identity.Name,
                 Region = new RegionAdapter().ReadFromStream(stream)
             };
             SessionRegions[regionName] = region;
@@ -209,7 +217,8 @@ namespace Jhu.Footprint.Web.Api.V1
             string autoZoom,
             string autoRotate,
             string grid,
-            string degreeStyle)
+            string degreeStyle,
+            string highlights)
         {
             var plotParameters = new Plot(projection, sys, ra, dec, b, l, width, height, colorTheme, autoZoom, autoRotate, grid, degreeStyle);
             return PlotFootprintRegionAdvanced(regionName, plotParameters);
@@ -217,7 +226,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
         public Spherical.Visualizer.Plot PlotFootprintRegionAdvanced(string regionName, Plot plotParameters)
         {
-            return plotParameters.GetPlot(new[] { SessionRegions[regionName].Region });
+            return plotParameters.GetPlot(new[] { SessionRegions[regionName] });
         }
 
         public Stream GetFootprintRegionThumbnail(string regionName)

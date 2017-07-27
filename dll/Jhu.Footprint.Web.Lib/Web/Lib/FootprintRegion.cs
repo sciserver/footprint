@@ -196,7 +196,7 @@ namespace Jhu.Footprint.Web.Lib
                 throw Error.RestrictedName(this.name);
             }
 
-            if (!Constants.NamePattern.Match(this.name).Success)
+            if (!Constants.NamePatternRegex.Match(this.name).Success)
             {
                 throw Error.InvalidName(this.name);
             }
@@ -369,7 +369,8 @@ WHERE r.ID = @ID
 
             if (region != null && !region.IsSimplified)
             {
-
+                // TODO
+                throw new NotImplementedException();
             }
 
             var sql = "[fps].[spSaveRegion]";

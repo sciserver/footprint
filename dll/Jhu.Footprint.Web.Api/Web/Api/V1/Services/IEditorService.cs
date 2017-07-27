@@ -119,7 +119,8 @@ namespace Jhu.Footprint.Web.Api.V1
             string autoZoom,
             string autoRotate,
             string grid,
-            string degreeStyle);
+            string degreeStyle,
+            string highlights);
 
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Post, UriTemplate = Urls.EditorFootprint + Urls.PlotAdvanced, BodyStyle = WebMessageBodyStyle.Bare)]
@@ -176,7 +177,8 @@ namespace Jhu.Footprint.Web.Api.V1
             string autoZoom,
             string autoRotate,
             string grid,
-            string degreeStyle);
+            string degreeStyle,
+            string highlights);
 
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Post, UriTemplate = Urls.EditorFootprintRegion + Urls.PlotAdvanced, BodyStyle = WebMessageBodyStyle.Bare)]
