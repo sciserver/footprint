@@ -63,6 +63,12 @@ namespace Jhu.Footprint.Web.Api.V1
             sessionRegions = null;
         }
 
+        private void ValidateRegion(FootprintRegion region)
+        {
+            // This simply fails if incorrect region string is uploaded
+            region.Region.Simplify();
+        }
+
         #region Region CRUD operations
 
         public FootprintResponse GetFootprint()
@@ -80,11 +86,6 @@ namespace Jhu.Footprint.Web.Api.V1
         #endregion
         #region Footprint region CRUD operations
 
-        public FootprintRegionResponse GetFootprintRegion(string regionName)
-        {
-            return new FootprintRegionResponse(SessionRegions[regionName]);
-        }
-
         public FootprintRegionResponse CreateFootprintRegion(string regionName, FootprintRegionRequest request)
         {
             if (!Lib.Constants.NamePatternRegex.Match(regionName).Success)
@@ -97,6 +98,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 throw Lib.Error.DuplicateRegionName("editor", "editor", regionName);
             }
 
+            ValidateRegion(request.Region);
             SessionRegions[regionName] = request.Region;
             return new FootprintRegionResponse(request.Region);
         }
@@ -108,6 +110,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 throw Lib.Error.RegionNotFound("editor", "editor", regionName);
             }
 
+            ValidateRegion(request.Region);
             SessionRegions[regionName] = request.Region;
             return new FootprintRegionResponse(request.Region);
         }
@@ -126,6 +129,11 @@ namespace Jhu.Footprint.Web.Api.V1
                     SessionRegions.Remove(item);
                 }
             }
+        }
+
+        public FootprintRegionResponse GetFootprintRegion(string regionName)
+        {
+            return new FootprintRegionResponse(SessionRegions[regionName]);
         }
 
         public FootprintRegionListResponse ListFootprintRegions()

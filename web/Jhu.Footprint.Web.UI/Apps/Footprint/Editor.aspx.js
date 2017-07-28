@@ -61,8 +61,9 @@ $(document).ready(function () {
     });
 
     rectangleModal.on("ok", function (region) {
-        addRegion(region);
-        rectangleModal.hide();
+        addRegion(region, function () {
+            rectangleModal.hide();
+        });
     });
 
     $("#newPolygon").on("click", function (event) {
@@ -78,8 +79,9 @@ $(document).ready(function () {
     });
 
     multipointRegionModal.on("ok", function (region) {
-        addRegion(region);
-        multipointRegionModal.hide();
+        addRegion(region, function () {
+            multipointRegionModal.hide();
+        });
     });
 
     $("#newCustomRegion").on("click", function (event) {
@@ -89,20 +91,22 @@ $(document).ready(function () {
     });
 
     customRegionModal.on("ok", function (region) {
-        addRegion(region);
-        customRegionModal.hide();
+        addRegion(region, function () {
+            customRegionModal.hide();
+        });
     });
 
     refreshAll();
 })
 
-function addRegion(region) {
+function addRegion(region, success) {
     editorService.createFootprintRegion(
         region.name, { region: region },
         function (result) {
             regionList.appendItem(result.region);
             regionList.applySelection([result.region.name]);
             editorCanvas.refresh(getPlotParameters());
+            if (success) success();
         });
 }
 

@@ -28,7 +28,7 @@
             </tr>
             <tr>
                 <td colspan="2" class="gw-form-field">
-                    <asp:TextBox runat="server" ID="customRegionString" ClientIDMode="Static" TextMode="MultiLine" Text="REGION CIRCLE J2000 10 10 300" />
+                    <asp:TextBox runat="server" ID="customRegionString" ClientIDMode="Static" TextMode="MultiLine" Height="200px" Text="REGION CIRCLE J2000 10 10 300" />
                     <asp:RequiredFieldValidator runat="server" ControlToValidate="customRegionString" ValidationGroup="customRegionModal" Display="Dynamic">
                         <br />Region text is required.
                     </asp:RequiredFieldValidator>
