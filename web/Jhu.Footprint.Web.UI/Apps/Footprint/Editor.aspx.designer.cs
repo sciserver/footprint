@@ -121,12 +121,39 @@ namespace Jhu.Footprint.Web.UI.Apps.Footprint {
         protected global::Jhu.Footprint.Web.UI.Apps.Footprint.EditorCanvas editorCanvas;
         
         /// <summary>
-        /// CircleModal control.
+        /// circleModal control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Jhu.Footprint.Web.UI.Apps.Footprint.CircleModal CircleModal;
+        protected global::Jhu.Footprint.Web.UI.Apps.Footprint.CircleModal circleModal;
+        
+        /// <summary>
+        /// rectangleModal control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Jhu.Footprint.Web.UI.Apps.Footprint.RectangleModal rectangleModal;
+        
+        /// <summary>
+        /// customRegionModal control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Jhu.Footprint.Web.UI.Apps.Footprint.CustomRegionModal customRegionModal;
+        
+        /// <summary>
+        /// multipointRegionModal control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Jhu.Footprint.Web.UI.Apps.Footprint.MultipointRegionModal multipointRegionModal;
     }
 }

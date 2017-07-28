@@ -26,8 +26,8 @@
             <tr>
                 <td class="gw-form-label">Center:</td>
                 <td class="gw-form-field">
-                    <asp:TextBox runat="server" ID="circleCenterRa" ClientIDMode="Static" CssClass="narrow" Text="10.524" />
-                    <asp:TextBox runat="server" ID="circleCenterDec" ClientIDMode="Static" CssClass="narrow" Text="-1.234" />
+                    <asp:TextBox runat="server" ID="circleCenterRa" ClientIDMode="Static" CssClass="narrow" Text="01:15:00" />
+                    <asp:TextBox runat="server" ID="circleCenterDec" ClientIDMode="Static" CssClass="narrow" Text="+05:00:00" />
                     <asp:RequiredFieldValidator runat="server" ControlToValidate="circleCenterRa" ValidationGroup="circleModal" Display="Dynamic">
                         <br />RA is required.
                     </asp:RequiredFieldValidator>

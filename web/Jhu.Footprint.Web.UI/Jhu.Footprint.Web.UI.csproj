@@ -68,6 +68,12 @@
   <ItemGroup>
     <Content Include="Api\V1\Editor.svc" />
     <Content Include="Api\V1\Footprint.svc" />
+    <Content Include="Apps\Footprint\MultipointRegionModal.ascx.js" />
+    <Content Include="Apps\Footprint\MultipointRegionModal.ascx" />
+    <Content Include="Apps\Footprint\CustomRegionModal.ascx" />
+    <Content Include="Apps\Footprint\CustomRegionModal.ascx.js" />
+    <Content Include="Apps\Footprint\RectangleModal.ascx.js" />
+    <Content Include="Apps\Footprint\RectangleModal.ascx" />
     <Content Include="Apps\Footprint\CircleModal.ascx" />
     <Content Include="Apps\Footprint\CircleModal.ascx.js" />
     <Content Include="Apps\Footprint\ControlBase.js" />
@@ -91,7 +97,6 @@
     <Content Include="Docs\images\nsf.png" />
     <Content Include="Docs\images\vao.png" />
     <Content Include="Global.asax" />
-    <Content Include="Scripts\astro.js" />
     <Content Include="Scripts\Bootstrap-Lightbox\ekko-lightbox.css" />
     <Content Include="Scripts\Bootstrap-Lightbox\ekko-lightbox.js" />
     <Content Include="Scripts\Bootstrap-Lightbox\ekko-lightbox.min.css" />
@@ -586,6 +591,27 @@
       <DependentUpon>UI.master</DependentUpon>
     </Content>
     <Compile Include="Apps\Footprint\App.cs" />
+    <Compile Include="Apps\Footprint\MultipointRegionModal.ascx.cs">
+      <DependentUpon>MultipointRegionModal.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Apps\Footprint\MultipointRegionModal.ascx.designer.cs">
+      <DependentUpon>MultipointRegionModal.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Apps\Footprint\CustomRegionModal.ascx.cs">
+      <DependentUpon>CustomRegionModal.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Apps\Footprint\CustomRegionModal.ascx.designer.cs">
+      <DependentUpon>CustomRegionModal.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Apps\Footprint\RectangleModal.ascx.cs">
+      <DependentUpon>RectangleModal.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Apps\Footprint\RectangleModal.ascx.designer.cs">
+      <DependentUpon>RectangleModal.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Apps\Footprint\CircleModal.ascx.cs">
       <DependentUpon>CircleModal.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

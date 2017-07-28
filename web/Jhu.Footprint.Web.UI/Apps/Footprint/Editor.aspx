@@ -3,7 +3,9 @@
 <%@ Register Src="~/Apps/Footprint/EditorRegionList.ascx" TagPrefix="uc1" TagName="EditorRegionList" %>
 <%@ Register Src="~/Apps/Footprint/CircleModal.ascx" TagPrefix="uc1" TagName="CircleModal" %>
 <%@ Register Src="~/Apps/Footprint/EditorCanvas.ascx" TagPrefix="uc1" TagName="EditorCanvas" %>
-
+<%@ Register Src="~/Apps/Footprint/RectangleModal.ascx" TagPrefix="uc1" TagName="RectangleModal" %>
+<%@ Register Src="~/Apps/Footprint/CustomRegionModal.ascx" TagPrefix="uc1" TagName="CustomRegionModal" %>
+<%@ Register Src="~/Apps/Footprint/MultipointRegionModal.ascx" TagPrefix="uc1" TagName="MultipointRegionModal" %>
 
 
 
@@ -46,12 +48,6 @@
 
         <span class="separator"></span>
 
-        <a data-toggle="modal" data-target="#clearModal">clear</a>
-        <a data-toggle="modal" data-target="#saveModal">save</a>
-        <a data-toggle="modal" data-target="#downloadModal">download</a>
-
-        <span class="span"></span>
-
         <div class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown">new region<span class="caret"></span></a>
             <ul class="dropdown-menu">
@@ -60,7 +56,7 @@
                 <li><a href="#" id="newPolygon">polygon</a></li>
                 <li><a href="#" id="newCHull">convex hull</a></li>
                 <li role="separator" class="divider"></li>
-                <li><a href="#" id="newRegion">custom region</a></li>
+                <li><a href="#" id="newCustomRegion">custom region</a></li>
                 <li><a href="#" id="newFile">upload file</a></li>
             </ul>
         </div>
@@ -74,15 +70,19 @@
         </div>
         <a id="delete" style="min-width: 40px; text-align: center"><span class="glyphicon glyphicon-remove"></span></a>
 
+        <span class="separator"></span>
+
+        <a data-toggle="modal" data-target="#clearModal">clear</a>
+        <a data-toggle="modal" data-target="#saveModal">save</a>
+        <a data-toggle="modal" data-target="#downloadModal">download</a>
+
+        <span class="span"></span>
+
     </div>
 </asp:Content>
 <asp:Content ID="Editor" ContentPlaceHolderID="middle" runat="server">
     <asp:ScriptManagerProxy runat="server">
         <Scripts>
-            <%-- TODO: delete
-            <asp:ScriptReference Path="Footprint.js" />
-            <asp:ScriptReference Path="ServiceBase.js" />
-            <asp:ScriptReference Path="EditorService.js" /> --%>
             <asp:ScriptReference Path="~/Api/V1/Editor.svc/proxy.js" />
             <asp:ScriptReference Path="Editor.aspx.js" />
             <asp:ScriptReference Path="~/Scripts/astro.js" />
@@ -101,9 +101,13 @@
                 <uc1:EditorCanvas runat="server" ID="editorCanvas" />
             </div>
 
-            <%-- Circle modal window  --%>
-            <uc1:CircleModal runat="server" ID="CircleModal" />
-
+            <%-- Modal windows  --%>
+            <uc1:CircleModal runat="server" ID="circleModal" />
+            <uc1:RectangleModal runat="server" id="rectangleModal" />
+            <uc1:CustomRegionModal runat="server" id="customRegionModal" />
+            <uc1:MultipointRegionModal runat="server" ID="multipointRegionModal" />
+            
+            <%--
             <div id="GrowModal" class="modal" tabindex="-1" role="dialog">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -213,7 +217,7 @@
                     </div>
                 </div>
             </div>
-
+                --%>
         </ContentTemplate>
     </asp:UpdatePanel>
 </asp:Content>

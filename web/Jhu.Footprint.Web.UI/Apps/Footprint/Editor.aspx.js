@@ -3,19 +3,20 @@
 var editorCanvas;
 var regionList;
 var circleModal;
+var rectangleModal;
+var customRegionModal;
+var multipointRegionModal;
 
 $(document).ready(function () {
 
     editorCanvas = new EditorCanvas($("#editorCanvas")[0], editorService);
     regionList = new EditorRegionList($("#regionList")[0], editorService);
     circleModal = new CircleModal($("#circleModal")[0]);
+    rectangleModal = new RectangleModal($("#rectangleModal")[0]);
+    customRegionModal = new CustomRegionModal($("#customRegionModal")[0]);
+    multipointRegionModal = new MultipointRegionModal($("#multipointRegionModal")[0]);
 
     // Event handlers
-
-    $("#newCircle").on("click", function (event) {
-        event.preventDefault();
-        circleModal.show();
-    });
 
     $("#refresh").on("click", function (event) {
         event.preventDefault();
@@ -41,19 +42,69 @@ $(document).ready(function () {
         editorCanvas.delayedRefresh(getPlotParameters());
     });
 
+
+    $("#newCircle").on("click", function (event) {
+        event.preventDefault();
+        var name = "new_circle_" + (regionList.count() + 1);
+        circleModal.show({ circleName: name });
+    });
+
     circleModal.on("ok", function (region) {
-        editorService.createFootprintRegion(
-            region.name, { region: region },
-            function (result) {
-                regionList.appendItem(result.region);
-                regionList.applySelection([result.region.name]);
-                editorCanvas.refresh(getPlotParameters());
-                circleModal.hide();
-            });
+        addRegion(region);
+        circleModal.hide();
+    });
+
+    $("#newRectangle").on("click", function (event) {
+        event.preventDefault();
+        var name = "new_rect_" + (regionList.count() + 1);
+        rectangleModal.show({ rectangleName: name });
+    });
+
+    rectangleModal.on("ok", function (region) {
+        addRegion(region);
+        rectangleModal.hide();
+    });
+
+    $("#newPolygon").on("click", function (event) {
+        event.preventDefault();
+        var name = "new_poly_" + (regionList.count() + 1);
+        multipointRegionModal.show({ multipointRegionName: name, multipointRegionPoly: true });
+    });
+
+    $("#newCHull").on("click", function (event) {
+        event.preventDefault();
+        var name = "new_chull_" + (regionList.count() + 1);
+        multipointRegionModal.show({ multipointRegionName: name, multipointRegionCHull: true });
+    });
+
+    multipointRegionModal.on("ok", function (region) {
+        addRegion(region);
+        multipointRegionModal.hide();
+    });
+
+    $("#newCustomRegion").on("click", function (event) {
+        event.preventDefault();
+        var name = "new_region_" + (regionList.count() + 1);
+        customRegionModal.show({ customRegionName: name });
+    });
+
+    customRegionModal.on("ok", function (region) {
+        addRegion(region);
+        customRegionModal.hide();
     });
 
     refreshAll();
 })
+
+function addRegion(region) {
+    editorService.createFootprintRegion(
+        region.name, { region: region },
+        function (result) {
+            regionList.appendItem(result.region);
+            regionList.applySelection([result.region.name]);
+            editorCanvas.refresh(getPlotParameters());
+        });
+}
 
 function refreshAll() {
     editorCanvas.refresh(getPlotParameters());
@@ -83,7 +134,7 @@ function getPlotParameters() {
 
 
 // ---------------
-
+// TODO: delete
 
 /*
 // Submit the form and create the recquired region

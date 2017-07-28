@@ -4,15 +4,20 @@
     var me = this;
     this.editorService = editorService;
 
-    $(this.control).on("click", "input", function () {
-        me.item_click(this);
+    $(this.control).on("click", "input", function (event) {
+        me.item_click(this, event);
     });
 };
 
 EditorRegionList.prototype = Object.create(ControlBase.prototype);
 EditorRegionList.prototype.constructor = EditorRegionList;
 
-EditorRegionList.prototype.item_click = function (item) {
+EditorRegionList.prototype.item_click = function (item, event) {
+    // Move selection to new item, except when shift or ctrl is pressed
+    if (!event.ctrlKey && !event.shiftKey) {
+        this.clearSelection();
+        $(item).prop("checked", true);
+    }
     if (this.events.click) this.events.click(item);
 }
 
@@ -50,6 +55,10 @@ EditorRegionList.prototype.createItem = function (region) {
     return html;
 }
 
+EditorRegionList.prototype.count = function () {
+    return $(this.control).find("input").length;
+};
+
 EditorRegionList.prototype.getSelection = function () {
     var selection = [];
     $(this.control).find("input:checked").each(function (index) {
@@ -58,8 +67,13 @@ EditorRegionList.prototype.getSelection = function () {
     return selection;
 }
 
-EditorRegionList.prototype.applySelection = function (selection) {
+EditorRegionList.prototype.clearSelection = function () {
     $(this.control).find("input").prop('checked', false);
+}
+
+
+EditorRegionList.prototype.applySelection = function (selection) {
+    this.clearSelection();
     for (i = 0; i < selection.length; i++) {
         $(this.control).find('input[data-item="' + selection[i] + '"]').prop('checked', true);
     }
