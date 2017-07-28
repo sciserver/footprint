@@ -1,7 +1,8 @@
-﻿function EditorRegionList(control) {
+﻿function EditorRegionList(control, editorService) {
     ControlBase.call(this, control);
 
     var me = this;
+    this.editorService = editorService;
 
     $(this.control).on("click", "input", function () {
         me.item_click(this);
@@ -17,11 +18,11 @@ EditorRegionList.prototype.item_click = function (item) {
 
 EditorRegionList.prototype.refreshList = function () {
     var me = this;
-    editorService.listFootprintRegions(
-        function (regions) {
+    this.editorService.listFootprintRegions(
+        function (result) {
             var selection = me.getSelection();
             me.clearList();
-            me.updateList(regions);
+            me.updateList(result.regions);
             me.applySelection(selection)
         });
 }

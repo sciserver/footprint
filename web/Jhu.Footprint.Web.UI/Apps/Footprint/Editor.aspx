@@ -9,22 +9,6 @@
 
 <asp:Content runat="server" ContentPlaceHolderID="toolbar">
     <div id="toolbar" class="toolbar">
-        <a data-toggle="modal" data-target="#clearModal">clear</a>
-        <a data-toggle="modal" data-target="#saveModal">save</a>
-        <a data-toggle="modal" data-target="#downloadModal">download</a>
-        <span class="separator"></span>
-        <div class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown">new region<span class="caret"></span></a>
-            <ul class="dropdown-menu">
-                <li><a href="#" id="newCircle">circle</a></li>
-                <li><a href="#" id="newRectangle">rectangle</a></li>
-                <li><a href="#" id="newPolygon">polygon</a></li>
-                <li><a href="#" id="newCHull">convex hull</a></li>
-            </ul>
-        </div>
-        <a data-toggle="modal" data-target="#GrowModal">grow shape</a>
-
-        <span class="span"></span>
 
         <div runat="server" id="projectionDiv" style="min-width: 140px">
             <asp:Label ID="projectionLabel" runat="server" Text="Projection:" /><br />
@@ -37,9 +21,10 @@
                 <asp:ListItem Text="Equirectangular" Value="Equirectangular" />
             </asp:DropDownList>
         </div>
+        <a id="refresh" style="min-width: 40px; text-align: center"><span class="glyphicon glyphicon-refresh"></span></a>
         <div class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown">options<span class="caret"></span></a>
-            <ul class="dropdown-menu">
+            <a class="dropdown-toggle" data-toggle="dropdown">view<span class="caret"></span></a>
+            <ul class="dropdown-menu" id="viewDropdown">
                 <li>
                     <asp:CheckBox runat="server" ID="autoRotate" ClientIDMode="Static" Text="auto center" /></li>
                 <li>
@@ -58,15 +43,47 @@
                     <asp:RadioButton runat="server" GroupName="degreeStyle" ID="hms" ClientIDMode="Static" Text="hms dms" /></li>
             </ul>
         </div>
-        <a id="refresh"><span class="glyphicon glyphicon-refresh"></span></a>
+
+        <span class="separator"></span>
+
+        <a data-toggle="modal" data-target="#clearModal">clear</a>
+        <a data-toggle="modal" data-target="#saveModal">save</a>
+        <a data-toggle="modal" data-target="#downloadModal">download</a>
+
+        <span class="span"></span>
+
+        <div class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown">new region<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                <li><a href="#" id="newCircle">circle</a></li>
+                <li><a href="#" id="newRectangle">rectangle</a></li>
+                <li><a href="#" id="newPolygon">polygon</a></li>
+                <li><a href="#" id="newCHull">convex hull</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="#" id="newRegion">custom region</a></li>
+                <li><a href="#" id="newFile">upload file</a></li>
+            </ul>
+        </div>
+        <div class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown">combine<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                <li><a href="#" id="union">union</a></li>
+                <li><a href="#" id="intersect">intersect</a></li>
+                <li><a href="#" id="subtract">subtract</a></li>
+            </ul>
+        </div>
+        <a id="delete" style="min-width: 40px; text-align: center"><span class="glyphicon glyphicon-remove"></span></a>
+
     </div>
 </asp:Content>
 <asp:Content ID="Editor" ContentPlaceHolderID="middle" runat="server">
-    <asp:ScriptManagerProxy runat="server" >
+    <asp:ScriptManagerProxy runat="server">
         <Scripts>
+            <%-- TODO: delete
             <asp:ScriptReference Path="Footprint.js" />
             <asp:ScriptReference Path="ServiceBase.js" />
-            <asp:ScriptReference Path="EditorService.js" />
+            <asp:ScriptReference Path="EditorService.js" /> --%>
+            <asp:ScriptReference Path="~/Api/V1/Editor.svc/proxy.js" />
             <asp:ScriptReference Path="Editor.aspx.js" />
             <asp:ScriptReference Path="~/Scripts/astro.js" />
         </Scripts>
@@ -75,8 +92,8 @@
         <ContentTemplate>
 
             <%-- Region List  --%>
-            <div class="dock-right dock-container" style="width: 200px; margin-left: 8px;">
-                <uc1:EditorRegionList runat="server" id="regionList" />
+            <div class="dock-right dock-container" style="width: 248px; margin-left: 8px;">
+                <uc1:EditorRegionList runat="server" ID="regionList" />
             </div>
 
             <%-- Canvas  --%>
@@ -85,7 +102,7 @@
             </div>
 
             <%-- Circle modal window  --%>
-            <uc1:CircleModal runat="server" id="CircleModal" />
+            <uc1:CircleModal runat="server" ID="CircleModal" />
 
             <div id="GrowModal" class="modal" tabindex="-1" role="dialog">
                 <div class="modal-dialog" role="document">

@@ -1,11 +1,13 @@
-﻿var editorCanvas;
+﻿var editorService = new EditorService("../../Api/V1/Editor.Svc");
+
+var editorCanvas;
 var regionList;
 var circleModal;
 
 $(document).ready(function () {
 
-    editorCanvas = new EditorCanvas($("#editorCanvas")[0]);
-    regionList = new EditorRegionList($("#regionList")[0]);
+    editorCanvas = new EditorCanvas($("#editorCanvas")[0], editorService);
+    regionList = new EditorRegionList($("#regionList")[0], editorService);
     circleModal = new CircleModal($("#circleModal")[0]);
 
     // Event handlers
@@ -20,17 +22,34 @@ $(document).ready(function () {
         refreshAll();
     });
 
+    $("#projection").on("click", function (event) {
+        editorCanvas.delayedRefresh(getPlotParameters());
+    });
+
+    $("#viewDropdown").on("click", "input", function (event) {
+        editorCanvas.delayedRefresh(getPlotParameters());
+    });
+
+    $("#delete").on("click", function (event) {
+        regions = regionList.getSelection();
+        editorService.deleteFootprintRegions(regions, function () {
+            refreshAll();
+        });
+    });
+
     regionList.on("click", function (item) {
-        editorCanvas.refresh(getPlotParameters());
+        editorCanvas.delayedRefresh(getPlotParameters());
     });
 
     circleModal.on("ok", function (region) {
-        editorService.createFootprintRegion(region, function (region) {
-            regionList.appendItem(region);
-            regionList.applySelection([region.name]);
-            editorCanvas.refresh(getPlotParameters());
-            circleModal.hide();
-        });
+        editorService.createFootprintRegion(
+            region.name, { region: region },
+            function (result) {
+                regionList.appendItem(result.region);
+                regionList.applySelection([result.region.name]);
+                editorCanvas.refresh(getPlotParameters());
+                circleModal.hide();
+            });
     });
 
     refreshAll();
@@ -65,6 +84,8 @@ function getPlotParameters() {
 
 // ---------------
 
+
+/*
 // Submit the form and create the recquired region
 $("body").on("click", "#AddRegionButton", function () {
     var selectedAdditionType = $("#AdditionTypeSelector input:radio:checked").val();
@@ -84,7 +105,7 @@ $("body").on("click", "#AddRegionButton", function () {
 })
 
 
-
+*/
 
 /*
 $(document).one('ready', function () {

@@ -16,6 +16,7 @@ namespace Jhu.Footprint.Web.UI.Apps.Footprint
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
+            Page.ClientScript.RegisterClientScriptInclude(typeof(UserControl).FullName, "ControlBase.ascx.js");
             Page.ClientScript.RegisterClientScriptInclude(GetType().FullName, "EditorCanvas.ascx.js");
         }
     }

@@ -117,6 +117,17 @@ namespace Jhu.Footprint.Web.Api.V1
             SessionRegions.Remove(regionName);
         }
 
+        public void DeleteFootprintRegions(string[] regionNames)
+        {
+            foreach (var item in regionNames)
+            {
+                if (SessionRegions.ContainsKey(item))
+                {
+                    SessionRegions.Remove(item);
+                }
+            }
+        }
+
         public FootprintRegionListResponse ListFootprintRegions()
         {
             return new FootprintRegionListResponse()

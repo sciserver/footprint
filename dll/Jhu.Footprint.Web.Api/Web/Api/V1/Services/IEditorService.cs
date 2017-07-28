@@ -25,6 +25,10 @@ namespace Jhu.Footprint.Web.Api.V1
         [WebInvoke(UriTemplate = "*", Method = "OPTIONS")]
         void HandleHttpOptionsRequest();
 
+        [OperationContract]
+        [WebInvoke(UriTemplate = "/proxy.{lang}", Method = HttpMethod.Get)]
+        Stream GenerateProxy(string lang);
+
         #region Footprint CRUD operations
 
         [OperationContract]
@@ -61,6 +65,11 @@ namespace Jhu.Footprint.Web.Api.V1
         [WebInvoke(Method = HttpMethod.Delete, UriTemplate = Urls.EditorFootprintRegion)]
         [Description("Delete a region.")]
         void DeleteFootprintRegion(string regionName);
+
+        [OperationContract]
+        [WebInvoke(Method = HttpMethod.Delete, UriTemplate = Urls.EditorFootprintRegions)]
+        [Description("Deletes multiple regions.")]
+        void DeleteFootprintRegions(string[] regionNames);
 
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Get, UriTemplate = Urls.EditorFootprintRegions)]
