@@ -22,6 +22,8 @@ namespace Jhu.Footprint.Web.Api.V1
         public const string FootprintSearchParams = "name={name}&from={from}&max={max}";
         public const string RegionSearchParams = "regionName={regionName}&from={from}&max={max}";
 
+        public const string Combine = "?op={operation}&keepOrig={keepOriginal}";
+
         public const string Shape = "/shape";
         public const string Outline = "/outline";
         public const string OutlinePoints = "/outline/points?res={resolution}";

@@ -7,13 +7,14 @@ using System.Web.UI.WebControls;
 
 namespace Jhu.Footprint.Web.UI.Apps.Footprint
 {
-    public partial class CircleModal : RegionModalBase
+    public partial class CombinedRegionModal : RegionModalBase
     {
         protected override void OnPreRender(EventArgs e)
         {
             base.OnPreRender(e);
 
-            Page.ClientScript.RegisterClientScriptInclude(typeof(CircleModal).FullName, "CircleModal.ascx.js");
+            Page.ClientScript.RegisterClientScriptInclude(typeof(CombinedRegionModal).FullName, "CombinedRegionModal.ascx.js");
         }
+        
     }
 }

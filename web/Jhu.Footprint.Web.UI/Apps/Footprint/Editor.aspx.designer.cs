@@ -155,5 +155,14 @@ namespace Jhu.Footprint.Web.UI.Apps.Footprint {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::Jhu.Footprint.Web.UI.Apps.Footprint.MultipointRegionModal multipointRegionModal;
+        
+        /// <summary>
+        /// combinedRegionModal control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Jhu.Footprint.Web.UI.Apps.Footprint.CombinedRegionModal combinedRegionModal;
     }
 }

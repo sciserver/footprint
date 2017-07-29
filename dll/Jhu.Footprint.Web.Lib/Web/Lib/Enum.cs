@@ -36,6 +36,8 @@ namespace Jhu.Footprint.Web.Lib
         None = 0,
         Union = 1,
         Intersection = 2,
+        Intersect = 2,
+        Subtract = 4,
 
         Any = 0x7F,
     }

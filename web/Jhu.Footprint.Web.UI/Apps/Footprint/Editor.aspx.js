@@ -6,6 +6,7 @@ var circleModal;
 var rectangleModal;
 var customRegionModal;
 var multipointRegionModal;
+var combinedRegionModal;
 
 $(document).ready(function () {
 
@@ -15,6 +16,7 @@ $(document).ready(function () {
     rectangleModal = new RectangleModal($("#rectangleModal")[0]);
     customRegionModal = new CustomRegionModal($("#customRegionModal")[0]);
     multipointRegionModal = new MultipointRegionModal($("#multipointRegionModal")[0]);
+    combinedRegionModal = new CombinedRegionModal($("#combinedRegionModal")[0]);
 
     // Event handlers
 
@@ -43,71 +45,120 @@ $(document).ready(function () {
     });
 
 
-    $("#newCircle").on("click", function (event) {
+    $("#circle").on("click", function (event) {
         event.preventDefault();
-        var name = "new_circle_" + (regionList.count() + 1);
-        circleModal.show({ circleName: name });
+        var name = regionList.generateUniqueName("new_circle");
+        circleModal.show({ regionName: name });
     });
 
-    circleModal.on("ok", function (region) {
-        addRegion(region);
-        circleModal.hide();
+    circleModal.on("ok", function () {
+        createRegion(circleModal.region(), function() {
+            circleModal.hide();
+        });
     });
 
-    $("#newRectangle").on("click", function (event) {
+    $("#rectangle").on("click", function (event) {
         event.preventDefault();
-        var name = "new_rect_" + (regionList.count() + 1);
-        rectangleModal.show({ rectangleName: name });
+        var name = regionList.generateUniqueName("new_rect");
+        rectangleModal.show({ regionName: name });
     });
 
-    rectangleModal.on("ok", function (region) {
-        addRegion(region, function () {
+    rectangleModal.on("ok", function () {
+        createRegion(rectangleModal.region(), function () {
             rectangleModal.hide();
         });
     });
 
-    $("#newPolygon").on("click", function (event) {
+    $("#polygon").on("click", function (event) {
         event.preventDefault();
-        var name = "new_poly_" + (regionList.count() + 1);
-        multipointRegionModal.show({ multipointRegionName: name, multipointRegionPoly: true });
+        var name = regionList.generateUniqueName("new_poly");
+        multipointRegionModal.show({ regionName: name, mode: "poly" });
     });
 
-    $("#newCHull").on("click", function (event) {
+    $("#cHull").on("click", function (event) {
         event.preventDefault();
-        var name = "new_chull_" + (regionList.count() + 1);
-        multipointRegionModal.show({ multipointRegionName: name, multipointRegionCHull: true });
+        var name = regionList.generateUniqueName("new_chull");
+        multipointRegionModal.show({ regionName: name, mode: "chull" });
     });
 
-    multipointRegionModal.on("ok", function (region) {
-        addRegion(region, function () {
+    multipointRegionModal.on("ok", function () {
+        createRegion(multipointRegionModal.region(), function () {
             multipointRegionModal.hide();
         });
     });
 
-    $("#newCustomRegion").on("click", function (event) {
+    $("#customRegion").on("click", function (event) {
         event.preventDefault();
-        var name = "new_region_" + (regionList.count() + 1);
-        customRegionModal.show({ customRegionName: name });
+        var name = regionList.generateUniqueName("new_region");
+        customRegionModal.show({ regionName: name });
     });
 
-    customRegionModal.on("ok", function (region) {
-        addRegion(region, function () {
+    customRegionModal.on("ok", function () {
+        createRegion(customRegionModal.region(), function () {
             customRegionModal.hide();
         });
+    });
+
+    $("#union").on("click", function (event) {
+        event.preventDefault();
+        var name = regionList.generateUniqueName("new_union");
+        combinedRegionModal.show({ regionName: name, combineMethod: "union" });
+    });
+
+    $("#intersect").on("click", function (event) {
+        event.preventDefault();
+        var name = regionList.generateUniqueName("new_intersect");
+        combinedRegionModal.show({ regionName: name, combineMethod: "intersect" });
+    });
+
+    $("#subtract").on("click", function (event) {
+        event.preventDefault();
+        var name = regionList.generateUniqueName("new_difference");
+        combinedRegionModal.show({ regionName: name, combineMethod: "subtract" });
+    });
+
+    combinedRegionModal.on("ok", function () {
+        combineRegions(combinedRegionModal.region(), function () {
+            combinedRegionModal.hide();
+        })
     });
 
     refreshAll();
 })
 
-function addRegion(region, success) {
+function createRegion(region, success) {
     editorService.createFootprintRegion(
         region.name, { region: region },
         function (result) {
-            regionList.appendItem(result.region);
-            regionList.applySelection([result.region.name]);
-            editorCanvas.refresh(getPlotParameters());
+            addRegion(result);
             if (success) success();
         });
+}
+
+function combineRegions(region, success) {
+    var keepOriginal = combinedRegionModal.keepOriginal();
+    var request = {
+        region: region,
+        sources: regionList.getSelection()
+    };
+
+
+    editorService.combineFootprintRegions(
+        region.name, combinedRegionModal.combineMethod, keepOriginal, request,
+        function (result) {
+            if (combinedRegionModal.keepOriginal()) {
+                addRegion(result);
+            } else {
+                refreshAll();
+            }
+            if (success) success(result);
+        });
+}
+
+function addRegion(result) {
+    regionList.appendItem(result.region);
+    regionList.applySelection([result.region.name]);
+    editorCanvas.refresh(getPlotParameters());
 }
 
 function refreshAll() {

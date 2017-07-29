@@ -16,6 +16,11 @@ namespace Jhu.Footprint.Web.Api.V1
         [Description("Conveys a region.")]
         public FootprintRegion Region { get; set; }
 
+        [DataMember(Name = "sources", EmitDefaultValue = false)]
+        [DefaultValue(null)]
+        [Description("When performing operations, conveys the list of names of source regions")]
+        public string[] Sources { get; set; }
+
         public FootprintRegionRequest()
         {
         }

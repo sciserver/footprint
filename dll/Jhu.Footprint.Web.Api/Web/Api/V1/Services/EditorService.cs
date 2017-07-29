@@ -145,6 +145,76 @@ namespace Jhu.Footprint.Web.Api.V1
         }
 
         #endregion
+        #region Boolean operations
+
+        public FootprintRegionResponse CombineFootprintRegions(string regionName, string operation, bool keepOriginal, FootprintRegionRequest request)
+        {
+            if (request.Sources == null)
+            {
+                throw new ArgumentNullException("regionNames", "The region list cannot be null.");
+            }
+
+            if (request.Sources.Length < 2)
+            {
+                throw new ArgumentException("At least two regions must be specified.", "regionNames");
+            }
+
+            if (SessionRegions.ContainsKey(regionName))
+            {
+                throw Lib.Error.DuplicateRegionName("editor", "editor", regionName);
+            }
+
+            Lib.CombinationMethod method;
+            if (!Enum.TryParse(operation, true, out method))
+            {
+                throw new ArgumentException("Invalid boolean operation.");
+            }
+
+            Spherical.Region combined = null;
+
+            for (int i = 0; i < request.Sources.Length; i++)
+            {
+                var r = SessionRegions[request.Sources[i]].Region;
+
+                if (i == 0)
+                {
+                    combined = (Spherical.Region)r.Clone();
+                }
+                else
+                {
+                    switch (method)
+                    {
+                        case Lib.CombinationMethod.Union:
+                            combined.SmartUnion(r);
+                            break;
+                        case Lib.CombinationMethod.Intersect:
+                            combined = combined.SmartIntersect(r, true);
+                            break;
+                        case Lib.CombinationMethod.Subtract:
+                            combined = combined.SmartDifference(r);
+                            break;
+                        default:
+                            throw new NotImplementedException();
+                    }
+                }
+
+                if (!keepOriginal)
+                {
+                    SessionRegions.Remove(request.Sources[i]);
+                }
+            }
+
+            var newregion = new FootprintRegion()
+            {
+                Name = regionName,
+                Region = combined,
+            };
+
+            SessionRegions.Add(regionName, newregion);
+            return new FootprintRegionResponse(newregion);
+        }
+
+        #endregion
         #region Footprint combined region get and plot
 
         public Spherical.Region GetFootprintShape()

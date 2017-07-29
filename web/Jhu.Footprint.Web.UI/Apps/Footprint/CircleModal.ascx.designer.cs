@@ -22,22 +22,13 @@ namespace Jhu.Footprint.Web.UI.Apps.Footprint {
         protected global::Jhu.Graywulf.Web.UI.Controls.Form circleModal;
         
         /// <summary>
-        /// circleName control.
+        /// regionName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox circleName;
-        
-        /// <summary>
-        /// circleNameFormatValidator control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RegularExpressionValidator circleNameFormatValidator;
+        protected global::System.Web.UI.WebControls.TextBox regionName;
         
         /// <summary>
         /// circleCenterRa control.

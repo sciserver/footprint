@@ -22,22 +22,13 @@ namespace Jhu.Footprint.Web.UI.Apps.Footprint {
         protected global::Jhu.Graywulf.Web.UI.Controls.Form rectangleModal;
         
         /// <summary>
-        /// rectangleName control.
+        /// regionName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox rectangleName;
-        
-        /// <summary>
-        /// rectangleNameFormatValidator control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RegularExpressionValidator rectangleNameFormatValidator;
+        protected global::System.Web.UI.WebControls.TextBox regionName;
         
         /// <summary>
         /// rectangleRa1 control.

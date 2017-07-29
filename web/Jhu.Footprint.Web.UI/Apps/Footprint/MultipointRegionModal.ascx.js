@@ -1,35 +1,51 @@
 ﻿function MultipointRegionModal(control) {
-    ModalBase.call(this, control);
-
-    var me = this;
-
-    $(this.control).find("#ok").on("click", function () {
-        me.ok_click();
-    });
+    RegionModalBase.call(this, control);
 }
 
-MultipointRegionModal.prototype = Object.create(ModalBase.prototype);
+MultipointRegionModal.prototype = Object.create(RegionModalBase.prototype);
 MultipointRegionModal.prototype.constructor = MultipointRegionModal;
 
-MultipointRegionModal.prototype.ok_click = function () {
-    if (Page_ClientValidate("multipointRegionModal")) {
-        if (this.events.ok) this.events.ok(this.getRegion());
-    }
-};
+MultipointRegionModal.prototype.poly = function (value) {
+    var c = $(this.control).find("#multipointRegionPoly")
+    if (value) c.prop("checked", value)
+    return c.prop("checked");
+}
 
-MultipointRegionModal.prototype.getRegion = function () {
-    var regionName = $(this.control).find("#multipointRegionName").val();
+MultipointRegionModal.prototype.chull = function (value) {
+    var c = $(this.control).find("#multipointRegionCHull")
+    if (value) c.prop("checked", value)
+    return c.prop("checked");
+}
+
+MultipointRegionModal.prototype.mode = function (value) {
+    if (value)
+    {
+        switch (value) {
+            case "poly":
+                this.poly(true);
+                break;
+            case "chull":
+                this.chull(true);
+                break;
+            default:
+                throw "unknown mode"
+        }
+        if (this.poly()) {
+            return "poly";
+        }
+        else {
+            return "chull";
+        }
+    }
+}
+
+MultipointRegionModal.prototype.regionString = function () {
     var regionString;
-    if ($(this.control).find("#multipointRegionPoly").prop("checked")) {
+    if (this.poly()) {
         regionString = "POLY J2000 ";
     } else {
         regionString = "CHULL J2000 ";
     }
     regionString += $(this.control).find("#multipointRegionCoordinates").val();
-    var region = {
-        fillFactor: 1.0,
-        name: regionName,
-        regionString: regionString
-    };
-    return region;
+    return regionString;
 };

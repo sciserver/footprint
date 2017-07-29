@@ -68,6 +68,8 @@
   <ItemGroup>
     <Content Include="Api\V1\Editor.svc" />
     <Content Include="Api\V1\Footprint.svc" />
+    <Content Include="Apps\Footprint\CombinedRegionModal.ascx.js" />
+    <Content Include="Apps\Footprint\CombinedRegionModal.ascx" />
     <Content Include="Apps\Footprint\MultipointRegionModal.ascx.js" />
     <Content Include="Apps\Footprint\MultipointRegionModal.ascx" />
     <Content Include="Apps\Footprint\CustomRegionModal.ascx" />
@@ -84,6 +86,7 @@
     <Content Include="Apps\Footprint\EditorRegionList.ascx" />
     <Content Include="Apps\Footprint\EditorRegionList.ascx.js" />
     <Content Include="Apps\Footprint\ModalBase.js" />
+    <Content Include="Apps\Footprint\RegionModalBase.js" />
     <Content Include="Default.aspx" />
     <Content Include="Docs\01_introduction\00_index.aspx" />
     <Content Include="Docs\99_info\00_index.aspx" />
@@ -591,6 +594,16 @@
       <DependentUpon>UI.master</DependentUpon>
     </Content>
     <Compile Include="Apps\Footprint\App.cs" />
+    <Compile Include="Apps\Footprint\CombinedRegionModal.ascx.cs">
+      <DependentUpon>CombinedRegionModal.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Apps\Footprint\CombinedRegionModal.ascx.designer.cs">
+      <DependentUpon>CombinedRegionModal.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Apps\Footprint\ModalBase.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="Apps\Footprint\MultipointRegionModal.ascx.cs">
       <DependentUpon>MultipointRegionModal.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -639,6 +652,9 @@
     </Compile>
     <Compile Include="Apps\Footprint\EditorRegionList.ascx.designer.cs">
       <DependentUpon>EditorRegionList.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Apps\Footprint\RegionModalBase.cs">
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="CustomPageBase.cs">
       <SubType>ASPXCodeBehind</SubType>

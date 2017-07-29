@@ -11,12 +11,12 @@
             <tr>
                 <td class="gw-form-label">Region name:</td>
                 <td class="gw-form-field">
-                    <asp:TextBox runat="server" ID="customRegionName" ClientIDMode="Static"
+                    <asp:TextBox runat="server" ID="regionName" ClientIDMode="Static"
                         CssClass="narrow" Text="new_region" />
-                    <asp:RequiredFieldValidator runat="server" ControlToValidate="customRegionName" ValidationGroup="customRegionModal" Display="Dynamic">
+                    <asp:RequiredFieldValidator runat="server" ControlToValidate="regionName" ValidationGroup="customRegionModal" Display="Dynamic">
                         <br />Name is required.
                     </asp:RequiredFieldValidator>
-                    <asp:RegularExpressionValidator runat="server" ID="customRegionNameFormatValidator" ControlToValidate="customRegionName" ValidationGroup="customRegionModal" Display="Dynamic">
+                    <asp:RegularExpressionValidator runat="server" ID="regionNameFormatValidator" ControlToValidate="regionName" ValidationGroup="customRegionModal" Display="Dynamic">
                         <br />Name format is invalid.
                     </asp:RegularExpressionValidator>
                 </td>

@@ -76,6 +76,21 @@ namespace Jhu.Footprint.Web.Api.V1
         [Description("List all regions.")]
         FootprintRegionListResponse ListFootprintRegions();
 
+        #endregion
+        #region Boolean operations
+
+        [OperationContract]
+        [WebInvoke(Method = HttpMethod.Post, UriTemplate = Urls.EditorFootprintRegion + Urls.Combine)]
+        [Description("Compute union, intersection or difference of regions.")]
+        FootprintRegionResponse CombineFootprintRegions(
+            [Description("Name of the newly created region.")]
+            string regionName,
+            [Description("Boolean operation, one of 'union', 'intersect' or 'subtract'.")]
+            string operation,
+            [Description("Keep all original regions.")]
+            bool keepOriginal,
+            FootprintRegionRequest request);
+
         /*
 
         [OperationContract]

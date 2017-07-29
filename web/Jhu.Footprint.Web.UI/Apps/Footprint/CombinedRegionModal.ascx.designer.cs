@@ -10,16 +10,16 @@
 namespace Jhu.Footprint.Web.UI.Apps.Footprint {
     
     
-    public partial class CustomRegionModal {
+    public partial class CombinedRegionModal {
         
         /// <summary>
-        /// customRegionModal control.
+        /// combinedRegionModal control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Jhu.Graywulf.Web.UI.Controls.Form customRegionModal;
+        protected global::Jhu.Graywulf.Web.UI.Controls.Form combinedRegionModal;
         
         /// <summary>
         /// regionName control.
@@ -31,12 +31,12 @@ namespace Jhu.Footprint.Web.UI.Apps.Footprint {
         protected global::System.Web.UI.WebControls.TextBox regionName;
         
         /// <summary>
-        /// customRegionString control.
+        /// keepOriginal control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox customRegionString;
+        protected global::System.Web.UI.WebControls.CheckBox keepOriginal;
     }
 }

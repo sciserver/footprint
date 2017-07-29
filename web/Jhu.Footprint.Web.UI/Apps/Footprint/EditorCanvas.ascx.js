@@ -22,5 +22,5 @@ EditorCanvas.prototype.delayedRefresh = function (plot) {
     if (this.timer) clearTimeout(this.timer);
     this.timer = setTimeout(function () {
         me.refresh(plot);
-    }, 2000);
+    }, 1000);
 };

@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 
 namespace Jhu.Footprint.Web.UI.Apps.Footprint
 {
-    public partial class CircleModal : RegionModalBase
+    public class ModalBase : UserControl
     {
         protected override void OnPreRender(EventArgs e)
         {
             base.OnPreRender(e);
 
-            Page.ClientScript.RegisterClientScriptInclude(typeof(CircleModal).FullName, "CircleModal.ascx.js");
+            Page.ClientScript.RegisterClientScriptInclude(typeof(UserControl).FullName, "ControlBase.js");
+            Page.ClientScript.RegisterClientScriptInclude(typeof(ModalBase).FullName, "ModalBase.js");
         }
     }
 }

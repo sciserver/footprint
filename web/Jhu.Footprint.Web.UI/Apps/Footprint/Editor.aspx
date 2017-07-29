@@ -6,6 +6,8 @@
 <%@ Register Src="~/Apps/Footprint/RectangleModal.ascx" TagPrefix="uc1" TagName="RectangleModal" %>
 <%@ Register Src="~/Apps/Footprint/CustomRegionModal.ascx" TagPrefix="uc1" TagName="CustomRegionModal" %>
 <%@ Register Src="~/Apps/Footprint/MultipointRegionModal.ascx" TagPrefix="uc1" TagName="MultipointRegionModal" %>
+<%@ Register Src="~/Apps/Footprint/CombinedRegionModal.ascx" TagPrefix="uc1" TagName="CombinedRegionModal" %>
+
 
 
 
@@ -51,13 +53,13 @@
         <div class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown">new region<span class="caret"></span></a>
             <ul class="dropdown-menu">
-                <li><a href="#" id="newCircle">circle</a></li>
-                <li><a href="#" id="newRectangle">rectangle</a></li>
-                <li><a href="#" id="newPolygon">polygon</a></li>
-                <li><a href="#" id="newCHull">convex hull</a></li>
+                <li><a href="#" id="circle">circle</a></li>
+                <li><a href="#" id="rectangle">rectangle</a></li>
+                <li><a href="#" id="polygon">polygon</a></li>
+                <li><a href="#" id="cHull">convex hull</a></li>
                 <li role="separator" class="divider"></li>
-                <li><a href="#" id="newCustomRegion">custom region</a></li>
-                <li><a href="#" id="newFile">upload file</a></li>
+                <li><a href="#" id="customRegion">custom region</a></li>
+                <li><a href="#" id="upload">upload file</a></li>
             </ul>
         </div>
         <div class="dropdown">
@@ -106,6 +108,7 @@
             <uc1:RectangleModal runat="server" id="rectangleModal" />
             <uc1:CustomRegionModal runat="server" id="customRegionModal" />
             <uc1:MultipointRegionModal runat="server" ID="multipointRegionModal" />
+            <uc1:CombinedRegionModal runat="server" id="combinedRegionModal" />
             
             <%--
             <div id="GrowModal" class="modal" tabindex="-1" role="dialog">

@@ -59,6 +59,11 @@ EditorRegionList.prototype.count = function () {
     return $(this.control).find("input").length;
 };
 
+EditorRegionList.prototype.generateUniqueName = function (prefix) {
+    var cnt = $(this.control).find('input[data-item^="' + prefix + '"]').length;
+    return prefix + "_" + (cnt + 1);
+};
+
 EditorRegionList.prototype.getSelection = function () {
     var selection = [];
     $(this.control).find("input:checked").each(function (index) {
