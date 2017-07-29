@@ -38,5 +38,14 @@ namespace Jhu.Footprint.Web.UI.Apps.Footprint {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox keepOriginal;
+        
+        /// <summary>
+        /// firstRegion control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList firstRegion;
     }
 }

@@ -28,6 +28,12 @@
                     <asp:CheckBox runat="server" ID="keepOriginal" ClientIDMode="Static" Text="Keep original regions" Checked="true" />
                 </td>
             </tr>
+            <tr id="firstRegionRow" style="display:none;">
+                <td class="gw-form-label">First region:</td>
+                <td class="gw-form-field">
+                    <asp:DropDownList runat="server" ID="firstRegion" ClientIDMode="Static" />
+                </td>
+            </tr>
         </table>
     </FormTemplate>
     <ButtonsTemplate>

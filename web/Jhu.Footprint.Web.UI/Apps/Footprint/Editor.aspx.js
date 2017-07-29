@@ -101,24 +101,54 @@ $(document).ready(function () {
 
     $("#union").on("click", function (event) {
         event.preventDefault();
+        if (regionList.getSelection().length < 2) {
+            alert("At least two regions must be selected.");
+            return;
+        }
         var name = regionList.generateUniqueName("new_union");
-        combinedRegionModal.show({ regionName: name, combineMethod: "union" });
+        combinedRegionModal.clearFirstRegionList();
+        combinedRegionModal.show(
+            {
+                regionName: name,
+                combineMethod: "union",
+                firstRegionVisible: false
+            });
     });
 
     $("#intersect").on("click", function (event) {
         event.preventDefault();
+        if (regionList.getSelection().length < 2) {
+            alert("At least two regions must be selected.");
+            return;
+        }
         var name = regionList.generateUniqueName("new_intersect");
-        combinedRegionModal.show({ regionName: name, combineMethod: "intersect" });
+        combinedRegionModal.clearFirstRegionList();
+        combinedRegionModal.show(
+            {
+                regionName: name,
+                combineMethod: "intersect",
+                firstRegionVisible: false
+            });
     });
 
     $("#subtract").on("click", function (event) {
         event.preventDefault();
+        if (regionList.getSelection().length < 2) {
+            alert("At least two regions must be selected.");
+            return;
+        }
         var name = regionList.generateUniqueName("new_difference");
-        combinedRegionModal.show({ regionName: name, combineMethod: "subtract" });
+        combinedRegionModal.refreshFirstRegionList(regionList.getSelection());
+        combinedRegionModal.show(
+            {
+                regionName: name,
+                combineMethod: "subtract",
+                firstRegionVisible: true
+            });
     });
 
     combinedRegionModal.on("ok", function () {
-        combineRegions(combinedRegionModal.region(), function () {
+        combineRegions(function () {
             combinedRegionModal.hide();
         })
     });
@@ -135,13 +165,23 @@ function createRegion(region, success) {
         });
 }
 
-function combineRegions(region, success) {
+function combineRegions(success) {
+    var region = combinedRegionModal.region();
     var keepOriginal = combinedRegionModal.keepOriginal();
-    var request = {
-        region: region,
-        sources: regionList.getSelection()
-    };
+    var firstRegion = combinedRegionModal.firstRegion();
+    var selection = regionList.getSelection();
+    
+    // Remove first region from sources and add it to the very beginning
+    var sources = [];
+    if (firstRegion) sources.push(firstRegion);
+    for (i = 0; i < selection.length; i++) {
+        if (selection[i] != firstRegion) sources.push(selection[i]);
+    }
 
+    var request = {
+        region: combinedRegionModal.region(),
+        sources: sources
+    };
 
     editorService.combineFootprintRegions(
         region.name, combinedRegionModal.combineMethod, keepOriginal, request,
