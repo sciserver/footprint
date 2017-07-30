@@ -130,7 +130,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
         [OperationContract]
         [PlotFormatter]
-        [WebGet(UriTemplate = Urls.EditorFootprint + Urls.Plot, BodyStyle = WebMessageBodyStyle.Bare)]
+        [WebGet(UriTemplate = Urls.EditorFootprint + Urls.Plot + Urls.PlotHightlighs, BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Plots the footprint")]
         Spherical.Visualizer.Plot PlotFootprint(
             string projection,
@@ -203,8 +203,7 @@ namespace Jhu.Footprint.Web.Api.V1
             string autoZoom,
             string autoRotate,
             string grid,
-            string degreeStyle,
-            string highlights);
+            string degreeStyle);
 
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Post, UriTemplate = Urls.EditorFootprintRegion + Urls.PlotAdvanced, BodyStyle = WebMessageBodyStyle.Bare)]

@@ -100,9 +100,14 @@ namespace Jhu.Footprint.Web.Api.V1
 
         public void GetValues(Lib.FootprintRegion region)
         {
+            region.Name = Name ?? region.Name;
             region.FillFactor = FillFactor ?? region.FillFactor;
 
-            if (RegionString != null)
+            if (this.region != null)
+            {
+                region.Region = this.Region;
+            }
+            else if (RegionString != null)
             {
                 region.Region = this.Region;
             }

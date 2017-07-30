@@ -16,7 +16,8 @@ namespace Jhu.Footprint.Web.Lib
             "region",
             "points",
             "outline",
-            "reduced"
+            "reduced",
+            "editor"
         };
 
         public const string RoleAdmin = "footprint-admin";

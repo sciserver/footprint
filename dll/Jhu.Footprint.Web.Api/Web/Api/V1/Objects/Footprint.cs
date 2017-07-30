@@ -60,6 +60,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
         public void GetValues(Lib.Footprint footprint)
         {
+            footprint.Name = this.Name ?? footprint.Name;
             footprint.Comments = this.Comments ?? footprint.Comments;
             
             // To prevent resetting permission when modifying a footprint,

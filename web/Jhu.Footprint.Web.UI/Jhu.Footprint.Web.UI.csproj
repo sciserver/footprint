@@ -68,6 +68,8 @@
   <ItemGroup>
     <Content Include="Api\V1\Editor.svc" />
     <Content Include="Api\V1\Footprint.svc" />
+    <Content Include="Apps\Footprint\SaveFootprintModal.ascx.js" />
+    <Content Include="Apps\Footprint\SaveFootprintModal.ascx" />
     <Content Include="Apps\Footprint\ConfirmModal.ascx" />
     <Content Include="Apps\Footprint\CombinedRegionModal.ascx.js" />
     <Content Include="Apps\Footprint\CombinedRegionModal.ascx" />
@@ -596,6 +598,13 @@
       <DependentUpon>UI.master</DependentUpon>
     </Content>
     <Compile Include="Apps\Footprint\App.cs" />
+    <Compile Include="Apps\Footprint\SaveFootprintModal.ascx.cs">
+      <DependentUpon>SaveFootprintModal.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Apps\Footprint\SaveFootprintModal.ascx.designer.cs">
+      <DependentUpon>SaveFootprintModal.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Apps\Footprint\ConfirmModal.ascx.cs">
       <DependentUpon>ConfirmModal.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

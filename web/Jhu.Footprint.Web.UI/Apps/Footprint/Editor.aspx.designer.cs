@@ -13,6 +13,15 @@ namespace Jhu.Footprint.Web.UI.Apps.Footprint {
     public partial class Editor {
         
         /// <summary>
+        /// owner control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField owner;
+        
+        /// <summary>
         /// projectionDiv control.
         /// </summary>
         /// <remarks>
@@ -173,5 +182,14 @@ namespace Jhu.Footprint.Web.UI.Apps.Footprint {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::Jhu.Footprint.Web.UI.Apps.Footprint.CombinedRegionModal combinedRegionModal;
+        
+        /// <summary>
+        /// saveFootprintModal control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Jhu.Footprint.Web.UI.Apps.Footprint.SaveFootprintModal saveFootprintModal;
     }
 }

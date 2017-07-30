@@ -1,4 +1,5 @@
-﻿var editorService = new EditorService("../../Api/V1/Editor.Svc");
+﻿var editorService;
+var footprintService;
 
 var editorCanvas;
 var regionList;
@@ -8,8 +9,14 @@ var rectangleModal;
 var customRegionModal;
 var multipointRegionModal;
 var combinedRegionModal;
+var saveFootprintModal;
+
+$.getScript()
 
 $(document).ready(function () {
+
+    editorService = new EditorService("../../Api/V1/Editor.Svc");
+    footprintService = new FootprintService("../../Api/V1/Footprint.Svc");
 
     editorCanvas = new EditorCanvas($("#editorCanvas")[0], editorService);
     regionList = new EditorRegionList($("#regionList")[0], editorService);
@@ -19,6 +26,7 @@ $(document).ready(function () {
     customRegionModal = new CustomRegionModal($("#customRegionModal")[0]);
     multipointRegionModal = new MultipointRegionModal($("#multipointRegionModal")[0]);
     combinedRegionModal = new CombinedRegionModal($("#combinedRegionModal")[0]);
+    saveFootprintModal = new SaveFootprintModal($("#saveFootprintModal")[0]);
 
     // Event handlers
 
@@ -173,6 +181,26 @@ $(document).ready(function () {
         })
     });
 
+    $("#save").on("click", function (event) {
+        event.preventDefault();
+        if (!$("#owner").val()) {
+            alert("To save footprints, you have to register and sign in.");
+            return;
+        }
+        if (regionList.getSelection().length == 0) {
+            alert("At least one region has to be added to the footprint.")
+            return;
+        }
+        saveFootprintModal.show();
+    });
+
+    saveFootprintModal.on("ok", function () {
+        saveFootprint(function () {
+            alert("Footprint saved successfully.");
+            saveFootprintModal.hide();
+        })
+    });
+
     refreshAll();
 })
 
@@ -211,6 +239,18 @@ function combineRegions(success) {
             } else {
                 refreshAll();
             }
+            if (success) success(result);
+        });
+}
+
+function saveFootprint(success) {
+    var owner = $("#owner").val();
+    request = {
+        footprint: {},
+        source: "editor"
+    }
+    footprintService.copyUserFootprint(owner, saveFootprintModal.footprintName(), request,
+        function (result) {
             if (success) success(result);
         });
 }

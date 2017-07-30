@@ -8,8 +8,11 @@
 <%@ Register Src="~/Apps/Footprint/CustomRegionModal.ascx" TagPrefix="uc1" TagName="CustomRegionModal" %>
 <%@ Register Src="~/Apps/Footprint/MultipointRegionModal.ascx" TagPrefix="uc1" TagName="MultipointRegionModal" %>
 <%@ Register Src="~/Apps/Footprint/CombinedRegionModal.ascx" TagPrefix="uc1" TagName="CombinedRegionModal" %>
+<%@ Register Src="~/Apps/Footprint/SaveFootprintModal.ascx" TagPrefix="uc1" TagName="SaveFootprintModal" %>
 
 <asp:Content runat="server" ContentPlaceHolderID="toolbar">
+    
+    <asp:HiddenField runat="server" ID="owner" ClientIDMode="Static" />
     <div id="toolbar" class="toolbar">
 
         <div runat="server" id="projectionDiv" style="min-width: 140px">
@@ -83,7 +86,7 @@
         <span class="separator"></span>
 
         <a id="clear">clear</a>
-        <a data-toggle="modal" data-target="#saveModal">save</a>
+        <a id="save">save</a>
         <a data-toggle="modal" data-target="#downloadModal">download</a>
 
         <span class="span"></span>
@@ -93,9 +96,9 @@
 <asp:Content ID="Editor" ContentPlaceHolderID="middle" runat="server">
     <asp:ScriptManagerProxy runat="server">
         <Scripts>
-            <asp:ScriptReference Path="~/Api/V1/Editor.svc/proxy.js" />
+            <asp:ScriptReference Path="../../Api/V1/Editor.svc/proxy.js" />
+            <asp:ScriptReference Path="../../Api/V1/Footprint.svc/proxy.js" />
             <asp:ScriptReference Path="Editor.aspx.js" />
-            <asp:ScriptReference Path="~/Scripts/astro.js" />
         </Scripts>
     </asp:ScriptManagerProxy>
     <asp:UpdatePanel runat="server" class="dock-container dock-fill">
@@ -117,6 +120,7 @@
             <uc1:CustomRegionModal runat="server" id="customRegionModal" />
             <uc1:MultipointRegionModal runat="server" ID="multipointRegionModal" />
             <uc1:CombinedRegionModal runat="server" id="combinedRegionModal" />
+            <uc1:SaveFootprintModal runat="server" id="saveFootprintModal" />
         </ContentTemplate>
     </asp:UpdatePanel>
 </asp:Content>

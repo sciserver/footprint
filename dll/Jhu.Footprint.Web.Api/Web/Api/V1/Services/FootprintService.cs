@@ -52,10 +52,41 @@ namespace Jhu.Footprint.Web.Api.V1
                 var footprint = new Lib.Footprint(context)
                 {
                     Owner = owner,
-                    Name = name
                 };
                 request.Footprint.GetValues(footprint);
+                footprint.Name = name;
                 footprint.Save();
+
+                return new FootprintResponse(footprint);
+            }
+        }
+
+        public FootprintResponse CopyUserFootprint(string owner, string name, FootprintRequest request)
+        {
+            Lib.Footprint footprint;
+
+            using (var context = CreateContext())
+            {
+                if (request.Source == "editor")
+                {
+                    footprint = new Lib.Footprint(context);
+                    request.Footprint?.GetValues(footprint);
+                    footprint.Name = name;
+                    footprint.Save();
+
+                    var sessionRegions = (Dictionary<string, FootprintRegion>)Session[EditorService.SessionKeyEditorRegions];
+                    foreach (var key in sessionRegions.Keys)
+                    {
+                        var region = new Lib.FootprintRegion(footprint);
+                        sessionRegions[key].GetValues(region);
+                        region.Save();
+                        region.SaveRegion();
+                    }
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
 
                 return new FootprintResponse(footprint);
             }
@@ -189,11 +220,9 @@ namespace Jhu.Footprint.Web.Api.V1
                 var footprint = new Lib.Footprint(context);
                 footprint.Load(owner, name);
 
-                var region = new Lib.FootprintRegion(footprint)
-                {
-                    Name = regionName,
-                };
+                var region = new Lib.FootprintRegion(footprint);
                 request.Region.GetValues(region);
+                region.Name = regionName;
                 region.Save();
                 region.SaveRegion();
 
@@ -313,7 +342,6 @@ namespace Jhu.Footprint.Web.Api.V1
             }
         }
 
-
         #endregion
         #region Individual region get and plot
 
@@ -420,7 +448,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
         private static Uri GetBaseUrl(string relativeUri)
         {
-            // TODO: where to take machine name from? HttpContext?
+            // TODO: where to take public host name from? HttpContext?
             return new Uri("http://" + Environment.MachineName + "/footprint/api/v1/Footprint.svc" + relativeUri);
         }
 

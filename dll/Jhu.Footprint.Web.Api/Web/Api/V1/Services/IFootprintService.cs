@@ -24,6 +24,10 @@ namespace Jhu.Footprint.Web.Api.V1
         [WebInvoke(UriTemplate = "*", Method = "OPTIONS")]
         void HandleHttpOptionsRequest();
 
+        [OperationContract]
+        [WebInvoke(UriTemplate = "/proxy.{lang}", Method = HttpMethod.Get)]
+        Stream GenerateProxy(string lang);
+
         #region Footprint CRUD operations
 
         [OperationContract]
@@ -35,6 +39,11 @@ namespace Jhu.Footprint.Web.Api.V1
         [WebInvoke(Method = HttpMethod.Post, UriTemplate = Urls.UserFootprint)]
         [Description("Create new footprint.")]
         FootprintResponse CreateUserFootprint(string owner, string name, FootprintRequest request);
+
+        [OperationContract]
+        [WebInvoke(Method = HttpMethod.Post, UriTemplate = Urls.UserFootprint + Urls.Copy)]
+        [Description("Copy from and existing footprint.")]
+        FootprintResponse CopyUserFootprint(string owner, string name, FootprintRequest request);
 
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Patch, UriTemplate = Urls.UserFootprint)]

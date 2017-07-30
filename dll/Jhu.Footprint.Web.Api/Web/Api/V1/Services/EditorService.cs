@@ -15,52 +15,44 @@ namespace Jhu.Footprint.Web.Api.V1
     [RestServiceBehavior]
     public class EditorService : ServiceBase, IEditorService
     {
-        private const string SessionKeyEditorFootprint = "Jhu.Footprint.Web.Api.SessionFootprint";
-        private const string SessionKeyEditorRegions = "Jhu.Footprint.Web.Api.SessionRegions";
-
-        private Footprint sessionFootprint;
-        private Dictionary<string, FootprintRegion> sessionRegions;
+        internal const string SessionKeyEditorFootprint = "Jhu.Footprint.Web.Api.SessionFootprint";
+        internal const string SessionKeyEditorRegions = "Jhu.Footprint.Web.Api.SessionRegions";
 
         private Footprint SessionFootprint
         {
-            get { return sessionFootprint; }
-            set { sessionFootprint = value; }
+            get
+            {
+                var sessionFootprint = (Footprint)Session[SessionKeyEditorFootprint];
+
+                if (sessionFootprint == null)
+                {
+                    sessionFootprint = new Footprint()
+                    {
+                        CombinationMethod = Lib.CombinationMethod.None,
+                        Name = "new_footprint",
+                        Owner = User.Identity.Name,
+                    };
+                    Session[SessionKeyEditorFootprint] = sessionFootprint;
+                }
+
+                return sessionFootprint;
+            }
         }
 
         private Dictionary<string, FootprintRegion> SessionRegions
         {
-            get { return sessionRegions; }
-            set { sessionRegions = value; }
-        }
-
-        protected override void OnBeforeInvoke(RestOperationContext context)
-        {
-            sessionFootprint = (Footprint)context.Session[SessionKeyEditorFootprint];
-            sessionRegions = (Dictionary<string, FootprintRegion>)context.Session[SessionKeyEditorRegions];
-
-            if (sessionFootprint == null)
+            get
             {
-                sessionFootprint = new Footprint()
+                var sessionRegions = (Dictionary<string, FootprintRegion>)Session[SessionKeyEditorRegions];
+
+                if (sessionRegions == null)
                 {
-                    CombinationMethod = Lib.CombinationMethod.None,
-                    Name = "new_footprint",
-                    Owner = context.Principal.Identity.Name,
-                };
+                    sessionRegions = new Dictionary<string, FootprintRegion>();
+                    Session[SessionKeyEditorRegions] = sessionRegions;
+                }
+
+                return sessionRegions;
             }
-
-            if (sessionRegions == null)
-            {
-                sessionRegions = new Dictionary<string, FootprintRegion>();
-            }
-        }
-
-        protected override void OnAfterInvoke(RestOperationContext context)
-        {
-            context.Session[SessionKeyEditorFootprint] = sessionFootprint;
-            context.Session[SessionKeyEditorRegions] = sessionRegions;
-
-            sessionFootprint = null;
-            sessionRegions = null;
         }
 
         private void ValidateRegion(FootprintRegion region)
@@ -78,9 +70,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
         public void DeleteFootprint()
         {
-            sessionRegions.Clear();
-            sessionRegions = null;
-            sessionFootprint = null;
+            SessionRegions.Clear();
         }
 
         #endregion
@@ -98,6 +88,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 throw Lib.Error.DuplicateRegionName("editor", "editor", regionName);
             }
 
+            request.Region.Name = regionName;
             ValidateRegion(request.Region);
             SessionRegions[regionName] = request.Region;
             return new FootprintRegionResponse(request.Region);
@@ -110,6 +101,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 throw Lib.Error.RegionNotFound("editor", "editor", regionName);
             }
 
+            request.Region.Name = regionName;
             ValidateRegion(request.Region);
             SessionRegions[regionName] = request.Region;
             return new FootprintRegionResponse(request.Region);
@@ -326,8 +318,7 @@ namespace Jhu.Footprint.Web.Api.V1
             string autoZoom,
             string autoRotate,
             string grid,
-            string degreeStyle,
-            string highlights)
+            string degreeStyle)
         {
             var plotParameters = new Plot(projection, sys, ra, dec, b, l, width, height, colorTheme, autoZoom, autoRotate, grid, degreeStyle);
             return PlotFootprintRegionAdvanced(regionName, plotParameters);
