@@ -2,6 +2,7 @@
 
 var editorCanvas;
 var regionList;
+var confirmModal;
 var circleModal;
 var rectangleModal;
 var customRegionModal;
@@ -12,6 +13,7 @@ $(document).ready(function () {
 
     editorCanvas = new EditorCanvas($("#editorCanvas")[0], editorService);
     regionList = new EditorRegionList($("#regionList")[0], editorService);
+    confirmModal = new ConfirmModal($("#confirmModal")[0]);
     circleModal = new CircleModal($("#circleModal")[0]);
     rectangleModal = new RectangleModal($("#rectangleModal")[0]);
     customRegionModal = new CustomRegionModal($("#customRegionModal")[0]);
@@ -34,10 +36,28 @@ $(document).ready(function () {
     });
 
     $("#delete").on("click", function (event) {
-        regions = regionList.getSelection();
-        editorService.deleteFootprintRegions(regions, function () {
-            refreshAll();
+        event.preventDefault();
+        confirmModal.message("Do you really want to delete the selected regions?");
+        confirmModal.on("ok",function () {
+            var regions = regionList.getSelection();
+            editorService.deleteFootprintRegions(regions, function () {
+                refreshAll();
+                confirmModal.hide();
+            });
         });
+        confirmModal.show();
+    });
+
+    $("#clear").on("click", function (event) {
+        event.preventDefault();
+        confirmModal.message("Do you really want to delete all regions?");
+        confirmModal.on("ok", function () {
+            editorService.deleteFootprintRegions([ "*" ], function () {
+                refreshAll();
+                confirmModal.hide();
+            });
+        });
+        confirmModal.show();
     });
 
     regionList.on("click", function (item) {

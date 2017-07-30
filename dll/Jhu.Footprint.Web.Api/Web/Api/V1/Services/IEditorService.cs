@@ -36,12 +36,12 @@ namespace Jhu.Footprint.Web.Api.V1
         [Description("Returns the header information of the edited footprint")]
         FootprintResponse GetFootprint();
 
-        // TODO: save, load
-
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Delete, UriTemplate = Urls.EditorFootprint)]
         [Description("Delete footprint and reset the editor.")]
         void DeleteFootprint();
+
+        // TODO: save, load
 
         #endregion
         #region Footprint region CRUD operations
@@ -69,7 +69,9 @@ namespace Jhu.Footprint.Web.Api.V1
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Delete, UriTemplate = Urls.EditorFootprintRegions)]
         [Description("Deletes multiple regions.")]
-        void DeleteFootprintRegions(string[] regionNames);
+        void DeleteFootprintRegions(
+            [Description("An array of region names to delete. Specify a single * to delete everything.")]
+            string[] regionNames);
 
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Get, UriTemplate = Urls.EditorFootprintRegions)]

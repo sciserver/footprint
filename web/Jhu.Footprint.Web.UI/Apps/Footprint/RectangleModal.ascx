@@ -25,7 +25,7 @@
                 <td class="gw-form-label">RA Dec:</td>
                 <td class="gw-form-field">
                     <asp:TextBox runat="server" ID="rectangleRa1" ClientIDMode="Static" CssClass="narrow" Text="01:15:00" />
-                    <asp:TextBox runat="server" ID="rectangleDec1" ClientIDMode="Static" CssClass="narrow" Text="+05:00:00" />
+                    <asp:TextBox runat="server" ID="rectangleDec1" ClientIDMode="Static" CssClass="narrow" Text="+13:00:00" />
                     <asp:RequiredFieldValidator runat="server" ControlToValidate="rectangleRa1" ValidationGroup="rectangleModal" Display="Dynamic">
                         <br />RA is required.
                     </asp:RequiredFieldValidator>
@@ -43,8 +43,8 @@
             <tr>
                 <td class="gw-form-label">RA Dec:</td>
                 <td class="gw-form-field">
-                    <asp:TextBox runat="server" ID="rectangleRa2" ClientIDMode="Static" CssClass="narrow" Text="05:15:00" />
-                    <asp:TextBox runat="server" ID="rectangleDec2" ClientIDMode="Static" CssClass="narrow" Text="+00:00:00" />
+                    <asp:TextBox runat="server" ID="rectangleRa2" ClientIDMode="Static" CssClass="narrow" Text="01:55:00" />
+                    <asp:TextBox runat="server" ID="rectangleDec2" ClientIDMode="Static" CssClass="narrow" Text="+03:00:00" />
                     <asp:RequiredFieldValidator runat="server" ControlToValidate="rectangleRa2" ValidationGroup="rectangleModal" Display="Dynamic">
                         <br />RA is required.
                     </asp:RequiredFieldValidator>

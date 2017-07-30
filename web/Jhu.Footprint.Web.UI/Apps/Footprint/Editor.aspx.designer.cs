@@ -121,6 +121,15 @@ namespace Jhu.Footprint.Web.UI.Apps.Footprint {
         protected global::Jhu.Footprint.Web.UI.Apps.Footprint.EditorCanvas editorCanvas;
         
         /// <summary>
+        /// confirmModal control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Jhu.Footprint.Web.UI.Apps.Footprint.ConfirmModal confirmModal;
+        
+        /// <summary>
         /// circleModal control.
         /// </summary>
         /// <remarks>

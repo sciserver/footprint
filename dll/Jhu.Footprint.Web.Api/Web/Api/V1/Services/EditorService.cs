@@ -122,6 +122,11 @@ namespace Jhu.Footprint.Web.Api.V1
 
         public void DeleteFootprintRegions(string[] regionNames)
         {
+            if (regionNames != null && regionNames.Length == 1 && regionNames[0] == "*")
+            {
+                SessionRegions.Clear();
+            }
+
             foreach (var item in regionNames)
             {
                 if (SessionRegions.ContainsKey(item))

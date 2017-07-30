@@ -1,15 +1,13 @@
 ﻿<%@ Page Title="" Language="C#" AutoEventWireup="true" CodeBehind="Editor.aspx.cs" Inherits="Jhu.Footprint.Web.UI.Apps.Footprint.Editor" %>
 
 <%@ Register Src="~/Apps/Footprint/EditorRegionList.ascx" TagPrefix="uc1" TagName="EditorRegionList" %>
+<%@ Register Src="~/Apps/Footprint/ConfirmModal.ascx" TagPrefix="uc1" TagName="ConfirmModal" %>
 <%@ Register Src="~/Apps/Footprint/CircleModal.ascx" TagPrefix="uc1" TagName="CircleModal" %>
 <%@ Register Src="~/Apps/Footprint/EditorCanvas.ascx" TagPrefix="uc1" TagName="EditorCanvas" %>
 <%@ Register Src="~/Apps/Footprint/RectangleModal.ascx" TagPrefix="uc1" TagName="RectangleModal" %>
 <%@ Register Src="~/Apps/Footprint/CustomRegionModal.ascx" TagPrefix="uc1" TagName="CustomRegionModal" %>
 <%@ Register Src="~/Apps/Footprint/MultipointRegionModal.ascx" TagPrefix="uc1" TagName="MultipointRegionModal" %>
 <%@ Register Src="~/Apps/Footprint/CombinedRegionModal.ascx" TagPrefix="uc1" TagName="CombinedRegionModal" %>
-
-
-
 
 <asp:Content runat="server" ContentPlaceHolderID="toolbar">
     <div id="toolbar" class="toolbar">
@@ -30,9 +28,9 @@
             <a class="dropdown-toggle" data-toggle="dropdown">view<span class="caret"></span></a>
             <ul class="dropdown-menu" id="viewDropdown">
                 <li>
-                    <asp:CheckBox runat="server" ID="autoRotate" ClientIDMode="Static" Text="auto center" /></li>
+                    <asp:CheckBox runat="server" ID="autoRotate" ClientIDMode="Static" Text="auto center" Checked="true" /></li>
                 <li>
-                    <asp:CheckBox runat="server" ID="autoZoom" ClientIDMode="Static" Text="auto zoom" /></li>
+                    <asp:CheckBox runat="server" ID="autoZoom" ClientIDMode="Static" Text="auto zoom" Checked="true" /></li>
                 <li role="separator" class="divider"></li>
                 <li>
                     <asp:CheckBox runat="server" ID="grid" ClientIDMode="Static" Text="grid" Checked="true" /></li>
@@ -70,11 +68,11 @@
                 <li><a href="#" id="subtract">subtract</a></li>
             </ul>
         </div>
-        <a id="delete" style="min-width: 40px; text-align: center"><span class="glyphicon glyphicon-remove"></span></a>
+        <a id="delete">delete</a>
 
         <span class="separator"></span>
 
-        <a data-toggle="modal" data-target="#clearModal">clear</a>
+        <a id="clear">clear</a>
         <a data-toggle="modal" data-target="#saveModal">save</a>
         <a data-toggle="modal" data-target="#downloadModal">download</a>
 
@@ -104,6 +102,7 @@
             </div>
 
             <%-- Modal windows  --%>
+            <uc1:ConfirmModal runat="server" ID="confirmModal" />
             <uc1:CircleModal runat="server" ID="circleModal" />
             <uc1:RectangleModal runat="server" id="rectangleModal" />
             <uc1:CustomRegionModal runat="server" id="customRegionModal" />
@@ -134,92 +133,6 @@
                 </div>
             </div>
 
-
-            <div id="AddRegionModal" class="modal" tabindex="-1" role="dialog">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
-                            <h4 class="modal-title">Add Region</h4>
-                        </div>
-                        <div class="modal-body">
-                            <div id="AdditionTypeSelector" class="text-center">
-                                <h3 class="FormLabel">Select addition type:</h3>
-                                <div class="btn-group" data-toggle="buttons">
-                                    <label class="btn btn-primary active">
-                                        <input type="radio" name="AdditionTypeSelector" value="new" checked="checked">
-                                        New
-                                    </label>
-                                    <label class="btn btn-primary">
-                                        <input type="radio" name="AdditionTypeSelector" value="union">
-                                        Union
-                                    </label>
-                                    <label class="btn btn-primary">
-                                        <input type="radio" name="AdditionTypeSelector" value="intersect">
-                                        Intersect
-                                    </label>
-                                    <label class="btn btn-primary">
-                                        <input type="radio" name="AdditionTypeSelector" value="subtract">
-                                        Subtract
-                                    </label>
-                                </div>
-                            </div>
-
-                            <hr />
-
-                            <div id="RegionTypeSelector" class="text-center">
-                                <h3 class="FormLabel">Select region type:</h3>
-                                <div class="btn-group" data-toggle="buttons">
-                                    <label class="btn btn-primary active">
-                                        <input type="radio" name="RegionTypeSelector" value="circle" checked="checked">
-                                        Circle
-                                    </label>
-                                    <label class="btn btn-primary">
-                                        <input type="radio" name="RegionTypeSelector" value="polygon">
-                                        Polygon
-                                    </label>
-                                    <label class="btn btn-primary">
-                                        <input type="radio" name="RegionTypeSelector" value="costum">
-                                        Costum
-                                    </label>
-                                </div>
-                                <hr />
-                            </div>
-
-
-                            <div id="CircleRegionForm" class="AddRegionForms">
-                                <div class="form-inline">
-                                    <label for="CircleRA" class="FormLabel">Center:</label>
-                                    <input id="CircleRA" type="text" class="form-control" placeholder="12:00:00.00" data-toogle="tooltip" title="Right Ascension" />
-                                    <input id="CircleDec" type="text" class="form-control" placeholder="00:00:00.00" data-toogle="tooltip" title="Declination" />
-                                </div>
-                                <div class="form-inline">
-                                    <label for="CircleRaidus" class="FormLabel">Radius:</label>
-                                    <input id="CircleRadius" type="text" class="form-control" placeholder="120" data-toogle="tooltip" title="Arcmin" />
-                                </div>
-                            </div>
-                            <div id="PolygonRegionForm" class="AddRegionForms text-center hidden">
-                                <div class="form-inline">
-                                    <label for="PolygonPoints" class="FormLabel">Points: </label>
-                                    <textarea rows="8" id="PolygonPoints" class="form-control" style="min-width: 50%" data-toogle="tooltip" title="Specify one polygon point in each line. Use sexagesimal or decimal format.">
-12:00:00.00,   00:00:00.00
-12:00:00.00,   10:00:00.00
-11:00:00.00,   10:00:00.00
-11:00:00.00,   00:00:00.00
-                                        </textarea>
-                                </div>
-                            </div>
-                            <div id="CostumRegionForm" class="AddRegionForms hidden">
-                                costum
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-success" id="AddRegionButton">Add</button>
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
                 --%>
         </ContentTemplate>
     </asp:UpdatePanel>
