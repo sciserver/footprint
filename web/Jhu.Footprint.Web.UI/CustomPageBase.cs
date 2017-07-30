@@ -35,10 +35,16 @@ namespace Jhu.Footprint.Web.UI
 
         private void CreateContext()
         {
-            footprintContext = new FootprintContext()
+            footprintContext = new FootprintContext();
+
+            if (Page.User is Jhu.Graywulf.AccessControl.GraywulfPrincipal)
             {
-                Principal = Page.User
-            };
+                footprintContext.Principal = Page.User;
+            }
+            else
+            {
+                footprintContext.Principal = Jhu.Graywulf.AccessControl.GraywulfPrincipal.Guest;
+            }
         }
     }
 }

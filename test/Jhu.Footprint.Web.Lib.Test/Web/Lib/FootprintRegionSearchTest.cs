@@ -157,30 +157,6 @@ namespace Jhu.Footprint.Web.Lib.Test
         }
 
         [TestMethod]
-        public void RegionConeSearchTest()
-        {
-            var name = GetTestUniqueName();
-
-            using (var context = CreateContext())
-            {
-                CreateTestFootprintAndRegion(context, name);
-            }
-
-            using (var context = CreateContext())
-            {
-                var search = new FootprintRegionSearch(context)
-                {
-                    SearchMethod = SearchMethod.Cone,
-                    Point = new Spherical.Cartesian(9, 9),
-                    Radius = 100
-                };
-
-                Assert.IsTrue(1 <= search.Count());
-                Assert.IsTrue(1 <= search.Find().Count());
-            }
-        }
-
-        [TestMethod]
         public void RegionIntersectSearchTest()
         {
             var name = GetTestUniqueName();
@@ -224,6 +200,12 @@ namespace Jhu.Footprint.Web.Lib.Test
                 Assert.IsTrue(1 <= search.Count());
                 Assert.IsTrue(1 <= search.Find().Count());
             }
+        }
+
+        [TestMethod]
+        public void RegionCoverSearchTest()
+        {
+            Assert.Inconclusive();
         }
     }
 }

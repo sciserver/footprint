@@ -12,7 +12,6 @@ namespace Jhu.Footprint.Web.Lib
         string Name { get; set; }
         SearchMethod SearchMethod { get; set; }
         Spherical.Cartesian Point { get; set; }
-        double Radius { get; set; }
         Spherical.Region Region { get; set; }
     }
 }

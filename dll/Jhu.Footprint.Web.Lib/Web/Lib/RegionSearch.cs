@@ -40,12 +40,6 @@ namespace Jhu.Footprint.Web.Lib
             set { point = value; }
         }
 
-        public double Radius
-        {
-            get { return radius; }
-            set { radius = value; }
-        }
-
         public Region Region
         {
             get { return region; }
@@ -82,11 +76,12 @@ namespace Jhu.Footprint.Web.Lib
 
                 case SearchMethod.Point:
                     return GetTableQuery_PointSearch();
-                case SearchMethod.Cone:
                 case SearchMethod.Intersect:
                     return GetTableQuery_IntersectSearch();
                 case SearchMethod.Contain:
                     return GetTableQuery_ContainSearch();
+                case SearchMethod.Cover:
+                    return GetTableQuery_CoverSearch();
                 default:
                     return base.GetTableQuery();
             }
@@ -98,6 +93,8 @@ namespace Jhu.Footprint.Web.Lib
 
         protected abstract string GetTableQuery_ContainSearch();
 
+        protected abstract string GetTableQuery_CoverSearch();
+
         protected override void AppendParameters()
         {
             switch (searchMethod)
@@ -105,12 +102,10 @@ namespace Jhu.Footprint.Web.Lib
                 case SearchMethod.Point:
                     AppendParameters_PointSearch();
                     break;
-                case SearchMethod.Cone:
-                    AppendParameters_ConeSearch();
-                    break;
                 case SearchMethod.Contain:
                 case SearchMethod.Intersect:
-                    AppendParameters_IntersectSearch();
+                case SearchMethod.Cover:
+                    AppendParameters_RegionSearch();
                     break;
                 default:
                     base.AppendParameters();
@@ -124,14 +119,7 @@ namespace Jhu.Footprint.Web.Lib
             AppendSearchParameter("@dec", SqlDbType.Float, Point.Dec);
         }
 
-        private void AppendParameters_ConeSearch()
-        {
-            var sb = new ShapeBuilder();
-            var circle = sb.CreateCircle(Point, radius);
-            var region = new Region(circle, false);
-            AppendSearchParameter("@region", SqlDbType.VarBinary, region.ToSqlBytes().Value);
-        }
-        private void AppendParameters_IntersectSearch()
+        private void AppendParameters_RegionSearch()
         {
             AppendSearchParameter("@region", SqlDbType.VarBinary, Region.ToSqlBytes().Value);
         }

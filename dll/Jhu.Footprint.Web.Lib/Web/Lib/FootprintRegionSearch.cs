@@ -1,4 +1,5 @@
-﻿using Jhu.Graywulf.Entities.Mapping;
+﻿using System;
+using Jhu.Graywulf.Entities.Mapping;
 
 namespace Jhu.Footprint.Web.Lib
 {
@@ -100,6 +101,11 @@ SELECT r.ID, [FootprintID], r.[Name], [FillFactor], [Type],  f.[Name] AS Footpri
 FROM [fps].[FindFootprintRegionContain](@region) r
 INNER JOIN [dbo].[Footprint] f 
     ON r.footprintID = f.ID";
+        }
+
+        protected override string GetTableQuery_CoverSearch()
+        {
+            throw new NotImplementedException();
         }
     }
 }

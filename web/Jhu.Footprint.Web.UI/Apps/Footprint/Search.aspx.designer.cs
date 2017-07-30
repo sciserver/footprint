@@ -22,21 +22,21 @@ namespace Jhu.Footprint.Web.UI.Apps.Footprint {
         protected global::Jhu.Footprint.Web.UI.Apps.Footprint.SearchForm searchForm;
         
         /// <summary>
-        /// footprintRegionDataSource control.
+        /// footprintList control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ObjectDataSource footprintRegionDataSource;
+        protected global::Jhu.Footprint.Web.UI.Apps.Footprint.FootprintList footprintList;
         
         /// <summary>
-        /// regionList control.
+        /// footprintRegionList control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ListView regionList;
+        protected global::Jhu.Footprint.Web.UI.Apps.Footprint.FootprintRegionList footprintRegionList;
     }
 }

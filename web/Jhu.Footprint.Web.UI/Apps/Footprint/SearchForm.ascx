@@ -1,14 +1,8 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="SearchForm.ascx.cs" Inherits="Jhu.Footprint.Web.UI.Apps.Footprint.SearchForm" %>
 
-<jgwuc:Form runat="server" ID="searchForm" Text="Footprint search">
+<jgwuc:Form runat="server" ID="searchForm" Text="Footprint search" ClientIDMode="Static">
     <FormTemplate>
-
-        <%--<div class="row" id="FastSearchPanel">
-            <div class="col-sm-6">
-                <asp:TextBox runat="server" ID="FastSearchInput" CssClass="form-control"></asp:TextBox>
-
-            </div>
-        </div>--%>
+        <asp:HiddenField runat="server" ID="selectedTab" ClientIDMode="Static" Value="keywordSearch" />
         <div class="row">
             <div class="col-sm-12">
                 <ul runat="server" id="searchTabContainer" class="nav nav-tabs gw-tabs">
@@ -122,7 +116,7 @@
                         <tr>
                             <td class="gw-form-label">Visibility:</td>
                             <td class="gw-form-field">
-                                <asp:DropDownList runat="server" ID="visibility" CssClass="wide">
+                                <asp:DropDownList runat="server" ID="searchVisibility" CssClass="wide">
                                     <asp:ListItem Text="Public and private footprints" Value="All" Selected="True" />
                                     <asp:ListItem Text="Public footprints only" Value="Public" />
                                     <asp:ListItem Text="Private footprints only" Value="Private" />
@@ -132,9 +126,9 @@
                         <tr>
                             <td class="gw-form-label">Search mode:</td>
                             <td class="gw-form-field">
-                                <asp:DropDownList runat="server" ID="mode" CssClass="wide">
-                                    <asp:ListItem Text="Search among entire footprints" Value="Footprint" />
-                                    <asp:ListItem Text="Search among individual regions" Value="Region" />
+                                <asp:DropDownList runat="server" ID="searchMode" CssClass="wide">
+                                    <asp:ListItem Text="Search among entire footprints" Value="footprint" />
+                                    <asp:ListItem Text="Search among individual regions" Value="region" />
                                 </asp:DropDownList>
                             </td>
                         </tr>
@@ -144,6 +138,6 @@
         </div>
     </FormTemplate>
     <ButtonsTemplate>
-        <input type="button" id="ok" value="OK" />
+        <asp:Button runat="server" ID="ok" Text="OK" OnClick="ok_Click" />
     </ButtonsTemplate>
 </jgwuc:Form>

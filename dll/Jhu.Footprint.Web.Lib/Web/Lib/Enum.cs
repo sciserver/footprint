@@ -16,9 +16,9 @@ namespace Jhu.Footprint.Web.Lib
     {
         Name,       // footprint name
         Point,      // Coordinates
-        Cone,
         Intersect,
-        Contain
+        Contain,
+        Cover
     }
 
     [Flags]

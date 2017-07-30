@@ -22,6 +22,15 @@ namespace Jhu.Footprint.Web.UI.Apps.Footprint {
         protected global::Jhu.Graywulf.Web.UI.Controls.Form searchForm;
         
         /// <summary>
+        /// selectedTab control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField selectedTab;
+        
+        /// <summary>
         /// searchTabContainer control.
         /// </summary>
         /// <remarks>
@@ -175,21 +184,30 @@ namespace Jhu.Footprint.Web.UI.Apps.Footprint {
         protected global::System.Web.UI.WebControls.RadioButton regionContain;
         
         /// <summary>
-        /// visibility control.
+        /// searchVisibility control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList visibility;
+        protected global::System.Web.UI.WebControls.DropDownList searchVisibility;
         
         /// <summary>
-        /// mode control.
+        /// searchMode control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList mode;
+        protected global::System.Web.UI.WebControls.DropDownList searchMode;
+        
+        /// <summary>
+        /// ok control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button ok;
     }
 }

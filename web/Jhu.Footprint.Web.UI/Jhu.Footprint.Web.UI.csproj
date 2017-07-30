@@ -68,6 +68,8 @@
   <ItemGroup>
     <Content Include="Api\V1\Editor.svc" />
     <Content Include="Api\V1\Footprint.svc" />
+    <Content Include="Apps\Footprint\FootprintList.ascx" />
+    <Content Include="Apps\Footprint\FootprintRegionList.ascx" />
     <Content Include="Apps\Footprint\SaveFootprintModal.ascx.js" />
     <Content Include="Apps\Footprint\SaveFootprintModal.ascx" />
     <Content Include="Apps\Footprint\ConfirmModal.ascx" />
@@ -602,6 +604,20 @@
       <DependentUpon>UI.master</DependentUpon>
     </Content>
     <Compile Include="Apps\Footprint\App.cs" />
+    <Compile Include="Apps\Footprint\FootprintList.ascx.cs">
+      <DependentUpon>FootprintList.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Apps\Footprint\FootprintList.ascx.designer.cs">
+      <DependentUpon>FootprintList.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Apps\Footprint\FootprintRegionList.ascx.cs">
+      <DependentUpon>FootprintRegionList.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Apps\Footprint\FootprintRegionList.ascx.designer.cs">
+      <DependentUpon>FootprintRegionList.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Apps\Footprint\SaveFootprintModal.ascx.cs">
       <DependentUpon>SaveFootprintModal.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
