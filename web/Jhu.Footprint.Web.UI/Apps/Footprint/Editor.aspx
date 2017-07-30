@@ -60,6 +60,16 @@
                 <li><a href="#" id="upload">upload file</a></li>
             </ul>
         </div>
+        <%--
+        <div class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown">adjust</a>
+            <ul class="dropdown-menu">
+                <li><a href="#" id="invert">invert</a></li>
+                <li><a href="#" id="grow">grow</a></li>
+                <li><a href="#" id="mec">minimal circle</a></li>
+            </ul>
+        </div>
+        --%>
         <div class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown">combine<span class="caret"></span></a>
             <ul class="dropdown-menu">
@@ -90,7 +100,6 @@
     </asp:ScriptManagerProxy>
     <asp:UpdatePanel runat="server" class="dock-container dock-fill">
         <ContentTemplate>
-
             <%-- Region List  --%>
             <div class="dock-right dock-container" style="width: 248px; margin-left: 8px;">
                 <uc1:EditorRegionList runat="server" ID="regionList" />
@@ -108,32 +117,6 @@
             <uc1:CustomRegionModal runat="server" id="customRegionModal" />
             <uc1:MultipointRegionModal runat="server" ID="multipointRegionModal" />
             <uc1:CombinedRegionModal runat="server" id="combinedRegionModal" />
-            
-            <%--
-            <div id="GrowModal" class="modal" tabindex="-1" role="dialog">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
-                            <h4 class="modal-title">Grow region</h4>
-
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-inline">
-                                <label for="GrowRadius" class="control-label">Radius (arcmin): </label>
-                                <input type="text" class="form-control" id="GrowRadius" placeholder="10" />
-                                <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" title="Use negative value to reduce. Valid range: -120 .. 120 arcmin"></span>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-success" id="GrowButton">Grow</button>
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-                --%>
         </ContentTemplate>
     </asp:UpdatePanel>
 </asp:Content>
