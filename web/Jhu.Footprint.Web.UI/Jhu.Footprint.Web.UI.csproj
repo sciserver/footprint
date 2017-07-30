@@ -91,6 +91,10 @@
     <Content Include="Apps\Footprint\ModalBase.js" />
     <Content Include="Apps\Footprint\ConfirmModal.ascx.js" />
     <Content Include="Apps\Footprint\RegionModalBase.js" />
+    <Content Include="Apps\Footprint\Search.aspx" />
+    <Content Include="Apps\Footprint\Search.aspx.js" />
+    <Content Include="Apps\Footprint\SearchForm.ascx" />
+    <Content Include="Apps\Footprint\SearchForm.ascx.js" />
     <Content Include="Default.aspx" />
     <Content Include="Docs\01_introduction\00_index.aspx" />
     <Content Include="Docs\99_info\00_index.aspx" />
@@ -673,6 +677,20 @@
     </Compile>
     <Compile Include="Apps\Footprint\RegionModalBase.cs">
       <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Apps\Footprint\Search.aspx.cs">
+      <DependentUpon>Search.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Apps\Footprint\Search.aspx.designer.cs">
+      <DependentUpon>Search.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Apps\Footprint\SearchForm.ascx.cs">
+      <DependentUpon>SearchForm.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Apps\Footprint\SearchForm.ascx.designer.cs">
+      <DependentUpon>SearchForm.ascx</DependentUpon>
     </Compile>
     <Compile Include="CustomPageBase.cs">
       <SubType>ASPXCodeBehind</SubType>
