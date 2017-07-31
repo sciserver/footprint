@@ -27,7 +27,9 @@ AS
 
 	-- Save region
 	UPDATE FootprintRegion
-	SET region = @region, Thumbnail = NULL
+	SET region = @region, 
+		ImageThumbnail = NULL, 
+		ImagePreview = NULL
 	FROM FootprintRegion r
 	WHERE r.ID = @RegionID;
 
@@ -118,9 +120,9 @@ AS
 
 			-- Save combined region
 			INSERT FootprintRegion
-				([FootprintID], [Name], [FillFactor], [Type], [Region], [Thumbnail])
+				([FootprintID], [Name], [FillFactor], [Type], [Region], [ImageThumbnail], [ImagePreview])
 			VALUES
-				(@FootprintID, 'combined', 1.0, 1, @combinedRegion.ToBinary(), NULL)
+				(@FootprintID, 'combined', 1.0, 1, @combinedRegion.ToBinary(), NULL, NULL)
 
 			SET @combinedRegionID = @@IDENTITY
 
@@ -146,14 +148,18 @@ AS
 				-- UNION
 
 				UPDATE FootprintRegion
-				SET Region = @combinedRegion.[Union](@region).ToBinary(), Thumbnail = NULL
+				SET Region = @combinedRegion.[Union](@region).ToBinary(), 
+					ImageThumbnail = NULL,
+					ImagePreview = NULL
 				WHERE ID = @combinedRegionID
 
 			END ELSE IF @combinationMethod = 2 BEGIN
 				-- INTERSECT
 
 				UPDATE FootprintRegion
-				SET Region = @combinedRegion.[Intersect](@region).ToBinary(), Thumbnail = NULL
+				SET Region = @combinedRegion.[Intersect](@region).ToBinary(), 
+					ImageThumbnail = NULL,
+					ImagePreview = NULL
 				WHERE ID = @combinedRegionID
 
 			END ELSE THROW 51000, 'Invalid combination method.', 1;
@@ -255,7 +261,9 @@ AS
 			PRINT 'Updating cache region';
 
 			UPDATE FootprintRegion
-			SET Region = @combinedRegion.ToBinary(), Thumbnail = NULL
+			SET Region = @combinedRegion.ToBinary(), 
+				ImageThumbnail = NULL,
+				ImagePreview = NULL
 			WHERE ID = @combinedRegionID
 
 		END ELSE BEGIN
@@ -263,9 +271,9 @@ AS
 			PRINT 'Creating new cache region';
 		
 			INSERT FootprintRegion
-				([FootprintID], [Name], [FillFactor], [Type], [Region], [Thumbnail])
+				([FootprintID], [Name], [FillFactor], [Type], [Region], [ImageThumbnail], [ImagePreview])
 			VALUES
-				(@FootprintID, 'combined', 1.0, 1, @combinedRegion.ToBinary(), NULL)
+				(@FootprintID, 'combined', 1.0, 1, @combinedRegion.ToBinary(), NULL, NULL)
 
 			SET @combinedRegionID = @@IDENTITY
 

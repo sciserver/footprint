@@ -32,8 +32,8 @@ namespace Jhu.Footprint.Web.Lib
         private double fillFactor;
         private RegionType type;
         private Spherical.Region region;
-        private byte[] thumbnail;
-        
+        private byte[] imageThumbnail;
+        private byte[] imagePreview;
 
         #endregion
         #region Properties
@@ -95,17 +95,31 @@ namespace Jhu.Footprint.Web.Lib
         }
 
         [DbColumn(Binding = DbColumnBinding.Auxiliary)]
-        public byte[] Thumbnail
+        public byte[] ImageThumbnail
         {
             get
             {
-                if (thumbnail == null)
+                if (imageThumbnail == null)
                 {
                     LoadThumbnail();
                 }
-                return thumbnail;
+                return imageThumbnail;
             }
-            set { thumbnail = value; }
+            set { imageThumbnail = value; }
+        }
+
+        [DbColumn(Binding = DbColumnBinding.Auxiliary)]
+        public byte[] ImagePreview
+        {
+            get
+            {
+                if (imagePreview == null)
+                {
+                    LoadPreview();
+                }
+                return imagePreview;
+            }
+            set { imagePreview = value; }
         }
 
         [DbColumn(Name = "FootprintName", Binding = DbColumnBinding.Auxiliary)]
@@ -157,7 +171,8 @@ namespace Jhu.Footprint.Web.Lib
             this.fillFactor = 1.0;
             this.type = RegionType.Single;
             this.region = null;
-            this.thumbnail = null;
+            this.imageThumbnail = null;
+            this.imagePreview = null;
         }
 
         private void CopyMembers(FootprintRegion old)
@@ -170,7 +185,8 @@ namespace Jhu.Footprint.Web.Lib
             this.fillFactor = old.fillFactor;
             this.type = old.type;
             this.region = new Spherical.Region(old.region);
-            this.thumbnail = old.thumbnail;
+            this.imageThumbnail = old.imageThumbnail;
+            this.imagePreview = old.imagePreview;
         }
 
         #endregion
@@ -384,13 +400,13 @@ WHERE r.ID = @ID
             }
         }
 
-        public void LoadThumbnail()
+        private byte[] LoadImage(string column)
         {
-
             EvaluateAccess().EnsureRead();
 
+            // column name is internal, no need to prevent injection here
             var sql = @"
-SELECT thumbnail
+SELECT " + column + @"
 FROM [FootprintRegion] r
 WHERE r.ID = @ID
 ";
@@ -403,38 +419,120 @@ WHERE r.ID = @ID
                 {
                     dr.Read();
 
-                    this.thumbnail = dr["thumbnail"] == DBNull.Value ? null : (byte[])dr["thumbnail"];
-
-                    if (thumbnail == null)
-                    {
-                        CreateThumbnail();
-                    }
+                    return dr[column] == DBNull.Value ? null : (byte[])dr[column];
                 }
+            }
+        }
+
+        private byte[] SaveImage(string column, Spherical.Visualizer.Plot p)
+        {
+            // create binary array
+            var ms = new MemoryStream();
+            p.RenderToBitmap(ms, ImageFormat.Png);
+            var data = ms.ToArray();
+
+            var sql = @"
+UPDATE [dbo].[FootprintRegion] 
+SET " + column + @" = @Data
+WHERE Id = @Id";
+
+            using (var cmd = new SqlCommand(sql))
+            {
+                cmd.Parameters.Add("@Id", SqlDbType.Int).Value = id;
+                cmd.Parameters.Add("@Data", SqlDbType.VarBinary).Value = data == null ? (object)DBNull.Value : data;
+
+                Context.ExecuteCommandNonQuery(cmd);
+            }
+
+            return data;
+        }
+
+        public void LoadThumbnail()
+        {
+            this.imageThumbnail = LoadImage("ImageThumbnail");
+
+            if (imageThumbnail == null)
+            {
+                CreateThumbnail();
+            }
+        }
+
+        public void LoadPreview()
+        {
+            this.imagePreview = LoadImage("ImagePreview");
+
+            if (imagePreview == null)
+            {
+                CreatePreview();
             }
         }
 
         public void RefreshThumbnail()
         {
-            // TO DO
+            // TODO
         }
 
         public void CreateThumbnail()
         {
-
-            // generate plot
-            var p = new Spherical.Visualizer.Plot()
-            {
-                Width = 300,
-                Height = 224,
-                Projection = new Spherical.Visualizer.AitoffProjection(),
-                AutoRotate = true,
-                AutoZoom = true
-            };
-
             if (region == null)
             {
                 LoadRegion();
             }
+
+            // generate plot
+            var p = new Spherical.Visualizer.Plot()
+            {
+                Width = Constants.ImageThumbnailWidth,
+                Height = Constants.ImageThumbnailHeight,
+                Projection = new Spherical.Visualizer.AitoffProjection(),
+            };
+            
+            // add grid
+            var grid = new GridLayer();
+            p.Layers.Add(grid);
+
+            // add region
+            var regionds = new ObjectListDataSource(new[] { region });
+            var r = new RegionsLayer();
+            r.DataSource = regionds;
+            p.Layers.Add(r);
+
+            imageThumbnail = SaveImage("ImageThumbnail", p);
+        }
+
+        public void RefreshPreview()
+        {
+            // TODO
+        }
+
+        public void CreatePreview()
+        {
+            if (region == null)
+            {
+                LoadRegion();
+            }
+            
+            // generate plot
+            var p = new Spherical.Visualizer.Plot()
+            {
+                Width = Constants.ImagePreviewWidth,
+                Height = Constants.ImagePreviewHeight,
+            };
+
+            // projection depends on area
+            if (region.Area < Constants.ImagePreviewAreaLimit)
+            {
+                p.Projection = new Spherical.Visualizer.StereographicProjection();
+                p.AutoRotate = true;
+                p.AutoZoom = true;
+            }
+            else
+            {
+                p.Projection = new Spherical.Visualizer.AitoffProjection();
+                p.AutoRotate = false;
+                p.AutoZoom = false;
+            }
+
 
             // add grid
             var grid = new GridLayer();
@@ -448,7 +546,7 @@ WHERE r.ID = @ID
 
             // add axes
             var axes = new AxesLayer();
-            
+
             axes.X1Axis.Title.Text = "Right ascension (deg)";
             axes.X1Axis.Title.Visible = true;
             axes.X2Axis.Labels.Visible = false;
@@ -456,28 +554,8 @@ WHERE r.ID = @ID
             axes.Y2Axis.Labels.Visible = false;
             p.Layers.Add(axes);
 
-            // create binary array
-            var ms = new MemoryStream();
-            p.RenderToBitmap(ms, ImageFormat.Png);
-            thumbnail = ms.ToArray();
-
-            // SQL here
-
-            var sql = @"
-UPDATE [dbo].[FootprintRegion] 
-SET Thumbnail= @Thumbnail
-WHERE Id = @Id";
-
-            using (var cmd = new SqlCommand(sql))
-            {
-                cmd.Parameters.Add("@Id", SqlDbType.Int).Value = id;
-                cmd.Parameters.Add("@Thumbnail", SqlDbType.VarBinary).Value = thumbnail == null ? (object)DBNull.Value : thumbnail;
-
-                Context.ExecuteCommandNonQuery(cmd);
-            }
+            imagePreview = SaveImage("ImagePreview", p);
         }
-
-
 
         #endregion
     }

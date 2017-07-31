@@ -32,7 +32,8 @@ CREATE TABLE [dbo].[FootprintRegion]
 	[FillFactor] [float] NOT NULL,
 	[Type] [tinyint] NOT NULL,
 	[Region] [varbinary](max) NULL,
-	[Thumbnail] [varbinary](max) NULL,
+	[ImageThumbnail] [varbinary](max) NULL,
+	[ImagePreview] [varbinary](max) NULL,
 
 	CONSTRAINT [PK_FootprintRegion] PRIMARY KEY CLUSTERED
 	(

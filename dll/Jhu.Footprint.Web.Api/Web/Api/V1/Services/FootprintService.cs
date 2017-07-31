@@ -337,7 +337,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
                 WebOperationContext.Current.OutgoingResponse.ContentType = "image/jpeg";
 
-                var ms = new MemoryStream(footprint.CombinedRegion.Thumbnail);
+                var ms = new MemoryStream(footprint.CombinedRegion.ImageThumbnail);
                 return ms;
             }
         }
@@ -438,7 +438,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
                 WebOperationContext.Current.OutgoingResponse.ContentType = "image/jpeg";
 
-                var ms = new MemoryStream(region.Thumbnail);
+                var ms = new MemoryStream(region.ImageThumbnail);
                 return ms;
             }
         }

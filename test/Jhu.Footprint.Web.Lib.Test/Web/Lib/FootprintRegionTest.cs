@@ -34,7 +34,7 @@ namespace Jhu.Footprint.Web.Lib
                 {
                     Name = "CreateRegionTest",
                     Type = RegionType.Single,
-                    Region = Spherical.Region.Parse("CIRCLE J2000 10 10 10"),
+                    Region = Spherical.Region.Parse("CIRCLE J2000 10 10 10", true, true),
                 };
 
                 footprint.Save();
@@ -250,7 +250,8 @@ namespace Jhu.Footprint.Web.Lib
             RefreshCombinedRegionHelper3(name, CombinationMethod.Intersection);
         }
 
-        #region thumbnail tests
+        #region Thumbnail and preview tests
+
         [TestMethod]
         public void CreateThumbnailTest()
         {
@@ -292,7 +293,7 @@ namespace Jhu.Footprint.Web.Lib
 
                 regionId = (int)r.Save();
                 r.CreateThumbnail();
-                t1 = r.Thumbnail;
+                t1 = r.ImageThumbnail;
             }
 
             using (var context = CreateContext())
@@ -307,11 +308,74 @@ namespace Jhu.Footprint.Web.Lib
 
                 r.Load(regionId);
                 r.LoadThumbnail();
-                t2 = r.Thumbnail;
+                t2 = r.ImageThumbnail;
             }
             t1.SequenceEqual(t2);
 
         }
+
+        [TestMethod]
+        public void CreatePreviewTest()
+        {
+            var name = GetTestUniqueName();
+
+            using (var context = CreateContext())
+            {
+                var footprint = CreateTestFootprint(context, name);
+                var r = CreateTestRegion(footprint, name);
+
+                r.CreatePreview();
+
+            }
+        }
+
+        [TestMethod]
+        public void LoadPreviewTest()
+        {
+            var name = GetTestUniqueName();
+            int footprintId;
+            int regionId;
+            byte[] t1;
+            byte[] t2;
+
+            using (var context = CreateContext())
+            {
+                //var footprint = CreateTestFootprint(context, name);
+                var f = new Lib.Footprint(context)
+                {
+                    Name = name
+                };
+                footprintId = (int)f.Save();
+
+                var r = new Lib.FootprintRegion(f)
+                {
+                    Name = name,
+                    Region = Spherical.Region.Parse("CIRCLE J2000 10 10 10")
+                };
+
+                regionId = (int)r.Save();
+                r.CreatePreview();
+                t1 = r.ImagePreview;
+            }
+
+            using (var context = CreateContext())
+            {
+                var f = new Footprint(context);
+                f.Load(footprintId);
+
+                var r = new FootprintRegion(f)
+                {
+                    Id = regionId
+                };
+
+                r.Load(regionId);
+                r.LoadPreview();
+                t2 = r.ImagePreview;
+            }
+
+            t1.SequenceEqual(t2);
+        }
+
         #endregion
 
     }

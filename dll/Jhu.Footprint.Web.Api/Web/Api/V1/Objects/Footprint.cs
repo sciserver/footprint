@@ -44,7 +44,7 @@ namespace Jhu.Footprint.Web.Api.V1
         [DefaultValue("")]
         [Description("Comments.")]
         public string Comments { get; set; }
-
+        
         [DataMember(Name = "public")]
         [Description("Visibility of the footprint to the public.")]
         public bool? Public { get; set; }

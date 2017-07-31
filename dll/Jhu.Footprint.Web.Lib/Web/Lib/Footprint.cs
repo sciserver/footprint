@@ -88,10 +88,7 @@ namespace Jhu.Footprint.Web.Lib
         public string Comments
         {
             get { return comments; }
-            set
-            {
-                comments = value;
-            }
+            set { comments = value; }
         }
 
         public FootprintRegion CombinedRegion
