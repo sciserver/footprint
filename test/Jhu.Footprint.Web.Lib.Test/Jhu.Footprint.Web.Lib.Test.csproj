@@ -98,6 +98,10 @@
       <Project>{10b184e6-825d-4498-98d5-a42939e4bd2d}</Project>
       <Name>Jhu.Graywulf.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\graywulf\test\Jhu.Graywulf.Logging.Test\Jhu.Graywulf.Logging.Test.csproj">
+      <Project>{d152dc9a-004c-4851-b0e7-b81a4325c9b7}</Project>
+      <Name>Jhu.Graywulf.Logging.Test</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\graywulf\test\Jhu.Graywulf.Test\Jhu.Graywulf.Test.csproj">
       <Project>{ea6164ba-b283-46c2-874b-348d6bad41ad}</Project>
       <Name>Jhu.Graywulf.Test</Name>
