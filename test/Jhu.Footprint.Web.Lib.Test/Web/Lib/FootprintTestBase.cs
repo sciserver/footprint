@@ -85,15 +85,15 @@ namespace Jhu.Footprint.Web.Lib
             string bin = @"bin\Release";
 #endif
 
-            RunScript(@"footprint\sql\Jhu.Footprint.Logic.Drop.sql");
-            RunScript(@"footprint\sql\Jhu.Footprint.Tables.Drop.sql");
+            RunScript(@"modules\footprint\sql\Jhu.Footprint.Logic.Drop.sql");
+            RunScript(@"modules\footprint\sql\Jhu.Footprint.Tables.Drop.sql");
             RunScript(bin + @"\Jhu.Graywulf.Entities.Sql.Drop.sql");
             RunScript(bin + @"\Jhu.Spherical.Sql.Drop.sql");
 
             RunScript(bin + @"\Jhu.Spherical.Sql.Create.sql");
             RunScript(bin + @"\Jhu.Graywulf.Entities.Sql.Create.sql");
-            RunScript(@"footprint\sql\Jhu.Footprint.Tables.Create.sql");
-            RunScript(@"footprint\sql\Jhu.Footprint.Logic.Create.sql");
+            RunScript(@"modules\footprint\sql\Jhu.Footprint.Tables.Create.sql");
+            RunScript(@"modules\footprint\sql\Jhu.Footprint.Logic.Create.sql");
         }
 
         /*
