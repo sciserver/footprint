@@ -17,9 +17,9 @@ namespace Jhu.Footprint.Web.UI
     public class Global : FederationApplicationBase
     {
 
-        protected override void RegisterApps()
+        protected override void OnRegisterApps()
         {
-            base.RegisterApps();
+            base.OnRegisterApps();
 
             RegisterApp(typeof(Jhu.Graywulf.Web.UI.Apps.Common.App));
             RegisterApp(typeof(Jhu.Footprint.Web.UI.Apps.Footprint.App));
@@ -27,17 +27,17 @@ namespace Jhu.Footprint.Web.UI
             RegisterApp(typeof(Jhu.Graywulf.Web.UI.Apps.Docs.App));
         }
 
-        protected override void RegisterServices()
+        protected override void OnRegisterServices()
         {
-            base.RegisterServices();
+            base.OnRegisterServices();
 
             RegisterService(typeof(Jhu.Footprint.Web.Api.V1.IEditorService));
             RegisterService(typeof(Jhu.Footprint.Web.Api.V1.IFootprintService));
         }
 
-        protected override void RegisterButtons()
+        protected override void OnRegisterButtons()
         {
-            base.RegisterButtons();
+            base.OnRegisterButtons();
 
             RegisterFooterButton(new Graywulf.Web.UI.MenuButton()
             {
