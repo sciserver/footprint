@@ -9,7 +9,7 @@ using Jhu.Graywulf.AccessControl;
 using Jhu.Graywulf.Web;
 using Jhu.Graywulf.Web.UI;
 using Jhu.Graywulf.Registry;
-using Jhu.Graywulf.Schema;
+using Jhu.Graywulf.Sql.Schema;
 using Jhu.Graywulf.Install;
 
 namespace Jhu.Footprint.Web.UI
