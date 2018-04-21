@@ -21,6 +21,8 @@ EditorRegionList.prototype.item_click = function (item, event) {
     if (this.events.click) this.events.click(item);
 }
 
+
+
 EditorRegionList.prototype.refreshList = function () {
     var me = this;
     this.editorService.listFootprintRegions(
@@ -50,7 +52,7 @@ EditorRegionList.prototype.appendItem = function (region) {
 EditorRegionList.prototype.createItem = function (region) {
     var html = '<div class="gw-list-item">';
     html += '<span style="width: 24px"><input type="checkbox" data-item="' + region.name + '" /></span>';
-    html += '<span class="gw-list-span">' + region.name + '</span>';
+    html += '<span class="gw-list-span">' + region.name + ' ' + (region.area || 0.0).toFixed(2) + '</span>';
     html += '</div>';
     return html;
 }

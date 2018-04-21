@@ -41,6 +41,32 @@ namespace Jhu.Footprint.Web.Api.V1
         [Description("Fill factor of the region.")]
         public double? FillFactor { get; set; }
 
+        [DataMember(Name = "isSimplified")]
+        [Description("True if the region is simplified and area is available.")]
+        public bool? IsSimplified
+        {
+            get { return Region?.IsSimplified; }
+            set { }
+        }
+
+        [DataMember(Name = "area")]
+        [Description("Area.")]
+        public double? Area
+        {
+            get
+            {
+                if (Region != null && Region.IsSimplified && !Double.IsNaN(Region.Area))
+                {
+                    return Region.Area;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set { }
+        }
+
         [DataMember(Name = "regionString")]
         [Description("Region string.")]
         public string RegionString
