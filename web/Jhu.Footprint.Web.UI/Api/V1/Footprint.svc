@@ -1,1 +1,1 @@
-﻿<%@ ServiceHost Language="C#" Debug="true" Service="Jhu.Footprint.Web.Api.V1.FootprintService" Factory="System.ServiceModel.Activation.WebServiceHostFactory"  %>
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="Jhu.Footprint.Web.Api.V1.FootprintService" Factory="Jhu.Graywulf.Web.Services.RestServiceFactory"  %>
