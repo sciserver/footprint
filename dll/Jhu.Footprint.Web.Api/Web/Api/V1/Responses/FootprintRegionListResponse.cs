@@ -9,7 +9,7 @@ using System.ServiceModel;
 
 namespace Jhu.Footprint.Web.Api.V1
 {
-    [DataContract(Name = "regionList")]
+    [DataContract]
     [Description("Represents a list of regions.")]
     public class FootprintRegionListResponse
     {

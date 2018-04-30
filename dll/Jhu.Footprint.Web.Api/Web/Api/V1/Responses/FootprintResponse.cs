@@ -10,7 +10,7 @@ using System.ServiceModel;
 
 namespace Jhu.Footprint.Web.Api.V1
 {
-    [DataContract(Name = "footprint")]
+    [DataContract]
     [Description("Represents a footprint.")]
     public class FootprintResponse
     {

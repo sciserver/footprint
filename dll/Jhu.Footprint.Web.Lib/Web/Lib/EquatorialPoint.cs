@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Runtime.Serialization;
 using Jhu.Spherical;
 
 namespace Jhu.Footprint.Web.Lib
 {
+    [DataContract]
     public class EquatorialPoint
     {
         public double RA { get; set; }

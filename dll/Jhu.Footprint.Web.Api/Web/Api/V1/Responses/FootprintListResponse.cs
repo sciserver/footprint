@@ -11,7 +11,7 @@ using Lib = Jhu.Footprint.Web.Lib;
 
 namespace Jhu.Footprint.Web.Api.V1
 {
-    [DataContract(Name = "footprintList")]
+    [DataContract]
     [Description("Represents a list of footprints.")]
     public class FootprintListResponse
     {

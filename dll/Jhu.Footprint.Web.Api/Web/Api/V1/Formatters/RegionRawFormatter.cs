@@ -15,16 +15,10 @@ namespace Jhu.Footprint.Web.Api.V1
 {
     public class RegionFormatter : StreamingRawFormatter<Spherical.Region>, IDispatchMessageFormatter, IClientMessageFormatter
     {
-        public RegionFormatter(OperationDescription operationDescription, ServiceEndpoint endpoint, IDispatchMessageFormatter fallbackFormatter)
-            : base(operationDescription, endpoint, fallbackFormatter)
+        public RegionFormatter()
         {
         }
-
-        public RegionFormatter(OperationDescription operationDescription, ServiceEndpoint endpoint, IClientMessageFormatter fallbackFormatter)
-            : base(operationDescription, endpoint, fallbackFormatter)
-        {
-        }
-
+        
         protected override StreamingRawAdapter<Spherical.Region> CreateAdapter()
         {
             return new RegionAdapter();

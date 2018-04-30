@@ -11,14 +11,9 @@ namespace Jhu.Footprint.Web.Api.V1
 {
     public class RegionFormatterAttribute : StreamingRawFormatAttribute
     {
-        protected override StreamingRawFormatterBase OnCreateDispatchFormatter(OperationDescription operationDescription, ServiceEndpoint endpoint, IDispatchMessageFormatter fallbackFormatter)
+        protected override StreamingRawFormatterBase OnCreateFormatter()
         {
-            return new RegionFormatter(operationDescription, endpoint, fallbackFormatter);
-        }
-
-        protected override StreamingRawFormatterBase OnCreateClientFormatter(OperationDescription operationDescription, ServiceEndpoint endpoint, IClientMessageFormatter fallbackFormatter)
-        {
-            return new RegionFormatter(operationDescription, endpoint, fallbackFormatter);
+            return new RegionFormatter();
         }
     }
 }

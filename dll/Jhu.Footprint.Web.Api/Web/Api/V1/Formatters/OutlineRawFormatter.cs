@@ -15,13 +15,7 @@ namespace Jhu.Footprint.Web.Api.V1
 {
     public class OutlineFormatter : StreamingRawFormatter<Spherical.Outline>, IDispatchMessageFormatter, IClientMessageFormatter
     {
-        public OutlineFormatter(OperationDescription operationDescription, ServiceEndpoint endpoint, IDispatchMessageFormatter fallbackFormatter)
-            : base(operationDescription, endpoint, fallbackFormatter)
-        {
-        }
-
-        public OutlineFormatter(OperationDescription operationDescription, ServiceEndpoint endpoint, IClientMessageFormatter fallbackFormatter)
-            : base(operationDescription, endpoint, fallbackFormatter)
+        public OutlineFormatter()
         {
         }
 

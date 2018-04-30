@@ -7,6 +7,7 @@ using System.ComponentModel;
 
 namespace Jhu.Footprint.Web.Api.V1
 {
+    [DataContract]
     public class PlotRequest
     {
         public Plot Plot { get; set; }

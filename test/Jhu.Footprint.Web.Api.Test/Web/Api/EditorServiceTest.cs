@@ -3,168 +3,187 @@ using System.Linq;
 using System.ServiceModel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Jhu.Graywulf.Web.Services;
+using Jhu.Graywulf.Web.Services.CodeGen;
 
 namespace Jhu.Footprint.Web.Api.V1
 {
     [TestClass]
     public class EditorServiceTest : EditorApiTestBase
     {
+        [TestMethod]
+        public void GenerateJavascriptTest()
+        {
+            var r = new RestServiceReflector();
+            r.ReflectServiceContract(typeof(IEditorService), "http://localhost/EditorService.svc");
+            var cg = new SwaggerJsonGenerator(r.Api);
+            var code = cg.Execute();
+        }
+
+        [TestMethod]
+        public void GenerateSwaggerJsonTest()
+        {
+            var r = new RestServiceReflector();
+            r.ReflectServiceContract(typeof(IEditorService), "http://localhost/EditorService.svc");
+            var cg = new SwaggerJsonGenerator(r.Api);
+            var code = cg.Execute();
+        }
+
         // TODO: reimplement these tests
 
-            /*
-        [TestMethod]
-        public void ResetTest()
+        /*
+    [TestMethod]
+    public void ResetTest()
+    {
+        using (var session = new RestClientSession())
         {
-            using (var session = new RestClientSession())
-            {
-                var client = CreateClient(session, TestUser);
-                client.Reset();
-                var res = client.GetShape();
-                Assert.AreEqual(0, res.ConvexList.Count);
-            }
+            var client = CreateClient(session, TestUser);
+            client.Reset();
+            var res = client.GetShape();
+            Assert.AreEqual(0, res.ConvexList.Count);
+        }
+    }
+
+    [TestMethod]
+    public void NewTest()
+    {
+        using (var session = new RestClientSession())
+        {
+            var client = CreateClient(session, TestUser);
+            var region = GetTestRegion();
+            client.New(region);
+            var res = client.GetShape();
+            Assert.AreEqual(1, res.ConvexList.Count);
+        }
+    }
+
+    [TestMethod]
+    public void UnionTest()
+    {
+        using (var session = new RestClientSession())
+        {
+            var client = CreateClient(session, TestUser);
+            var r1 = GetTestRegion();
+            client.New(r1);
+            var r2 = GetTestRegion("CIRCLE J2000 15 10 15");
+            client.Union(r2);
+            var res = client.GetShape();
+            Assert.AreEqual(2, res.ConvexList.Count);
+        }
+    }
+
+    [TestMethod]
+    public void IntersectTest()
+    {
+        using (var session = new RestClientSession())
+        {
+            var client = CreateClient(session, TestUser);
+            var r1 = GetTestRegion();
+            client.New(r1);
+            var r2 = GetTestRegion("CIRCLE J2000 15 10 15");
+            client.Intersect(r2);
+            var res = client.GetShape();
+            Assert.IsTrue(res.ConvexList.Count >= 1);
         }
 
-        [TestMethod]
-        public void NewTest()
+    }
+
+    [TestMethod]
+    public void SubtractTest()
+    {
+        using (var session = new RestClientSession())
         {
-            using (var session = new RestClientSession())
-            {
-                var client = CreateClient(session, TestUser);
-                var region = GetTestRegion();
-                client.New(region);
-                var res = client.GetShape();
-                Assert.AreEqual(1, res.ConvexList.Count);
-            }
+            var client = CreateClient(session, TestUser);
+            var r1 = GetTestRegion();
+            client.New(r1);
+            var r2 = GetTestRegion("CIRCLE J2000 15 10 15");
+            client.Subtract(r2);
+            var res = client.GetShape();
+            Assert.IsTrue(res.ConvexList.Count >= 1);
         }
 
-        [TestMethod]
-        public void UnionTest()
+    }
+
+    [TestMethod]
+    public void GrowTest()
+    {
+        using (var session = new RestClientSession())
         {
-            using (var session = new RestClientSession())
-            {
-                var client = CreateClient(session, TestUser);
-                var r1 = GetTestRegion();
-                client.New(r1);
-                var r2 = GetTestRegion("CIRCLE J2000 15 10 15");
-                client.Union(r2);
-                var res = client.GetShape();
-                Assert.AreEqual(2, res.ConvexList.Count);
-            }
+            var client = CreateClient(session, TestUser);
+            var r1 = GetTestRegion();
+            client.New(r1);
+            client.Grow(10);
+            var res = client.GetShape();
+
+            Assert.IsTrue(res.Area > r1.Region.GetRegion().Area);
         }
 
-        [TestMethod]
-        public void IntersectTest()
+    }
+
+    [TestMethod]
+    public void SaveLoadTest()
+    {
+
+        using (var session = new RestClientSession())
         {
-            using (var session = new RestClientSession())
-            {
-                var client = CreateClient(session, TestUser);
-                var r1 = GetTestRegion();
-                client.New(r1);
-                var r2 = GetTestRegion("CIRCLE J2000 15 10 15");
-                client.Intersect(r2);
-                var res = client.GetShape();
-                Assert.IsTrue(res.ConvexList.Count >= 1);
-            }
+            var name = GetTestUniqueName();
+            var client = CreateClient(session, TestUser);
+            var r1 = GetTestRegion();
+            client.New(r1);
+            client.Save(TestUser, name, name, "");
 
+            client.Load(TestUser, name, name);
+
+            var res = client.GetShape();
+            Assert.AreEqual(res.ToString(), r1.Region.GetRegion().ToString());
         }
+    }
 
-        [TestMethod]
-        public void SubtractTest()
+    [TestMethod]
+    public void GetTestOutline()
+    {
+        using (var session = new RestClientSession())
         {
-            using (var session = new RestClientSession())
-            {
-                var client = CreateClient(session, TestUser);
-                var r1 = GetTestRegion();
-                client.New(r1);
-                var r2 = GetTestRegion("CIRCLE J2000 15 10 15");
-                client.Subtract(r2);
-                var res = client.GetShape();
-                Assert.IsTrue(res.ConvexList.Count >= 1);
-            }
-
+            var name = GetTestUniqueName();
+            var client = CreateClient(session, TestUser);
+            var r1 = GetTestRegion();
+            client.New(r1);
+            var url = EditorApiBaseUrl + "/outline";
+            var buffer = session.HttpGet(url);
+            Assert.IsTrue(buffer != null && buffer.Length > 0);
         }
+    }
 
-        [TestMethod]
-        public void GrowTest()
+    [TestMethod]
+    public void PlotTestFootprintRegion()
+    {
+        using (var session = new RestClientSession())
         {
-            using (var session = new RestClientSession())
-            {
-                var client = CreateClient(session, TestUser);
-                var r1 = GetTestRegion();
-                client.New(r1);
-                client.Grow(10);
-                var res = client.GetShape();
-
-                Assert.IsTrue(res.Area > r1.Region.GetRegion().Area);
-            }
-
+            var name = GetTestUniqueName();
+            var client = CreateClient(session, TestUser);
+            var r1 = GetTestRegion();
+            client.New(r1);
+            var url = EditorApiBaseUrl + "/plot";
+            var buffer = session.HttpGet(url,"image/png");
+            Assert.IsTrue(buffer != null && buffer.Length > 0);
         }
+    }
 
-        [TestMethod]
-        public void SaveLoadTest()
+    [TestMethod]
+    public void PlotTestFootprintRegionAdvanced()
+    {
+        using (var session = new RestClientSession())
         {
-
-            using (var session = new RestClientSession())
-            {
-                var name = GetTestUniqueName();
-                var client = CreateClient(session, TestUser);
-                var r1 = GetTestRegion();
-                client.New(r1);
-                client.Save(TestUser, name, name, "");
-
-                client.Load(TestUser, name, name);
-
-                var res = client.GetShape();
-                Assert.AreEqual(res.ToString(), r1.Region.GetRegion().ToString());
-            }
+            var name = GetTestUniqueName();
+            var client = CreateClient(session, TestUser);
+            var r1 = GetTestRegion();
+            client.New(r1);
+            var url = EditorApiBaseUrl + "/plot";
+            var json = "{ \"ra\": 10, \"dec\": 10 }";
+            var data = System.Text.ASCIIEncoding.Default.GetBytes(json);
+            var buffer = session.HttpPost(url, "image/png", "application/json", data);
+            Assert.IsTrue(buffer != null && buffer.Length > 0);
         }
-
-        [TestMethod]
-        public void GetTestOutline()
-        {
-            using (var session = new RestClientSession())
-            {
-                var name = GetTestUniqueName();
-                var client = CreateClient(session, TestUser);
-                var r1 = GetTestRegion();
-                client.New(r1);
-                var url = EditorApiBaseUrl + "/outline";
-                var buffer = session.HttpGet(url);
-                Assert.IsTrue(buffer != null && buffer.Length > 0);
-            }
-        }
-
-        [TestMethod]
-        public void PlotTestFootprintRegion()
-        {
-            using (var session = new RestClientSession())
-            {
-                var name = GetTestUniqueName();
-                var client = CreateClient(session, TestUser);
-                var r1 = GetTestRegion();
-                client.New(r1);
-                var url = EditorApiBaseUrl + "/plot";
-                var buffer = session.HttpGet(url,"image/png");
-                Assert.IsTrue(buffer != null && buffer.Length > 0);
-            }
-        }
-
-        [TestMethod]
-        public void PlotTestFootprintRegionAdvanced()
-        {
-            using (var session = new RestClientSession())
-            {
-                var name = GetTestUniqueName();
-                var client = CreateClient(session, TestUser);
-                var r1 = GetTestRegion();
-                client.New(r1);
-                var url = EditorApiBaseUrl + "/plot";
-                var json = "{ \"ra\": 10, \"dec\": 10 }";
-                var data = System.Text.ASCIIEncoding.Default.GetBytes(json);
-                var buffer = session.HttpPost(url, "image/png", "application/json", data);
-                Assert.IsTrue(buffer != null && buffer.Length > 0);
-            }
-        }
-        */
+    }
+    */
     }
 }
