@@ -10,9 +10,9 @@ using Lib = Jhu.Footprint.Web.Lib;
 
 namespace Jhu.Footprint.Web.Api.V1
 {
-    [DataContract(Name = "footprintRegion")]
+    [DataContract(Name = "region")]
     [Description("Represents a celestial region belonging to a footprint.")]
-    public class FootprintRegion
+    public class Region
     {
         private Spherical.Region region;
         private string regionString;
@@ -50,7 +50,7 @@ namespace Jhu.Footprint.Web.Api.V1
         }
 
         [DataMember(Name = "area")]
-        [Description("Area.")]
+        [Description("Area in square degrees.")]
         public double? Area
         {
             get
@@ -68,7 +68,7 @@ namespace Jhu.Footprint.Web.Api.V1
         }
 
         [DataMember(Name = "regionString")]
-        [Description("Region string.")]
+        [Description("Region string. Set this field to create a custom region")]
         public string RegionString
         {
             get
@@ -85,6 +85,26 @@ namespace Jhu.Footprint.Web.Api.V1
             }
         }
 
+        [DataMember(Name = "circle", EmitDefaultValue = false)]
+        [DefaultValue(null)]
+        [Description("Set this field to create a circle")]
+        public Circle Circle { get; set; }
+
+        [DataMember(Name = "rect", EmitDefaultValue = false)]
+        [DefaultValue(null)]
+        [Description("Set this field to create a rectangle")]
+        public Rect Rect { get; set; }
+
+        [DataMember(Name = "poly", EmitDefaultValue = false)]
+        [DefaultValue(null)]
+        [Description("Set this field to create a polygon")]
+        public Poly Poly { get; set; }
+
+        [DataMember(Name = "chull", EmitDefaultValue = false)]
+        [DefaultValue(null)]
+        [Description("Set this field to create a convex hull")]
+        public CHull CHull { get; set; }
+
         // TODO: pull out to service?
         [IgnoreDataMember]
         public int BrushIndex { get; set; }
@@ -93,27 +113,11 @@ namespace Jhu.Footprint.Web.Api.V1
         [IgnoreDataMember]
         public int PenIndex { get; set; }
 
-        [IgnoreDataMember]
-        public Spherical.Region Region
-        {
-            get
-            {
-                if (region == null && regionString != null)
-                {
-                    region = Spherical.Region.Parse(regionString);
-                    region.Simplify();
-                }
-
-                return region;
-            }
-            set { this.region = value; }
-        }
-
-        public FootprintRegion()
+        public Region()
         {
         }
 
-        public FootprintRegion(Lib.Footprint footprint, Lib.FootprintRegion region)
+        public Region(Lib.Footprint footprint, Lib.FootprintRegion region)
         {
             SetValues(footprint, region);
         }
@@ -122,6 +126,59 @@ namespace Jhu.Footprint.Web.Api.V1
         {
             this.region = null;
             this.regionString = null;
+        }
+
+        public Spherical.Region GetRegion()
+        {
+            int count = 0;
+
+            if (region == null && regionString != null)
+            {
+                region = Spherical.Region.Parse(regionString);
+                region.Simplify();
+                count++;
+            }
+
+            if (Circle != null)
+            {
+                region = Circle.GetRegion();
+                count++;
+            }
+
+            if (Rect != null)
+            {
+                region = Rect.GetRegion();
+                count++;
+            }
+
+            if (Poly != null)
+            {
+                region = Poly.GetRegion();
+                count++;
+            }
+
+            if (CHull != null)
+            {
+                region = CHull.GetRegion();
+                count++;
+            }
+
+            if (count > 1)
+            {
+                throw Error.MultipleRegionsSpecified();
+            }
+
+            if (region == null)
+            {
+                throw Error.NoRegionSpecified();
+            }
+
+            return region;
+        }
+
+        public void SetRegion(Spherical.Region value)
+        {
+            this.region = value;
         }
 
         public void GetValues(Lib.FootprintRegion region)

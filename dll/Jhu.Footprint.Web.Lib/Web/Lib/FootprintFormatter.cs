@@ -8,7 +8,7 @@ namespace Jhu.Footprint.Web.Lib
 {
     public static class FootprintFormatter
     {
-        public static IEnumerable<EquatorialPoint> InterpolateOutlinePoints(Outline outline, double resolution)
+        public static IEnumerable<Cartesian> InterpolateOutlinePoints(Outline outline, double resolution)
         {
             if (resolution == 0)
             {
@@ -17,7 +17,7 @@ namespace Jhu.Footprint.Web.Lib
 
             resolution = resolution / 3600.0 / 180.0 * Math.PI;
 
-            var res = new List<EquatorialPoint>();
+            var res = new List<Cartesian>();
 
             foreach (var loop in outline.LoopList)
             {

@@ -70,7 +70,6 @@
     <Compile Include="Web\Lib\CoordinateTransformations.cs" />
     <Compile Include="Web\Lib\DuplicateNameException.cs" />
     <Compile Include="Web\Lib\Enum.cs" />
-    <Compile Include="Web\Lib\EquatorialPoint.cs" />
     <Compile Include="Web\Lib\Error.cs" />
     <Compile Include="Web\Lib\ExceptionMessages.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -85,7 +84,6 @@
     <Compile Include="Web\Lib\FootprintRegion.cs" />
     <Compile Include="Web\Lib\FootprintRegionSearch.cs" />
     <Compile Include="Web\Lib\FootprintSearch.cs" />
-    <Compile Include="Web\Lib\GalacticPoint.cs" />
     <Compile Include="Web\Lib\IRegionSearch.cs" />
     <Compile Include="Web\Lib\Plot.cs" />
     <Compile Include="Web\Lib\RegionSearch.cs" />
@@ -98,6 +96,10 @@
     <ProjectReference Include="..\..\..\graywulf\dll\Jhu.Graywulf.Entities\Jhu.Graywulf.Entities.csproj">
       <Project>{10b184e6-825d-4498-98d5-a42939e4bd2d}</Project>
       <Name>Jhu.Graywulf.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\sharpastrolib\src\Jhu.SharpAstroLib\Jhu.SharpAstroLib.csproj">
+      <Project>{d2de5b24-643c-4980-980a-3e170ca0b49e}</Project>
+      <Name>Jhu.SharpAstroLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\spherical\src\Jhu.Spherical.Visualizer\Jhu.Spherical.Visualizer.csproj">
       <Project>{1dcd8ac1-dcdd-4941-9e3f-d9ef60a078f9}</Project>

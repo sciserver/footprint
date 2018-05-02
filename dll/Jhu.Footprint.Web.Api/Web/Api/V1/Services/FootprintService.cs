@@ -74,7 +74,7 @@ namespace Jhu.Footprint.Web.Api.V1
                     footprint.Name = name;
                     footprint.Save();
 
-                    var sessionRegions = (Dictionary<string, FootprintRegion>)Session[EditorService.SessionKeyEditorRegions];
+                    var sessionRegions = (Dictionary<string, Region>)Session[EditorService.SessionKeyEditorRegions];
                     foreach (var key in sessionRegions.Keys)
                     {
                         var region = new Lib.FootprintRegion(footprint);
@@ -166,7 +166,7 @@ namespace Jhu.Footprint.Web.Api.V1
             };
         }
 
-        public FootprintRegionListResponse FindUserFootprintRegions(string owner, string footprintName, string name, int from, int max)
+        public RegionListResponse FindUserFootprintRegions(string owner, string footprintName, string name, int from, int max)
         {
             var context = CreateContext(true);
             var s = new Lib.FootprintRegionSearch(context)
@@ -187,15 +187,15 @@ namespace Jhu.Footprint.Web.Api.V1
 
             f.Load();
 
-            return new FootprintRegionListResponse()
+            return new RegionListResponse()
             {
-                Regions = results.Where(r => r.FootprintId == f.Id).Select(r => new FootprintRegion(f, r))
+                Regions = results.Where(r => r.FootprintId == f.Id).Select(r => new Region(f, r))
             };
         }
         #endregion
         #region Footprint region CRUD operations
 
-        public FootprintRegionResponse GetUserFootprintRegion(string owner, string name, string regionName)
+        public RegionResponse GetUserFootprintRegion(string owner, string name, string regionName)
         {
             using (var context = CreateContext())
             {
@@ -209,11 +209,11 @@ namespace Jhu.Footprint.Web.Api.V1
                 region.Name = regionName;
                 region.Load();
 
-                return new FootprintRegionResponse(footprint, region);
+                return new RegionResponse(footprint, region);
             }
         }
 
-        public FootprintRegionResponse CreateUserFootprintRegion(string owner, string name, string regionName, FootprintRegionRequest request)
+        public RegionResponse CreateUserFootprintRegion(string owner, string name, string regionName, RegionRequest request)
         {
             using (var context = CreateContext())
             {
@@ -226,11 +226,11 @@ namespace Jhu.Footprint.Web.Api.V1
                 region.Save();
                 region.SaveRegion();
 
-                return new FootprintRegionResponse(footprint, region);
+                return new RegionResponse(footprint, region);
             }
         }
 
-        public FootprintRegionResponse ModifyUserFootprintRegion(string owner, string name, string regionName, FootprintRegionRequest request)
+        public RegionResponse ModifyUserFootprintRegion(string owner, string name, string regionName, RegionRequest request)
         {
             using (var context = CreateContext())
             {
@@ -243,7 +243,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 request.Region.GetValues(region);
                 region.Save();
 
-                return new FootprintRegionResponse(footprint, region);
+                return new RegionResponse(footprint, region);
             }
         }
 
@@ -291,15 +291,16 @@ namespace Jhu.Footprint.Web.Api.V1
             }
         }
 
-        public IEnumerable<Lib.EquatorialPoint> GetUserFootprintOutlinePoints(string owner, string name, double resolution)
+        public IEnumerable<Point> GetUserFootprintOutlinePoints(string owner, string name, double resolution)
         {
             using (var context = CreateContext())
             {
                 var footprint = new Lib.Footprint(context);
-
                 footprint.Load(owner, name);
 
-                return Lib.FootprintFormatter.InterpolateOutlinePoints(footprint.CombinedRegion.Region.Outline, resolution);
+                var points = Lib.FootprintFormatter.InterpolateOutlinePoints(footprint.CombinedRegion.Region.Outline, resolution);
+
+                return points.Select(p => Point.ToRADec(p));
             }
         }
 
@@ -323,7 +324,7 @@ namespace Jhu.Footprint.Web.Api.V1
             {
                 var footprint = new Lib.Footprint(context);
                 footprint.Load(owner, name);
-                var region = new FootprintRegion(footprint, footprint.CombinedRegion);
+                var region = new Region(footprint, footprint.CombinedRegion);
                 return plotParameters.GetPlot(new[] { region });
             }
         }
@@ -392,7 +393,7 @@ namespace Jhu.Footprint.Web.Api.V1
             }
         }
 
-        public IEnumerable<Lib.EquatorialPoint> GetUserFootprintRegionOutlinePoints(string owner, string name, string regionName, double resolution)
+        public IEnumerable<Point> GetUserFootprintRegionOutlinePoints(string owner, string name, string regionName, double resolution)
         {
             using (var context = CreateContext())
             {
@@ -402,7 +403,8 @@ namespace Jhu.Footprint.Web.Api.V1
                 var region = new Lib.FootprintRegion(footprint);
                 region.Load(regionName);
 
-                return Lib.FootprintFormatter.InterpolateOutlinePoints(region.Region.Outline, resolution);
+                var points = Lib.FootprintFormatter.InterpolateOutlinePoints(region.Region.Outline, resolution);
+                return points.Select(p => Point.ToRADec(p));
             }
         }
 
@@ -421,7 +423,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 footprint.Load(owner, name);
                 var region = new Lib.FootprintRegion(footprint);
                 region.Load(regionName);
-                var fpr = new FootprintRegion(footprint, region);
+                var fpr = new Region(footprint, region);
                 return plotParameters.GetPlot(new[] { fpr });
             }
         }

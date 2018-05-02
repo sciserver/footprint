@@ -9,23 +9,23 @@ namespace Jhu.Footprint.Web.Api.V1
 {
     [DataContract]
     [Description("Represents a region.")]
-    public class FootprintRegionRequest
+    public class RegionRequest
     {
         [DataMember(Name = "region", EmitDefaultValue = false)]
         [DefaultValue(null)]
         [Description("Conveys a region.")]
-        public FootprintRegion Region { get; set; }
+        public Region Region { get; set; }
 
         [DataMember(Name = "sources", EmitDefaultValue = false)]
         [DefaultValue(null)]
         [Description("When performing operations, conveys the list of names of source regions")]
         public string[] Sources { get; set; }
 
-        public FootprintRegionRequest()
+        public RegionRequest()
         {
         }
 
-        public FootprintRegionRequest(FootprintRegion region)
+        public RegionRequest(Region region)
         {
             this.Region = region;
         }

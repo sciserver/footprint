@@ -13,7 +13,7 @@ namespace Jhu.Footprint.Web.Api.V1
     [Description("Footprint plot prameters")]
     public class Plot
     {
-        private IEnumerable<FootprintRegion> regions = null;
+        private IEnumerable<Region> regions = null;
 
         [DataMember(Name = "width")]
         public float? Width { get; set; }
@@ -240,7 +240,7 @@ namespace Jhu.Footprint.Web.Api.V1
             }
         }
 
-        public Spherical.Visualizer.Plot GetPlot(IEnumerable<FootprintRegion> regions)
+        public Spherical.Visualizer.Plot GetPlot(IEnumerable<Region> regions)
         {
             var plot = new Spherical.Visualizer.Plot();
 

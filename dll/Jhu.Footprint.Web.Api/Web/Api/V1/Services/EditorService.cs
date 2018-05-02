@@ -39,15 +39,15 @@ namespace Jhu.Footprint.Web.Api.V1
             }
         }
 
-        private Dictionary<string, FootprintRegion> SessionRegions
+        private Dictionary<string, Region> SessionRegions
         {
             get
             {
-                var sessionRegions = (Dictionary<string, FootprintRegion>)Session[SessionKeyEditorRegions];
+                var sessionRegions = (Dictionary<string, Region>)Session[SessionKeyEditorRegions];
 
                 if (sessionRegions == null)
                 {
-                    sessionRegions = new Dictionary<string, FootprintRegion>();
+                    sessionRegions = new Dictionary<string, Region>();
                     Session[SessionKeyEditorRegions] = sessionRegions;
                 }
 
@@ -55,7 +55,7 @@ namespace Jhu.Footprint.Web.Api.V1
             }
         }
 
-        private void ValidateRegion(FootprintRegion region)
+        private void ValidateRegion(Region region)
         {
             // This simply fails if incorrect region string is uploaded
             region.Region.Simplify();
@@ -76,7 +76,7 @@ namespace Jhu.Footprint.Web.Api.V1
         #endregion
         #region Footprint region CRUD operations
 
-        public FootprintRegionResponse CreateFootprintRegion(string regionName, FootprintRegionRequest request)
+        public FootprintRegionResponse CreateFootprintRegion(string regionName, RegionRequest request)
         {
             if (!Lib.Constants.NamePatternRegex.Match(regionName).Success)
             {
@@ -94,7 +94,7 @@ namespace Jhu.Footprint.Web.Api.V1
             return new FootprintRegionResponse(request.Region);
         }
 
-        public FootprintRegionResponse ModifyFootprintRegion(string regionName, FootprintRegionRequest request)
+        public FootprintRegionResponse ModifyFootprintRegion(string regionName, RegionRequest request)
         {
             if (!SessionRegions.ContainsKey(regionName))
             {
@@ -144,7 +144,7 @@ namespace Jhu.Footprint.Web.Api.V1
         #endregion
         #region Boolean operations
 
-        public FootprintRegionResponse CombineFootprintRegions(string regionName, string operation, bool keepOriginal, FootprintRegionRequest request)
+        public FootprintRegionResponse CombineFootprintRegions(string regionName, string operation, bool keepOriginal, RegionRequest request)
         {
             if (request.Sources == null)
             {
@@ -201,7 +201,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 }
             }
 
-            var newregion = new FootprintRegion()
+            var newregion = new Region()
             {
                 Name = regionName,
                 Region = combined,
@@ -278,7 +278,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
         public void SetFootprintRegionShape(string regionName, Stream stream)
         {
-            var region = new FootprintRegion()
+            var region = new Region()
             {
                 Name = regionName,
                 Owner = RestOperationContext.Current.Principal.Identity.Name,

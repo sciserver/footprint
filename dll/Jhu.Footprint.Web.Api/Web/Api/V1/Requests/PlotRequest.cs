@@ -14,6 +14,6 @@ namespace Jhu.Footprint.Web.Api.V1
 
         public Footprint[] Footprints { get; set; }
 
-        public FootprintRegion[] Regions { get; set; }
+        public Region[] Regions { get; set; }
     }
 }

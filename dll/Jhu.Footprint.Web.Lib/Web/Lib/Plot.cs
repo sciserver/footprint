@@ -183,6 +183,7 @@ namespace Jhu.Footprint.Web.Lib
             RenderToBitmap(stream, System.Drawing.Imaging.ImageFormat.Jpeg);
         }
 
+        /* TODO: delete
         private void plotTestPoints()
         {
             var pl = new PointsLayer();
@@ -200,5 +201,6 @@ namespace Jhu.Footprint.Web.Lib
 
             Layers.Add(pl);
         }
+        */
     }
 }

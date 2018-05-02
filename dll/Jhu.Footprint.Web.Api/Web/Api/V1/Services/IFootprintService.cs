@@ -77,7 +77,7 @@ namespace Jhu.Footprint.Web.Api.V1
         [OperationContract]
         [WebGet(UriTemplate = Urls.UserFootprintRegions + "?" + Urls.RegionSearchParams, BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Returns the list of the regions of a footprint.")]
-        FootprintRegionListResponse FindUserFootprintRegions(string owner, string name, string regionName, int from, int max);
+        RegionListResponse FindUserFootprintRegions(string owner, string name, string regionName, int from, int max);
 
         #endregion
         #region Footprint region CRUD operations
@@ -85,17 +85,17 @@ namespace Jhu.Footprint.Web.Api.V1
         [OperationContract]
         [WebGet(UriTemplate = Urls.UserFootprintRegion)]
         [Description("Returns the header information of a region.")]
-        FootprintRegionResponse GetUserFootprintRegion(string owner, string name, string regionName);
+        RegionResponse GetUserFootprintRegion(string owner, string name, string regionName);
 
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Post, UriTemplate = Urls.UserFootprintRegion)]
         [Description("Create new region under an existing footprint.")]
-        FootprintRegionResponse CreateUserFootprintRegion(string owner, string name, string regionName, FootprintRegionRequest request);
+        RegionResponse CreateUserFootprintRegion(string owner, string name, string regionName, RegionRequest request);
 
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Put, UriTemplate = Urls.UserFootprintRegion)]
         [Description("Modify a region under an existing footprint.")]
-        FootprintRegionResponse ModifyUserFootprintRegion(string owner, string name, string regionName, FootprintRegionRequest request);
+        RegionResponse ModifyUserFootprintRegion(string owner, string name, string regionName, RegionRequest request);
 
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Delete, UriTemplate = Urls.UserFootprintRegion)]
@@ -123,7 +123,7 @@ namespace Jhu.Footprint.Web.Api.V1
         [TextJsonXmlFormat]
         [WebGet(UriTemplate = Urls.UserFootprint + Urls.OutlinePoints)]
         [Description("Returns the points of the outline of a footprint.")]
-        IEnumerable<Lib.EquatorialPoint> GetUserFootprintOutlinePoints(string owner, string name, double resolution);
+        IEnumerable<Point> GetUserFootprintOutlinePoints(string owner, string name, double resolution);
 
         [OperationContract]
         [PlotFormatter]

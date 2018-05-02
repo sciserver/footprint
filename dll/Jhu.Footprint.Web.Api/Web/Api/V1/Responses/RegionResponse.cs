@@ -11,20 +11,20 @@ namespace Jhu.Footprint.Web.Api.V1
 {
     [DataContract]
     [Description("Represents a region.")]
-    public class FootprintRegionResponse
+    public class RegionResponse
     {
         [DataMember(Name = "region")]
         [Description("A region.")]
-        public FootprintRegion Region { get; set; }
+        public Region Region { get; set; }
 
-        public FootprintRegionResponse(FootprintRegion region)
+        public RegionResponse(Region region)
         {
             Region = region;
         }
 
-        public FootprintRegionResponse(Lib.Footprint footprint, Lib.FootprintRegion region)
+        public RegionResponse(Lib.Footprint footprint, Lib.FootprintRegion region)
         {
-            Region = new FootprintRegion(footprint, region);
+            Region = new Region(footprint, region);
         }
     }
 }

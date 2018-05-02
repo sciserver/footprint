@@ -45,16 +45,16 @@ namespace Jhu.Footprint.Web.Api.V1
             return client;
         }
 
-        protected FootprintRegionRequest GetTestRegion()
+        protected RegionRequest GetTestRegion()
         {
             return GetTestRegion("CIRCLE J2000 10 10 10");
         }
 
-        protected FootprintRegionRequest GetTestRegion(string regionString)
+        protected RegionRequest GetTestRegion(string regionString)
         {
-            var req = new FootprintRegionRequest()
+            var req = new RegionRequest()
             {
-                Region = new FootprintRegion()
+                Region = new Region()
                 {
                     RegionString = regionString,
                     FillFactor = 0.8,

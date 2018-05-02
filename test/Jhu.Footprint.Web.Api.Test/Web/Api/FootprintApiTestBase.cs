@@ -102,15 +102,15 @@ namespace Jhu.Footprint.Web.Api.V1
         }
         
 
-        protected FootprintRegion CreateTestRegion(string user, string owner, string name, string regionName)
+        protected Region CreateTestRegion(string user, string owner, string name, string regionName)
         {
             using (var session = new RestClientSession())
             {
                 var client = CreateClient(session, user);
                 var fp = client.GetUserFootprint(owner, name);
-                var req = new FootprintRegionRequest()
+                var req = new RegionRequest()
                 {
-                    Region = new FootprintRegion()
+                    Region = new Region()
                     {
                         RegionString = "CIRCLE J2000 10 10 10",
                         FillFactor = 0.8,
@@ -121,7 +121,7 @@ namespace Jhu.Footprint.Web.Api.V1
             }
         }
 
-        protected FootprintRegion GetTestRegion(string user, string owner, string name, string regionName)
+        protected Region GetTestRegion(string user, string owner, string name, string regionName)
         {
             using (var session = new RestClientSession())
             {
@@ -130,7 +130,7 @@ namespace Jhu.Footprint.Web.Api.V1
             }
         }
 
-        protected FootprintRegion ModifyTestRegion(string user, string owner, string name, string regionName)
+        protected Region ModifyTestRegion(string user, string owner, string name, string regionName)
         {
             using (var session = new RestClientSession())
             {
@@ -140,7 +140,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 region.FillFactor = 0.7;
                 region.RegionString = "CIRCLE J2000 20 20 20";
 
-                var req = new FootprintRegionRequest(region);
+                var req = new RegionRequest(region);
 
                 client.ModifyUserFootprintRegion(owner, name, regionName, req);
 

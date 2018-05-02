@@ -11,13 +11,13 @@ namespace Jhu.Footprint.Web.Api.V1
 {
     [DataContract]
     [Description("Represents a list of regions.")]
-    public class FootprintRegionListResponse
+    public class RegionListResponse
     {
         [DataMember(Name = "regions")]
         [Description("List of regions.")]
-        public  IEnumerable<FootprintRegion> Regions { get; set; }
+        public  IEnumerable<Region> Regions { get; set; }
 
-        public FootprintRegionListResponse()
+        public RegionListResponse()
         {
         }
     }
