@@ -240,6 +240,22 @@ namespace Jhu.Footprint.Web.Api.V1
         #endregion
         #region Footprint region CRUD operations
 
+        private void EnsureRegionNameValid(string regionName)
+        {
+            if (!Lib.Constants.NamePatternRegex.Match(regionName).Success)
+            {
+                throw Lib.Error.InvalidName(regionName);
+            }
+        }
+
+        private void EnsureRegionNotExisting(string regionName)
+        {
+            if (SessionRegions.ContainsKey(regionName))
+            {
+                throw Lib.Error.DuplicateRegionName("editor", "editor", regionName);
+            }
+        }
+
         private void ApplyRotation(Spherical.Region region, Spherical.Rotation r)
         {
             region.Rotate(r);
@@ -265,16 +281,9 @@ namespace Jhu.Footprint.Web.Api.V1
 
         public RegionResponse CreateRegion(string regionName, RegionRequest request)
         {
-            if (!Lib.Constants.NamePatternRegex.Match(regionName).Success)
-            {
-                throw Lib.Error.InvalidName(regionName);
-            }
-
-            if (SessionRegions.ContainsKey(regionName))
-            {
-                throw Lib.Error.DuplicateRegionName("editor", "editor", regionName);
-            }
-
+            EnsureRegionNameValid(regionName);
+            EnsureRegionNotExisting(regionName);
+            
             var region = new Lib.FootprintRegion();
             request.Region.GetValues(region, true);
             region.Name = regionName;
@@ -307,9 +316,13 @@ namespace Jhu.Footprint.Web.Api.V1
 
             if (request.Region.Name != null && StringComparer.InvariantCultureIgnoreCase.Compare(request.Region.Name, regionName) != 0)
             {
+                name = request.Region.Name;
+
+                EnsureRegionNameValid(name);
+                EnsureRegionNotExisting(name);
+                
                 // Renaming, so remove old one
                 SessionRegions.Remove(regionName);
-                name = request.Region.Name;
             }
             else
             {
@@ -385,6 +398,9 @@ namespace Jhu.Footprint.Web.Api.V1
             }
             else
             {
+                EnsureRegionNameValid(regionName);
+                EnsureRegionNotExisting(regionName);
+
                 r = new Lib.FootprintRegion(SessionFootprint);
             }
 

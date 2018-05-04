@@ -21,8 +21,8 @@ namespace Jhu.Footprint.Web.Api.V1
         {
             return new string[]
             {
-                Jhu.Graywulf.Web.Services.Constants.MimeTypeText,
                 Jhu.Graywulf.Web.Services.Constants.MimeTypeBinary,
+                Jhu.Graywulf.Web.Services.Constants.MimeTypeText,
                 MimeTypeStc,
             };
         }

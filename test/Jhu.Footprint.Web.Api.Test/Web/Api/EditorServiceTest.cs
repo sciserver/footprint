@@ -586,10 +586,24 @@ namespace Jhu.Footprint.Web.Api.V1
         // TODO: test reduction methods
 
         [TestMethod]
+        public void UploadRegionTest()
+        {
+            using (var session = new RestClientSession())
+            {
+                var client = CreateClient(session, TestUser);
+                var name = GetTestUniqueName();
+                var region = TestRegion1.GetRegion(true);
+
+                client.UploadRegion(name, region);
+                
+                var r = client.GetRegion(name);
+                Assert.IsTrue(r.Region.Area > 0);
+            }
+        }
+
+        [TestMethod]
         public void UploadRegionAsStringTest()
         {
-            // TODO: fix formatter
-
             using (var session = new RestClientSession())
             {
                 var client = CreateClient(session, TestUser);
