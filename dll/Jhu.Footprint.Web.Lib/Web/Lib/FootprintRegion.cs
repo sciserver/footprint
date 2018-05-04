@@ -35,6 +35,9 @@ namespace Jhu.Footprint.Web.Lib
         private byte[] imageThumbnail;
         private byte[] imagePreview;
 
+        private int brushIndex;
+        private int penIndex;
+
         #endregion
         #region Properties
 
@@ -136,7 +139,19 @@ namespace Jhu.Footprint.Web.Lib
             get { return footprintOwner; }
             set { footprintOwner = value;  }
         }
-        
+
+        public int BrushIndex
+        {
+            get { return brushIndex; }
+            set { brushIndex = value; }
+        }
+
+        public int PenIndex
+        {
+            get { return penIndex; }
+            set { penIndex = value; }
+        }
+
         #endregion
         #region Constructors and initializers
 
@@ -173,7 +188,10 @@ namespace Jhu.Footprint.Web.Lib
             this.region = null;
             this.imageThumbnail = null;
             this.imagePreview = null;
-        }
+
+            this.brushIndex = 0;
+            this.penIndex = 0;
+    }
 
         private void CopyMembers(FootprintRegion old)
         {
@@ -187,10 +205,12 @@ namespace Jhu.Footprint.Web.Lib
             this.region = new Spherical.Region(old.region);
             this.imageThumbnail = old.imageThumbnail;
             this.imagePreview = old.imagePreview;
+
+            this.brushIndex = old.brushIndex;
+            this.penIndex = old.penIndex;
         }
 
         #endregion
-
         #region Methods
 
         public void Load(string regionName)

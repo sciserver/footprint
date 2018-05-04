@@ -59,12 +59,14 @@ namespace Jhu.Footprint.Web.Api.V1
         [return: Description("The combined footprint in string or binary representation.")]
         Spherical.Region DownloadFootprint();
 
+        // TODO: outline as xml or json?
+
         [OperationContract]
         [OutlineFormatter]
-        [WebGet(UriTemplate = Urls.EditorFootprint + Urls.Outline, BodyStyle = WebMessageBodyStyle.Bare)]
+        [WebGet(UriTemplate = Urls.EditorFootprint + Urls.Outline + Urls.Raw, BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Returns the outline of the footprint.")]
         [return: Description("The outline of the combined footprint in string representation.")]
-        Spherical.Outline GetFootprintOutline();
+        Spherical.Outline DownloadFootprintOutline();
 
         [OperationContract]
         [TextJsonXmlFormat]
@@ -72,45 +74,45 @@ namespace Jhu.Footprint.Web.Api.V1
         [Description("Returns the points of the outline of the footprint.")]
         [return: Description("The points of the outline of the combined footprint.")]
         IEnumerable<Point> GetFootprintOutlinePoints(
-            [Description("Representation system of the points")]
-            string sys,
-            [Description("Sampling resolution")]
+            [Description("Coordinate system of the points")]
+            CoordinateSystem? sys,
+            [Description("Representation of the coordinates")]
+            CoordinateRepresentation? rep,
+            [Description("Sampling resolution in arc sec")]
             double? resolution,
             [Description("Outline complexity reduction method")]
-            string reduce,
-            [Description("Outline complexity reduction limit")]
+            OutlineReduction? reduce,
+            [Description("Outline complexity reduction limit in arc min")]
             double? limit);
 
         [OperationContract]
         [PlotFormatter]
-        [WebGet(UriTemplate = Urls.EditorFootprint + Urls.Plot + Urls.PlotHightlighs, BodyStyle = WebMessageBodyStyle.Bare)]
+        [WebGet(UriTemplate = Urls.EditorFootprint + Urls.Plot, BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Plots the footprint")]
         [return: Description("The plot as an image in various formats.")]
         Spherical.Visualizer.Plot PlotFootprint(
             [Description("Projection")]
-            string projection,
+            Projection? projection,
             [Description("Coordinate system")]
-            string sys,
+            CoordinateSystem? sys,
             [Description("Center longitude")]
-            string lon,
+            double? lon,
             [Description("Center latitude")]
-            string lat,
+            double? lat,
             [Description("Image width")]
-            float width,
+            float? width,
             [Description("Image height")]
-            float height,
+            float? height,
             [Description("Color theme")]
-            string colorTheme,
+            ColorTheme? colorTheme,
             [Description("Zoom in on the region automatically.")]
-            string autoZoom,
+            bool? autoZoom,
             [Description("Rotate region to the origin of projection automatically")]
-            string autoRotate,
+            bool? autoRotate,
             [Description("Plot grid")]
-            string grid,
+            bool? grid,
             [Description("Format of numeric values")]
-            string degreeStyle,
-            [Description("Highlights")]
-            string highlights);
+            DegreeStyle? degreeStyle);
 
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Post, UriTemplate = Urls.EditorFootprint + Urls.PlotAdvanced, BodyStyle = WebMessageBodyStyle.Bare)]
@@ -119,13 +121,13 @@ namespace Jhu.Footprint.Web.Api.V1
         [return: Description("The plot as an image in various formats.")]
         Spherical.Visualizer.Plot PlotFootprintAdvanced(
             [Description("Detailed parameters of the plot")]
-            Plot plotParameters);
+            PlotRequest plot);
 
         #endregion
-        #region Footprint region CRUD operations
+#region Footprint region CRUD operations
 
         [OperationContract]
-        [WebInvoke(Method = HttpMethod.Put, UriTemplate = Urls.EditorRegion + Urls.Circle)]
+        [WebInvoke(Method = HttpMethod.Put, UriTemplate = Urls.EditorRegion)]
         [Description("Create a new region.")]
         RegionResponse CreateRegion(string regionName, RegionRequest request);
 
@@ -133,11 +135,6 @@ namespace Jhu.Footprint.Web.Api.V1
         [WebGet(UriTemplate = Urls.EditorRegion)]
         [Description("Returns the header information of a region.")]
         RegionResponse GetRegion(string regionName);
-
-        [OperationContract]
-        [WebInvoke(Method = HttpMethod.Get, UriTemplate = Urls.EditorRegions + Urls.RegionSearchParams + Urls.Paging)]
-        [Description("List all regions.")]
-        RegionListResponse ListRegions(string regionName, int? from, int? max);
 
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Patch, UriTemplate = Urls.EditorRegion)]
@@ -150,21 +147,108 @@ namespace Jhu.Footprint.Web.Api.V1
         void DeleteRegion(string regionName);
 
         [OperationContract]
-        [WebInvoke(Method = HttpMethod.Delete, UriTemplate = Urls.EditorRegions)]
-        [Description("Deletes multiple regions.")]
-        void DeleteRegions(
-            [Description("A region request containing an array of region names to delete. Specify a single * to delete everything.")]
-            RegionRequest region);
+        [WebInvoke(Method = HttpMethod.Delete, UriTemplate = Urls.EditorRegionSearch)]
+        [Description("Delete regions matching pattern.")]
+        void DeleteRegions(string regionName);
 
+        [OperationContract]
+        [WebGet(UriTemplate = Urls.EditorRegionSearch + Urls.Paging)]
+        [Description("List regions.")]
+        RegionListResponse ListRegions(
+            [Description("Name pattern")]
+            string regionName,
+            [Description("List items from")]
+            int? from,
+            [Description("Max number of items")]
+            int? max);
 
+        [OperationContract]
+        [RegionFormatter]
+        [WebGet(UriTemplate = Urls.EditorRegion + Urls.Raw, BodyStyle = WebMessageBodyStyle.Bare)]
+        [Description("Returns the shape description of the footprint region.")]
+        Spherical.Region DownloadRegion(string regionName);
+
+        [OperationContract]
+        [RegionFormatter]
+        [WebInvoke(Method = HttpMethod.Put, UriTemplate = Urls.EditorRegion + Urls.Raw, BodyStyle = WebMessageBodyStyle.Bare)]
+        [Description("Upload a region binary or other representation")]
+        void UploadRegion(string regionName, Spherical.Region region);
+
+        [OperationContract]
+        [OutlineFormatter]
+        [WebGet(UriTemplate = Urls.EditorRegion + Urls.Outline + Urls.Raw, BodyStyle = WebMessageBodyStyle.Bare)]
+        [Description("Returns the outline of the footprint.")]
+        Spherical.Outline DownloadRegionOutline(string regionName);
+
+        [OperationContract]
+        [TextJsonXmlFormat]
+        [WebGet(UriTemplate = Urls.EditorRegion + Urls.OutlinePoints)]
+        [Description("Returns the points of the outline of the region.")]
+        [return: Description("The points of the outline of the region.")]
+        IEnumerable<Point> GetRegionOutlinePoints(
+            string regionName,
+            [Description("Coordinate system of the points")]
+            CoordinateSystem? sys,
+            [Description("Representation of the coordinates")]
+            CoordinateRepresentation? rep,
+            [Description("Sampling resolution in arc sec")]
+            double? resolution,
+            [Description("Outline complexity reduction method")]
+            OutlineReduction? reduce,
+            [Description("Outline complexity reduction limit in arc min")]
+            double? limit);
+
+        [OperationContract]
+        [PlotFormatter]
+        [WebGet(UriTemplate = Urls.EditorRegion + Urls.Plot, BodyStyle = WebMessageBodyStyle.Bare)]
+        [Description("Plots the region")]
+        [return: Description("The plot as an image in various formats.")]
+        Spherical.Visualizer.Plot PlotRegion(
+            string regionName,
+            [Description("Projection")]
+            Projection? projection,
+            [Description("Coordinate system")]
+            CoordinateSystem? sys,
+            [Description("Center longitude")]
+            double? lon,
+            [Description("Center latitude")]
+            double? lat,
+            [Description("Image width")]
+            float? width,
+            [Description("Image height")]
+            float? height,
+            [Description("Color theme")]
+            ColorTheme? colorTheme,
+            [Description("Zoom in on the region automatically.")]
+            bool? autoZoom,
+            [Description("Rotate region to the origin of projection automatically")]
+            bool? autoRotate,
+            [Description("Plot grid")]
+            bool? grid,
+            [Description("Format of numeric values")]
+            DegreeStyle? degreeStyle);
+
+        [OperationContract]
+        [WebInvoke(Method = HttpMethod.Post, UriTemplate = Urls.EditorRegion + Urls.PlotAdvanced, BodyStyle = WebMessageBodyStyle.Bare)]
+        [PlotFormatter]
+        [Description("Plots the footprint, with advanced parameters")]
+        [return: Description("The plot as an image in various formats.")]
+        Spherical.Visualizer.Plot PlotRegionAdvanced(
+            string regionName,
+            [Description("Detailed parameters of the plot")]
+            PlotRequest plot);
 
         #endregion
+#if false
+
+        // TODO: how to parameterize multiple regions
+
         #region Boolean operations
 
         [OperationContract]
-        [WebInvoke(Method = HttpMethod.Post, UriTemplate = Urls.EditorRegion + Urls.Combine)]
+        [WebInvoke(Method = HttpMethod.Put, UriTemplate = Urls.EditorRegion + Urls.Combine)]
         [Description("Compute union, intersection or difference of regions.")]
-        RegionResponse CombineFootprintRegions(
+        RegionResponse CombineRegions(
             [Description("Name of the newly created region.")]
             string regionName,
             [Description("Boolean operation, one of 'union', 'intersect' or 'subtract'.")]
@@ -188,66 +272,8 @@ namespace Jhu.Footprint.Web.Api.V1
         */
 
         #endregion
-
-        #region Individual region set, get and plot
-
-        [OperationContract]
-        [WebInvoke(Method = HttpMethod.Post, UriTemplate = Urls.EditorRegion + Urls.Raw, BodyStyle = WebMessageBodyStyle.Bare)]
-        [Description("Upload a region shape binary or other representation")]
-        void SetFootprintRegionShape(string regionName, Stream stream);
-
-        [OperationContract]
-        [RegionFormatter]
-        [WebGet(UriTemplate = Urls.EditorRegion + Urls.Raw, BodyStyle = WebMessageBodyStyle.Bare)]
-        [Description("Returns the shape description of the footprint region.")]
-        Spherical.Region GetFootprintRegionShape(string regionName);
-
-        [OperationContract]
-        [OutlineFormatter]
-        [WebGet(UriTemplate = Urls.EditorRegion + Urls.Outline, BodyStyle = WebMessageBodyStyle.Bare)]
-        [Description("Returns the outline of the footprint.")]
-        Spherical.Outline GetFootprintRegionOutline(string regionName);
-
-        [OperationContract]
-        [TextJsonXmlFormat]
-        [WebGet(UriTemplate = Urls.EditorRegion + Urls.OutlinePoints)]
-        [Description("Returns the points of the outline of the footprint.")]
-        IEnumerable<Point> GetFootprintRegionOutlinePoints(string regionName, double resolution);
-
-        [OperationContract]
-        [WebGet(UriTemplate = Urls.EditorRegion + Urls.Plot, BodyStyle = WebMessageBodyStyle.Bare)]
-        [PlotFormatter]
-        [Description("Plots a footprint region.")]
-        Spherical.Visualizer.Plot PlotFootprintRegion(
-            string regionName,
-            string projection,
-            string sys,
-            string ra,
-            string dec,
-            string b,
-            string l,
-            float width,
-            float height,
-            string colorTheme,
-            string autoZoom,
-            string autoRotate,
-            string grid,
-            string degreeStyle);
-
-        [OperationContract]
-        [WebInvoke(Method = HttpMethod.Post, UriTemplate = Urls.EditorRegion + Urls.PlotAdvanced, BodyStyle = WebMessageBodyStyle.Bare)]
-        [PlotFormatter]
-        [Description("Plots a footprint region.")]
-        Spherical.Visualizer.Plot PlotFootprintRegionAdvanced(string regionName, Plot plotParameters);
-
-
-        [OperationContract]
-        [WebGet(UriTemplate = Urls.EditorRegion + Urls.Thumbnail)]
-        [Description("Gets the thumbnail of a footprint region.")]
-        Stream GetFootprintRegionThumbnail(string regionName);
-
+        
         // TODO: add HTM cover
-
-        #endregion
+#endif
     }
 }

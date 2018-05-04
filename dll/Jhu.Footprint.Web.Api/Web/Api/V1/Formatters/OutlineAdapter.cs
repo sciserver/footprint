@@ -19,7 +19,7 @@ namespace Jhu.Footprint.Web.Api.V1
         {
             return new string[]
             {
-                Constants.MimeTypeText,
+                Jhu.Graywulf.Web.Services.Constants.MimeTypeText,
             };
         }
 
@@ -39,7 +39,7 @@ namespace Jhu.Footprint.Web.Api.V1
             {
                 switch (contentType)
                 {
-                    case Constants.MimeTypeText:
+                    case Jhu.Graywulf.Web.Services.Constants.MimeTypeText:
                         WriteAsText(stream, value);
                         break;
                     default:

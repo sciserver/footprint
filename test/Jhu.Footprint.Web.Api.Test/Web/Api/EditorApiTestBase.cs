@@ -16,8 +16,37 @@ namespace Jhu.Footprint.Web.Api.V1
         {
             get
             {
-                var url = "http://" + Environment.MachineName + "/" + AppSettings.WebUIPath + "/api/v1/Editor.svc";
+                var url = "http://" + Environment.MachineName + AppSettings.WebUIPath + "/api/v1/Editor.svc";
                 return url;
+            }
+        }
+
+        protected Region TestRegion1
+        {
+            get
+            {
+                return GetTestRegion("RECT J2000 0 0 10 10");
+            }
+        }
+
+        protected Region TestRegion2
+        {
+            get
+            {
+                return GetTestRegion("CIRCLE J2000 10 10 300");
+            }
+        }
+
+        protected Rotation TestRotation
+        {
+            get
+            {
+                return new Rotation()
+                {
+                    Alpha = 5,
+                    Beta = 10,
+                    Gamma = 20,
+                };
             }
         }
 
@@ -38,29 +67,19 @@ namespace Jhu.Footprint.Web.Api.V1
                 AuthenticateUser(session, user);
             }
 
-            var host = Environment.MachineName;
-            var uri = new Uri("http://" + host + "/" + AppSettings.WebUIPath + "/api/v1/Editor.svc");
+            var uri = new Uri(EditorApiBaseUrl);
             var client = session.CreateClient<IEditorService>(uri, null);
 
             return client;
         }
 
-        protected RegionRequest GetTestRegion()
+        protected Region GetTestRegion(string regionString)
         {
-            return GetTestRegion("CIRCLE J2000 10 10 10");
-        }
-
-        protected RegionRequest GetTestRegion(string regionString)
-        {
-            var req = new RegionRequest()
+            return new Region()
             {
-                Region = new Region()
-                {
-                    RegionString = regionString,
-                    FillFactor = 0.8,
-                }
+                RegionString = regionString,
+                FillFactor = 0.8,
             };
-            return req;
         }
 
     }

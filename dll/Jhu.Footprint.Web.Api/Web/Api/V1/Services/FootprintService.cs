@@ -15,6 +15,7 @@ namespace Jhu.Footprint.Web.Api.V1
     [RestServiceBehavior]
     public class FootprintService : ServiceBase, IFootprintService
     {
+#if false
         #region Constructors and initializers
 
         public FootprintService()
@@ -446,6 +447,7 @@ namespace Jhu.Footprint.Web.Api.V1
         }
 
         #endregion
+#endif
         #region URI constructors
 
         private static Uri GetBaseUrl(string relativeUri)

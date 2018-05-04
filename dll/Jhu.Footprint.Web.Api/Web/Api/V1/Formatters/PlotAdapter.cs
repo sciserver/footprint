@@ -22,13 +22,13 @@ namespace Jhu.Footprint.Web.Api.V1
         {
             return new string[]
             {
-                Constants.MimeTypeJpeg,
-                Constants.MimeTypePng,
-                Constants.MimeTypeGif,
-                Constants.MimeTypeBmp,
-                Constants.MimeTypePdf,
-                Constants.MimeTypeEps,
-                Constants.MimeTypeEmf,
+                Jhu.Graywulf.Web.Services.Constants.MimeTypeJpeg,
+                Jhu.Graywulf.Web.Services.Constants.MimeTypePng,
+                Jhu.Graywulf.Web.Services.Constants.MimeTypeGif,
+                Jhu.Graywulf.Web.Services.Constants.MimeTypeBmp,
+                Jhu.Graywulf.Web.Services.Constants.MimeTypePdf,
+                Jhu.Graywulf.Web.Services.Constants.MimeTypeEps,
+                Jhu.Graywulf.Web.Services.Constants.MimeTypeEmf,
             };
         }
 
@@ -46,15 +46,15 @@ namespace Jhu.Footprint.Web.Api.V1
         {
             switch (contentType)
             {
-                case Constants.MimeTypeJpeg:
-                case Constants.MimeTypePng:
-                case Constants.MimeTypeGif:
-                case Constants.MimeTypeBmp:
+                case Jhu.Graywulf.Web.Services.Constants.MimeTypeJpeg:
+                case Jhu.Graywulf.Web.Services.Constants.MimeTypePng:
+                case Jhu.Graywulf.Web.Services.Constants.MimeTypeGif:
+                case Jhu.Graywulf.Web.Services.Constants.MimeTypeBmp:
                     WriteAsBitmap(stream, plot, contentType);
                     break;
-                case Constants.MimeTypePdf:
-                case Constants.MimeTypeEps:
-                case Constants.MimeTypeEmf:
+                case Jhu.Graywulf.Web.Services.Constants.MimeTypePdf:
+                case Jhu.Graywulf.Web.Services.Constants.MimeTypeEps:
+                case Jhu.Graywulf.Web.Services.Constants.MimeTypeEmf:
                 default:
                     throw new NotImplementedException();
             }
@@ -66,16 +66,16 @@ namespace Jhu.Footprint.Web.Api.V1
 
             switch (contentType)
             {
-                case Constants.MimeTypeJpeg:
+                case Jhu.Graywulf.Web.Services.Constants.MimeTypeJpeg:
                     format = ImageFormat.Jpeg;
                     break;
-                case Constants.MimeTypePng:
+                case Jhu.Graywulf.Web.Services.Constants.MimeTypePng:
                     format = ImageFormat.Png;
                     break;
-                case Constants.MimeTypeGif:
+                case Jhu.Graywulf.Web.Services.Constants.MimeTypeGif:
                     format = ImageFormat.Gif;
                     break;
-                case Constants.MimeTypeBmp:
+                case Jhu.Graywulf.Web.Services.Constants.MimeTypeBmp:
                     format = ImageFormat.Bmp;
                     break;
                 default:
@@ -89,13 +89,13 @@ namespace Jhu.Footprint.Web.Api.V1
         {
             switch (contentType)
             {
-                case Constants.MimeTypePdf:
+                case Jhu.Graywulf.Web.Services.Constants.MimeTypePdf:
                     plot.RenderToPdf(stream);
                     break;
-                case Constants.MimeTypeEps:
+                case Jhu.Graywulf.Web.Services.Constants.MimeTypeEps:
                     plot.RenderToEps(stream);
                     break;
-                case Constants.MimeTypeEmf:
+                case Jhu.Graywulf.Web.Services.Constants.MimeTypeEmf:
                     plot.RenderToEmf(stream);
                     break;
                 default:

@@ -68,6 +68,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Web\Api\V1\Constants.cs" />
+    <Compile Include="Web\Api\V1\Enum.cs" />
     <Compile Include="Web\Api\V1\Error.cs" />
     <Compile Include="Web\Api\V1\ExceptionMessages.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -94,6 +96,7 @@
     <Compile Include="Web\Api\V1\Objects\Poly.cs" />
     <Compile Include="Web\Api\V1\Objects\Rect.cs" />
     <Compile Include="Web\Api\V1\Objects\Region.cs" />
+    <Compile Include="Web\Api\V1\Objects\Rotation.cs" />
     <Compile Include="Web\Api\V1\Objects\Shape.cs" />
     <Compile Include="Web\Api\V1\Requests\FootprintRequest.cs" />
     <Compile Include="Web\Api\V1\Requests\PlotRequest.cs" />

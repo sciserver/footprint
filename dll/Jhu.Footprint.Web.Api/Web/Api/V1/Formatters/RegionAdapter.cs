@@ -21,8 +21,8 @@ namespace Jhu.Footprint.Web.Api.V1
         {
             return new string[]
             {
-                Constants.MimeTypeText,
-                Constants.MimeTypeBinary,
+                Jhu.Graywulf.Web.Services.Constants.MimeTypeText,
+                Jhu.Graywulf.Web.Services.Constants.MimeTypeBinary,
                 MimeTypeStc,
             };
         }
@@ -33,9 +33,9 @@ namespace Jhu.Footprint.Web.Api.V1
         {
             switch (contentType)
             {
-                case Constants.MimeTypeText:
+                case Jhu.Graywulf.Web.Services.Constants.MimeTypeText:
                     return ReadAsText(stream);
-                case Constants.MimeTypeBinary:
+                case Jhu.Graywulf.Web.Services.Constants.MimeTypeBinary:
                     return ReadAsBinary(stream);
                 case MimeTypeStc:
                     return ReadAsStc(stream);
@@ -79,10 +79,10 @@ namespace Jhu.Footprint.Web.Api.V1
             {
                 switch (contentType)
                 {
-                    case Constants.MimeTypeText:
+                    case Jhu.Graywulf.Web.Services.Constants.MimeTypeText:
                         WriteAsText(stream, value);
                         break;
-                    case Constants.MimeTypeBinary:
+                    case Jhu.Graywulf.Web.Services.Constants.MimeTypeBinary:
                         WriteAsBinary(stream, value);
                         break;
                     case MimeTypeStc:

@@ -16,10 +16,15 @@ namespace Jhu.Footprint.Web.Api.V1
         [Description("Conveys a region.")]
         public Region Region { get; set; }
 
-        [DataMember(Name = "sources", EmitDefaultValue = false)]
+        [DataMember(Name = "rotation", EmitDefaultValue = false)]
         [DefaultValue(null)]
-        [Description("When performing operations, conveys the list of names of source regions")]
-        public string[] Sources { get; set; }
+        [Description("Defines a rotation to be applied to the region.")]
+        public Rotation Rotation { get; set; }
+
+        [DataMember(Name = "sys", EmitDefaultValue = false)]
+        [DefaultValue(null)]
+        [Description("Original coordinate system, will be converted to equatorial J2000.")]
+        public CoordinateSystem? CoordinateSystem { get; set; }
 
         public RegionRequest()
         {
@@ -28,6 +33,8 @@ namespace Jhu.Footprint.Web.Api.V1
         public RegionRequest(Region region)
         {
             this.Region = region;
+            this.CoordinateSystem = V1.CoordinateSystem.EqJ2000;
+            this.Rotation = null;
         }
     }
 

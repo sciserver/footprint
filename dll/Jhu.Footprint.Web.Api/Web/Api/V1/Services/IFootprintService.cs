@@ -20,6 +20,8 @@ namespace Jhu.Footprint.Web.Api.V1
     [Description("Store, search and retrieve observation footprints.")]
     public interface IFootprintService
     {
+#if false
+
         [OperationContract]
         [WebInvoke(UriTemplate = "*", Method = "OPTIONS")]
         void HandleHttpOptionsRequest();
@@ -28,7 +30,7 @@ namespace Jhu.Footprint.Web.Api.V1
         [WebInvoke(UriTemplate = "/proxy.{lang}", Method = HttpMethod.Get)]
         Stream GenerateProxy(string lang);
 
-        #region Footprint CRUD operations
+#region Footprint CRUD operations
 
         [OperationContract]
         [WebGet(UriTemplate = Urls.UserFootprint)]
@@ -55,8 +57,8 @@ namespace Jhu.Footprint.Web.Api.V1
         [Description("Delete footprint.")]
         void DeleteUserFootprint(string owner, string name);
 
-        #endregion
-        #region Footprint search operations
+#endregion
+#region Footprint search operations
 
         // TODO: expose additional search criteria
         [OperationContract]
@@ -79,8 +81,8 @@ namespace Jhu.Footprint.Web.Api.V1
         [Description("Returns the list of the regions of a footprint.")]
         RegionListResponse FindUserFootprintRegions(string owner, string name, string regionName, int from, int max);
 
-        #endregion
-        #region Footprint region CRUD operations
+#endregion
+#region Footprint region CRUD operations
 
         [OperationContract]
         [WebGet(UriTemplate = Urls.UserFootprintRegion)]
@@ -104,8 +106,8 @@ namespace Jhu.Footprint.Web.Api.V1
 
         // TODO: add HTM cover
 
-        #endregion
-        #region Footprint combined region get and plot
+#endregion
+#region Footprint combined region get and plot
 
         [OperationContract]
         [RegionFormatter]
@@ -158,8 +160,8 @@ namespace Jhu.Footprint.Web.Api.V1
         Stream GetUserFootprintThumbnail(string owner, string name);
 
 
-        #endregion
-        #region Individual region set, get and plot
+#endregion
+#region Individual region set, get and plot
 
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Post, UriTemplate = Urls.UserFootprintRegion + Urls.Raw, BodyStyle = WebMessageBodyStyle.Bare)]
@@ -220,6 +222,8 @@ namespace Jhu.Footprint.Web.Api.V1
 
         // TODO: add HTM cover
 
-        #endregion
+#endregion
+
+#endif
     }
 }

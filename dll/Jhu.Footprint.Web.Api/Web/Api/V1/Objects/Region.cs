@@ -17,6 +17,9 @@ namespace Jhu.Footprint.Web.Api.V1
         private Spherical.Region region;
         private string regionString;
 
+        private bool? isSimplified;
+        private double? area;
+
         [DataMember(Name = "owner")]
         [Description("Owner of the footprint.")]
         public string Owner { get; set; }
@@ -45,8 +48,20 @@ namespace Jhu.Footprint.Web.Api.V1
         [Description("True if the region is simplified and area is available.")]
         public bool? IsSimplified
         {
-            get { return Region?.IsSimplified; }
-            set { }
+            get
+            {
+                GetRegion(false);
+
+                if (region != null)
+                {
+                    return region.IsSimplified;
+                }
+                else
+                {
+                    return isSimplified;
+                }
+            }
+            set { isSimplified = value; }
         }
 
         [DataMember(Name = "area")]
@@ -55,16 +70,21 @@ namespace Jhu.Footprint.Web.Api.V1
         {
             get
             {
-                if (Region != null && Region.IsSimplified && !Double.IsNaN(Region.Area))
+                GetRegion(false);
+
+                if (region != null && region.IsSimplified && !Double.IsNaN(region.Area))
                 {
-                    return Region.Area;
+                    return region.Area;
                 }
                 else
                 {
-                    return null;
+                    return area;
                 }
             }
-            set { }
+            set
+            {
+                area = value;
+            }
         }
 
         [DataMember(Name = "regionString")]
@@ -107,11 +127,11 @@ namespace Jhu.Footprint.Web.Api.V1
 
         // TODO: pull out to service?
         [IgnoreDataMember]
-        public int BrushIndex { get; set; }
+        public int? BrushIndex { get; set; }
 
         // TODO: pull out to service?
         [IgnoreDataMember]
-        public int PenIndex { get; set; }
+        public int? PenIndex { get; set; }
 
         public Region()
         {
@@ -127,12 +147,17 @@ namespace Jhu.Footprint.Web.Api.V1
             this.region = null;
             this.regionString = null;
         }
-
-        public Spherical.Region GetRegion()
+        
+        public Spherical.Region GetRegion(bool required)
         {
+            if (region != null)
+            {
+                return region;
+            }
+
             int count = 0;
 
-            if (region == null && regionString != null)
+            if (regionString != null)
             {
                 region = Spherical.Region.Parse(regionString);
                 region.Simplify();
@@ -168,7 +193,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 throw Error.MultipleRegionsSpecified();
             }
 
-            if (region == null)
+            if (required && region == null)
             {
                 throw Error.NoRegionSpecified();
             }
@@ -181,18 +206,18 @@ namespace Jhu.Footprint.Web.Api.V1
             this.region = value;
         }
 
-        public void GetValues(Lib.FootprintRegion region)
+        public void GetValues(Lib.FootprintRegion region, bool required)
         {
+            GetRegion(required);
+
             region.Name = Name ?? region.Name;
             region.FillFactor = FillFactor ?? region.FillFactor;
+            region.BrushIndex = BrushIndex ?? region.BrushIndex;
+            region.PenIndex = PenIndex ?? region.PenIndex;
 
             if (this.region != null)
             {
-                region.Region = this.Region;
-            }
-            else if (RegionString != null)
-            {
-                region.Region = this.Region;
+                region.Region = this.region;
             }
         }
 
@@ -200,10 +225,13 @@ namespace Jhu.Footprint.Web.Api.V1
         {
             this.Owner = footprint.Owner;
             this.FootprintName = footprint.Name;
+            // this.FootprintUrl = // TODO
             this.Name = region.Name;
-            this.FillFactor = region.FillFactor;
             this.Url = FootprintService.GetUrl(footprint, region);
-            this.Region = region.Region;
+            this.FillFactor = region.FillFactor;
+            this.BrushIndex = region.BrushIndex;
+            this.PenIndex = region.PenIndex;
+            this.region = region.Region;
         }
     }
 }

@@ -15,39 +15,42 @@ namespace Jhu.Footprint.Web.Api.V1
     [RestServiceBehavior]
     public class EditorService : ServiceBase, IEditorService
     {
+        #region Web session access
+
         internal const string SessionKeyEditorFootprint = "Jhu.Footprint.Web.Api.SessionFootprint";
         internal const string SessionKeyEditorRegions = "Jhu.Footprint.Web.Api.SessionRegions";
+        internal const string SessionKeyEditorCombinedRegion = "Jhu.Footprint.Web.Api.SessionCombinedRegion";
 
-        private Footprint SessionFootprint
+        private Lib.Footprint SessionFootprint
         {
             get
             {
-                var sessionFootprint = (Footprint)Session[SessionKeyEditorFootprint];
+                var footprint = (Lib.Footprint)Session[SessionKeyEditorFootprint];
 
-                if (sessionFootprint == null)
+                if (footprint == null)
                 {
-                    sessionFootprint = new Footprint()
+                    footprint = new Lib.Footprint()
                     {
                         CombinationMethod = Lib.CombinationMethod.None,
                         Name = "new_footprint",
                         Owner = User.Identity.Name,
                     };
-                    Session[SessionKeyEditorFootprint] = sessionFootprint;
+                    Session[SessionKeyEditorFootprint] = footprint;
                 }
 
-                return sessionFootprint;
+                return footprint;
             }
         }
 
-        private Dictionary<string, Region> SessionRegions
+        private Dictionary<string, Lib.FootprintRegion> SessionRegions
         {
             get
             {
-                var sessionRegions = (Dictionary<string, Region>)Session[SessionKeyEditorRegions];
+                var sessionRegions = (Dictionary<string, Lib.FootprintRegion>)Session[SessionKeyEditorRegions];
 
                 if (sessionRegions == null)
                 {
-                    sessionRegions = new Dictionary<string, Region>();
+                    sessionRegions = new Dictionary<string, Lib.FootprintRegion>();
                     Session[SessionKeyEditorRegions] = sessionRegions;
                 }
 
@@ -55,28 +58,212 @@ namespace Jhu.Footprint.Web.Api.V1
             }
         }
 
-        private void ValidateRegion(Region region)
+        private Lib.FootprintRegion SessionCombinedRegion
         {
-            // This simply fails if incorrect region string is uploaded
-            region.Region.Simplify();
+            get
+            {
+                var region = (Lib.FootprintRegion)Session[SessionKeyEditorCombinedRegion];
+
+                if (region == null)
+                {
+                    region = new Lib.FootprintRegion(SessionFootprint);
+                    region.Region = new Spherical.Region();
+                    Session[SessionKeyEditorCombinedRegion] = region;
+                }
+
+                return region;
+            }
+            set
+            {
+                Session[SessionKeyEditorCombinedRegion] = value;
+            }
         }
 
-        #region Region CRUD operations
+        private void InvalidateCombinedRegion()
+        {
+            SessionCombinedRegion = null;
+        }
+
+        private void UpdateCombinedRegion()
+        {
+            if (SessionCombinedRegion.Region.ConvexList.Count == 0 &&
+                SessionRegions.Count > 0 &&
+                SessionFootprint.CombinationMethod != Lib.CombinationMethod.None)
+            {
+                RefreshCombinedRegion();
+            }
+        }
+
+        private void UpdateCombinedRegion(Spherical.Region region)
+        {
+            var footprint = SessionFootprint;
+            var combined = SessionCombinedRegion.Region;
+
+            if (combined.ConvexList.Count != 0)
+            {
+                // Update existing
+                switch (footprint.CombinationMethod)
+                {
+                    case Lib.CombinationMethod.Intersect:
+                        combined = combined.SmartIntersect(region, true);
+                        break;
+                    case Lib.CombinationMethod.Union:
+                        combined.SmartUnion(region, true, 1000);
+                        break;
+                    case Lib.CombinationMethod.None:
+                        // no op
+                        break;
+                    default:
+                        throw new NotImplementedException();
+                }
+
+                SessionCombinedRegion.Region = combined;
+            }
+            else if (footprint.CombinationMethod != Lib.CombinationMethod.None)
+            {
+                RefreshCombinedRegion();
+            }
+        }
+
+        private void RefreshCombinedRegion()
+        {
+            var footprint = SessionFootprint;
+            Spherical.Region combined = null;
+
+            // From scratch
+            int q = 0;
+            foreach (var r in SessionRegions.Values)
+            {
+                if (q == 0)
+                {
+                    combined = r.Region;
+                }
+                else
+                {
+                    switch (footprint.CombinationMethod)
+                    {
+                        case Lib.CombinationMethod.Intersect:
+                            combined = combined.SmartIntersect(r.Region, true);
+                            break;
+                        case Lib.CombinationMethod.Union:
+                            combined.SmartUnion(r.Region, true, 1000);
+                            break;
+                        default:
+                            throw new NotImplementedException();
+                    }
+                }
+
+                q++;
+            }
+
+            SessionCombinedRegion.Region = combined;
+        }
+
+        #endregion
+        #region Footprint CRUD operations
 
         public FootprintResponse GetFootprint()
         {
             return new FootprintResponse(SessionFootprint);
         }
 
+        public FootprintResponse ModifyFootprint(FootprintRequest footprint)
+        {
+            footprint.Footprint.GetValues(SessionFootprint);
+            InvalidateCombinedRegion();
+            return new FootprintResponse(SessionFootprint);
+        }
+
         public void DeleteFootprint()
         {
-            SessionRegions.Clear();
+            Session[SessionKeyEditorFootprint] = null;
+            Session[SessionKeyEditorRegions] = null;
+            Session[SessionKeyEditorCombinedRegion] = null;
+        }
+
+        public Spherical.Region DownloadFootprint()
+        {
+            UpdateCombinedRegion();
+            return SessionCombinedRegion.Region;
+        }
+
+        public Spherical.Outline DownloadFootprintOutline()
+        {
+            UpdateCombinedRegion();
+            return SessionCombinedRegion.Region.Outline;
+        }
+
+        public IEnumerable<Point> GetFootprintOutlinePoints(CoordinateSystem? sys, CoordinateRepresentation? rep, double? resolution, OutlineReduction? reduce, double? limit)
+        {
+            UpdateCombinedRegion();
+            return GetRegionOutlinePointsImpl(SessionCombinedRegion.Region, sys, rep, resolution, reduce, limit);
+        }
+
+        public Spherical.Visualizer.Plot PlotFootprint(
+            Projection? projection,
+            CoordinateSystem? sys,
+            double? lon,
+            double? lat,
+            float? width,
+            float? height,
+            ColorTheme? colorTheme,
+            bool? autoZoom,
+            bool? autoRotate,
+            bool? grid,
+            DegreeStyle? degreeStyle)
+        {
+            var plot = new Plot()
+            {
+                Projection = projection,
+                CoordinateSystem = sys,
+                Lon = lon,
+                Lat = lat,
+                Width = width,
+                Height = height,
+                ColorTheme = colorTheme,
+                AutoZoom = autoZoom,
+                AutoRotate = autoRotate,
+                GridVisible = grid,
+                DegreeStyle = degreeStyle
+            };
+
+            UpdateCombinedRegion();
+            return PlotRegionImpl(plot, new[] { SessionCombinedRegion });
+        }
+
+        public Spherical.Visualizer.Plot PlotFootprintAdvanced(PlotRequest plot)
+        {
+            UpdateCombinedRegion();
+            return PlotRegionImpl(plot.Plot, SessionRegions.Values);
         }
 
         #endregion
         #region Footprint region CRUD operations
 
-        public FootprintRegionResponse CreateFootprintRegion(string regionName, RegionRequest request)
+        private void ApplyRotation(Spherical.Region region, Spherical.Rotation r)
+        {
+            region.Rotate(r);
+        }
+
+        private void ApplyCoordinateSystem(Spherical.Region region, CoordinateSystem sys)
+        {
+            Spherical.Rotation r;
+
+            switch (sys)
+            {
+                case CoordinateSystem.EqJ2000:
+                    return;
+                case CoordinateSystem.GalJ2000:
+                    r = Spherical.Rotation.GalacticToEquatorial;
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }
+
+            region.Rotate(r);
+        }
+
+        public RegionResponse CreateRegion(string regionName, RegionRequest request)
         {
             if (!Lib.Constants.NamePatternRegex.Match(regionName).Success)
             {
@@ -88,59 +275,261 @@ namespace Jhu.Footprint.Web.Api.V1
                 throw Lib.Error.DuplicateRegionName("editor", "editor", regionName);
             }
 
-            request.Region.Name = regionName;
-            ValidateRegion(request.Region);
-            SessionRegions[regionName] = request.Region;
-            return new FootprintRegionResponse(request.Region);
-        }
+            var region = new Lib.FootprintRegion();
+            request.Region.GetValues(region, true);
+            region.Name = regionName;
 
-        public FootprintRegionResponse ModifyFootprintRegion(string regionName, RegionRequest request)
-        {
-            if (!SessionRegions.ContainsKey(regionName))
+            if (request.Rotation != null)
             {
-                throw Lib.Error.RegionNotFound("editor", "editor", regionName);
+                ApplyRotation(region.Region, request.Rotation.GetRotation());
             }
 
-            request.Region.Name = regionName;
-            ValidateRegion(request.Region);
-            SessionRegions[regionName] = request.Region;
-            return new FootprintRegionResponse(request.Region);
+            if (request.CoordinateSystem.HasValue)
+            {
+                ApplyCoordinateSystem(region.Region, request.CoordinateSystem.Value);
+            }
+
+            SessionRegions[regionName] = region;
+            UpdateCombinedRegion(region.Region);
+
+            return new RegionResponse(new Region(SessionFootprint, SessionRegions[regionName]));
         }
 
-        public void DeleteFootprintRegion(string regionName)
+        public RegionResponse GetRegion(string regionName)
+        {
+            return new RegionResponse(new Region(SessionFootprint, SessionRegions[regionName]));
+        }
+
+        public RegionResponse ModifyRegion(string regionName, RegionRequest request)
+        {
+            var region = SessionRegions[regionName];
+            string name;
+
+            if (request.Region.Name != null && StringComparer.InvariantCultureIgnoreCase.Compare(request.Region.Name, regionName) != 0)
+            {
+                // Renaming, so remove old one
+                SessionRegions.Remove(regionName);
+                name = request.Region.Name;
+            }
+            else
+            {
+                name = regionName;
+            }
+
+            request.Region.GetValues(region, false);
+
+            if (request.Rotation != null)
+            {
+                ApplyRotation(region.Region, request.Rotation.GetRotation());
+            }
+
+            if (request.CoordinateSystem.HasValue)
+            {
+                ApplyCoordinateSystem(region.Region, request.CoordinateSystem.Value);
+            }
+
+            SessionRegions[name] = region;
+            InvalidateCombinedRegion();
+
+            return new RegionResponse(new Region(SessionFootprint, region));
+        }
+
+        public void DeleteRegion(string regionName)
         {
             SessionRegions.Remove(regionName);
+            InvalidateCombinedRegion();
         }
 
-        public void DeleteFootprintRegions(string[] regionNames)
+        public void DeleteRegions(string regionName)
         {
-            if (regionNames != null && regionNames.Length == 1 && regionNames[0] == "*")
+            var keys = GetMatchingKeys(SessionRegions.Keys, regionName, null, null, out var hasBefore, out var hasAfter);
+
+            foreach (var key in keys)
             {
-                SessionRegions.Clear();
+                SessionRegions.Remove(key);
             }
 
-            foreach (var item in regionNames)
+            InvalidateCombinedRegion();
+        }
+
+        public RegionListResponse ListRegions(string regionName, int? from, int? max)
+        {
+            var res = new List<Region>();
+            var keys = GetMatchingKeys(SessionRegions.Keys, regionName, from, max, out var hasBefore, out var hasAfter);
+
+            foreach (var key in keys)
             {
-                if (SessionRegions.ContainsKey(item))
-                {
-                    SessionRegions.Remove(item);
-                }
+                res.Add(new Region(SessionFootprint, SessionRegions[key]));
             }
-        }
 
-        public FootprintRegionResponse GetFootprintRegion(string regionName)
-        {
-            return new FootprintRegionResponse(SessionRegions[regionName]);
-        }
-
-        public FootprintRegionListResponse ListFootprintRegions()
-        {
-            return new FootprintRegionListResponse()
+            return new RegionListResponse()
             {
-                Regions = SessionRegions.Values.ToArray()
+                Regions = res
             };
+
+            // TODO: get paging links
         }
 
+        public Spherical.Region DownloadRegion(string regionName)
+        {
+            return SessionRegions[regionName].Region;
+        }
+
+        public void UploadRegion(string regionName, Spherical.Region region)
+        {
+            Lib.FootprintRegion r;
+
+            if (SessionRegions.ContainsKey(regionName))
+            {
+                r = SessionRegions[regionName];
+            }
+            else
+            {
+                r = new Lib.FootprintRegion(SessionFootprint);
+            }
+
+            r.Region = region;
+            SessionRegions[regionName] = r;
+
+            UpdateCombinedRegion(region);
+        }
+
+        public Spherical.Outline DownloadRegionOutline(string regionName)
+        {
+            return SessionRegions[regionName].Region.Outline;
+        }
+
+        public IEnumerable<Point> GetRegionOutlinePoints(string regionName, CoordinateSystem? sys, CoordinateRepresentation? rep, double? resolution, OutlineReduction? reduce, double? limit)
+        {
+            var region = SessionRegions[regionName];
+            return GetRegionOutlinePointsImpl(region.Region, sys, rep, resolution, reduce, limit);
+        }
+
+        private List<Point> GetRegionOutlinePointsImpl(Spherical.Region region, CoordinateSystem? sys, CoordinateRepresentation? rep, double? resolution, OutlineReduction? reduce, double? limit)
+        {
+            var outline = region.Outline;
+
+            if (reduce.HasValue && reduce.Value == OutlineReduction.Dp)
+            {
+                outline = (Spherical.Outline)outline.Clone();
+                outline.Reduce((limit ?? 1) * SharpAstroLib.Coords.Constants.ArcMin2Radian);
+            }
+            if (reduce.HasValue && reduce.Value == OutlineReduction.CHull)
+            {
+                var chull = outline.GetConvexHull();
+                outline = chull.Outline;
+            }
+
+            // Figure out coordinate system transformation
+
+            SharpAstroLib.Coords.Transformation t;
+
+            switch (sys ?? CoordinateSystem.EqJ2000)
+            {
+                case CoordinateSystem.EqJ2000:
+                    t = SharpAstroLib.Coords.Transformation.Identity;
+                    break;
+                case CoordinateSystem.GalJ2000:
+                    t = SharpAstroLib.Coords.Transformation.Eq2GalJ2000;
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }
+
+            var res = new List<Point>();
+
+            foreach (var p in outline.Interpolate((resolution ?? 10)))
+            {
+                var pp = SharpAstroLib.Coords.Point.FromBoth(p.RA, p.Dec, p.X, p.Y, p.Z);
+                pp = t.Apply(pp);
+
+                var pr = new Point();
+
+                switch (rep ?? CoordinateRepresentation.Dec)
+                {
+                    case CoordinateRepresentation.Dec:
+                        pr.Lon = pp.Lon;
+                        pr.Lat = pp.Lat;
+                        break;
+                    case CoordinateRepresentation.Sexa:
+                        pr.RA = new SharpAstroLib.Coords.Angle(pp.Lon).ToString(SharpAstroLib.Coords.AngleFormatInfo.DefaultHours);
+                        pr.Dec = new SharpAstroLib.Coords.Angle(pp.Lat).ToString(SharpAstroLib.Coords.AngleFormatInfo.DefaultHours);
+                        break;
+                    case CoordinateRepresentation.Cart:
+                        pr.Cx = pp.X;
+                        pr.Cy = pp.Y;
+                        pr.Cz = pp.Z;
+                        break;
+                    default:
+                        throw new NotImplementedException();
+                }
+
+                res.Add(pr);
+            }
+
+            return res;
+        }
+
+        public Spherical.Visualizer.Plot PlotRegion(
+            string regionName,
+            Projection? projection,
+            CoordinateSystem? sys,
+            double? lon,
+            double? lat,
+            float? width,
+            float? height,
+            ColorTheme? colorTheme,
+            bool? autoZoom,
+            bool? autoRotate,
+            bool? grid,
+            DegreeStyle? degreeStyle)
+        {
+            var plot = new Plot()
+            {
+                Projection = projection,
+                CoordinateSystem = sys,
+                Lon = lon,
+                Lat = lat,
+                Width = width,
+                Height = height,
+                ColorTheme = colorTheme,
+                AutoZoom = autoZoom,
+                AutoRotate = autoRotate,
+                GridVisible = grid,
+                DegreeStyle = degreeStyle
+            };
+
+            // TODO: multiple plot doesn't conform to URI scheme
+
+            var keys = GetMatchingKeys(SessionRegions.Keys, regionName, null, null, out var hasBefore, out var hasAfter);
+            var regions = SessionRegions.Join(keys, r => r.Key, k => k, (a, b) => a.Value);
+
+            return PlotRegionImpl(plot, regions);
+        }
+
+        public Spherical.Visualizer.Plot PlotRegionAdvanced(string regionName, PlotRequest plot)
+        {
+            // TODO: highlights, etc.
+
+            // TODO: multiple plot doesn't conform to URI scheme
+
+            var keys = GetMatchingKeys(SessionRegions.Keys, regionName, null, null, out var hasBefore, out var hasAfter);
+            var regions = SessionRegions.Join(keys, r => r.Key, k => k, (a, b) => a.Value);
+
+            return PlotRegionImpl(plot.Plot, new[] { SessionRegions[regionName] });
+        }
+
+        private Spherical.Visualizer.Plot PlotRegionImpl(Plot plot, IEnumerable<Lib.FootprintRegion> regions)
+        {
+            // TODO: plot combined region
+
+            return plot.GetPlot(regions);
+        }
+
+        #endregion
+#if false
+        #region XXX
+        
         #endregion
         #region Boolean operations
 
@@ -212,131 +601,6 @@ namespace Jhu.Footprint.Web.Api.V1
         }
 
         #endregion
-        #region Footprint combined region get and plot
-
-        public Spherical.Region GetFootprintShape()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Spherical.Outline GetFootprintOutline()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<Lib.EquatorialPoint> GetFootprintOutlinePoints(double resolution)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Spherical.Visualizer.Plot PlotFootprint(
-            string projection,
-            string sys,
-            string ra,
-            string dec,
-            string b,
-            string l,
-            float width,
-            float height,
-            string colorTheme,
-            string autoZoom,
-            string autoRotate,
-            string grid,
-            string degreeStyle,
-            string highlights)
-        {
-            // Set highlights
-            HashSet<string> hl = null;
-
-            if (highlights != null && highlights.Length > 0)
-            {
-                hl = new HashSet<string>(highlights.Split(','));
-            }
-
-            foreach (var name in SessionRegions.Keys)
-            {
-                var r = SessionRegions[name];
-                r.BrushIndex = r.PenIndex = (hl != null && hl.Contains(name)) ? 1 : 0;
-            }
-
-            var plotParameters = new Plot(projection, sys, ra, dec, b, l, width, height, colorTheme, autoZoom, autoRotate, grid, degreeStyle);
-            return PlotFootprintAdvanced(plotParameters);
-        }
-
-        public Spherical.Visualizer.Plot PlotFootprintAdvanced(Plot plotParameters)
-        {
-            return plotParameters.GetPlot(SessionRegions.Values);
-        }
-
-        public Stream GetFootprintThumbnail()
-        {
-            throw new NotImplementedException();
-        }
-
-        #endregion
-        #region Individual region set, get and plot
-
-        public void SetFootprintRegionShape(string regionName, Stream stream)
-        {
-            var region = new Region()
-            {
-                Name = regionName,
-                Owner = RestOperationContext.Current.Principal.Identity.Name,
-                Region = new RegionAdapter().ReadFromStream(stream)
-            };
-            SessionRegions[regionName] = region;
-        }
-
-        public Spherical.Region GetFootprintRegionShape(string regionName)
-        {
-            return SessionRegions[regionName].Region;
-        }
-
-        public Spherical.Outline GetFootprintRegionOutline(string regionName)
-        {
-            return SessionRegions[regionName].Region.Outline;
-        }
-
-        public IEnumerable<Lib.EquatorialPoint> GetFootprintRegionOutlinePoints(string regionName, double resolution)
-        {
-            return Lib.FootprintFormatter.InterpolateOutlinePoints(
-                SessionRegions[regionName].Region.Outline,
-                resolution);
-        }
-
-        public Spherical.Visualizer.Plot PlotFootprintRegion(
-            string regionName,
-            string projection,
-            string sys,
-            string ra,
-            string dec,
-            string b,
-            string l,
-            float width,
-            float height,
-            string colorTheme,
-            string autoZoom,
-            string autoRotate,
-            string grid,
-            string degreeStyle)
-        {
-            var plotParameters = new Plot(projection, sys, ra, dec, b, l, width, height, colorTheme, autoZoom, autoRotate, grid, degreeStyle);
-            return PlotFootprintRegionAdvanced(regionName, plotParameters);
-        }
-
-        public Spherical.Visualizer.Plot PlotFootprintRegionAdvanced(string regionName, Plot plotParameters)
-        {
-            return plotParameters.GetPlot(new[] { SessionRegions[regionName] });
-        }
-
-        public Stream GetFootprintRegionThumbnail(string regionName)
-        {
-            throw new NotImplementedException();
-        }
-
-        // TODO: add HTM cover
-
-        #endregion
 
         /*
 
@@ -353,15 +617,7 @@ namespace Jhu.Footprint.Web.Api.V1
         */
 
 #if false
-        public void Reset()
-        {
-            SessionRegion = new Spherical.Region();
-        }
-
-        public void New(FootprintRegionRequest request)
-        {
-            SessionRegion = request.Region.GetRegion();
-        }
+        
 
         public void Union(FootprintRegionRequest request)
         {
@@ -462,54 +718,8 @@ namespace Jhu.Footprint.Web.Api.V1
                 region.SaveRegion();
             }
         }
-
-        public Spherical.Region GetShape()
-        {
-            return SessionRegion;
-        }
-
-        public Spherical.Outline GetOutline()
-        {
-            return SessionRegion.Outline;
-        }
-
-        public IEnumerable<Lib.EquatorialPoint> GetOutlinePoints(double resolution)
-        {
-            return Lib.FootprintFormatter.InterpolateOutlinePoints(SessionRegion.Outline, resolution);
-        }
-
-        public Spherical.Visualizer.Plot PlotUserFootprintRegion(string projection, string sys, string ra, string dec, string b, string l, float width, float height, string colorTheme, string autoZoom, string autoRotate, string grid, string degreeStyle)
-        {
-            var plot = Lib.FootprintPlot.GetDefaultPlot(new[] { SessionRegion });
-
-            // TODO: change this part to use all parameters
-            // Size is different for vector graphics!
-
-            var plotParameters = new Plot()
-            {
-                Projection = projection,
-                CoordinateSystem = sys,
-                //Ra = ra,
-                //Dec = dec
-                //B = b,
-                //L = l,
-                Width = Math.Max(width, 1080),
-                Height = Math.Max(height, 600),
-                ColorTheme = colorTheme,
-                AutoRotate = true,
-                AutoZoom = true,
-
-            };
-
-            return plotParameters.GetPlot(new[] { SessionRegion });
-        }
-
-        public Spherical.Visualizer.Plot PlotUserFootprintRegionAdvanced(Plot plotParameters)
-        {
-            //var plot = Lib.FootprintPlot.GetDefaultPlot(new[] { SessionRegion });
-
-            return plotParameters.GetPlot(new[] { SessionRegion });
-        }
 #endif
+#endif
+
     }
 }

@@ -83,7 +83,7 @@ namespace Jhu.Footprint.Web.Lib
         }
         */
 
-        public static FootprintException RegionNotFound(string userName, string footprintName, string regionName)
+        public static KeyNotFoundException RegionNotFound(string userName, string footprintName, string regionName)
         {
             var message = String.Format(
                 ExceptionMessages.RegionNotFound,
@@ -91,7 +91,7 @@ namespace Jhu.Footprint.Web.Lib
                 footprintName, 
                 regionName);
 
-            return new FootprintException(message);
+            return new KeyNotFoundException(message);
         }
         
         #endregion

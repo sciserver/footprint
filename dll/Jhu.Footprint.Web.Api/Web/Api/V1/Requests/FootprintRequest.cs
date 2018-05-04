@@ -24,5 +24,10 @@ namespace Jhu.Footprint.Web.Api.V1
         public FootprintRequest()
         {
         }
+
+        public FootprintRequest(Footprint footprint)
+        {
+            Footprint = footprint;
+        }
     }
 }

@@ -13,8 +13,6 @@ namespace Jhu.Footprint.Web.Api.V1
     [Description("Footprint plot prameters")]
     public class Plot
     {
-        private IEnumerable<Region> regions = null;
-
         [DataMember(Name = "width")]
         public float? Width { get; set; }
 
@@ -22,27 +20,21 @@ namespace Jhu.Footprint.Web.Api.V1
         public float? Height { get; set; }
 
         [DataMember(Name = "theme")]
-        public string ColorTheme { get; set; }
+        public ColorTheme? ColorTheme { get; set; }
 
         [DataMember(Name = "proj")]
         [Description("Projection. Valid values: TODO")]
-        public string Projection { get; set; }
+        public Projection? Projection { get; set; }
 
         [DataMember(Name = "sys")]
         [Description("Coordinate system. Valid values: eq, gal.")]
-        public string CoordinateSystem { get; set; }
+        public CoordinateSystem? CoordinateSystem { get; set; }
 
-        [DataMember(Name = "ra")]
-        public double Ra { get; set; }
+        [DataMember(Name = "lon")]
+        public double? Lon { get; set; }
 
-        [DataMember(Name = "dec")]
-        public double Dec { get; set; }
-
-        [DataMember(Name = "b")]
-        public double B { get; set; }
-
-        [DataMember(Name = "l")]
-        public double L { get; set; }
+        [DataMember(Name = "lat")]
+        public double? Lat { get; set; }
 
         [DataMember(Name = "zoom")]
         public bool? AutoZoom { get; set; }
@@ -58,7 +50,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
         [DataMember(Name = "gridSys")]
         [Description("Coordinate system. Valid values: eq, gal.")]
-        public string GridCoordinateSystem { get; set; }
+        public CoordinateSystem? GridCoordinateSystem { get; set; }
 
         [DataMember(Name = "axesVisible")]
         public bool? AxesVisible { get; set; }
@@ -68,7 +60,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
         [DataMember(Name = "degreeStyle")]
         [Description("Degree style. Valid values: hms, decimal")]
-        public string DegreeStyle { get; set; }
+        public DegreeStyle? DegreeStyle { get; set; }
 
         [DataMember(Name = "fontSize")]
         public int? FontSize { get; set; }
@@ -89,73 +81,50 @@ namespace Jhu.Footprint.Web.Api.V1
         {
         }
 
-        public Plot(
-            string projection,
-            string sys,
-            string ra,
-            string dec,
-            string b,
-            string l,
-            float width,
-            float height,
-            string colorTheme,
-            string autoZoom,
-            string autoRotate,
-            string grid,
-            string degreeStyle)
-        {
-            // TODO: change this part to use all parameters
-            // Size is different for vector graphics!
-
-            Projection = projection;
-            CoordinateSystem = sys;
-            //Ra = ra,
-            //Dec = dec
-            //B = b,
-            //L = l,
-            Width = width;
-            Height = height;
-            ColorTheme = colorTheme;
-            AutoZoom = String.IsNullOrEmpty(autoZoom) ? true : Convert.ToBoolean(autoZoom);
-            AutoRotate = String.IsNullOrEmpty(autoRotate) ? true : Convert.ToBoolean(autoRotate);
-            GridVisible = String.IsNullOrEmpty(grid) ? true : Convert.ToBoolean(grid);
-            DegreeStyle = degreeStyle;
-        }
-
-        private void GetValues(Spherical.Visualizer.Plot plot)
+        private void GetValues(Spherical.Visualizer.Plot plot, IEnumerable<Lib.FootprintRegion> regions)
         {
             plot.Width = Math.Max(Width ?? 1080, 1080);
             plot.Height = Math.Max(Height ?? 600, 600);
 
             // TODO: colorTheme
 
-            // projection
-            if (Projection != "")
+            switch (Projection ?? V1.Projection.Stereo)
             {
-                try
-                {
-                    Projection = "Jhu.Spherical.Visualizer." + Projection + "Projection,Jhu.Spherical.Visualizer";
-                    var t = Type.GetType(Projection);
-                    plot.Projection = (Projection)Activator.CreateInstance(t);
-                }
-                catch (Exception e)
-                {
+                case V1.Projection.Stereo:
+                    plot.Projection = new StereographicProjection();
+                    break;
+                case V1.Projection.Ortho:
+                    plot.Projection = new OrthographicProjection();
+                    break;
+                case V1.Projection.Aitoff:
                     plot.Projection = new AitoffProjection();
-                }
+                    break;
+                case V1.Projection.Hammer:
+                    plot.Projection = new HammerAitoffProjection();
+                    break;
+                case V1.Projection.Mollweide:
+                    plot.Projection = new MollweideProjection();
+                    break;
+                default:
+                    throw new NotImplementedException();
             }
 
-            switch (CoordinateSystem)
+            /* TODO: push this down to plotting lib
+            switch (CoordinateSystem ?? V1.CoordinateSystem.EqJ2000)
             {
-                default:
-                case "equatorial":
+                case V1.CoordinateSystem.EqJ2000:
                     break;
-                case "galactic":
+                case V1.CoordinateSystem.GalJ2000:
                     // TODO: this is a bit fishy here, we should probably only tag a rotation matrix to the region
-                    regions?.AsParallel().ForAll(r => r.Region.Rotate(Spherical.Rotation.EquatorialToGalactic));
+                    regions?.AsParallel().ForAll(r => r.GetRegion(true).Rotate(Spherical.Rotation.EquatorialToGalactic));
                     break;
+                default:
+                    throw new NotImplementedException();
             }
+            */
 
             // TODO: ra, dec, l, b 
+            // plot.Projection.Rotation
 
             plot.AutoRotate = AutoRotate ?? true;
             plot.AutoZoom = AutoZoom ?? false;
@@ -187,10 +156,9 @@ namespace Jhu.Footprint.Web.Api.V1
 
             // DegreeStyle
 
-            switch (DegreeStyle)
+            switch (DegreeStyle ?? V1.DegreeStyle.Dec)
             {
-                default:
-                case "decimal":
+                case V1.DegreeStyle.Dec:
                     grid.RaScale.DegreeFormat.DegreeStyle = Spherical.Visualizer.DegreeStyle.Decimal;
                     grid.DecScale.DegreeFormat.DegreeStyle = Spherical.Visualizer.DegreeStyle.Decimal;
                     axes.X1Axis.Scale.DegreeFormat.DegreeStyle = Spherical.Visualizer.DegreeStyle.Decimal;
@@ -198,7 +166,7 @@ namespace Jhu.Footprint.Web.Api.V1
                     axes.Y1Axis.Scale.DegreeFormat.DegreeStyle = Spherical.Visualizer.DegreeStyle.Decimal;
                     axes.Y2Axis.Scale.DegreeFormat.DegreeStyle = Spherical.Visualizer.DegreeStyle.Decimal;
                     break;
-                case "hms":
+                case V1.DegreeStyle.Sexa:
                     grid.RaScale.DegreeFormat.DegreeStyle = Spherical.Visualizer.DegreeStyle.Hours;
                     grid.DecScale.DegreeFormat.DegreeStyle = Spherical.Visualizer.DegreeStyle.Symbols;
                     axes.X1Axis.Scale.DegreeFormat.DegreeStyle = Spherical.Visualizer.DegreeStyle.Hours;
@@ -206,12 +174,11 @@ namespace Jhu.Footprint.Web.Api.V1
                     axes.Y1Axis.Scale.DegreeFormat.DegreeStyle = Spherical.Visualizer.DegreeStyle.Symbols;
                     axes.Y2Axis.Scale.DegreeFormat.DegreeStyle = Spherical.Visualizer.DegreeStyle.Symbols;
                     break;
-
+                default:
+                    throw new NotImplementedException();
             }
 
             // TODO: Linewidth
-
-            
 
             var regionds = new ObjectListDataSource(regions);
 
@@ -240,12 +207,11 @@ namespace Jhu.Footprint.Web.Api.V1
             }
         }
 
-        public Spherical.Visualizer.Plot GetPlot(IEnumerable<Region> regions)
+        public Spherical.Visualizer.Plot GetPlot(IEnumerable<Lib.FootprintRegion> regions)
         {
             var plot = new Spherical.Visualizer.Plot();
 
-            this.regions = regions;
-            GetValues(plot);
+            GetValues(plot, regions);
 
             return plot;
 

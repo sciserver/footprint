@@ -28,18 +28,12 @@ namespace Jhu.Footprint.Web.Api.V1
         [Description("Footprint url.")]
         public Uri Url { get; set; }
 
-        [IgnoreDataMember]
-        public Jhu.Footprint.Web.Lib.CombinationMethod? CombinationMethod { get; set; }
 
         [DataMember(Name = "combinationMethod")]
         [DefaultValue("None")]
         [Description("Method to combine regions: none, union or intersection.")]
-        public string CombinationMethod_ForXml
-        {
-            get { return Util.EnumFormatter.ToNullableXmlString(CombinationMethod); }
-            set { CombinationMethod = Util.EnumFormatter.FromNullableXmlString<Lib.CombinationMethod>(value); }
-        }
-
+        public Lib.CombinationMethod? CombinationMethod { get; set; }
+                
         [DataMember(Name = "comments")]
         [DefaultValue("")]
         [Description("Comments.")]
@@ -61,12 +55,13 @@ namespace Jhu.Footprint.Web.Api.V1
         public void GetValues(Lib.Footprint footprint)
         {
             footprint.Name = this.Name ?? footprint.Name;
+            footprint.CombinationMethod = this.CombinationMethod ?? footprint.CombinationMethod;
             footprint.Comments = this.Comments ?? footprint.Comments;
             
             // To prevent resetting permission when modifying a footprint,
             // only set permission when the public field is present
             // in the request
-            if (!footprint.IsExisting || Public.HasValue)
+            if (footprint.Context != null && (!footprint.IsExisting || Public.HasValue))
             {
                 footprint.SetDefaultPermissions(Public ?? false);
             }
@@ -83,6 +78,5 @@ namespace Jhu.Footprint.Web.Api.V1
             this.Public = access.CanRead();
             this.Url = FootprintService.GetUrl(footprint);
         }
-
     }
 }

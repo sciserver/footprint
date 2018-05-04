@@ -79,7 +79,6 @@
     <Compile Include="Web\Lib\Footprint.cs" />
     <Compile Include="Web\Lib\FootprintContext.cs" />
     <Compile Include="Web\Lib\FootprintException.cs" />
-    <Compile Include="Web\Lib\FootprintFormatter.cs" />
     <Compile Include="Web\Lib\FootprintPlot.cs" />
     <Compile Include="Web\Lib\FootprintRegion.cs" />
     <Compile Include="Web\Lib\FootprintRegionSearch.cs" />
