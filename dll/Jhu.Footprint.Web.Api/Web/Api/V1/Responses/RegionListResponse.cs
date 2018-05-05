@@ -14,8 +14,13 @@ namespace Jhu.Footprint.Web.Api.V1
     public class RegionListResponse
     {
         [DataMember(Name = "regions")]
+        [DefaultValue(null)]
         [Description("List of regions.")]
-        public  IEnumerable<Region> Regions { get; set; }
+        public IEnumerable<Region> Regions { get; set; }
+
+        [DataMember(Name = "links", EmitDefaultValue = false)]
+        [DefaultValue(null)]
+        public Links Links { get; set; }
 
         public RegionListResponse()
         {

@@ -15,6 +15,10 @@ namespace Jhu.Footprint.Web.Api.V1
         [DefaultValue(null)]
         public Uri Self { get; set; }
 
+        [DataMember(Name = "parent", EmitDefaultValue = false)]
+        [DefaultValue(null)]
+        public Uri Parent { get; set; }
+
         [DataMember(Name = "prev", EmitDefaultValue = false)]
         [DefaultValue(null)]
         public Uri Prev { get; set; }

@@ -13,69 +13,100 @@ namespace Jhu.Footprint.Web.Api.V1
     [Description("Footprint plot prameters")]
     public class Plot
     {
-        [DataMember(Name = "width")]
+        [DataMember(Name = "width", EmitDefaultValue = false)]
+        [DefaultValue(null)]
+        [Description("Width of plot. Pixels for bitmaps, inches for vectors.")]
         public float? Width { get; set; }
 
-        [DataMember(Name = "height")]
+        [DataMember(Name = "height", EmitDefaultValue = false)]
+        [DefaultValue(null)]
+        [Description("Height of plot. Pixels for bitmaps, inches for vectors.")]
         public float? Height { get; set; }
 
-        [DataMember(Name = "theme")]
+        [DataMember(Name = "theme", EmitDefaultValue = false)]
+        [DefaultValue(null)]
+        [Description("Color theme")]
         public ColorTheme? ColorTheme { get; set; }
 
-        [DataMember(Name = "proj")]
+        [DataMember(Name = "proj", EmitDefaultValue = false)]
+        [DefaultValue(null)]
         [Description("Projection. Valid values: TODO")]
         public Projection? Projection { get; set; }
 
-        [DataMember(Name = "sys")]
+        [DataMember(Name = "sys", EmitDefaultValue = false)]
+        [DefaultValue(null)]
         [Description("Coordinate system. Valid values: eq, gal.")]
         public CoordinateSystem? CoordinateSystem { get; set; }
 
-        [DataMember(Name = "lon")]
+        [DataMember(Name = "lon", EmitDefaultValue = false)]
+        [DefaultValue(null)]
+        [Description("Longitude of projection origin.")]
         public double? Lon { get; set; }
 
-        [DataMember(Name = "lat")]
+        [DataMember(Name = "lat", EmitDefaultValue = false)]
+        [DefaultValue(null)]
+        [Description("Latitude of projection origin.")]
         public double? Lat { get; set; }
 
-        [DataMember(Name = "zoom")]
+        [DataMember(Name = "zoom", EmitDefaultValue = false)]
+        [DefaultValue(null)]
+        [Description("Zoom in on region automatically.")]
         public bool? AutoZoom { get; set; }
 
-        [DataMember(Name = "rotate")]
+        [DataMember(Name = "rotate", EmitDefaultValue = false)]
+        [DefaultValue(null)]
+        [Description("Rotate projection origin to render region in the center.")]
         public bool? AutoRotate { get; set; }
 
-        [DataMember(Name = "grid")]
+        [DataMember(Name = "grid", EmitDefaultValue = false)]
+        [DefaultValue(null)]
+        [Description("Grid lines visible.")]
         public bool? GridVisible { get; set; }
 
-        [DataMember(Name = "gridDensity")]
+        [DataMember(Name = "gridDensity", EmitDefaultValue = false)]
+        [DefaultValue(null)]
+        [Description("Grid line density.")]
         public float? GridDensity { get; set; }
 
-        [DataMember(Name = "gridSys")]
+        [DataMember(Name = "gridSys", EmitDefaultValue = false)]
+        [DefaultValue(null)]
         [Description("Coordinate system. Valid values: eq, gal.")]
         public CoordinateSystem? GridCoordinateSystem { get; set; }
 
-        [DataMember(Name = "axesVisible")]
+        [DataMember(Name = "axesVisible", EmitDefaultValue = false)]
+        [DefaultValue(null)]
+        [Description("Axes visible.")]
         public bool? AxesVisible { get; set; }
 
-        [DataMember(Name = "axisLabelsVisible")]
+        [DataMember(Name = "axisLabelsVisible", EmitDefaultValue = false)]
+        [DefaultValue(null)]
+        [Description("Axis labels visible.")]
         public bool? AxisLabelsVisible { get; set; }
 
-        [DataMember(Name = "degreeStyle")]
+        [DataMember(Name = "degreeStyle", EmitDefaultValue = false)]
+        [DefaultValue(null)]
         [Description("Degree style. Valid values: hms, decimal")]
         public DegreeStyle? DegreeStyle { get; set; }
 
-        [DataMember(Name = "fontSize")]
+        [DataMember(Name = "fontSize", EmitDefaultValue = false)]
+        [DefaultValue(null)]
+        [Description("Font size in points.")]
         public int? FontSize { get; set; }
 
-        [DataMember(Name = "lineWidth")]
+        [DataMember(Name = "lineWidth", EmitDefaultValue = false)]
+        [DefaultValue(null)]
+        [Description("Line width in points.")]
         public int? LineWidth { get; set; }
 
-        [DataMember(Name = "regionsVisible")]
+        [DataMember(Name = "regionsVisible", EmitDefaultValue = false)]
+        [DefaultValue(null)]
+        [Description("Plot filled regions.")]
         public bool? RegionsVisible { get; set; }
 
-        [DataMember(Name = "outlineVisible")]
+        [DataMember(Name = "outlineVisible", EmitDefaultValue = false)]
+        [DefaultValue(null)]
+        [Description("Plot region outline.")]
         public bool? OutlineVisible { get; set; }
-
-        [DataMember(Name = "highlights")]
-        public string[] Highligths { get; set; }
 
         public Plot()
         {
@@ -184,7 +215,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
             // Plot regions
             if (RegionsVisible ?? true)
-            {                
+            {
                 var r = new RegionsLayer();
                 r.DataSource = regionds;
                 r.RegionDataField = "Region";

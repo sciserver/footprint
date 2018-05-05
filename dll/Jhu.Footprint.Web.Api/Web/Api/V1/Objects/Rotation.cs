@@ -16,15 +16,18 @@ namespace Jhu.Footprint.Web.Api.V1
     {
         private Spherical.Rotation rotation;
 
-        [DataMember(Name = "alpha")]
+        [DataMember(Name = "alpha", EmitDefaultValue = false)]
+        [DefaultValue(null)]
         [Description("First Euler angle.")]
         public double? Alpha { get; set; }
 
-        [DataMember(Name = "beta")]
+        [DataMember(Name = "beta", EmitDefaultValue = false)]
+        [DefaultValue(null)]
         [Description("Second Euler angle.")]
         public double? Beta { get; set; }
 
-        [DataMember(Name = "gamma")]
+        [DataMember(Name = "gamma", EmitDefaultValue = false)]
+        [DefaultValue(null)]
         [Description("Third Euler angle.")]
         public double? Gamma { get; set; }
 

@@ -124,7 +124,7 @@ namespace Jhu.Footprint.Web.Api.V1
             PlotRequest plot);
 
         #endregion
-#region Footprint region CRUD operations
+        #region Footprint region CRUD operations
 
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Put, UriTemplate = Urls.EditorRegion)]

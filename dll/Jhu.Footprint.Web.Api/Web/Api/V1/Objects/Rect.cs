@@ -17,7 +17,7 @@ namespace Jhu.Footprint.Web.Api.V1
         [Description("Coordinates of the first corner.")]
         public Point P1 { get; set; }
 
-        [DataMember(Name = "center", EmitDefaultValue = false)]
+        [DataMember(Name = "p2", EmitDefaultValue = false)]
         [DefaultValue(null)]
         [Description("Coordinates of the second corner.")]
         public Point P2 { get; set; }

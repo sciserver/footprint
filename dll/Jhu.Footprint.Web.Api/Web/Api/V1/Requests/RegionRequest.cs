@@ -26,6 +26,11 @@ namespace Jhu.Footprint.Web.Api.V1
         [Description("Original coordinate system, will be converted to equatorial J2000.")]
         public CoordinateSystem? CoordinateSystem { get; set; }
 
+        [DataMember(Name = "selection", EmitDefaultValue = false)]
+        [DefaultValue(null)]
+        [Description("When performing operations, conveys the name of source regions.")]
+        public string[] Selection { get; set; }
+
         public RegionRequest()
         {
         }

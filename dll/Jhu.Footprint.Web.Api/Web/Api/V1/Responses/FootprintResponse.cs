@@ -14,9 +14,14 @@ namespace Jhu.Footprint.Web.Api.V1
     [Description("Represents a footprint.")]
     public class FootprintResponse
     {
-        [DataMember(Name = "footprint")]
+        [DataMember(Name = "footprint", EmitDefaultValue = false)]
+        [DefaultValue(null)]
         [Description("Footprint.")]
         public Footprint Footprint { get; set; }
+
+        [DataMember(Name = "links", EmitDefaultValue = false)]
+        [DefaultValue(null)]
+        public Links Links { get; set; }
 
         public FootprintResponse(Footprint footprint)
         {
@@ -26,6 +31,10 @@ namespace Jhu.Footprint.Web.Api.V1
         public FootprintResponse(Lib.Footprint footprint)
         {
             Footprint = new Footprint(footprint);
+            Links = new Links()
+            {
+                Self = FootprintService.GetUrl(footprint)
+            };
         }
     }
 }

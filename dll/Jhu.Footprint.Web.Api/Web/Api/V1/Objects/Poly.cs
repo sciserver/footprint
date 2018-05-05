@@ -12,7 +12,7 @@ namespace Jhu.Footprint.Web.Api.V1
     [DataContract]
     public class Poly : Shape
     {
-        [DataMember(Name = "p1", EmitDefaultValue = false)]
+        [DataMember(Name = "points", EmitDefaultValue = false)]
         [DefaultValue(null)]
         [Description("Coordinate points. Avoid bowties.")]
         public Point[] Points { get; set; }

@@ -16,30 +16,28 @@ namespace Jhu.Footprint.Web.Api.V1
     [Description("A footprint is a collection of regions representing the sky coverage of observations.")]
     public class Footprint
     {
-        [DataMember(Name = "owner")]
+        [DataMember(Name = "owner", EmitDefaultValue = false)]
+        [DefaultValue(null)]
         [Description("Owner of the footprint.")]
         public string Owner { get; set; }
 
-        [DataMember(Name = "name")]
+        [DataMember(Name = "name", EmitDefaultValue = false)]
+        [DefaultValue(null)]
         [Description("Name of the folder containing the footprint.")]
         public string Name { get; set; }
 
-        [DataMember(Name = "url")]
-        [Description("Footprint url.")]
-        public Uri Url { get; set; }
-
-
-        [DataMember(Name = "combinationMethod")]
-        [DefaultValue("None")]
+        [DataMember(Name = "combinationMethod", EmitDefaultValue = false)]
+        [DefaultValue(null)]
         [Description("Method to combine regions: none, union or intersection.")]
         public Lib.CombinationMethod? CombinationMethod { get; set; }
                 
-        [DataMember(Name = "comments")]
-        [DefaultValue("")]
+        [DataMember(Name = "comments", EmitDefaultValue = false)]
+        [DefaultValue(null)]
         [Description("Comments.")]
         public string Comments { get; set; }
         
-        [DataMember(Name = "public")]
+        [DataMember(Name = "public", EmitDefaultValue = false)]
+        [DefaultValue(null)]
         [Description("Visibility of the footprint to the public.")]
         public bool? Public { get; set; }
 
@@ -76,7 +74,6 @@ namespace Jhu.Footprint.Web.Api.V1
             this.CombinationMethod = footprint.CombinationMethod;
             this.Comments = footprint.Comments;
             this.Public = access.CanRead();
-            this.Url = FootprintService.GetUrl(footprint);
         }
     }
 }

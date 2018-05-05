@@ -10,13 +10,20 @@ namespace Jhu.Footprint.Web.Api.V1
     [DataContract]
     public class PlotRequest
     {
-        [DataMember]
+        [DataMember(Name = "plot", EmitDefaultValue = false)]
+        [DefaultValue(null)]
         public Plot Plot { get; set; }
 
-        [DataMember]
+        [DataMember(Name = "footprints", EmitDefaultValue = false)]
+        [DefaultValue(null)]
         public Footprint[] Footprints { get; set; }
 
-        [DataMember]
+        [DataMember(Name = "regions", EmitDefaultValue = false)]
+        [DefaultValue(null)]
         public Region[] Regions { get; set; }
+
+        [DataMember(Name = "selection", EmitDefaultValue = false)]
+        [DefaultValue(null)]
+        public string[] Selection { get; set; }
     }
 }

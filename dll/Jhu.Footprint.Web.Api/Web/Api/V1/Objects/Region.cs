@@ -20,31 +20,33 @@ namespace Jhu.Footprint.Web.Api.V1
         private bool? isSimplified;
         private double? area;
 
-        [DataMember(Name = "owner")]
+        [DataMember(Name = "owner", EmitDefaultValue = false)]
+        [DefaultValue(null)]
         [Description("Owner of the footprint.")]
         public string Owner { get; set; }
 
-        [DataMember(Name = "footprintName")]
+        [DataMember(Name = "footprintName", EmitDefaultValue = false)]
+        [DefaultValue(null)]
         [Description("Name of the footprint containing the region.")]
         public string FootprintName { get; set; }
 
-        [DataMember(Name = "footprintUrl")]
+        [DataMember(Name = "footprintUrl", EmitDefaultValue = false)]
+        [DefaultValue(null)]
         [Description("Footprint url.")]
         public Uri FootprintUrl { get; set; }
 
-        [DataMember(Name = "name")]
+        [DataMember(Name = "name", EmitDefaultValue = false)]
+        [DefaultValue(null)]
         [Description("Name of the region.")]
         public string Name { get; set; }
 
-        [DataMember(Name = "url")]
-        [Description("Region url.")]
-        public Uri Url { get; set; }
-
-        [DataMember(Name = "fillFactor")]
+        [DataMember(Name = "fillFactor", EmitDefaultValue = false)]
+        [DefaultValue(null)]
         [Description("Fill factor of the region.")]
         public double? FillFactor { get; set; }
 
-        [DataMember(Name = "isSimplified")]
+        [DataMember(Name = "isSimplified", EmitDefaultValue = false)]
+        [DefaultValue(null)]
         [Description("True if the region is simplified and area is available.")]
         public bool? IsSimplified
         {
@@ -64,7 +66,8 @@ namespace Jhu.Footprint.Web.Api.V1
             set { isSimplified = value; }
         }
 
-        [DataMember(Name = "area")]
+        [DataMember(Name = "area", EmitDefaultValue = false)]
+        [DefaultValue(null)]
         [Description("Area in square degrees.")]
         public double? Area
         {
@@ -87,7 +90,8 @@ namespace Jhu.Footprint.Web.Api.V1
             }
         }
 
-        [DataMember(Name = "regionString")]
+        [DataMember(Name = "regionString", EmitDefaultValue = false)]
+        [DefaultValue(null)]
         [Description("Region string. Set this field to create a custom region")]
         public string RegionString
         {
@@ -227,7 +231,6 @@ namespace Jhu.Footprint.Web.Api.V1
             this.FootprintName = footprint.Name;
             // this.FootprintUrl = // TODO
             this.Name = region.Name;
-            this.Url = FootprintService.GetUrl(footprint, region);
             this.FillFactor = region.FillFactor;
             this.BrushIndex = region.BrushIndex;
             this.PenIndex = region.PenIndex;

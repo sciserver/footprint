@@ -15,13 +15,13 @@ namespace Jhu.Footprint.Web.Api.V1
     [Description("Represents a list of footprints.")]
     public class FootprintListResponse
     {
-        [DataMember(Name = "links", EmitDefaultValue = false)]
-        [DefaultValue(null)]
-        public Links Links { get; set; }
-
         [DataMember(Name = "footprints")]
         [Description("List of footprints.")]
         public IEnumerable<Footprint> Footprints { get; set; }
+
+        [DataMember(Name = "links", EmitDefaultValue = false)]
+        [DefaultValue(null)]
+        public Links Links { get; set; }
 
         public FootprintListResponse()
         {
