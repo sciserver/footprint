@@ -195,7 +195,7 @@ namespace Jhu.Footprint.Web.Lib
 
         private void CopyMembers(FootprintRegion old)
         {
-            this.parent = new Footprint(old.parent);
+            this.parent = old.parent;
 
             this.id = old.id;
             this.footprintId = old.footprintId;

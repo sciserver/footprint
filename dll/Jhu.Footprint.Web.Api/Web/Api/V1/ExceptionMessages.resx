@@ -141,4 +141,13 @@
   <data name="OneCoordinateRepresentationRequired" xml:space="preserve">
     <value>Only one set of coordinates must be specified. Must specify either (RA, Dec - in degrees or HMS:DMS), (Lon, Lat - in degrees) or (Cx, Cy, Cz).</value>
   </data>
+  <data name="SelectionNotDefined" xml:space="preserve">
+    <value>No selections defined in request.</value>
+  </data>
+  <data name="SelectionTooFew" xml:space="preserve">
+    <value>Too few selections are specified for the operation. At least {0} required.</value>
+  </data>
+  <data name="SelectionTooMany" xml:space="preserve">
+    <value>Too many selection are specified for the operation. At most {0} requied.</value>
+  </data>
 </root>

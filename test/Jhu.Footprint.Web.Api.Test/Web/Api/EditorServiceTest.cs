@@ -400,32 +400,6 @@ namespace Jhu.Footprint.Web.Api.V1
         }
 
         [TestMethod]
-        public void DeleteRegionsByNameTest()
-        {
-            using (var session = new RestClientSession())
-            {
-                var client = CreateClient(session, TestUser);
-                var name = GetTestUniqueName();
-
-                for (int i = 0; i < 5; i++)
-                {
-                    var req = new RegionRequest()
-                    {
-                        Region = TestRegion1,
-                    };
-                    client.CreateRegion(name + "_" + i.ToString(), req);
-                }
-
-                var names = String.Join(",", name + "_" + 2.ToString(), name + "_" + 3.ToString());
-                client.DeleteRegions(names);
-
-                var res = client.ListRegions(null, null, null);
-
-                Assert.AreEqual(3, res.Regions.Count());
-            }
-        }
-
-        [TestMethod]
         public void ListAllRegionsTest()
         {
             using (var session = new RestClientSession())
@@ -583,8 +557,6 @@ namespace Jhu.Footprint.Web.Api.V1
             }
         }
 
-        // TODO: test reduction methods
-
         [TestMethod]
         public void UploadRegionTest()
         {
@@ -595,7 +567,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 var region = TestRegion1.GetRegion(true);
 
                 client.UploadRegion(name, region);
-                
+
                 var r = client.GetRegion(name);
                 Assert.IsTrue(r.Region.Area > 0);
             }
@@ -719,72 +691,144 @@ namespace Jhu.Footprint.Web.Api.V1
         }
 
         #endregion
+        #region Operations test
+
+        [TestMethod]
+        public void CopyRegionTest()
+        {
+            using (var session = new RestClientSession())
+            {
+                var name = GetTestUniqueName();
+                var client = CreateClient(session, TestUser);
+
+                var req1 = new RegionRequest()
+                {
+                    Region = TestRegion1,
+                };
+                client.CreateRegion(name, req1);
+
+                var req2 = new RegionRequest()
+                {
+                    Selection = new[] { name }
+                };
+                client.CopyRegion(name + "_copy", req2);
+
+                var r1 = client.GetRegion(name + "_copy");
+                Assert.AreEqual(name + "_copy", r1.Region.Name);
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(EndpointNotFoundException))]
+        public void MoveRegionTest()
+        {
+            using (var session = new RestClientSession())
+            {
+                var name = GetTestUniqueName();
+                var client = CreateClient(session, TestUser);
+
+                var req1 = new RegionRequest()
+                {
+                    Region = TestRegion1,
+                };
+                client.CreateRegion(name, req1);
+
+                var req2 = new RegionRequest()
+                {
+                    Selection = new[] { name }
+                };
+                client.MoveRegion(name + "_copy", req2);
+
+                var r1 = client.GetRegion(name + "_copy");
+                Assert.AreEqual(name + "_copy", r1.Region.Name);
+
+                var r2 = client.GetRegion(name);
+            }
+        }
+
+        [TestMethod]
+        public void GrowRegionTest()
+        {
+            using (var session = new RestClientSession())
+            {
+                var name = GetTestUniqueName();
+                var client = CreateClient(session, TestUser);
+
+                var req1 = new RegionRequest()
+                {
+                    Region = TestRegion1,
+                };
+                client.CreateRegion(name, req1);
+
+                var req2 = new RegionRequest()
+                {
+                    Selection = new[] { name }
+                };
+                client.GrowRegion(name + "_copy", 20, true, req2);
+
+                var r1 = client.GetRegion(name);
+                var r2 = client.GetRegion(name + "_copy");
+                Assert.IsTrue(r2.Region.Area > r1.Region.Area);
+            }
+        }
+
+        [TestMethod]
+        public void CombineRegionsTest()
+        {
+            foreach (var method in new[] { Lib.CombinationMethod.Union, Lib.CombinationMethod.Intersect, Lib.CombinationMethod.Subtract })
+            {
+                using (var session = new RestClientSession())
+                {
+                    var name = GetTestUniqueName();
+                    var client = CreateClient(session, TestUser);
+
+                    var r1 = new RegionRequest()
+                    {
+                        Region = TestRegion1,
+                    };
+                    client.CreateRegion(name + "_1", r1);
+
+                    var r2 = new RegionRequest()
+                    {
+                        Region = TestRegion2,
+                    };
+                    client.CreateRegion(name + "_2", r2);
+
+                    var req = new RegionRequest()
+                    {
+                        Selection = new[] { name + "_1", name + "_2" }
+                    };
+
+                    string nn = null;
+
+                    switch (method)
+                    {
+                        case Lib.CombinationMethod.Union:
+                            nn = name + "_union";
+                            client.UnionRegions(nn, false, req);
+                            break;
+                        case Lib.CombinationMethod.Intersect:
+                            nn = name + "_intersect";
+                            client.IntersectRegions(nn, false, req);
+                            break;
+                        case Lib.CombinationMethod.Subtract:
+                            nn = name + "_difference";
+                            client.SubtractRegions(nn, false, req);
+                            break;
+                        default:
+                            throw new NotImplementedException();
+                    }
+
+                    var r = client.GetRegion(nn);
+                    Assert.IsTrue(r.Region.Area > 0);
+                }
+            }
+        }
+
+        #endregion
 
 #if false
-
-        [TestMethod]
-        public void UnionTest()
-        {
-            using (var session = new RestClientSession())
-            {
-                var client = CreateClient(session, TestUser);
-                var r1 = GetTestRegion();
-                client.New(r1);
-                var r2 = GetTestRegion("CIRCLE J2000 15 10 15");
-                client.Union(r2);
-                var res = client.GetShape();
-                Assert.AreEqual(2, res.ConvexList.Count);
-            }
-        }
-
-        [TestMethod]
-        public void IntersectTest()
-        {
-            using (var session = new RestClientSession())
-            {
-                var client = CreateClient(session, TestUser);
-                var r1 = GetTestRegion();
-                client.New(r1);
-                var r2 = GetTestRegion("CIRCLE J2000 15 10 15");
-                client.Intersect(r2);
-                var res = client.GetShape();
-                Assert.IsTrue(res.ConvexList.Count >= 1);
-            }
-
-        }
-
-        [TestMethod]
-        public void SubtractTest()
-        {
-            using (var session = new RestClientSession())
-            {
-                var client = CreateClient(session, TestUser);
-                var r1 = GetTestRegion();
-                client.New(r1);
-                var r2 = GetTestRegion("CIRCLE J2000 15 10 15");
-                client.Subtract(r2);
-                var res = client.GetShape();
-                Assert.IsTrue(res.ConvexList.Count >= 1);
-            }
-
-        }
-
-        [TestMethod]
-        public void GrowTest()
-        {
-            using (var session = new RestClientSession())
-            {
-                var client = CreateClient(session, TestUser);
-                var r1 = GetTestRegion();
-                client.New(r1);
-                client.Grow(10);
-                var res = client.GetShape();
-
-                Assert.IsTrue(res.Area > r1.Region.GetRegion().Area);
-            }
-
-        }
-
+        
         [TestMethod]
         public void SaveLoadTest()
         {
@@ -804,37 +848,6 @@ namespace Jhu.Footprint.Web.Api.V1
             }
         }
 
-        [TestMethod]
-        public void GetTestOutline()
-        {
-            using (var session = new RestClientSession())
-            {
-                var name = GetTestUniqueName();
-                var client = CreateClient(session, TestUser);
-                var r1 = GetTestRegion();
-                client.New(r1);
-                var url = EditorApiBaseUrl + "/outline";
-                var buffer = session.HttpGet(url);
-                Assert.IsTrue(buffer != null && buffer.Length > 0);
-            }
-        }
-
-        [TestMethod]
-        public void PlotTestFootprintRegionAdvanced()
-        {
-            using (var session = new RestClientSession())
-            {
-                var name = GetTestUniqueName();
-                var client = CreateClient(session, TestUser);
-                var r1 = GetTestRegion();
-                client.New(r1);
-                var url = EditorApiBaseUrl + "/plot";
-                var json = "{ \"ra\": 10, \"dec\": 10 }";
-                var data = System.Text.ASCIIEncoding.Default.GetBytes(json);
-                var buffer = session.HttpPost(url, "image/png", "application/json", data);
-                Assert.IsTrue(buffer != null && buffer.Length > 0);
-            }
-        }
 #endif
     }
 }

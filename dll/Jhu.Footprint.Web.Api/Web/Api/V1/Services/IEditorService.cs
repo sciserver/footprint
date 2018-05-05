@@ -45,8 +45,6 @@ namespace Jhu.Footprint.Web.Api.V1
             [Description("An object conveyings the footprint properties to be updated")]
             FootprintRequest footprint);
 
-        // TODO: save, load should go into the footprint service
-
         [OperationContract]
         [WebInvoke(Method = HttpMethod.Delete, UriTemplate = Urls.EditorFootprint)]
         [Description("Delete footprint and reset the editor.")]
@@ -147,11 +145,6 @@ namespace Jhu.Footprint.Web.Api.V1
         void DeleteRegion(string regionName);
 
         [OperationContract]
-        [WebInvoke(Method = HttpMethod.Delete, UriTemplate = Urls.EditorRegionSearch)]
-        [Description("Delete regions matching pattern.")]
-        void DeleteRegions(string regionName);
-
-        [OperationContract]
         [WebGet(UriTemplate = Urls.EditorRegionSearch + Urls.Paging)]
         [Description("List regions.")]
         RegionListResponse ListRegions(
@@ -239,23 +232,79 @@ namespace Jhu.Footprint.Web.Api.V1
             PlotRequest plot);
 
         #endregion
-#if false
-
-        // TODO: how to parameterize multiple regions
-
-        #region Boolean operations
+        #region Operations
 
         [OperationContract]
-        [WebInvoke(Method = HttpMethod.Put, UriTemplate = Urls.EditorRegion + Urls.Combine)]
-        [Description("Compute union, intersection or difference of regions.")]
-        RegionResponse CombineRegions(
+        [WebInvoke(Method = HttpMethod.Put, UriTemplate = Urls.EditorRegion + Urls.Copy)]
+        [Description("Copy a region.")]
+        RegionResponse CopyRegion(
+            [Description("Name of the target region.")]
+            string regionName,
+            RegionRequest request);
+
+        [OperationContract]
+        [WebInvoke(Method = HttpMethod.Put, UriTemplate = Urls.EditorRegion + Urls.Move)]
+        [Description("Move a region.")]
+        RegionResponse MoveRegion(
+            [Description("Name of the target region.")]
+            string regionName,
+            RegionRequest request);
+
+        [OperationContract]
+        [WebInvoke(Method = HttpMethod.Put, UriTemplate = Urls.EditorRegion + Urls.Grow)]
+        [Description("Grow region.")]
+        RegionResponse GrowRegion(
             [Description("Name of the newly created region.")]
             string regionName,
-            [Description("Boolean operation, one of 'union', 'intersect' or 'subtract'.")]
-            string operation,
-            [Description("Keep all original regions.")]
-            bool keepOriginal,
+            [Description("Growth radius in arc minutes.")]
+            double radius,
+            [Description("Keep original region.")]
+            bool? keepOriginal,
             RegionRequest request);
+
+        [OperationContract]
+        [WebInvoke(Method = HttpMethod.Put, UriTemplate = Urls.EditorRegion + Urls.Grow)]
+        [Description("Generate the convex hull of the regions.")]
+        RegionResponse CHullRegion(
+            [Description("Name of the newly created region.")]
+            string regionName,
+            [Description("Keep original regions.")]
+            bool? keepOriginal,
+            RegionRequest request);
+
+        [OperationContract]
+        [WebInvoke(Method = HttpMethod.Put, UriTemplate = Urls.EditorRegion + Urls.Union)]
+        [Description("Compute the union of regions.")]
+        RegionResponse UnionRegions(
+            [Description("Name of the newly created region.")]
+            string regionName,
+            [Description("Keep all original regions.")]
+            bool? keepOriginal,
+            RegionRequest request);
+
+        [OperationContract]
+        [WebInvoke(Method = HttpMethod.Put, UriTemplate = Urls.EditorRegion + Urls.Intersect)]
+        [Description("Compute the intersection of regions.")]
+        RegionResponse IntersectRegions(
+            [Description("Name of the newly created region.")]
+            string regionName,
+            [Description("Keep all original regions.")]
+            bool? keepOriginal,
+            RegionRequest request);
+
+        [OperationContract]
+        [WebInvoke(Method = HttpMethod.Put, UriTemplate = Urls.EditorRegion + Urls.Subtract)]
+        [Description("Compute the difference of regions.")]
+        RegionResponse SubtractRegions(
+            [Description("Name of the newly created region.")]
+            string regionName,
+            [Description("Keep all original regions.")]
+            bool? keepOriginal,
+            RegionRequest request);
+
+        #endregion
+
+        // TODO: save, load should go into the footprint service?
 
         /*
 
@@ -271,9 +320,6 @@ namespace Jhu.Footprint.Web.Api.V1
 
         */
 
-        #endregion
-        
         // TODO: add HTM cover
-#endif
     }
 }

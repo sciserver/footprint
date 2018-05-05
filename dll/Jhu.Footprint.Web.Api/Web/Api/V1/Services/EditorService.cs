@@ -248,11 +248,38 @@ namespace Jhu.Footprint.Web.Api.V1
             }
         }
 
-        private void EnsureRegionNotExisting(string regionName)
+        private void EnsureRegionNameUnique(string regionName)
         {
             if (SessionRegions.ContainsKey(regionName))
             {
                 throw Lib.Error.DuplicateRegionName("editor", "editor", regionName);
+            }
+        }
+
+        private void EnsureRegionSelectionValid(RegionRequest request, int min, int max)
+        {
+            if (request == null || request.Selection == null ||
+                request.Selection.Length == 0)
+            {
+                throw Error.SelectionNotDefined();
+            }
+
+            if (request.Selection.Length < min)
+            {
+                throw Error.SelectionTooFew(min);
+            }
+
+            if (request.Selection.Length > max)
+            {
+                throw Error.SelectionTooMany(max);
+            }
+
+            foreach (var s in request.Selection)
+            {
+                if (!SessionRegions.ContainsKey(s))
+                {
+                    throw new KeyNotFoundException();
+                }
             }
         }
 
@@ -282,7 +309,7 @@ namespace Jhu.Footprint.Web.Api.V1
         public RegionResponse CreateRegion(string regionName, RegionRequest request)
         {
             EnsureRegionNameValid(regionName);
-            EnsureRegionNotExisting(regionName);
+            EnsureRegionNameUnique(regionName);
             
             var region = new Lib.FootprintRegion();
             request.Region.GetValues(region, true);
@@ -319,7 +346,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 name = request.Region.Name;
 
                 EnsureRegionNameValid(name);
-                EnsureRegionNotExisting(name);
+                EnsureRegionNameUnique(name);
                 
                 // Renaming, so remove old one
                 SessionRegions.Remove(regionName);
@@ -352,19 +379,7 @@ namespace Jhu.Footprint.Web.Api.V1
             SessionRegions.Remove(regionName);
             InvalidateCombinedRegion();
         }
-
-        public void DeleteRegions(string regionName)
-        {
-            var keys = GetMatchingKeys(SessionRegions.Keys, regionName, null, null, out var hasBefore, out var hasAfter);
-
-            foreach (var key in keys)
-            {
-                SessionRegions.Remove(key);
-            }
-
-            InvalidateCombinedRegion();
-        }
-
+        
         public RegionListResponse ListRegions(string regionName, int? from, int? max)
         {
             var res = new List<Region>();
@@ -399,7 +414,7 @@ namespace Jhu.Footprint.Web.Api.V1
             else
             {
                 EnsureRegionNameValid(regionName);
-                EnsureRegionNotExisting(regionName);
+                EnsureRegionNameUnique(regionName);
 
                 r = new Lib.FootprintRegion(SessionFootprint);
             }
@@ -543,40 +558,93 @@ namespace Jhu.Footprint.Web.Api.V1
         }
 
         #endregion
-#if false
-        #region XXX
-        
-        #endregion
-        #region Boolean operations
+        #region Region operations
 
-        public FootprintRegionResponse CombineFootprintRegions(string regionName, string operation, bool keepOriginal, RegionRequest request)
+        public RegionResponse CopyRegion(string regionName, RegionRequest request)
         {
-            if (request.Sources == null)
+            EnsureRegionNameValid(regionName);
+            EnsureRegionNameUnique(regionName);
+            EnsureRegionSelectionValid(request, 1, 1);
+
+            var r = new Lib.FootprintRegion(SessionRegions[request.Selection[0]])
             {
-                throw new ArgumentNullException("regionNames", "The region list cannot be null.");
+                Name = regionName,
+            };
+            SessionRegions[regionName] = r;
+            return new RegionResponse(SessionFootprint, r);
+        }
+
+        public RegionResponse MoveRegion(string regionName, RegionRequest request)
+        {
+            EnsureRegionNameValid(regionName);
+            EnsureRegionNameUnique(regionName);
+            EnsureRegionSelectionValid(request, 1, 1);
+
+            var r = new Lib.FootprintRegion(SessionRegions[request.Selection[0]])
+            {
+                Name = regionName,
+            };
+            SessionRegions[regionName] = r;
+
+            SessionRegions.Remove(request.Selection[0]);
+
+            return new RegionResponse(SessionFootprint, r);
+        }
+
+        public RegionResponse GrowRegion(string regionName, double radius, bool? keepOriginal, RegionRequest request)
+        {
+            EnsureRegionNameValid(regionName);
+            EnsureRegionNameUnique(regionName);
+            EnsureRegionSelectionValid(request, 1, 1);
+
+            var r = new Lib.FootprintRegion(SessionRegions[request.Selection[0]])
+            {
+                Name = regionName,
+            };
+            r.Region.Grow(radius);
+            r.Region.Simplify();
+            SessionRegions[regionName] = r;
+
+            if (!(keepOriginal ?? false))
+            {
+                SessionRegions.Remove(request.Selection[0]);
             }
 
-            if (request.Sources.Length < 2)
-            {
-                throw new ArgumentException("At least two regions must be specified.", "regionNames");
-            }
+            return new RegionResponse(SessionFootprint, r);
+        }
 
-            if (SessionRegions.ContainsKey(regionName))
-            {
-                throw Lib.Error.DuplicateRegionName("editor", "editor", regionName);
-            }
+        public RegionResponse CHullRegion(string regionName, bool? keepOriginal, RegionRequest request)
+        {
+            // TODO
+            throw new NotImplementedException();
+        }
 
-            Lib.CombinationMethod method;
-            if (!Enum.TryParse(operation, true, out method))
-            {
-                throw new ArgumentException("Invalid boolean operation.");
-            }
+        public RegionResponse UnionRegions(string regionName, bool? keepOriginal, RegionRequest request)
+        {
+            return CombineRegions(regionName, Lib.CombinationMethod.Union, keepOriginal, request);
+        }
 
+        public RegionResponse IntersectRegions(string regionName, bool? keepOriginal, RegionRequest request)
+        {
+            return CombineRegions(regionName, Lib.CombinationMethod.Intersect, keepOriginal, request);
+        }
+
+        public RegionResponse SubtractRegions(string regionName, bool? keepOriginal, RegionRequest request)
+        {
+            return CombineRegions(regionName, Lib.CombinationMethod.Subtract, keepOriginal, request);
+        }
+
+        private RegionResponse CombineRegions(string regionName, Lib.CombinationMethod method, bool? keepOriginal, RegionRequest request)
+        {
+            EnsureRegionNameValid(regionName);
+            EnsureRegionNameUnique(regionName);
+            EnsureRegionSelectionValid(request, 2, int.MaxValue);
+            
             Spherical.Region combined = null;
 
-            for (int i = 0; i < request.Sources.Length; i++)
+            for (int i = 0; i < request.Selection.Length; i++)
             {
-                var r = SessionRegions[request.Sources[i]].Region;
+                var r = SessionRegions[request.Selection[i]].Region;
 
                 if (i == 0)
                 {
@@ -600,23 +668,24 @@ namespace Jhu.Footprint.Web.Api.V1
                     }
                 }
 
-                if (!keepOriginal)
+                if (keepOriginal ?? false)
                 {
-                    SessionRegions.Remove(request.Sources[i]);
+                    SessionRegions.Remove(request.Selection[i]);
                 }
             }
 
-            var newregion = new Region()
+            var res = new Lib.FootprintRegion(SessionFootprint)
             {
                 Name = regionName,
                 Region = combined,
             };
+            SessionRegions[regionName] = res;
 
-            SessionRegions.Add(regionName, newregion);
-            return new FootprintRegionResponse(newregion);
+            return new RegionResponse(SessionFootprint, res);
         }
 
         #endregion
+#if false
 
         /*
 
@@ -634,33 +703,6 @@ namespace Jhu.Footprint.Web.Api.V1
 
 #if false
         
-
-        public void Union(FootprintRegionRequest request)
-        {
-            var region = request.Region.GetRegion();
-            SessionRegion.SmartUnion(region);
-            SessionRegion.Simplify();
-        }
-
-        public void Intersect(FootprintRegionRequest request)
-        {
-            var region = request.Region.GetRegion();
-            SessionRegion.SmartIntersect(region, true);
-            SessionRegion.Simplify();
-        }
-
-        public void Subtract(FootprintRegionRequest request)
-        {
-            var region = request.Region.GetRegion();
-            SessionRegion.Difference(region);
-            SessionRegion.Simplify();
-        }
-
-        public void Grow(double arcmin)
-        {
-            SessionRegion.Grow(arcmin);
-            SessionRegion.Simplify();
-        }
 
         public void CHull()
         {

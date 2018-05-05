@@ -93,9 +93,7 @@ namespace Jhu.Footprint.Web.Lib
 
             return new KeyNotFoundException(message);
         }
-        
-        #endregion
 
-        
+        #endregion
     }
 }

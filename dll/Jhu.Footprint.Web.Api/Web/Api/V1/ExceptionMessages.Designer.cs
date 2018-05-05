@@ -131,5 +131,32 @@ namespace Jhu.Footprint.Web.Api.V1 {
                 return ResourceManager.GetString("OneCoordinateRepresentationRequired", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No selections defined in request..
+        /// </summary>
+        internal static string SelectionNotDefined {
+            get {
+                return ResourceManager.GetString("SelectionNotDefined", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Too few selections are specified for the operation. At least {0} required..
+        /// </summary>
+        internal static string SelectionTooFew {
+            get {
+                return ResourceManager.GetString("SelectionTooFew", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Too many selection are specified for the operation. At most {0} requied..
+        /// </summary>
+        internal static string SelectionTooMany {
+            get {
+                return ResourceManager.GetString("SelectionTooMany", resourceCulture);
+            }
+        }
     }
 }

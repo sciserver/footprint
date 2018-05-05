@@ -47,5 +47,20 @@ namespace Jhu.Footprint.Web.Api.V1
         {
             return new FootprintServiceException(ExceptionMessages.MultipleRegionsSpecified);
         }
+
+        public static ArgumentNullException SelectionNotDefined()
+        {
+            return new ArgumentNullException(ExceptionMessages.SelectionNotDefined);
+        }
+
+        public static ArgumentNullException SelectionTooFew(int min)
+        {
+            return new ArgumentNullException(String.Format(ExceptionMessages.SelectionTooFew, min));
+        }
+
+        public static ArgumentNullException SelectionTooMany(int max)
+        {
+            return new ArgumentNullException(String.Format(ExceptionMessages.SelectionTooMany, max));
+        }
     }
 }
