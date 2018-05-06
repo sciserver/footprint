@@ -263,9 +263,9 @@ namespace Jhu.Footprint.Web.Api.V1
             RegionRequest request);
 
         [OperationContract]
-        [WebInvoke(Method = HttpMethod.Put, UriTemplate = Urls.EditorRegion + Urls.Grow)]
+        [WebInvoke(Method = HttpMethod.Put, UriTemplate = Urls.EditorRegion + Urls.CHull)]
         [Description("Generate the convex hull of the regions.")]
-        RegionResponse CHullRegion(
+        RegionResponse CHullRegions(
             [Description("Name of the newly created region.")]
             string regionName,
             [Description("Keep original regions.")]

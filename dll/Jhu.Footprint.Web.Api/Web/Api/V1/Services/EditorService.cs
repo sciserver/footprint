@@ -613,10 +613,40 @@ namespace Jhu.Footprint.Web.Api.V1
             return new RegionResponse(SessionFootprint, r);
         }
 
-        public RegionResponse CHullRegion(string regionName, bool? keepOriginal, RegionRequest request)
+        public RegionResponse CHullRegions(string regionName, bool? keepOriginal, RegionRequest request)
         {
-            // TODO
-            throw new NotImplementedException();
+            EnsureRegionNameValid(regionName);
+            EnsureRegionNameUnique(regionName);
+            EnsureRegionSelectionValid(request, 1, int.MaxValue);
+
+            var points = new List<Spherical.Cartesian>();
+
+            for (int i = 0; i < request.Selection.Length; i++)
+            {
+                var ri = SessionRegions[request.Selection[i]].Region;
+                var pi = ri.Outline.GetLoopEndpoints();
+                points.AddRange(pi);
+
+                if (!(keepOriginal ?? false))
+                {
+                    SessionRegions.Remove(request.Selection[i]);
+                }
+            }
+
+            // Call hull builder and extract the region
+            var qb = new Spherical.QuickHull.QuickHullBuilder();
+            qb.BuildSphericalConvex(points);
+            var r = new Spherical.Region(qb.GetSphericalConvex(), false);
+            r.Simplify();
+
+            var rr = new Lib.FootprintRegion(SessionFootprint)
+            {
+                Name = regionName,
+                Region = r,
+            };
+            SessionRegions[regionName] = rr;
+
+            return new RegionResponse(SessionFootprint, rr);
         }
 
         public RegionResponse UnionRegions(string regionName, bool? keepOriginal, RegionRequest request)

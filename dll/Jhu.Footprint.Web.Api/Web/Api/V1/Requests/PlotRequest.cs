@@ -14,10 +14,6 @@ namespace Jhu.Footprint.Web.Api.V1
         [DefaultValue(null)]
         public Plot Plot { get; set; }
 
-        [DataMember(Name = "footprints", EmitDefaultValue = false)]
-        [DefaultValue(null)]
-        public Footprint[] Footprints { get; set; }
-
         [DataMember(Name = "regions", EmitDefaultValue = false)]
         [DefaultValue(null)]
         public Region[] Regions { get; set; }

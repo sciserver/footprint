@@ -775,7 +775,7 @@ namespace Jhu.Footprint.Web.Api.V1
         [TestMethod]
         public void CombineRegionsTest()
         {
-            foreach (var method in new[] { Lib.CombinationMethod.Union, Lib.CombinationMethod.Intersect, Lib.CombinationMethod.Subtract })
+            foreach (var method in new[] { Lib.CombinationMethod.Union, Lib.CombinationMethod.Intersect, Lib.CombinationMethod.Subtract, Lib.CombinationMethod.CHull })
             {
                 using (var session = new RestClientSession())
                 {
@@ -814,6 +814,10 @@ namespace Jhu.Footprint.Web.Api.V1
                         case Lib.CombinationMethod.Subtract:
                             nn = name + "_difference";
                             client.SubtractRegions(nn, false, req);
+                            break;
+                        case Lib.CombinationMethod.CHull:
+                            nn = name + "_chull";
+                            client.CHullRegions(nn, false, req);
                             break;
                         default:
                             throw new NotImplementedException();

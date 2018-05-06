@@ -29,9 +29,9 @@ namespace Jhu.Footprint.Web.Api.V1
         public const string Union = "?op=union" + KeepOriginal;
         public const string Intersect = "?op=intersect" + KeepOriginal;
         public const string Subtract = "?op=subtract" + KeepOriginal;
-        public const string Grow = "?op=grow&radius={radius}" + KeepOriginal;
         public const string CHull = "?op=chull" + KeepOriginal;
-
+        public const string Grow = "?op=grow&radius={radius}" + KeepOriginal;
+        
         public const string Raw = "/raw";
         public const string Outline = "/outline";
         public const string OutlinePoints = "/outline/points?sys={sys}&rep={rep}&res={resolution}&reduce={reduce}&limit={limit}";
