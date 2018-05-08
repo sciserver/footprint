@@ -17,13 +17,13 @@ namespace Jhu.Footprint.Web.Api.V1
     {
         public const string MimeTypeStc = "text/xml";
 
-        public override string[] GetSupportedMimeTypes()
+        public override List<RestBodyFormat> GetSupportedFormats()
         {
-            return new string[]
+            return new List<RestBodyFormat>()
             {
-                Jhu.Graywulf.Web.Services.Constants.MimeTypeBinary,
-                Jhu.Graywulf.Web.Services.Constants.MimeTypeText,
-                MimeTypeStc,
+                RestBodyFormats.Text,
+                new RestBodyFormat("binary", "dat", Jhu.Graywulf.Web.Services.Constants.MimeTypeBinary),
+                new RestBodyFormat("stc", "stc", MimeTypeStc),
             };
         }
 

@@ -32,14 +32,14 @@ namespace Jhu.Footprint.Web.Api.V1
         public const string CHull = "/chull" + KeepOriginal;
         public const string Grow = "/grow" + KeepOriginal + "&radius={radius}";
         
-        public const string Raw = "/raw";
         public const string Outline = "/outline";
         public const string OutlinePoints = "/outline/points?sys={sys}&rep={rep}&res={resolution}&reduce={reduce}&limit={limit}";
-        public const string Plot = "/plot?proj={projection}&sys={sys}&lon={lon}&lat={lat}&width={width}&height={height}&theme={colorTheme}&zoom={autoZoom}&rotate={autoRotate}&grid={grid}&degStyle={degreeStyle}";
-        public const string PlotAdvanced = "/plot";
+        public const string Plot = "/plot";
         public const string Thumbnail = "/thumbnail";
 
+        public const string Raw = "/raw";
         public const string KeepOriginal = "?keepOrig={keepOriginal}";
         public const string Paging = "&from={from}&max={max}";
+        public const string PlotDetails = "?proj={projection}&sys={sys}&lon={lon}&lat={lat}&width={width}&height={height}&theme={colorTheme}&zoom={autoZoom}&rotate={autoRotate}&grid={grid}&degStyle={degreeStyle}";
     }
 }

@@ -8,7 +8,7 @@ using System.ComponentModel;
 
 namespace Jhu.Footprint.Web.Api.V1
 {
-    [DataContract(Name = "links")]
+    [DataContract]
     public class Links
     {
         [DataMember(Name = "self", EmitDefaultValue = false)]

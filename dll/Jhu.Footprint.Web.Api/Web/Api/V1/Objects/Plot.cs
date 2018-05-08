@@ -9,7 +9,7 @@ using Jhu.Spherical.Visualizer;
 
 namespace Jhu.Footprint.Web.Api.V1
 {
-    [DataContract(Name = "plot")]
+    [DataContract]
     [Description("Footprint plot prameters")]
     public class Plot
     {

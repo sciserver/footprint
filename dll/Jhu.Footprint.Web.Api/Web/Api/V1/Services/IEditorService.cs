@@ -85,7 +85,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
         [OperationContract]
         [PlotFormatter]
-        [WebGet(UriTemplate = Urls.EditorFootprint + Urls.Plot, BodyStyle = WebMessageBodyStyle.Bare)]
+        [WebGet(UriTemplate = Urls.EditorFootprint + Urls.Plot + Urls.PlotDetails, BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Plots the footprint")]
         [return: Description("The plot as an image in various formats.")]
         Spherical.Visualizer.Plot PlotFootprint(
@@ -113,7 +113,7 @@ namespace Jhu.Footprint.Web.Api.V1
             DegreeStyle? degreeStyle);
 
         [OperationContract]
-        [WebInvoke(Method = HttpMethod.Post, UriTemplate = Urls.EditorFootprint + Urls.PlotAdvanced, BodyStyle = WebMessageBodyStyle.Bare)]
+        [WebInvoke(Method = HttpMethod.Post, UriTemplate = Urls.EditorFootprint + Urls.Plot, BodyStyle = WebMessageBodyStyle.Bare)]
         [PlotFormatter]
         [Description("Plots the footprint, with advanced parameters")]
         [return: Description("The plot as an image in various formats.")]
@@ -193,7 +193,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
         [OperationContract]
         [PlotFormatter]
-        [WebGet(UriTemplate = Urls.EditorRegion + Urls.Plot, BodyStyle = WebMessageBodyStyle.Bare)]
+        [WebGet(UriTemplate = Urls.EditorRegion + Urls.Plot + Urls.PlotDetails, BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Plots the region")]
         [return: Description("The plot as an image in various formats.")]
         Spherical.Visualizer.Plot PlotRegion(
@@ -222,7 +222,7 @@ namespace Jhu.Footprint.Web.Api.V1
             DegreeStyle? degreeStyle);
 
         [OperationContract]
-        [WebInvoke(Method = HttpMethod.Post, UriTemplate = Urls.EditorRegion + Urls.PlotAdvanced, BodyStyle = WebMessageBodyStyle.Bare)]
+        [WebInvoke(Method = HttpMethod.Post, UriTemplate = Urls.EditorRegion + Urls.Plot, BodyStyle = WebMessageBodyStyle.Bare)]
         [PlotFormatter]
         [Description("Plots the footprint, with advanced parameters")]
         [return: Description("The plot as an image in various formats.")]

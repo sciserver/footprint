@@ -15,11 +15,11 @@ namespace Jhu.Footprint.Web.Api.V1
 {
     public class OutlineAdapter : StreamingRawAdapter<Spherical.Outline>
     {
-        public override string[] GetSupportedMimeTypes()
+        public override List<RestBodyFormat> GetSupportedFormats()
         {
-            return new string[]
+            return new List<RestBodyFormat>()
             {
-                Jhu.Graywulf.Web.Services.Constants.MimeTypeText,
+                RestBodyFormats.Text,
             };
         }
 

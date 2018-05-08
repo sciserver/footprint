@@ -18,17 +18,17 @@ namespace Jhu.Footprint.Web.Api.V1
 {
     public class PlotAdapter : StreamingRawAdapter<Spherical.Visualizer.Plot>
     {
-        public override string[] GetSupportedMimeTypes()
+        public override List<RestBodyFormat> GetSupportedFormats()
         {
-            return new string[]
+            return new List<RestBodyFormat>()
             {
-                Jhu.Graywulf.Web.Services.Constants.MimeTypeJpeg,
-                Jhu.Graywulf.Web.Services.Constants.MimeTypePng,
-                Jhu.Graywulf.Web.Services.Constants.MimeTypeGif,
-                Jhu.Graywulf.Web.Services.Constants.MimeTypeBmp,
-                Jhu.Graywulf.Web.Services.Constants.MimeTypePdf,
-                Jhu.Graywulf.Web.Services.Constants.MimeTypeEps,
-                Jhu.Graywulf.Web.Services.Constants.MimeTypeEmf,
+                RestBodyFormats.Png,
+                RestBodyFormats.Jpeg,
+                RestBodyFormats.Gif,
+                RestBodyFormats.Bmp,
+                RestBodyFormats.Pdf,
+                RestBodyFormats.Eps,
+                RestBodyFormats.Emf,
             };
         }
 

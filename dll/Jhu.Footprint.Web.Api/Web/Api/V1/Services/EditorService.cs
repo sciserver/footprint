@@ -527,7 +527,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 AutoZoom = autoZoom,
                 AutoRotate = autoRotate,
                 GridVisible = grid,
-                DegreeStyle = degreeStyle
+                DegreeStyle = degreeStyle,
             };
 
             // TODO: multiple plot doesn't conform to URI scheme

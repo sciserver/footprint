@@ -665,7 +665,7 @@ namespace Jhu.Footprint.Web.Api.V1
         }
 
         [TestMethod]
-        public void PloRegionAdvancedTest()
+        public void PlotRegionAdvancedTest()
         {
             using (var session = new RestClientSession())
             {

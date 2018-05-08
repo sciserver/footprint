@@ -12,7 +12,7 @@ using Lib = Jhu.Footprint.Web.Lib;
 
 namespace Jhu.Footprint.Web.Api.V1
 {
-    [DataContract(Name = "footprint")]
+    [DataContract]
     [Description("A footprint is a collection of regions representing the sky coverage of observations.")]
     public class Footprint
     {
