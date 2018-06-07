@@ -38,7 +38,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
         #region Request
 
-        protected override object OnDeserializeRequest(Stream stream, string contentType, Type parameterType)
+        protected override object OnDeserialize(Stream stream, string contentType, Type parameterType)
         {
             switch (contentType)
             {
@@ -82,7 +82,7 @@ namespace Jhu.Footprint.Web.Api.V1
         #endregion
         #region Response
 
-        protected override void OnSerializeResponse(Stream stream, string contentType, Type parameterType, object value)
+        protected override void OnSerialize(Stream stream, string contentType, Type parameterType, object value)
         {
             var region = (Spherical.Region)value;
 
