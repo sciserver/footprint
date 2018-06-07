@@ -22,6 +22,10 @@ namespace Jhu.Footprint.Web.Api.V1
         [Description("Coordinates of the second corner.")]
         public Point P2 { get; set; }
 
+        public Rect()
+        {
+        }
+
         public override Spherical.Region GetRegion()
         {
             var p1 = P1.ToCartesian();

@@ -23,6 +23,10 @@ namespace Jhu.Footprint.Web.Api.V1
         [DefaultValue(null)]
         public Links Links { get; set; }
 
+        public FootprintResponse()
+        {
+        }
+
         public FootprintResponse(Footprint footprint)
         {
             Footprint = footprint;

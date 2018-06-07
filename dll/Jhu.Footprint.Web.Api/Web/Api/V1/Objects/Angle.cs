@@ -31,6 +31,10 @@ namespace Jhu.Footprint.Web.Api.V1
         [Description("Angle in arc seconds")]
         public double? ArcSeconds { get; set; }
 
+        public Angle()
+        {
+        }
+
         public double ToDegrees()
         {
             EnsureValid();

@@ -17,6 +17,10 @@ namespace Jhu.Footprint.Web.Api.V1
         [Description("Coordinate points. Avoid bowties.")]
         public Point[] Points { get; set; }
 
+        public Poly()
+        {
+        }
+
         public override Spherical.Region GetRegion()
         {
             var points = new Cartesian[Points.Length];

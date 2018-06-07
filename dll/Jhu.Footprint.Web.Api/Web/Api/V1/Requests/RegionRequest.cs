@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
 using System.ComponentModel;
+using Util = Jhu.Graywulf.Web.Api.Util;
 
 namespace Jhu.Footprint.Web.Api.V1
 {

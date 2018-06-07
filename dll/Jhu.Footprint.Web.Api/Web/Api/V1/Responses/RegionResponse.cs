@@ -22,6 +22,10 @@ namespace Jhu.Footprint.Web.Api.V1
         [DefaultValue(null)]
         public Links Links { get; set; }
 
+        public RegionResponse()
+        {
+        }
+
         public RegionResponse(Region region)
         {
             Region = region;

@@ -31,6 +31,10 @@ namespace Jhu.Footprint.Web.Api.V1
         [Description("Third Euler angle.")]
         public double? Gamma { get; set; }
 
+        public Rotation()
+        {
+        }
+
         public Spherical.Rotation GetRotation()
         {
             if (rotation == null)

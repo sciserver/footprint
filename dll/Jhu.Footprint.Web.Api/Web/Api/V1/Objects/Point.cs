@@ -49,6 +49,10 @@ namespace Jhu.Footprint.Web.Api.V1
         [Description("Cartesian Z coordinate of unit vector.")]
         public double? Cz { get; set; }
 
+        public Point()
+        {
+        }
+
         public Cartesian ToCartesian()
         {
             if (RA != null && Dec != null && (Lon.HasValue || Lat.HasValue || Cx.HasValue || Cy.HasValue && Cz.HasValue) ||

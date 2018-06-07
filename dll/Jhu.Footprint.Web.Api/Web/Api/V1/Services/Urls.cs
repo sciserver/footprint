@@ -25,7 +25,7 @@ namespace Jhu.Footprint.Web.Api.V1
         public const string RegionSearchParams = "regionName={regionName}";
 
         public const string Copy = "/copy";
-        public const string Move = "/move";
+        public const string Rename = "/rename";
         public const string Union = "/union" + KeepOriginal;
         public const string Intersect = "/intersect" + KeepOriginal;
         public const string Subtract = "/subtract" + KeepOriginal;

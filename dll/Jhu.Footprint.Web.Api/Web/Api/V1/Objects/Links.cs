@@ -26,5 +26,9 @@ namespace Jhu.Footprint.Web.Api.V1
         [DataMember(Name = "next", EmitDefaultValue = false)]
         [DefaultValue(null)]
         public Uri Next { get; set; }
+
+        public Links()
+        {
+        }
     }
 }

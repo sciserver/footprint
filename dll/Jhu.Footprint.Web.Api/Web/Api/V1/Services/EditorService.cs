@@ -574,7 +574,7 @@ namespace Jhu.Footprint.Web.Api.V1
             return new RegionResponse(SessionFootprint, r);
         }
 
-        public RegionResponse MoveRegion(string regionName, RegionRequest request)
+        public RegionResponse RenameRegion(string regionName, RegionRequest request)
         {
             EnsureRegionNameValid(regionName);
             EnsureRegionNameUnique(regionName);

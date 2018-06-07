@@ -1,23 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
-using System.Xml.Serialization;
 using System.IO;
-using System.Net;
-using System.ServiceModel;
-using System.ServiceModel.Channels;
-using System.Drawing;
 using System.Drawing.Imaging;
-using Jhu.Graywulf.Web.Services;
-using Jhu.Spherical.Visualizer;
+using Jhu.Graywulf.Web.Services.Serialization;
 
 namespace Jhu.Footprint.Web.Api.V1
 {
-    public class PlotAdapter : StreamingRawAdapter<Spherical.Visualizer.Plot>
+    public class PlotFormatter : RawMessageFormatterBase
     {
+        public PlotFormatter()
+        {
+        }
+
+        protected override Type GetFormattedType()
+        {
+            return typeof(Spherical.Visualizer.Plot);
+        }
+
         public override List<RestBodyFormat> GetSupportedFormats()
         {
             return new List<RestBodyFormat>()
@@ -34,7 +33,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
         #region Request
 
-        protected override Spherical.Visualizer.Plot OnDeserializeRequest(Stream stream, string contentType)
+        protected override object OnDeserializeRequest(Stream stream, string contentType, Type parameterType)
         {
             throw new NotImplementedException();
         }
@@ -42,19 +41,21 @@ namespace Jhu.Footprint.Web.Api.V1
         #endregion
         #region Response
 
-        protected override void OnSerializeResponse(Stream stream, string contentType, Spherical.Visualizer.Plot plot)
+        protected override void OnSerializeResponse(Stream stream, string contentType, Type parameterType, object value)
         {
+            var plot = (Spherical.Visualizer.Plot)value;
+
             switch (contentType)
             {
-                case Jhu.Graywulf.Web.Services.Constants.MimeTypeJpeg:
-                case Jhu.Graywulf.Web.Services.Constants.MimeTypePng:
-                case Jhu.Graywulf.Web.Services.Constants.MimeTypeGif:
-                case Jhu.Graywulf.Web.Services.Constants.MimeTypeBmp:
+                case Jhu.Graywulf.Web.Services.Serialization.Constants.MimeTypeJpeg:
+                case Jhu.Graywulf.Web.Services.Serialization.Constants.MimeTypePng:
+                case Jhu.Graywulf.Web.Services.Serialization.Constants.MimeTypeGif:
+                case Jhu.Graywulf.Web.Services.Serialization.Constants.MimeTypeBmp:
                     WriteAsBitmap(stream, plot, contentType);
                     break;
-                case Jhu.Graywulf.Web.Services.Constants.MimeTypePdf:
-                case Jhu.Graywulf.Web.Services.Constants.MimeTypeEps:
-                case Jhu.Graywulf.Web.Services.Constants.MimeTypeEmf:
+                case Jhu.Graywulf.Web.Services.Serialization.Constants.MimeTypePdf:
+                case Jhu.Graywulf.Web.Services.Serialization.Constants.MimeTypeEps:
+                case Jhu.Graywulf.Web.Services.Serialization.Constants.MimeTypeEmf:
                 default:
                     throw new NotImplementedException();
             }
@@ -66,16 +67,16 @@ namespace Jhu.Footprint.Web.Api.V1
 
             switch (contentType)
             {
-                case Jhu.Graywulf.Web.Services.Constants.MimeTypeJpeg:
+                case Jhu.Graywulf.Web.Services.Serialization.Constants.MimeTypeJpeg:
                     format = ImageFormat.Jpeg;
                     break;
-                case Jhu.Graywulf.Web.Services.Constants.MimeTypePng:
+                case Jhu.Graywulf.Web.Services.Serialization.Constants.MimeTypePng:
                     format = ImageFormat.Png;
                     break;
-                case Jhu.Graywulf.Web.Services.Constants.MimeTypeGif:
+                case Jhu.Graywulf.Web.Services.Serialization.Constants.MimeTypeGif:
                     format = ImageFormat.Gif;
                     break;
-                case Jhu.Graywulf.Web.Services.Constants.MimeTypeBmp:
+                case Jhu.Graywulf.Web.Services.Serialization.Constants.MimeTypeBmp:
                     format = ImageFormat.Bmp;
                     break;
                 default:
@@ -89,13 +90,13 @@ namespace Jhu.Footprint.Web.Api.V1
         {
             switch (contentType)
             {
-                case Jhu.Graywulf.Web.Services.Constants.MimeTypePdf:
+                case Jhu.Graywulf.Web.Services.Serialization.Constants.MimeTypePdf:
                     plot.RenderToPdf(stream);
                     break;
-                case Jhu.Graywulf.Web.Services.Constants.MimeTypeEps:
+                case Jhu.Graywulf.Web.Services.Serialization.Constants.MimeTypeEps:
                     plot.RenderToEps(stream);
                     break;
-                case Jhu.Graywulf.Web.Services.Constants.MimeTypeEmf:
+                case Jhu.Graywulf.Web.Services.Serialization.Constants.MimeTypeEmf:
                     plot.RenderToEmf(stream);
                     break;
                 default:

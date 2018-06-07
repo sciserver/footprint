@@ -77,15 +77,9 @@
       <DependentUpon>ExceptionMessages.resx</DependentUpon>
     </Compile>
     <Compile Include="Web\Api\V1\FootprintServiceException.cs" />
-    <Compile Include="Web\Api\V1\Formatters\OutlineAdapter.cs" />
-    <Compile Include="Web\Api\V1\Formatters\OutlineFormatterAttribute.cs" />
-    <Compile Include="Web\Api\V1\Formatters\OutlineRawFormatter.cs" />
-    <Compile Include="Web\Api\V1\Formatters\PlotAdapter.cs" />
-    <Compile Include="Web\Api\V1\Formatters\PlotFormatterAttribute.cs" />
-    <Compile Include="Web\Api\V1\Formatters\PlotRawFormatter.cs" />
-    <Compile Include="Web\Api\V1\Formatters\RegionAdapter.cs" />
-    <Compile Include="Web\Api\V1\Formatters\RegionFormatterAttribute.cs" />
-    <Compile Include="Web\Api\V1\Formatters\RegionRawFormatter.cs" />
+    <Compile Include="Web\Api\V1\Formatters\OutlineFormatter.cs" />
+    <Compile Include="Web\Api\V1\Formatters\PlotFormatter.cs" />
+    <Compile Include="Web\Api\V1\Formatters\RegionFormatter.cs" />
     <Compile Include="Web\Api\V1\Objects\Angle.cs" />
     <Compile Include="Web\Api\V1\Objects\Circle.cs" />
     <Compile Include="Web\Api\V1\Objects\Footprint.cs" />

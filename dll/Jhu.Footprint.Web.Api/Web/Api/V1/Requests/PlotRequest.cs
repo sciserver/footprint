@@ -21,5 +21,9 @@ namespace Jhu.Footprint.Web.Api.V1
         [DataMember(Name = "selection", EmitDefaultValue = false)]
         [DefaultValue(null)]
         public string[] Selection { get; set; }
+
+        public PlotRequest()
+        {
+        }
     }
 }

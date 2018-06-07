@@ -22,6 +22,10 @@ namespace Jhu.Footprint.Web.Api.V1
         [Description("Radius of the circle.")]
         public Angle Radius { get; set; }
 
+        public Circle()
+        {
+        }
+
         public override Spherical.Region GetRegion()
         {
             var c = Center.ToCartesian();

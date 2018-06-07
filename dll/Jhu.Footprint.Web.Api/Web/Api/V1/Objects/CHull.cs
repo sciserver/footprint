@@ -17,6 +17,10 @@ namespace Jhu.Footprint.Web.Api.V1
         [Description("Coordinate points. Must be on a single hemisphere")]
         public Point[] Points { get; set; }
 
+        public CHull()
+        {
+        }
+
         public override Spherical.Region GetRegion()
         {
             var points = new Cartesian[Points.Length];

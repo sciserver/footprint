@@ -1,41 +1,50 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web;
+using System.ServiceModel.Dispatcher;
+using System.ServiceModel.Description;
+using System.ServiceModel.Channels;
+using System.ServiceModel.Web;
+using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
-using System.IO;
-using System.Net;
-using System.ServiceModel;
-using System.ServiceModel.Channels;
-using Jhu.Graywulf.Web.Services;
+using Jhu.Graywulf.Web.Services.Serialization;
 
 namespace Jhu.Footprint.Web.Api.V1
 {
-    public class RegionAdapter : StreamingRawAdapter<Spherical.Region>
+    public class RegionFormatter : RawMessageFormatterBase
     {
         public const string MimeTypeStc = "text/xml";
+
+        public RegionFormatter()
+        {
+        }
+
+        protected override Type GetFormattedType()
+        {
+            return typeof(Spherical.Region);
+        }
 
         public override List<RestBodyFormat> GetSupportedFormats()
         {
             return new List<RestBodyFormat>()
             {
                 RestBodyFormats.Text,
-                new RestBodyFormat("binary", "dat", Jhu.Graywulf.Web.Services.Constants.MimeTypeBinary),
+                new RestBodyFormat("binary", "dat", Jhu.Graywulf.Web.Services.Serialization.Constants.MimeTypeBinary),
                 new RestBodyFormat("stc", "stc", MimeTypeStc),
             };
         }
 
         #region Request
 
-        protected override Spherical.Region OnDeserializeRequest(Stream stream, string contentType)
+        protected override object OnDeserializeRequest(Stream stream, string contentType, Type parameterType)
         {
             switch (contentType)
             {
-                case Jhu.Graywulf.Web.Services.Constants.MimeTypeText:
+                case Jhu.Graywulf.Web.Services.Serialization.Constants.MimeTypeText:
                     return ReadAsText(stream);
-                case Jhu.Graywulf.Web.Services.Constants.MimeTypeBinary:
+                case Jhu.Graywulf.Web.Services.Serialization.Constants.MimeTypeBinary:
                     return ReadAsBinary(stream);
                 case MimeTypeStc:
                     return ReadAsStc(stream);
@@ -73,20 +82,22 @@ namespace Jhu.Footprint.Web.Api.V1
         #endregion
         #region Response
 
-        protected override void OnSerializeResponse(Stream stream, string contentType, Spherical.Region value)
+        protected override void OnSerializeResponse(Stream stream, string contentType, Type parameterType, object value)
         {
-            if (value != null)
+            var region = (Spherical.Region)value;
+
+            if (region != null)
             {
                 switch (contentType)
                 {
-                    case Jhu.Graywulf.Web.Services.Constants.MimeTypeText:
-                        WriteAsText(stream, value);
+                    case Jhu.Graywulf.Web.Services.Serialization.Constants.MimeTypeText:
+                        WriteAsText(stream, region);
                         break;
-                    case Jhu.Graywulf.Web.Services.Constants.MimeTypeBinary:
-                        WriteAsBinary(stream, value);
+                    case Jhu.Graywulf.Web.Services.Serialization.Constants.MimeTypeBinary:
+                        WriteAsBinary(stream, region);
                         break;
                     case MimeTypeStc:
-                        WriteAsStc(stream, value);
+                        WriteAsStc(stream, region);
                         break;
                     default:
                         throw new NotImplementedException();

@@ -737,7 +737,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 {
                     Selection = new[] { name }
                 };
-                client.MoveRegion(name + "_copy", req2);
+                client.RenameRegion(name + "_copy", req2);
 
                 var r1 = client.GetRegion(name + "_copy");
                 Assert.AreEqual(name + "_copy", r1.Region.Name);

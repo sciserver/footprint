@@ -24,41 +24,20 @@ namespace Jhu.Footprint.Web.Api.V1
         [Description("Height of plot. Pixels for bitmaps, inches for vectors.")]
         public float? Height { get; set; }
 
-        [IgnoreDataMember]
-        public ColorTheme? ColorTheme { get; set; }
-
         [DataMember(Name = "theme", EmitDefaultValue = false)]
         [DefaultValue(null)]
         [Description("Color theme")]
-        public string ColorTheme_ForXml
-        {
-            get { return Util.EnumFormatter.ToNullableXmlString(ColorTheme); }
-            set { ColorTheme = Util.EnumFormatter.FromNullableXmlString<ColorTheme>(value); }
-        }
-
-        [IgnoreDataMember]
-        public Projection? Projection { get; set; }
+        public ColorTheme? ColorTheme { get; set; }
 
         [DataMember(Name = "proj", EmitDefaultValue = false)]
         [DefaultValue(null)]
         [Description("Projection. Valid values: TODO")]
-        public string Projection_ForXml
-        {
-            get { return Util.EnumFormatter.ToNullableXmlString(Projection); }
-            set { Projection = Util.EnumFormatter.FromNullableXmlString<Projection>(value); }
-        }
-
-        [IgnoreDataMember]
-        public CoordinateSystem? CoordinateSystem { get; set; }
+        public Projection? Projection { get; set; }
 
         [DataMember(Name = "sys", EmitDefaultValue = false)]
         [DefaultValue(null)]
         [Description("Coordinate system. Valid values: eq, gal.")]
-        public string CoordinateSystem_ForXml
-        {
-            get { return Util.EnumFormatter.ToNullableXmlString(CoordinateSystem); }
-            set { CoordinateSystem = Util.EnumFormatter.FromNullableXmlString<CoordinateSystem>(value); }
-        }
+        public CoordinateSystem? CoordinateSystem { get; set; }
 
         [DataMember(Name = "lon", EmitDefaultValue = false)]
         [DefaultValue(null)]
@@ -90,17 +69,10 @@ namespace Jhu.Footprint.Web.Api.V1
         [Description("Grid line density.")]
         public float? GridDensity { get; set; }
 
-        [IgnoreDataMember]
-        public CoordinateSystem? GridCoordinateSystem { get; set; }
-
         [DataMember(Name = "gridSys", EmitDefaultValue = false)]
         [DefaultValue(null)]
         [Description("Coordinate system. Valid values: eq, gal.")]
-        public string GridCoordinateSystem_ForXml
-        {
-            get { return Util.EnumFormatter.ToNullableXmlString(GridCoordinateSystem); }
-            set { GridCoordinateSystem = Util.EnumFormatter.FromNullableXmlString<CoordinateSystem>(value); }
-        }
+        public CoordinateSystem? GridCoordinateSystem { get; set; }
 
         [DataMember(Name = "axesVisible", EmitDefaultValue = false)]
         [DefaultValue(null)]
@@ -112,18 +84,11 @@ namespace Jhu.Footprint.Web.Api.V1
         [Description("Axis labels visible.")]
         public bool? AxisLabelsVisible { get; set; }
 
-        [IgnoreDataMember]
-        public DegreeStyle? DegreeStyle { get; set; }
-
         [DataMember(Name = "degreeStyle", EmitDefaultValue = false)]
         [DefaultValue(null)]
         [Description("Degree style. Valid values: hms, decimal")]
-        public string DegreeStyle_ForXml
-        {
-            get { return Util.EnumFormatter.ToNullableXmlString(DegreeStyle); }
-            set { DegreeStyle = Util.EnumFormatter.FromNullableXmlString<DegreeStyle>(value); }
-        }
-
+        public DegreeStyle? DegreeStyle { get; set; }
+        
         [DataMember(Name = "fontSize", EmitDefaultValue = false)]
         [DefaultValue(null)]
         [Description("Font size in points.")]

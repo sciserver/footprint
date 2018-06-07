@@ -26,18 +26,11 @@ namespace Jhu.Footprint.Web.Api.V1
         [Description("Name of the folder containing the footprint.")]
         public string Name { get; set; }
 
-        [IgnoreDataMember]
-        public Lib.CombinationMethod? CombinationMethod { get; set; }
-
         [DataMember(Name = "combinationMethod", EmitDefaultValue = false)]
         [DefaultValue(null)]
         [Description("Method to combine regions: none, union or intersection.")]
-        public string CombinationMethod_ForXml
-        {
-            get { return Util.EnumFormatter.ToNullableXmlString(CombinationMethod); }
-            set { CombinationMethod = Util.EnumFormatter.FromNullableXmlString<Lib.CombinationMethod>(value); }
-        }
-                
+        public Lib.CombinationMethod? CombinationMethod { get; set; }
+                        
         [DataMember(Name = "comments", EmitDefaultValue = false)]
         [DefaultValue(null)]
         [Description("Comments.")]
