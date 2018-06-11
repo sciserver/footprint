@@ -57,6 +57,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 case Jhu.Graywulf.Web.Services.Serialization.Constants.MimeTypeEps:
                 case Jhu.Graywulf.Web.Services.Serialization.Constants.MimeTypeEmf:
                 default:
+                    // TODO: wire these up to visualizer lib
                     throw new NotImplementedException();
             }
         }
