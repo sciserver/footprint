@@ -159,7 +159,8 @@ namespace Jhu.Footprint.Web.Api.V1
         [RawFormat(typeof(RegionFormatter))]
         [WebInvoke(Method = HttpMethod.Put, UriTemplate = Urls.EditorRegion + Urls.Raw, BodyStyle = WebMessageBodyStyle.Bare)]
         [Description("Upload a region binary or other representation")]
-        void UploadRegion(string regionName, Spherical.Region region);
+        [return: Description("The header information of the newly created region.")]
+        RegionResponse UploadRegion(string regionName, Spherical.Region region);
 
         [OperationContract]
         [RawFormat(typeof(OutlineFormatter))]

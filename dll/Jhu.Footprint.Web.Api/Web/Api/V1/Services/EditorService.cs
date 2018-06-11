@@ -403,7 +403,7 @@ namespace Jhu.Footprint.Web.Api.V1
             return SessionRegions[regionName].Region;
         }
 
-        public void UploadRegion(string regionName, Spherical.Region region)
+        public RegionResponse UploadRegion(string regionName, Spherical.Region region)
         {
             Lib.FootprintRegion r;
 
@@ -423,6 +423,8 @@ namespace Jhu.Footprint.Web.Api.V1
             SessionRegions[regionName] = r;
 
             UpdateCombinedRegion(region);
+
+            return new RegionResponse(new Region(SessionFootprint, SessionRegions[regionName]));
         }
 
         public Spherical.Outline DownloadRegionOutline(string regionName)
