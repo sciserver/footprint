@@ -593,7 +593,7 @@ namespace Jhu.Footprint.Web.Api.V1
             return new RegionResponse(SessionFootprint, r);
         }
 
-        public RegionResponse GrowRegion(string regionName, double radius, bool? keepOriginal, RegionRequest request)
+        public RegionResponse GrowRegion(string regionName, double radius, RegionRequest request)
         {
             EnsureRegionNameValid(regionName);
             EnsureRegionNameUnique(regionName);
@@ -607,7 +607,7 @@ namespace Jhu.Footprint.Web.Api.V1
             r.Region.Simplify();
             SessionRegions[regionName] = r;
 
-            if (!(keepOriginal ?? false))
+            if (!(request.KeepOriginal ?? false))
             {
                 SessionRegions.Remove(request.Selection[0]);
             }
@@ -615,7 +615,7 @@ namespace Jhu.Footprint.Web.Api.V1
             return new RegionResponse(SessionFootprint, r);
         }
 
-        public RegionResponse CHullRegions(string regionName, bool? keepOriginal, RegionRequest request)
+        public RegionResponse CHullRegions(string regionName, RegionRequest request)
         {
             EnsureRegionNameValid(regionName);
             EnsureRegionNameUnique(regionName);
@@ -629,7 +629,7 @@ namespace Jhu.Footprint.Web.Api.V1
                 var pi = ri.Outline.GetLoopEndpoints();
                 points.AddRange(pi);
 
-                if (!(keepOriginal ?? false))
+                if (!(request.KeepOriginal ?? false))
                 {
                     SessionRegions.Remove(request.Selection[i]);
                 }
@@ -651,22 +651,22 @@ namespace Jhu.Footprint.Web.Api.V1
             return new RegionResponse(SessionFootprint, rr);
         }
 
-        public RegionResponse UnionRegions(string regionName, bool? keepOriginal, RegionRequest request)
+        public RegionResponse UnionRegions(string regionName, RegionRequest request)
         {
-            return CombineRegions(regionName, Lib.CombinationMethod.Union, keepOriginal, request);
+            return CombineRegions(regionName, Lib.CombinationMethod.Union, request);
         }
 
-        public RegionResponse IntersectRegions(string regionName, bool? keepOriginal, RegionRequest request)
+        public RegionResponse IntersectRegions(string regionName, RegionRequest request)
         {
-            return CombineRegions(regionName, Lib.CombinationMethod.Intersect, keepOriginal, request);
+            return CombineRegions(regionName, Lib.CombinationMethod.Intersect, request);
         }
 
-        public RegionResponse SubtractRegions(string regionName, bool? keepOriginal, RegionRequest request)
+        public RegionResponse SubtractRegions(string regionName, RegionRequest request)
         {
-            return CombineRegions(regionName, Lib.CombinationMethod.Subtract, keepOriginal, request);
+            return CombineRegions(regionName, Lib.CombinationMethod.Subtract, request);
         }
 
-        private RegionResponse CombineRegions(string regionName, Lib.CombinationMethod method, bool? keepOriginal, RegionRequest request)
+        private RegionResponse CombineRegions(string regionName, Lib.CombinationMethod method, RegionRequest request)
         {
             EnsureRegionNameValid(regionName);
             EnsureRegionNameUnique(regionName);
@@ -700,7 +700,7 @@ namespace Jhu.Footprint.Web.Api.V1
                     }
                 }
 
-                if (keepOriginal ?? false)
+                if (!(request.KeepOriginal ?? false))
                 {
                     SessionRegions.Remove(request.Selection[i]);
                 }

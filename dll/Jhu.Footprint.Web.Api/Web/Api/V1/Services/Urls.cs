@@ -26,11 +26,11 @@ namespace Jhu.Footprint.Web.Api.V1
 
         public const string Copy = "/copy";
         public const string Rename = "/rename";
-        public const string Union = "/union" + KeepOriginal;
-        public const string Intersect = "/intersect" + KeepOriginal;
-        public const string Subtract = "/subtract" + KeepOriginal;
-        public const string CHull = "/chull" + KeepOriginal;
-        public const string Grow = "/grow" + KeepOriginal + "&radius={radius}";
+        public const string Union = "/union";
+        public const string Intersect = "/intersect";
+        public const string Subtract = "/subtract";
+        public const string CHull = "/chull";
+        public const string Grow = "/grow?radius={radius}";
         
         public const string Outline = "/outline";
         public const string OutlinePoints = "/outline/points?sys={sys}&rep={rep}&res={resolution}&reduce={reduce}&limit={limit}";
@@ -38,7 +38,6 @@ namespace Jhu.Footprint.Web.Api.V1
         public const string Thumbnail = "/thumbnail";
 
         public const string Raw = "/raw";
-        public const string KeepOriginal = "?keepOrig={keepOriginal}";
         public const string Paging = "&from={from}&max={max}";
         public const string PlotDetails = "?proj={projection}&sys={sys}&lon={lon}&lat={lat}&width={width}&height={height}&theme={colorTheme}&zoom={autoZoom}&rotate={autoRotate}&grid={grid}&degStyle={degreeStyle}";
     }

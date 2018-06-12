@@ -32,6 +32,11 @@ namespace Jhu.Footprint.Web.Api.V1
         [Description("When performing operations, conveys the name of source regions.")]
         public string[] Selection { get; set; }
 
+        [DataMember(Name = "keepOriginal", EmitDefaultValue = false)]
+        [DefaultValue(null)]
+        [Description("Keep original region.")]
+        public bool? KeepOriginal { get; set; }
+
         public RegionRequest()
         {
         }
@@ -41,6 +46,7 @@ namespace Jhu.Footprint.Web.Api.V1
             this.Region = region;
             this.CoordinateSystem = V1.CoordinateSystem.EqJ2000;
             this.Rotation = null;
+            this.KeepOriginal = null;
         }
     }
 

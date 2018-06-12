@@ -253,8 +253,6 @@ namespace Jhu.Footprint.Web.Api.V1
             string regionName,
             [Description("Growth radius in arc minutes.")]
             double radius,
-            [Description("Keep original region.")]
-            bool? keepOriginal,
             RegionRequest request);
 
         [OperationContract]
@@ -263,8 +261,6 @@ namespace Jhu.Footprint.Web.Api.V1
         RegionResponse CHullRegions(
             [Description("Name of the newly created region.")]
             string regionName,
-            [Description("Keep original regions.")]
-            bool? keepOriginal,
             RegionRequest request);
 
         [OperationContract]
@@ -273,8 +269,6 @@ namespace Jhu.Footprint.Web.Api.V1
         RegionResponse UnionRegions(
             [Description("Name of the newly created region.")]
             string regionName,
-            [Description("Keep all original regions.")]
-            bool? keepOriginal,
             RegionRequest request);
 
         [OperationContract]
@@ -283,8 +277,6 @@ namespace Jhu.Footprint.Web.Api.V1
         RegionResponse IntersectRegions(
             [Description("Name of the newly created region.")]
             string regionName,
-            [Description("Keep all original regions.")]
-            bool? keepOriginal,
             RegionRequest request);
 
         [OperationContract]
@@ -293,8 +285,6 @@ namespace Jhu.Footprint.Web.Api.V1
         RegionResponse SubtractRegions(
             [Description("Name of the newly created region.")]
             string regionName,
-            [Description("Keep all original regions.")]
-            bool? keepOriginal,
             RegionRequest request);
 
         #endregion

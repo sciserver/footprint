@@ -762,9 +762,10 @@ namespace Jhu.Footprint.Web.Api.V1
 
                 var req2 = new RegionRequest()
                 {
-                    Selection = new[] { name }
+                    Selection = new[] { name },
+                    KeepOriginal = true
                 };
-                client.GrowRegion(name + "_copy", 20, true, req2);
+                client.GrowRegion(name + "_copy", 20, req2);
 
                 var r1 = client.GetRegion(name);
                 var r2 = client.GetRegion(name + "_copy");
@@ -805,19 +806,19 @@ namespace Jhu.Footprint.Web.Api.V1
                     {
                         case Lib.CombinationMethod.Union:
                             nn = name + "_union";
-                            client.UnionRegions(nn, false, req);
+                            client.UnionRegions(nn, req);
                             break;
                         case Lib.CombinationMethod.Intersect:
                             nn = name + "_intersect";
-                            client.IntersectRegions(nn, false, req);
+                            client.IntersectRegions(nn, req);
                             break;
                         case Lib.CombinationMethod.Subtract:
                             nn = name + "_difference";
-                            client.SubtractRegions(nn, false, req);
+                            client.SubtractRegions(nn, req);
                             break;
                         case Lib.CombinationMethod.CHull:
                             nn = name + "_chull";
-                            client.CHullRegions(nn, false, req);
+                            client.CHullRegions(nn, req);
                             break;
                         default:
                             throw new NotImplementedException();
