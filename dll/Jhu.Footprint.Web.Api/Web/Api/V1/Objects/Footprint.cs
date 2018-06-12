@@ -5,6 +5,8 @@ using System.Text;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
 using System.ComponentModel;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Jhu.Graywulf.AccessControl;
 using Jhu.Graywulf.Entities;
 using Util = Jhu.Graywulf.Web.Api.Util;
@@ -28,26 +30,32 @@ namespace Jhu.Footprint.Web.Api.V1
 
         [DataMember(Name = "combinationMethod", EmitDefaultValue = false)]
         [DefaultValue(null)]
+        [JsonConverter(typeof(StringEnumConverter))]
         [Description("Method to combine regions: none, union or intersection.")]
         public Lib.CombinationMethod? CombinationMethod { get; set; }
-                        
+
         [DataMember(Name = "comments", EmitDefaultValue = false)]
         [DefaultValue(null)]
         [Description("Comments.")]
         public string Comments { get; set; }
-        
+
         [DataMember(Name = "public", EmitDefaultValue = false)]
         [DefaultValue(null)]
         [Description("Visibility of the footprint to the public.")]
         public bool? Public { get; set; }
 
+        [DataMember(Name = "combinedRegion", EmitDefaultValue = false)]
+        [DefaultValue(null)]
+        [Description("When combination method is not None, contains details on combined region.")]
+        public Region CombinedRegion { get; set; }
+
         public Footprint()
         {
         }
 
-        public Footprint(Lib.Footprint footprint)
+        public Footprint(Lib.Footprint footprint, Lib.FootprintRegion combinedRegion)
         {
-            SetValues(footprint);
+            SetValues(footprint, combinedRegion);
         }
 
         public void GetValues(Lib.Footprint footprint)
@@ -55,7 +63,7 @@ namespace Jhu.Footprint.Web.Api.V1
             footprint.Name = this.Name ?? footprint.Name;
             footprint.CombinationMethod = this.CombinationMethod ?? footprint.CombinationMethod;
             footprint.Comments = this.Comments ?? footprint.Comments;
-            
+
             // To prevent resetting permission when modifying a footprint,
             // only set permission when the public field is present
             // in the request
@@ -65,7 +73,7 @@ namespace Jhu.Footprint.Web.Api.V1
             }
         }
 
-        public void SetValues(Lib.Footprint footprint)
+        public void SetValues(Lib.Footprint footprint, Lib.FootprintRegion combinedRegion)
         {
             var access = footprint.Permissions.EvaluateAccess(Principal.Guest);
 
@@ -74,6 +82,11 @@ namespace Jhu.Footprint.Web.Api.V1
             this.CombinationMethod = footprint.CombinationMethod;
             this.Comments = footprint.Comments;
             this.Public = access.CanRead();
+
+            if (combinedRegion != null)
+            {
+                this.CombinedRegion = new Region(footprint, combinedRegion);
+            }
         }
     }
 }

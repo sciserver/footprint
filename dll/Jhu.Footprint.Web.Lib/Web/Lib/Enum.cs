@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.Serialization;
 
 namespace Jhu.Footprint.Web.Lib
 {
@@ -33,13 +34,25 @@ namespace Jhu.Footprint.Web.Lib
     [Flags]
     public enum CombinationMethod : byte
     {
+        [EnumMember(Value = "none")]
         None = 0,
+
+        [EnumMember(Value = "union")]
         Union = 1,
+
+        [EnumMember(Value = "intersection")]
         Intersection = 2,
+
+        [EnumMember(Value = "intersect")]
         Intersect = 2,
+
+        [EnumMember(Value = "subtract")]
         Subtract = 4,
+
+        [EnumMember(Value = "chull")]
         CHull = 5,
 
+        [EnumMember(Value = "any")]
         Any = 0x7F,
     }
 

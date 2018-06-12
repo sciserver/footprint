@@ -164,14 +164,14 @@ namespace Jhu.Footprint.Web.Api.V1
 
         public FootprintResponse GetFootprint()
         {
-            return new FootprintResponse(SessionFootprint);
+            return new FootprintResponse(SessionFootprint, SessionCombinedRegion);
         }
 
         public FootprintResponse ModifyFootprint(FootprintRequest footprint)
         {
             footprint.Footprint.GetValues(SessionFootprint);
             InvalidateCombinedRegion();
-            return new FootprintResponse(SessionFootprint);
+            return new FootprintResponse(SessionFootprint, SessionCombinedRegion);
         }
 
         public void DeleteFootprint()

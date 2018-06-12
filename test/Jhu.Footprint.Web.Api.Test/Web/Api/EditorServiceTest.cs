@@ -46,8 +46,10 @@ namespace Jhu.Footprint.Web.Api.V1
                 client.CreateRegion("test2", new RegionRequest(TestRegion1));
 
                 var res = client.GetFootprint();
+
                 Assert.AreEqual("new_footprint", res.Footprint.Name);
                 Assert.AreEqual(Lib.CombinationMethod.Union, res.Footprint.CombinationMethod);
+                Assert.IsTrue(res.Footprint.CombinedRegion.Area > 0);
             }
         }
 

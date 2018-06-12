@@ -32,9 +32,10 @@ namespace Jhu.Footprint.Web.Api.V1
             Footprint = footprint;
         }
 
-        public FootprintResponse(Lib.Footprint footprint)
+        public FootprintResponse(Lib.Footprint footprint, Lib.FootprintRegion combinedRegion)
         {
-            Footprint = new Footprint(footprint);
+            Footprint = new Footprint(footprint, combinedRegion);
+
             Links = new Links()
             {
                 Self = FootprintService.GetUrl(footprint)

@@ -5,6 +5,8 @@ using System.Text;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
 using System.ComponentModel;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Util = Jhu.Graywulf.Web.Api.Util;
 using Jhu.Spherical.Visualizer;
 
@@ -26,16 +28,19 @@ namespace Jhu.Footprint.Web.Api.V1
 
         [DataMember(Name = "theme", EmitDefaultValue = false)]
         [DefaultValue(null)]
+        [JsonConverter(typeof(StringEnumConverter))]
         [Description("Color theme")]
         public ColorTheme? ColorTheme { get; set; }
 
         [DataMember(Name = "proj", EmitDefaultValue = false)]
         [DefaultValue(null)]
+        [JsonConverter(typeof(StringEnumConverter))]
         [Description("Projection. Valid values: TODO")]
         public Projection? Projection { get; set; }
 
         [DataMember(Name = "sys", EmitDefaultValue = false)]
         [DefaultValue(null)]
+        [JsonConverter(typeof(StringEnumConverter))]
         [Description("Coordinate system. Valid values: eq, gal.")]
         public CoordinateSystem? CoordinateSystem { get; set; }
 
@@ -71,6 +76,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
         [DataMember(Name = "gridSys", EmitDefaultValue = false)]
         [DefaultValue(null)]
+        [JsonConverter(typeof(StringEnumConverter))]
         [Description("Coordinate system. Valid values: eq, gal.")]
         public CoordinateSystem? GridCoordinateSystem { get; set; }
 
@@ -86,6 +92,7 @@ namespace Jhu.Footprint.Web.Api.V1
 
         [DataMember(Name = "degreeStyle", EmitDefaultValue = false)]
         [DefaultValue(null)]
+        [JsonConverter(typeof(StringEnumConverter))]
         [Description("Degree style. Valid values: hms, decimal")]
         public DegreeStyle? DegreeStyle { get; set; }
         
